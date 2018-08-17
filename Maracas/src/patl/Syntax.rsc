@@ -1,11 +1,11 @@
-module patl::PATLSyntax
+module patl::Syntax
 
 import Prelude;
 
 
-//-----------------------------------------------
-// Syntax
-//-----------------------------------------------
+//-------------------------------------------------
+// PATL (PAtch-like Transformation Language) Syntax
+//-------------------------------------------------
 
 start syntax RuleSequence = patl: TransformationRule* rules;
 
@@ -21,15 +21,15 @@ syntax SourcePattern = "-" StatementPattern pattern;
 syntax TargetPattern = "+" StatementPattern pattern;
 
 syntax StatementPattern 
-	= assignment: Id metavariable "=" ExpressionPattern expressionPattern ";"
-	| expression: ExpressionPattern expressionPattern ";";
+	= assignment: Id metavariable "=" ExpressionPattern expPattern ";"
+	| expression: ExpressionPattern expPattern ";";
 
 syntax ExpressionPattern 
-	= methodInvocation: FieldMethodAccess "(" {Id ","}* arguments ")"
-	| constructor: "new" Id typ "(" {Id ","}* arguments ")"
+	= methodInvocation: FieldMethodAccess "(" {Id ","}* args ")"
+	| constructor: "new" Id type "(" {Id ","}* args ")"
 	| fieldAccess: FieldMethodAccess;
 	
-syntax FieldMethodAccess = Id var NoSpace "." NoSpace Id fieldMethod;
+syntax FieldMethodAccess = Id var NoSpace "." NoSpace Id fieldMeth;
 
 lexical Id = [A-Za-z0-9$]+ !>> [A-Za-z0-9$];
 
