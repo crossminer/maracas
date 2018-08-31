@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Maracas
+Bundle-Name: maracas
 Bundle-SymbolicName: maracas
 Bundle-Version: 1.0.0
 Require-Bundle: rascal_eclipse

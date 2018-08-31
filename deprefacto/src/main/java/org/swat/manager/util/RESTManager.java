@@ -1,4 +1,4 @@
-package org.swat.manager.impl;
+package org.swat.manager.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,17 +9,22 @@ import java.util.Map;
 
 public class RESTManager {
 	
-	public HttpURLConnection configConnection(URL url, String method, Map<String, String> params) throws IOException {
+	public static final String GET_METHOD = "GET";
+	public static final String POST_METHOD = "POST";
+	public static final String PUT_METHOD = "PUT";
+	public static final String DELETE_METHOD = "DELETE";
+	
+	public static HttpURLConnection configConnection(URL url, String method, Map<String, String> params) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod(method);
 		return con;
 	}
 	
-	public int getResponseCode(HttpURLConnection con) throws IOException {
+	public static int getResponseCode(HttpURLConnection con) throws IOException {
 		return con.getResponseCode();
 	}
 	
-	public boolean isConnected(HttpURLConnection con) throws IOException {
+	public static boolean isConnected(HttpURLConnection con) throws IOException {
 		int respCode = con.getResponseCode();
 		
 		// Only 2XX HTTP codes return true
@@ -43,7 +48,7 @@ public class RESTManager {
 		}
 	}
 	
-	public String getResponse(HttpURLConnection con) throws IOException {
+	public static String getResponse(HttpURLConnection con) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		StringBuffer content = new StringBuffer();
 		String line;
@@ -56,7 +61,7 @@ public class RESTManager {
 	}
 	
 	// When you stop using a HttpURLConnection object you must invoke this method.
-	public void disconnect(HttpURLConnection con) {
+	public static void disconnect(HttpURLConnection con) {
 		con.disconnect();
 	}
 }
