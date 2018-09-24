@@ -13,4 +13,8 @@ public class B {
 	public double m3() {
 		return 1.2;
 	}
+	
+	public void m4() {
+		
+	}
 }

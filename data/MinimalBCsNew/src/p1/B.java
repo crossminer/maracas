@@ -13,4 +13,9 @@ public class B {
 	public int m3() {
 		return 1;
 	}
+	
+	// [REFACT] Modifying access modifier m4().
+	private void m4() {
+		
+	}
 }

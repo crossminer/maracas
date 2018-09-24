@@ -3,8 +3,10 @@ module org::swat::m3::M3
 import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
+import Relation;
 import Set;
 
+// TODO: check how to manage method, types, fields rename
 
 @memo
 M3 getRemovals(loc id, M3 m3Old, M3 m3New) = diffJavaM3(id, [m3Old, m3New]);
@@ -21,9 +23,33 @@ private set[loc] addedFinalModifiers(loc id, M3 m3Old, M3 m3New, bool (loc) fun)
 	return {e | <e,m> <- m3Diff.modifiers, m := \final(), fun(e)};
 }
 
+// TODO: manage package modifier.
+rel[loc,Modifier,Modifier] changedAccessModifiers2Type(loc id, M3 m3Old, M3 m3New) = changedAccessModifiers(id, m3Old, m3New, isClass);
+rel[loc,Modifier,Modifier] changedAccessModifiers2Method(loc id, M3 m3Old, M3 m3New) = changedAccessModifiers(id, m3Old, m3New, isMethod);
+
+private rel[loc,Modifier,Modifier] changedAccessModifiers(loc id, M3 m3Old, M3 m3New, bool (loc) fun) {
+	m3Adds = getAdditions(id, m3Old, m3New);
+	m3Rems = getRemovals(id, m3Old, m3New);
+	
+	// Get acces modifiers
+	accMods = {\public(), \private(), \protected()};
+	newElems = {<e,m> | <e,m> <- m3Adds.modifiers, fun(e), m in accMods};
+	oldElems = {<e,m> | <e,m> <- m3Rems.modifiers, fun(e), m in accMods};
+	
+	elems = domain(newElems);
+	return {<e, getFirstFrom(oldElems[e]), getFirstFrom(newElems[e])> | e <- elems, oldElems[e] != {}, newElems[e] != oldElems[e]};
+}
+
 rel[loc,loc] removedMethods(loc id, M3 m3Old, M3 m3New) {
 	m3Diff = getRemovals(id, m3Old, m3New);	
 	return {<c,m> | <c,m> <- m3Diff.containment, isClass(c) || isInterface(c)};
+}
+
+rel[loc,loc] removedClass(loc id, M3 m3Old, M3 m3New) {
+	m3Old.containment = m3Old.containment+;
+	m3New.containment = m3New.containment+;
+	m3Diff = getRemovals(id, m3Old, m3New);	
+	return {<p,c> | <p,c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
 }
 
 rel[loc,list[TypeSymbol],list[TypeSymbol]] changedParams(loc id, M3 m3Old, M3 m3New) 
@@ -57,7 +83,6 @@ private rel[loc,&T,&T] changedMethodSignature(loc id, M3 m3Old, M3 m3New, &T (&U
 private bool sameMethodName(loc m1, loc m2) {
 	m1Name = methodName(m1);
 	m2Name = methodName(m2);
-	println("<m1> : <m2> - <m1Name == m2Name>");
 	return m1Name == m2Name;
 }
 
