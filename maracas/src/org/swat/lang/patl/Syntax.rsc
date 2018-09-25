@@ -1,4 +1,4 @@
-module patl::Syntax
+module org::swat::lang::patl::Syntax
 
 import Prelude;
 

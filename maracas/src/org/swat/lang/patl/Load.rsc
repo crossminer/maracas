@@ -1,8 +1,8 @@
-module patl::Load
+module org::swat::lang::patl::Load
 
 import Prelude;
-import patl::Syntax;
-import patl::Abstract;
+import org::swat::lang::patl::Syntax;
+import org::swat::lang::patl::Abstract;
 
 
 // Return the Parse Tree of the program (cf. patl::Syntax)

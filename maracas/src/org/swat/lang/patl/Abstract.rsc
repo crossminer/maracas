@@ -1,4 +1,4 @@
-module patl::Abstract
+module org::swat::lang::patl::Abstract
 
 
 //-------------------------------------------------

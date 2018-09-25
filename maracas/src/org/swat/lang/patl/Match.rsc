@@ -1,7 +1,7 @@
-module patl::Match
+module org::swat::lang::patl::Match
 
-import mj::Syntax;
-import patl::Syntax;
+import org::swat::lang::mj::Syntax;
+import org::swat::lang::patl::Syntax;
 
 void matchingInstance() {}
 

@@ -1,1 +1,1 @@
-module patl::DefUse
+module org::swat::lang::patl::DefUse

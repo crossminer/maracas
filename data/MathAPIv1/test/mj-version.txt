@@ -1,0 +1,19 @@
+public class BasicCalculator extends Object{
+
+	public int add(int n, int m) {
+		return n + m;
+	}
+
+	public int substract(int n, int m) {
+		return n - m;
+	}
+
+	public int multiply(int n, int m) {
+		return n * m;
+	}
+
+	public int divide(int n, int m) {
+		return n / m;
+	}
+
+}

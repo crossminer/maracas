@@ -1,4 +1,4 @@
-module org::swat::m3::M3
+module org::swat::m3::BreakingChanges
 
 import IO;
 import lang::java::m3::AST;

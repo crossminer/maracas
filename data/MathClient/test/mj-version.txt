@@ -1,0 +1,8 @@
+public class Main extends Object {
+
+	public static void main(String[] args) {
+		BasicCalculator calc;
+		calc = new BasicCalculator();
+		calc.add(1, 2);
+	}
+}
