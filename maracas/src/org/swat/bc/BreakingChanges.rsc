@@ -67,12 +67,15 @@ private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
 private ClassBC createClassBCs(M3 m3Old, M3 m3New) {
 	gBCs =  createGenericBCs(m3Old, m3New, classBC());
-	return m = classBc(genericBCs=gBCs);
+	return classBc(genericBCs=gBCs);
 }
 
 private MethodBC createMethodBCs(M3 m3Old, M3 m3New) {
 	gBCs =  createGenericBCs(m3Old, m3New, methodBC());
-	return m = methodBc(genericBCs=gBCs);
+	return methodBc(
+			changedParams=changedParams(m3Old, m3New),
+			changedReturnTypes=changedReturnType(m3Old, m3New),
+			genericBCs=gBCs);
 }
 
 private GenericBC createGenericBCs(M3 m3Old, M3 m3New, BCType typ) 
@@ -87,8 +90,8 @@ private GenericBC createGenericBCs(M3 m3Old, M3 m3New, BCType typ)
 
 
 // TODO: manage package modifier.
-rel[loc, Mapping[Modifier, Modifier]] changedAccess(M3 m3Old, M3 m3New, classBC()) = changedAccess(m3Old, m3New, isClass);
-rel[loc, Mapping[Modifier, Modifier]] changedAccess(M3 m3Old, M3 m3New, methodBC()) = changedAccess(m3Old, m3New, isMethod);
+private rel[loc, Mapping[Modifier, Modifier]] changedAccess(M3 m3Old, M3 m3New, classBC()) = changedAccess(m3Old, m3New, isClass);
+private rel[loc, Mapping[Modifier, Modifier]] changedAccess(M3 m3Old, M3 m3New, methodBC()) = changedAccess(m3Old, m3New, isMethod);
 
 private rel[loc, Mapping[Modifier,Modifier]] changedAccess(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Adds = getAdditions(m3Old, m3New);
@@ -104,8 +107,8 @@ private rel[loc, Mapping[Modifier,Modifier]] changedAccess(M3 m3Old, M3 m3New, b
 }
 
 
-set[loc] addedFinal(M3 m3Old, M3 m3New, classBC()) = addedFinal(m3Old, m3New, isClass);
-set[loc] addedFinal(M3 m3Old, M3 m3New, methodBC()) = addedFinal(m3Old, m3New, isMethod);
+private set[loc] addedFinal(M3 m3Old, M3 m3New, classBC()) = addedFinal(m3Old, m3New, isClass);
+private set[loc] addedFinal(M3 m3Old, M3 m3New, methodBC()) = addedFinal(m3Old, m3New, isMethod);
 
 private set[loc] addedFinal(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Diff = getAdditions(m3Old, m3New);	
@@ -113,28 +116,28 @@ private set[loc] addedFinal(M3 m3Old, M3 m3New, bool (loc) fun) {
 }
 
 
-rel[loc, Mapping[loc,loc]] removedElems(M3 m3Old, M3 m3New, classBC()) {
+private rel[loc, Mapping[loc,loc]] removedElems(M3 m3Old, M3 m3New, classBC()) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
 	return {<c, <p,c>> | <p,c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
 }
 
-rel[loc, Mapping[loc,loc]] removedElems(M3 m3Old, M3 m3New, methodBC()) {
+private rel[loc, Mapping[loc,loc]] removedElems(M3 m3Old, M3 m3New, methodBC()) {
 	m3Diff = getRemovals(m3Old, m3New);	
 	return {<m, <c,m>> | <c,m> <- m3Diff.containment, isClass(c) || isInterface(c)};
 }
 
-//TODO: continue here
-rel[loc,list[TypeSymbol],list[TypeSymbol]] changedParams(loc id, M3 m3Old, M3 m3New) 
-	= changedMethodSignature(id, m3Old, m3New, methodParams);
 
-rel[loc,TypeSymbol,TypeSymbol] changedReturnType(loc id, M3 m3Old, M3 m3New)
-	= changedMethodSignature(id, m3Old, m3New, methodReturnType);
+rel[loc, Mapping[list[TypeSymbol],list[TypeSymbol]]] changedParams(M3 m3Old, M3 m3New) 
+	= changedMethodSignature(m3Old, m3New, methodParams);
+
+rel[loc, Mapping[TypeSymbol,TypeSymbol]] changedReturnType(M3 m3Old, M3 m3New)
+	= changedMethodSignature(m3Old, m3New, methodReturnType);
 	
-private rel[loc,&T,&T] changedMethodSignature(loc id, M3 m3Old, M3 m3New, &T (&U) fun) {
-	m3Adds = getAdditions(id, m3Old, m3New);
-	m3Rems = getRemovals(id, m3Old, m3New);
+private rel[loc, Mapping[&T,&T]] changedMethodSignature(M3 m3Old, M3 m3New, &T (&U) fun) {
+	m3Adds = getAdditions(m3Old, m3New);
+	m3Rems = getRemovals(m3Old, m3New);
 	
 	// Get modified methods' type dependencies	
 	newMeths = {<m,t> | <m,t> <- m3Adds.types, isMethod(m) || isConstructor(m)};
@@ -147,7 +150,7 @@ private rel[loc,&T,&T] changedMethodSignature(loc id, M3 m3Old, M3 m3New, &T (&U
 			oldElems = fun(oldType);
 			
 			if(oldElems != newElems) {
-					result += <newMeth, oldElems, newElems>;
+					result += <newMeth, <oldElems, newElems>>;
 			}
 		}
 	}
