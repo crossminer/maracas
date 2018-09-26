@@ -18,4 +18,11 @@ public class B {
 	private void m4() {
 		
 	}
+	
+	// [REFACT] Renaming method m5() -> m6().
+	public int m6() {
+		System.out.println("Hello, lets see if we can identify this snippet.");
+		int eternity = 42;
+		return eternity;
+	}
 }

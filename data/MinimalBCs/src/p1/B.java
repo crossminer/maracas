@@ -17,4 +17,10 @@ public class B {
 	public void m4() {
 		
 	}
+	
+	public int m5() {
+		System.out.println("Hello, lets see if we can identify this snippet.");
+		int eternity = 42;
+		return eternity;
+	}
 }
