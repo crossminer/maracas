@@ -19,7 +19,6 @@ public class CodeSimilarity {
 	public IBool codeIsSimilar(IString snippet1, IString snippet2, IReal threshold, IEvaluatorContext eval) {
 		NormalizedLevenshtein levenshtein = new NormalizedLevenshtein();
 		double distance = levenshtein.distance(snippet1.getValue(), snippet2.getValue());
-		eval.getStdOut().println(distance);
 		return factory.bool(distance <= (1 - threshold.doubleValue()));
 	}
 }

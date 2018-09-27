@@ -8,40 +8,31 @@ import Relation;
 import Set;
 import String;
 
-// TODO: check how to manage method, types, fields rename
 
 //----------------------------------------------
 // ADT
 //----------------------------------------------
 
-// TODO: check if it makes sense to use rel or an alias
-data BC = bc (
-	Mapping[loc, loc] id,
-	ClassBC classBCs = classBc(),
-	MethodBC methodBCs = methodBc()
-);
-
-data ClassBC = classBc (
-	GenericBC genericBCs = genericBc()
-);
-
-data MethodBC = methodBc (
-	rel[loc, Mapping[list[TypeSymbol], list[TypeSymbol]]] changedParams = {},
-	rel[loc, Mapping[TypeSymbol, TypeSymbol]] changedReturnTypes = {},
-	GenericBC genericBCs = genericBc()
-);
-
-data GenericBC = genericBc (
+//// TODO: check if it makes sense to use rel or an alias
+data BreakingChanges (
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedAccess = {},
 	set[loc elem] final = {},
 	rel[loc elem, Mapping[loc, loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc, loc] mapping] removed = {},
-	rel[loc elem, Mapping[str, str] mapping] renamed = {}
-);
+	rel[loc elem, Mapping[str, str] mapping] renamed = {})
+	= class (
+		Mapping[loc, loc] id,
+		BCType \type = classBC())
+	| method (
+		Mapping[loc, loc] id,
+		BCType \type = methodBC(), 
+		rel[loc, Mapping[list[TypeSymbol], list[TypeSymbol]]] changedParams = {},
+		rel[loc, Mapping[TypeSymbol, TypeSymbol]] changedReturnTypes = {})
+	;
 
 data BCType
-	= classBC()
-	| methodBC()
+	= classBC()		// Class type
+	| methodBC()	// Method type
 	;
 
 alias Mapping[&T, &U] = tuple[&T from, &U to];
@@ -51,44 +42,35 @@ alias Mapping[&T, &U] = tuple[&T from, &U to];
 // Builder
 //----------------------------------------------
 
-@memo
-M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
+@memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
+@memo M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
 
 @memo
-M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
-
-
-BC createBC(M3 m3Old, M3 m3New) {
+BreakingChanges createClassBC(M3 m3Old, M3 m3New) {
 	id = createBCId(m3Old, m3New);
-	cBCs = createClassBCs(m3Old, m3New);
-	mBCs = createMethodBCs(m3Old, m3New);
-	return bc(id, classBCs=cBCs, methodBCs=mBCs); 
+	bc = class(id);
+	return addCoreBCs(m3Old, m3New, bc);
+}
+
+@memo
+BreakingChanges createMethodBC(M3 m3Old, M3 m3New) {
+	id = createBCId(m3Old, m3New);
+	bc = method(id);
+	bc.changedParams = changedParams(m3Old, m3New);
+	bc.changedReturnTypes = changedReturnType(m3Old, m3New);
+	return addCoreBCs(m3Old, m3New, bc);
 }
 
 private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
-private ClassBC createClassBCs(M3 m3Old, M3 m3New) {
-	gBCs =  createGenericBCs(m3Old, m3New, classBC());
-	return classBc(genericBCs=gBCs);
+private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc) {
+	bc.changedAccess = changedAccess(m3Old, m3New, bc.\type);
+	bc.final = addedFinal(m3Old, m3New, bc.\type);
+	//TODO: moved
+	bc.removed = removedElems(m3Old, m3New, bc.\type);
+	bc.renamed = renamedElems(m3Old, m3New, bc.\type);
+	return bc;
 }
-
-private MethodBC createMethodBCs(M3 m3Old, M3 m3New) {
-	gBCs =  createGenericBCs(m3Old, m3New, methodBC());
-	return methodBc(
-			changedParams=changedParams(m3Old, m3New),
-			changedReturnTypes=changedReturnType(m3Old, m3New),
-			genericBCs=gBCs);
-}
-
-private GenericBC createGenericBCs(M3 m3Old, M3 m3New, BCType typ) 
-	= genericBc(
-		changedAccess = changedAccess(m3Old, m3New, typ),
-		final = addedFinal(m3Old, m3New, typ),
-		//TODO: moved
-		removed = removedElems(m3Old, m3New, typ),
-		renamed = renamedElems(m3Old, m3New, typ)
-	);
-
 
 /*
  * Identifying changes in access modifiers
@@ -144,7 +126,6 @@ private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, classBC()) 
 	m3New.containment = m3New.containment+;
 	return renamedElems(m3Old, m3New, isClass);
 }
-
 private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, methodBC()) = renamedElems(m3Old, m3New, isMethod);
 
 private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, bool (loc) fun) {
@@ -161,7 +142,6 @@ private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, bool (loc) 
 			str snippet1 = readFile(getFirstFrom(m3Rems.declarations[r]));
 			str snippet2 = readFile(getFirstFrom(m3Adds.declarations[a]));
 			
-			println("<r> to <a> :");
 			// Hard assumption: Assuming that the first match is the right one
 			if(codeIsSimilar(snippet1, snippet2, simThreshold)) {
 				result += <r, <methodName(r), methodName(a)>>;

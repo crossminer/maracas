@@ -2,7 +2,7 @@ package org.swat.math.internal;
 
 import org.swat.math.Calculator;
 
-public class BasicCalculator extends Object implements Calculator {
+public class BasicCalculator implements Calculator {
 
 	@Override
 	public int add(int n, int m) {
