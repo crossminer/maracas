@@ -16,16 +16,16 @@ import String;
 // TODO: check if it makes sense to use rel or an alias
 data BreakingChanges (
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedAccessModifier = {},
-	set[loc elem] addedFinalModifier = {},
+	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedFinalModifier = {},
 	rel[loc elem, Mapping[loc, loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc, loc] mapping] removed = {},
-	rel[loc elem, Mapping[str, str] mapping] renamed = {})
+	rel[loc elem, Mapping[loc, loc] mapping] renamed = {})
 	= class (
 		Mapping[loc, loc] id)
 	| method (
 		Mapping[loc, loc] id,
-		rel[loc, Mapping[list[TypeSymbol], list[TypeSymbol]]] changedParamList = {},
-		rel[loc, Mapping[TypeSymbol, TypeSymbol]] changedReturnType = {})
+		rel[loc elem, Mapping[list[TypeSymbol], list[TypeSymbol]] mapping] changedParamList = {},
+		rel[loc elem, Mapping[TypeSymbol, TypeSymbol] mapping] changedReturnType = {})
 	;
 
 alias Mapping[&T, &T] = tuple[&T from, &T to];
@@ -42,7 +42,8 @@ alias Mapping[&T, &T] = tuple[&T from, &T to];
 BreakingChanges createClassBC(M3 m3Old, M3 m3New) {
 	id = createBCId(m3Old, m3New);
 	bc = class(id);
-	return addCoreBCs(m3Old, m3New, bc);
+	bc = addCoreBCs(m3Old, m3New, bc);
+	return postprocessing(bc);
 }
 
 @memo
@@ -51,14 +52,15 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New) {
 	bc = method(id);
 	bc.changedParamList = changedParamList(m3Old, m3New);
 	bc.changedReturnType = changedReturnType(m3Old, m3New);
-	return addCoreBCs(m3Old, m3New, bc);
+	bc = addCoreBCs(m3Old, m3New, bc);
+	return postproc(bc);
 }
 
 private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
 private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc) {
 	bc.changedAccessModifier = changedAccessModifier(m3Old, m3New, bc);
-	bc.addedFinalModifier = addedFinalModifier(m3Old, m3New, bc);
+	bc.changedFinalModifier = changedFinalModifier(m3Old, m3New, bc);
 	//TODO: moved
 	bc.removed = removedElems(m3Old, m3New, bc);
 	bc.renamed = renamedElems(m3Old, m3New, bc);
@@ -88,12 +90,14 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 /*
  * Identifying additions of final modifiers
  */
-private set[loc] addedFinalModifier(M3 m3Old, M3 m3New, \class(_)) = addedFinalModifier(m3Old, m3New, isClass);
-private set[loc] addedFinalModifier(M3 m3Old, M3 m3New, \method(_)) = addedFinalModifier(m3Old, m3New, isMethod);
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \class(_)) = changedFinalModifier(m3Old, m3New, isClass);
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \method(_)) = changedFinalModifier(m3Old, m3New, isMethod);
 
-private set[loc] addedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
-	m3Diff = getAdditions(m3Old, m3New);	
-	return {e | <e,m> <- m3Diff.modifiers, m := \final(), fun(e)};
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
+	m3Adds = getAdditions(m3Old, m3New);
+	m3Rems = getRemovals(m3Old, m3New);	
+	return {<e, <\default(), m>> | <e,m> <- m3Adds.modifiers, m := \final(), fun(e)}
+		+ {<e, <m, \default()>> | <e,m> <- m3Rems.modifiers, m := \final(), fun(e)};
 }
 
 /*
@@ -114,14 +118,14 @@ private rel[loc, Mapping[loc, loc]] removedElems(M3 m3Old, M3 m3New, \method(_))
 /*
  * Identifying renamed elements
  */
-private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, \class(_)) {
+private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	return renamedElems(m3Old, m3New, isClass);
 }
-private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, \method(_)) = renamedElems(m3Old, m3New, isMethod);
+private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, \method(_)) = renamedElems(m3Old, m3New, isMethod);
 
-private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, bool (loc) fun) {
+private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Adds = getAdditions(m3Old, m3New);
 	m3Rems = getRemovals(m3Old, m3New);
 	
@@ -137,7 +141,7 @@ private rel[loc, Mapping[str, str]] renamedElems(M3 m3Old, M3 m3New, bool (loc) 
 			
 			// Hard assumption: Assuming that the first match is the right one
 			if(codeIsSimilar(snippet1, snippet2, simThreshold)) {
-				result += <r, <methodName(r), methodName(a)>>;
+				result += <r, <r, a>>;
 				continue;
 			}
 		}
@@ -172,7 +176,7 @@ private rel[loc, Mapping[&T, &T]] changedMethodSignature(M3 m3Old, M3 m3New, &T 
 			oldElems = fun(oldType);
 			
 			if(oldElems != newElems) {
-					result += <newMeth, <oldElems, newElems>>;
+					result += <oldMeth, <oldElems, newElems>>;
 			}
 		}
 	}
@@ -189,3 +193,19 @@ private str methodQualName(loc m) = (/<mPath: [a-zA-Z0-9.$\/]+>(<mParams: [a-zA-
 private str methodName(loc m) = substring(methodQualName(m), (findLast(methodQualName(m), "/") + 1));
 private list[TypeSymbol] methodParams(TypeSymbol typ) = (\method(_,_,_,params) := typ) ? params : [];
 private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ) ? ret : \void();
+
+private BreakingChanges postproc(BreakingChanges bc) { 
+	bc = postprocRenamed(bc);
+	bc = postprocChangedParamList(bc);
+	return bc;
+}
+
+private BreakingChanges postprocRenamed(BreakingChanges bc) {
+	bc.removed = domainX(bc.removed, (bc.removed.elem & bc.renamed.elem));
+	return bc;
+}
+
+private BreakingChanges postprocChangedParamList(BreakingChanges bc) {
+	bc.removed = domainX(bc.removed, (bc.removed.elem & bc.changedParamList.elem));
+	return bc;
+}
