@@ -43,7 +43,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New) {
 	id = createBCId(m3Old, m3New);
 	bc = class(id);
 	bc = addCoreBCs(m3Old, m3New, bc);
-	return postprocessing(bc);
+	return postproc(bc);
 }
 
 @memo
@@ -194,8 +194,20 @@ private str methodName(loc m) = substring(methodQualName(m), (findLast(methodQua
 private list[TypeSymbol] methodParams(TypeSymbol typ) = (\method(_,_,_,params) := typ) ? params : [];
 private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ) ? ret : \void();
 
+
+//----------------------------------------------
+// Postprocessing
+//----------------------------------------------
+
 private BreakingChanges postproc(BreakingChanges bc) { 
 	bc = postprocRenamed(bc);
+	switch(bc) {
+		case \method() : return postprocMethodBC(bc);
+		default : return bc; 
+	}
+}
+
+private BreakingChanges postprocMethodBC(BreakingChanges bc) { 
 	bc = postprocChangedParamList(bc);
 	return bc;
 }
