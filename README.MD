@@ -42,9 +42,9 @@ classBreakChanges = createClassBC(modelApi1, modelApi2);
 methodBreakChanges = createMethodBC(modelApi1, modelApi2);
 ```
 
-6. List the changes (suggestions) that the client needs to consider to migrate its code to the newest version of the API.
+6. List the changes (detections) that the client needs to consider to migrate its code to the newest version of the API.
 ```
-import org::swat::bc::Suggestions;
-suggestions(modelClient, classBreakChanges);
-suggestions(modelClient, methodBreakChanges);
+import org::swat::bc::Detector;
+detections(modelClient, classBreakChanges);
+detections(modelClient, methodBreakChanges);
 ```
