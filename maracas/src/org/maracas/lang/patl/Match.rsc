@@ -1,7 +1,7 @@
-module org::swat::lang::patl::Match
+module org::maracas::lang::patl::Match
 
-import org::swat::lang::mj::Syntax;
-import org::swat::lang::patl::Syntax;
+import org::maracas::lang::mj::Syntax;
+import org::maracas::lang::patl::Syntax;
 
 void matchingInstance() {}
 

@@ -1,4 +1,4 @@
-module org::swat::lang::mj::Syntax
+module org::maracas::lang::mj::Syntax
 
 import Prelude;
 

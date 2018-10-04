@@ -2,10 +2,10 @@
 	This module uses term rewriting to support program transformation.
 	Only breaking and solvable changes are considered within it.
 }
-module org::swat::m3::Rewrite
+module org::maracas::m3::Rewrite
 
-import org::swat::bc::BreakingChanges;
-import org::swat::lang::mj::Syntax;
+import org::maracas::bc::BreakingChanges;
+import org::maracas::lang::mj::Syntax;
 import Set;
 
 

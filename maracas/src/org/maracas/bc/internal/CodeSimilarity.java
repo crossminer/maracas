@@ -1,4 +1,4 @@
-package org.swat.bc.internal;
+package org.maracas.bc.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
 

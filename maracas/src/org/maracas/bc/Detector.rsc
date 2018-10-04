@@ -1,8 +1,8 @@
-module org::swat::bc::Detector
+module org::maracas::bc::Detector
 
 import IO;
 import lang::java::m3::Core;
-import org::swat::bc::BreakingChanges;
+import org::maracas::bc::BreakingChanges;
 import Relation;
 
 

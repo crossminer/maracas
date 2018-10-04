@@ -1,4 +1,4 @@
-module org::swat::lang::java::Load
+module org::maracas::lang::java::Load
 
 import lang::java::\syntax::Java15;
 import ParseTree;

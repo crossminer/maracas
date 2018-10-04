@@ -1,9 +1,9 @@
-module org::swat::bc::BreakingChanges
+module org::maracas::bc::BreakingChanges
 
 import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
-import org::swat::bc::CodeSimilarity;
+import org::maracas::bc::CodeSimilarity;
 import Relation;
 import Set;
 import String;

@@ -1,4 +1,4 @@
-module org::swat::bc::vis::Visualizer
+module org::maracas::bc::vis::Visualizer
 
 import IO;
 import vis::Figure;

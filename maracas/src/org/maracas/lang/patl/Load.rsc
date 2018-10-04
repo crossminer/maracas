@@ -1,8 +1,8 @@
-module org::swat::lang::patl::Load
+module org::maracas::lang::patl::Load
 
 import Prelude;
-import org::swat::lang::patl::Syntax;
-import org::swat::lang::patl::Abstract;
+import org::maracas::lang::patl::Syntax;
+import org::maracas::lang::patl::Abstract;
 
 
 // Return the Parse Tree of the program (cf. patl::Syntax)

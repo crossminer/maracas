@@ -1,8 +1,8 @@
-module org::swat::lang::mj::Load
+module org::maracas::lang::mj::Load
 
 import IO;
 import Prelude;
-import org::swat::lang::mj::Syntax;
+import org::maracas::lang::mj::Syntax;
 
 // Return the Parse Tree of the program (cf. mj::Syntax)
 Program parseMJ(str content) = parse(#Program, content, allowAmbiguity=false);

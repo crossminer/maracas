@@ -3,7 +3,7 @@
  * lang::java::\syntax::Java15 from Rascal.
  * Updating it to comply with Java 1.8 grammar.
  */
-module org::swat::lang::java::Syntax
+module org::maracas::lang::java::Syntax
 
 syntax Identifier
 	= IdentifierChars
