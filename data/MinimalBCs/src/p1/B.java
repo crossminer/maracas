@@ -1,7 +1,7 @@
 package p1;
 
 public class B {
-
+	
 	public void m1() {
 		
 	}
@@ -22,5 +22,13 @@ public class B {
 		System.out.println("Hello, lets see if we can identify this snippet.");
 		int eternity = 42;
 		return eternity;
+	}
+	
+	public static final void m7() {
+		
+	}
+	
+	public void m8() {
+		
 	}
 }

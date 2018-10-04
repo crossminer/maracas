@@ -17,6 +17,7 @@ import String;
 data BreakingChanges (
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedAccessModifier = {},
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedFinalModifier = {},
+	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedStaticModifier = {},
 	rel[loc elem, Mapping[loc, loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc, loc] mapping] removed = {},
 	rel[loc elem, Mapping[loc, loc] mapping] renamed = {})
@@ -26,6 +27,9 @@ data BreakingChanges (
 		Mapping[loc, loc] id,
 		rel[loc elem, Mapping[list[TypeSymbol], list[TypeSymbol]] mapping] changedParamList = {},
 		rel[loc elem, Mapping[TypeSymbol, TypeSymbol] mapping] changedReturnType = {})
+	| field(
+		Mapping[loc, loc] id
+		rel[loc elem, Mapping[TypeSymbol, TypeSymbol] mapping] changedType = {})
 	;
 
 alias Mapping[&T, &T] = tuple[&T from, &T to];
@@ -56,23 +60,39 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New) {
 	return postproc(bc);
 }
 
+@memo
+BreakingChanges createFieldBC(M3 m3Old, M3 m3New) {
+	id = createBCId(m3Old, m3New);
+	bc = field(id);
+	bc = addCoreBCs(m3Old, m3New, bc);
+	return postproc(bc);
+}
+
 private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
 private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc) {
 	bc.changedAccessModifier = changedAccessModifier(m3Old, m3New, bc);
 	bc.changedFinalModifier = changedFinalModifier(m3Old, m3New, bc);
+	bc.changedStaticModifier = changedStaticModifier(m3Old, m3New, bc);
 	//TODO: moved
-	bc.removed = removedElems(m3Old, m3New, bc);
-	bc.renamed = renamedElems(m3Old, m3New, bc);
+	bc.removed = removed(m3Old, m3New, bc);
+	bc.renamed = renamed(m3Old, m3New, bc);
 	return bc;
 }
+
 
 /*
  * Identifying changes in access modifiers
  */
 // TODO: manage package modifier.
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \class(_)) = changedAccessModifier(m3Old, m3New, isClass);
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \method(_)) = changedAccessModifier(m3Old, m3New, isMethod);
+private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \class(_)) 
+	= changedAccessModifier(m3Old, m3New, isClass);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \method(_)) 
+	= changedAccessModifier(m3Old, m3New, isMethod);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \field(_)) 
+	= changedAccessModifier(m3Old, m3New, isField);
 
 private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Adds = getAdditions(m3Old, m3New);
@@ -88,44 +108,82 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 
 
 /*
- * Identifying additions of final modifiers
+ * Identifying changes in final modifiers
  */
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \class(_)) = changedFinalModifier(m3Old, m3New, isClass);
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \method(_)) = changedFinalModifier(m3Old, m3New, isMethod);
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \class(_)) 
+	= changedFinalModifier(m3Old, m3New, isClass);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \method(_)) 
+	= changedFinalModifier(m3Old, m3New, isMethod);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \field(_)) 
+	= changedFinalModifier(m3Old, m3New, isField);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
+	= changedModifier(m3Old, m3New, fun, \final());
 
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
+
+/*
+ * Identifying changes in static modifiers
+ */
+private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \class(_)) 
+	= changedStaticModifier(m3Old, m3New, isClass);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \method(_)) 
+	= changedStaticModifier(m3Old, m3New, isMethod);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \field(_)) 
+	= changedStaticModifier(m3Old, m3New, isField);
+	
+private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
+	= changedModifier(m3Old, m3New, fun, \static());
+
+private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New, bool (loc) fun, Modifier modifier) {
 	m3Adds = getAdditions(m3Old, m3New);
 	m3Rems = getRemovals(m3Old, m3New);	
-	return {<e, <\default(), m>> | <e,m> <- m3Adds.modifiers, m := \final(), fun(e)}
-		+ {<e, <m, \default()>> | <e,m> <- m3Rems.modifiers, m := \final(), fun(e)};
+	return {<e, <\default(), m>> | <e,m> <- m3Adds.modifiers, m := modifier, fun(e)}
+		+ {<e, <m, \default()>> | <e,m> <- m3Rems.modifiers, m := modifier, fun(e)};
 }
+
 
 /*
  * Identifying removed elements
  */
-private rel[loc, Mapping[loc, loc]] removedElems(M3 m3Old, M3 m3New, \class(_)) {
+private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
 	return {<c, <p,c>> | <p,c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
 }
 
-private rel[loc, Mapping[loc, loc]] removedElems(M3 m3Old, M3 m3New, \method(_)) {
+private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \method(_)) 
+	= removed(m3Old, m3New, isMethod);
+	
+private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \field(_)) 
+	= removed(m3Old, m3New, isField);
+
+private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<m, <c,m>> | <c,m> <- m3Diff.containment, isClass(c) || isInterface(c)};
+	return {<e, <p, e>> | <p, e> <- m3Diff.containment, fun(e), isClass(p) || isInterface(p)};
 }
+
 
 /*
  * Identifying renamed elements
  */
-private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, \class(_)) {
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
-	return renamedElems(m3Old, m3New, isClass);
+	return renamed(m3Old, m3New, isClass);
 }
-private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, \method(_)) = renamedElems(m3Old, m3New, isMethod);
 
-private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, bool (loc) fun) {
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \method(_)) 
+	= renamed(m3Old, m3New, isMethod);
+
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \field(_)) 
+	= renamed(m3Old, m3New, isField);
+	
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Adds = getAdditions(m3Old, m3New);
 	m3Rems = getRemovals(m3Old, m3New);
 	
@@ -155,6 +213,7 @@ private rel[loc, Mapping[loc, loc]] renamedElems(M3 m3Old, M3 m3New, bool (loc) 
  */
 private rel[loc, Mapping[list[TypeSymbol], list[TypeSymbol]]] changedParamList(M3 m3Old, M3 m3New) 
 	= changedMethodSignature(m3Old, m3New, methodParams);
+
 
 /*
  * Identifying changes in method return types

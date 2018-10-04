@@ -25,4 +25,12 @@ public class B {
 		int eternity = 42;
 		return eternity;
 	}
+	
+	public void m7() {
+		
+	}
+	
+	public static final void m8() {
+		
+	}
 }
