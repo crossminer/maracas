@@ -5,46 +5,49 @@ Marcas stands for **M**igrating **AR**caic **A**PIs under certain **CAS**es.
 
 ## Dependencies
 
-Maracas depends on `rascal` core library (version 0.11.1-SNAPSHOT unstable) for performing analysis tasks, and on the `java-string-similarity` (version 1.1.0) for text comparison.
+Maracas depends on:
+- `rascal` core library (version 0.11.1-SNAPSHOT unstable) for performing analysis tasks;
+- `java-string-similarity` (version 1.1.0) for text comparison; and
+- `java-build-manager` (version 0.0.1) for extracting the classpath of Maven and OSGi-based Java projects during M3 models creation. . This project is required to compute M3 models from source code without losing information from Java projects' dependencies. 
 
-## Getting Started
+
+## Requirements
 
 You can run Maracas from Eclipse.
 To this aim you should previously:
 1. Install Eclipse RCP and RAP.
 2. Install the unstable version of Rascal plugin from its update site `https://update.rascal-mpl.org/unstable`. 
 Click [here](https://www.rascal-mpl.org/developers/) for more information.
-3. Download the `data` folder to your file system.
+3. Clone the Rascal `java-build-manager` project from [GitHub](https://github.com/cwi-swat/rascal-java-build-manager) and import it to your workspace.
+4. Download the `data` folder to your file system.
+
+
+
+## Quick Started
 
 Once your environment is ready: 
 1. Import `maracas` to your workspace.
-2. Run the Rascal REPL. 
+2. Modify your classpath so it includes the `java-build-manager` project.
+3. Run the Rascal REPL. 
 That is, right click on `maracas` project and click on **Rascal Console**. 
-3. Define the following **loc** variables in the REPL (don't forget to change the absolute paths of the projects).
+4. Define the following **loc** variables in the REPL (don't forget to change the absolute paths of the projects).
 ```
 locApi1 = |file:///Users/your/path/APIMigration/data/MinimalBCs|;
 locApi2 = |file:///Users/your/path/APIMigration/data/MinimalBCsNew|;
 locClient = |file:///Users/your/path/APIMigration/data/MinimalClient|;
 ```
 
-4. Create the **m3** models of the two version of the toy API and the client code that uses it.
+5.  Identify the breaking changes introduced between the two versions of the API.
 ```
-import lang::java::m3::Core;
-modelApi1 = createM3FromDirectory(locApi1);
-modelApi2 = createM3FromDirectory(locApi2);
-modelClient = createM3FromDirectory(locClient);
-```
-
-5. Identify the breaking changes introduced between the two versions of the API.
-```
-import org::swat::bc::BreakingChanges;
-classBreakChanges = createClassBC(modelApi1, modelApi2);
-methodBreakChanges = createMethodBC(modelApi1, modelApi2);
+import org::swat::Maracas;
+classBreakChanges = classBreakingChanges(locApi1, locApi2);
+methodBreakChanges = methodBreakingChanges(locApi1, locApi2);
+fieldBreakChanges = fieldBreakingChanges(locApi1, locApi2);
 ```
 
 6. List the changes (detections) that the client needs to consider to migrate its code to the newest version of the API.
 ```
-import org::swat::bc::Detector;
-detections(modelClient, classBreakChanges);
-detections(modelClient, methodBreakChanges);
+classDetection = detections(locClient, classBreakChanges);
+methodDetection = detections(locClient, methodBreakChanges);
+fieldDetection = detections(locClient, fieldBreakChanges);
 ```

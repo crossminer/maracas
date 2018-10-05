@@ -3,4 +3,4 @@ Main-Function: main
 Courses: courses
 Main-Module: Plugin
 Source: src
-
+Require-Bundles: rascal_java_build_manager
