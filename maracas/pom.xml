@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
   <repositories>
 		<repository>
-			<id>rascal-unstable</id>
-			<url>https://update.rascal-mpl.org/unstable/</url>
+			<id>rascal-snapshots</id>
+			<url>http://nexus.usethesource.io/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
   <build>
