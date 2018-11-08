@@ -102,10 +102,10 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 	newElems = {<e,m> | <e,m> <- m3Adds.modifiers, fun(e), m in accMods};
 	oldElems = {<e,m> | <e,m> <- m3Rems.modifiers, fun(e), m in accMods};
 	
-	elems = domain(newElems);
-	return {<e, <getFirstFrom(oldElems[e]), getFirstFrom(newElems[e])>> | e <- elems, oldElems[e] != {}, newElems[e] != oldElems[e]};
+	oldDomain = domain(oldElems);
+	newDomain = domain(newElems);
+	return {<e, <getFirstFrom(oldElems[e]), getFirstFrom(newElems[e])>> | e <- newDomain, e in oldDomain, newElems[e] != oldElems[e]};
 }
-
 
 /*
  * Identifying changes in final modifiers
