@@ -1,1 +1,1 @@
-module org::maracas::diff::CodeDiff
+module org::maracas::diff::APIDiff

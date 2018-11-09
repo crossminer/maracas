@@ -1,4 +1,4 @@
-module org::maracas::diff::MatchDiff
+module org::maracas::diff::Match
 
 import IO;
 import lang::java::m3::AST;
@@ -19,7 +19,14 @@ Match matchM3s(M3 m3Old, M3 m3New) {
 	apiElemsOld = apiElements(m3Old);
 	apiElemsNew = apiElements(m3New);
 	
-	apiMatch = ident(apiElemsOld & apiElemsNew);
+	apiElemsIntersec = apiElemsOld & apiElemsNew;
+	apiElemsOld = apiElemsOld - apiElemsIntersec;
+	apiElemsNew = apiElemsNew - apiElemsIntersec;
+	
+	// Match by signature
+	apiMatch = ident(apiElemsIntersec);
+	
+	
 	return apiMatch;
 }
 
@@ -28,6 +35,7 @@ Match matchM3s(M3 m3Old, M3 m3New) {
  * A declaration is considered an API element if it is
  * either a package, class, interface, or enum,
  * or if it contains a public modifier.
+ * TODO: what if its semantics change?
  */
 set[loc] apiElements(M3 m) = 
 	{e | <e,l> <- m.declarations, isPackage(e) 
@@ -35,3 +43,4 @@ set[loc] apiElements(M3 m) =
 		|| isInterface(e) 
 		|| isEnum(e) 
 		|| \public() in m.modifiers[e]};
+		
