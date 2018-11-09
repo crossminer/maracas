@@ -26,6 +26,7 @@ public class B {
 		return eternity;
 	}
 	
+	@Deprecated
 	public void m7() {
 		
 	}

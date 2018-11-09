@@ -8,15 +8,13 @@ import String;
 
 
 @memo
-M3 projectM3(loc project) {
+M3 projectM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	if(existFileWithName(project, "pom.xml") 
 		|| existFileWithName(project, "MANIFEST.MF")) {
-
-		//TODO: make it parametric 
-		classPaths = getClassPath(project, mavenExecutable=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|);
-		classPath = [*classPaths[cp] | cp <- classPaths];
 		
-		// THis step seems to take too long
+		// This step seems to take too long
+		classPath = projectClassPath(project, mvnExec);
+		
 		return createM3FromFiles(project,
 			fetchFilesByExtension(project, "java"),
 			sourcePath=[project],
@@ -25,6 +23,11 @@ M3 projectM3(loc project) {
 	else {
 		return createM3FromDirectory(project);
 	}
+}
+
+private list[loc] projectClassPath(loc project, loc mvnExec) {
+	classPaths = getClassPath(project, mavenExecutable=mvnExec);
+	return [*classPaths[cp] | cp <- classPaths];
 }
 
 private set[loc] fetchFilesByExtension(loc directory, str extension) {
