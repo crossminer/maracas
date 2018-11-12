@@ -108,5 +108,5 @@ private str label(&T <: node n) {
 	TODO
 }
 bool isomorphic(&T <: node t1, &S <: node t2) {
-	return true;
+	return canonicalStr(t1) == canonicalStr(t2);
 }
