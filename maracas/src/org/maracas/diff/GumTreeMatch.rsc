@@ -9,21 +9,20 @@
 module org::maracas::diff::GumTreeMatch
 
 import IO;
-import lang::java::m3::AST;
 import Node;
 import org::maracas::diff::Tree;
 import Set;
 import util::Math;
 
 
-list[value] topDownMatch(Declaration ast1, Declaration ast2, int minHeight) {
+list[value] topDownMatch(&T <: node t1, &T <: node t2, int minHeight) {
 	priority1 = [];
 	priority2 = [];
 	candidates = [];
 	mappings = [];
 	
-	priority1 += <height(ast1), ast1>;
-	priority2 += <height(ast2), ast2>;
+	priority1 += <height(t1), t1>;
+	priority2 += <height(t2), t2>;
 	
 	terminate = false;
 	while(!terminate){
@@ -92,7 +91,7 @@ list[value] topDownMatch(Declaration ast1, Declaration ast2, int minHeight) {
 		}
 	}
 	
-	// Less than function for list sorting
+	// Less than function for list sorting.
 	bool diceLessThan (
 		tuple[real c1, tuple[&T <: node, &T <: node] m1] n1,
 		tuple[real c2, tuple[&R <: node, &R <: node] m2] n2) 
@@ -109,7 +108,7 @@ list[value] topDownMatch(Declaration ast1, Declaration ast2, int minHeight) {
 @doc {
 	Metric used for comparing the similarity of two trees.
 }
-real diceCoefficient(&T <: node t1, &T <: node t2, lrel[&R <: node, &S <: node] mappings) {
+real diceCoefficient(&T <: node t1, &T <: node t2, lrel[node, node] mappings) {
 	// TODO: there can be repeated children? Consider using other structure.
 	descendantsT1 = descendants(t1);
 	descendantsT2 = descendants(t2);
