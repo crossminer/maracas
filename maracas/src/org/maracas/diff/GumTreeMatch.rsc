@@ -9,13 +9,17 @@
 module org::maracas::diff::GumTreeMatch
 
 import IO;
+import List;
+import ListRelation;
 import Node;
 import org::maracas::diff::Tree;
+import org::maracas::util::Math;
 import Set;
 import util::Math;
+import Type;
 
 
-list[value] topDownMatch(&T <: node t1, &T <: node t2, int minHeight) {
+list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	priority1 = [];
 	priority2 = [];
 	candidates = [];
@@ -35,48 +39,49 @@ list[value] topDownMatch(&T <: node t1, &T <: node t2, int minHeight) {
 		
 		if(maxHeight1 > maxHeight2) {
 			// Add children from nodes with height = maxHeight1.
-			priority1 += {<height(c),c> |
-				<h, n> <- domainR(priority1, maxHeight1), 
-				c <- getChildren(n)};
+			priority1 += [<height(c), c> |
+				<h, n> <- domainR(priority1, {maxHeight1}), 
+				&T <: node c <- getChildren(n)];
 				
 			// Remove nodes from list with height = maxHeight1.
-			priotity1 = domainX(priotity1, maxHeight1);
+			priority1 = domainX(priority1, {maxHeight1});
 		}
 			
 		else if(maxHeight1 < maxHeight2) {
 			// Add children from nodes with height = maxHeight2.
-			priority2 += {<height(c),c> |
-				<h, n> <- domainR(priority2, maxHeight2), 
-				c <- getChildren(n)};
+			priority2 += [<height(c), c> |
+				<h, n> <- domainR(priority2, {maxHeight2}),
+				&T <: node c <- getChildren(n)];
 				
 			// Remove nodes from list with height = maxHeight2.
-			priotity2 = domainX(priotity2, maxHeight2);
+			priority2 = domainX(priority2, {maxHeight2});
 		}
 		
 		else {
-			nodesMaxHeight1 = range(domainR(priority1, maxHeight1));
-			nodesMaxHeight2 = range(domainR(priority2, maxHeight2));
-			priotity1 = domainX(priotity1, maxHeight1);
-			priotity2 = domainX(priotity2, maxHeight2);
+			nodesMaxHeight1 = range(domainR(priority1, {maxHeight1}));
+			nodesMaxHeight2 = range(domainR(priority2, {maxHeight2}));
+			priority1 = domainX(priority1, {maxHeight1});
+			priority2 = domainX(priority2, {maxHeight2});
 			
 			cartesian = nodesMaxHeight1 * nodesMaxHeight2;
 			for(<t1, t2> <- cartesian) {
 				if(isomorphic(t1, t2)) {
 					candidates += <t1, t2>;
+					terminate = true;
 				}
 			}
 			
 			candidatesDom = domain(candidates);
 			for(n <- nodesMaxHeight1) {
 				if(n notin candidatesDom) {
-					priority1 += {<height(c),c> | c <- getChildren(n)};
+					priority1 += [<height(c), c> | &T <: node c <- getChildren(n)];
 				}
 			}
 			
 			candidatesRang = range(candidates);
 			for(n <- nodesMaxHeight2) {
 				if(n notin candidatesRang) {
-					priority2 += {<height(c),c> | c <- getChildren(n)};
+					priority2 += [<height(c), c> | &T <: node c <- getChildren(n)];
 				}
 			}
 		}
@@ -117,3 +122,4 @@ real diceCoefficient(&T <: node t1, &T <: node t2, lrel[node, node] mappings) {
 		
 	return 0.0 + ((2 * commonDescendants) / (size(descendantsT1) + size(descendantsT2)));
 }
+
