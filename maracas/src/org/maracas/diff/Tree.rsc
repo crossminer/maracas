@@ -19,6 +19,7 @@ int height(&T <: node n) {
 		if (list[value] e := c) {
 			childrenList += e;
 		}
+		
 	}
 	
 	for(c <- childrenList) {
@@ -35,9 +36,9 @@ private int updateHeight(int maxHeight, node n) {
 	return (nodeHeight > maxHeight) ? nodeHeight : maxHeight;
 }
 
-set[node] descendants(&T <: node n) {
-	children = getChildren(n);
-	return {*(c + descendants(c)) | c <- children};
+list[value] descendants(value n) {
+	children = (&T <: node nod := n) ? getChildren(nod) : {};
+	return [*(c + descendants(c)) | c <- children];
 }
 
 @doc {
@@ -46,6 +47,9 @@ set[node] descendants(&T <: node n) {
 	the following characters:
 		$: distinguishes children from different parents
 		#: distinguishes different levels
+	
+	[Assumption] We won't consider specific values or names,
+	just node names
 }
 str canonicalStr(&T <: node n) = canonicalStrBFT([[n]], "");
 
@@ -55,25 +59,32 @@ private str canonicalStrBFT(list[list[value]] nodeLists, str canon) {
 	}
 	
 	list[list[value]]levelNodes = [];
+	void updateCanonLevelNodes(&T <: node nod) {
+		canon += label(nod);
+		levelNodes += [getChildren(nod)];
+	}
 
 	for(nodes <- nodeLists) {
 		for(n <- nodes) {
 			switch(n) {
 				case &T <: node nod : {
-					canon += label(nod);
-					levelNodes += [getChildren(nod)];
+					updateCanonLevelNodes(nod);
 				}
 				case list[value] l : {
 					// We use default Rascal sorting w.r.t element types 
-					levelNodes += [sort(l)];
+					sortl = sort(l);
+					for(e <- sortl, &T <: node nod := e) {
+						updateCanonLevelNodes(nod);
+					}
 				}
-				default :
-					canon += "<n>";
+				default : 
+					continue;
+				
 			}			
 		}
-		canon += (!isEmpty(nodes)) ? "$" : "";
+		canon += (!isEmpty(nodes) && /(&T <: node) nod := nodes) ? "$" : "";
 	}
-	canon += (!isEmpty(nodeLists)) ? "#" : "";
+	canon += (!isEmpty(nodeLists) && /(&T <: node) nod := nodeLists) ? "#" : "";
 	
 	return "<canonicalStrBFT(levelNodes, canon)>"; 
 }
