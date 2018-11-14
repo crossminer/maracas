@@ -3,7 +3,7 @@ module org::maracas::\test::diff::TreeTest
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::diff::Tree;
-import org::maracas::\test::diff::ColoredTreeTestInput;
+import org::maracas::\test::input::ColoredTreeTestInput;
 import ValueIO;
 
 

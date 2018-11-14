@@ -105,7 +105,8 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	// Sort candidates using dice function.
 	candidatesDice = [<diceCoefficient(n1, n2, mappings), <n1, n2>>
 		| <n1, n2> <- candidates];
-	mappings += sort(candidates, diceLessThan);
+	candidatesDiceSort = sort(candidatesDice, diceLessThan);
+	mappings += range(candidatesDiceSort);
 	
 	return mappings;
 }

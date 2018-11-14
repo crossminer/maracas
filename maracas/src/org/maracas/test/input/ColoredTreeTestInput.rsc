@@ -1,4 +1,4 @@
-module org::maracas::\test::diff::ColoredTreeTestInput
+module org::maracas::\test::input::ColoredTreeTestInput
 
 @doc {
 	ColoredTree Tests
