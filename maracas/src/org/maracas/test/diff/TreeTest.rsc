@@ -45,7 +45,7 @@ test bool descendants1() = descendants(ct1)
 test bool descendants2() = descendants(ct2) == [1];
 
 test bool descendants3() = descendants(ct3) 
-	== [leaf(2), leaf(1), 2, 1];
+	== [leaf(2), 2, leaf(1), 1];
 
 test bool descendants4() = descendants(ct4) 
 	== [

@@ -2,27 +2,17 @@ module org::maracas::diff::Tree
 
 import IO;
 import List;
+import Map;
 import Node;
+import Set;
 import Type;
 
 
 int height(&T <: node n) {
 	maxHeight = 0;
-	children = getChildren(n);
-	childrenList = [];
+	children = getNodeChildren(n);
 	
 	for(c <- children) {
-		if(&R <: node e := c) {
-			maxHeight = updateHeight(maxHeight, e);
-			continue;
-		}
-		if (list[value] e := c) {
-			childrenList += e;
-		}
-		
-	}
-	
-	for(c <- childrenList) {
 		if(&R <: node e := c) {
 			maxHeight = updateHeight(maxHeight, e);
 		}
@@ -37,8 +27,46 @@ private int updateHeight(int maxHeight, node n) {
 }
 
 list[value] descendants(value n) {
-	children = (&T <: node nod := n) ? getChildren(nod) : {};
+	children = getChildrenNorm(n);
 	return [*(c + descendants(c)) | c <- children];
+}
+
+@doc{
+	Only children with a node subtype are retrieved.
+}
+list[value] getNodeChildren(&T <: node n, bool sort=false) {
+	children = getChildrenNorm(n, sort=sort);
+	return [c | c <- children, &T <: node nod := c];
+}
+
+@doc {
+	If there is a child c that is a list, set, or map, its 
+	elements e are extracted and replaced by it: c -> e.
+}
+private list[value] getChildrenNorm(value n, bool sort=false) {
+	children = (&T <: node nod := n) ? getChildren(nod) : [];
+	
+	if(sort) {
+		return [*(sort(compositeToList(c))) | c <- children];
+	}
+	else {
+		return [*(compositeToList(c)) | c <- children];
+	}
+}
+
+
+// TODO: This function is incomplete (w.r.t. possible types)
+private list[value] compositeToList(value n) {
+	switch(n) {
+		case list[value] l :
+			return l;
+		case set[value] s :
+			return toList(s);
+		case map[value, value] m : 
+			return toList(m);
+		default :
+			return [n];
+	}
 }
 
 @doc {
@@ -118,6 +146,5 @@ private str label(&T <: node n) {
 	4) For every ordered node, the ordering relation is preserved
 	TODO
 }
-bool isomorphic(&T <: node t1, &S <: node t2) {
-	return canonicalStr(t1) == canonicalStr(t2);
-}
+bool isomorphic(&T <: node t1, &S <: node t2) 
+	= canonicalStr(t1) == canonicalStr(t2);
