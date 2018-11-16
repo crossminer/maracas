@@ -32,7 +32,7 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	while(!terminate){
 		maxHeight1 = max(domain(priority1));
 		maxHeight2 = max(domain(priority2));
-		
+				
 		if(min(maxHeight1, maxHeight2) <= minHeight) {
 			terminate = true;
 		}
@@ -41,7 +41,7 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			// Add children from nodes with height = maxHeight1.
 			priority1 += [<height(c), c> |
 				<h, n> <- domainR(priority1, {maxHeight1}), 
-				&T <: node c <- getChildren(n)];
+				&T <: node c <- getNodeChildren(n)];
 				
 			// Remove nodes from list with height = maxHeight1.
 			priority1 = domainX(priority1, {maxHeight1});
@@ -51,7 +51,7 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			// Add children from nodes with height = maxHeight2.
 			priority2 += [<height(c), c> |
 				<h, n> <- domainR(priority2, {maxHeight2}),
-				&T <: node c <- getChildren(n)];
+				&T <: node c <- getNodeChildren(n)];
 				
 			// Remove nodes from list with height = maxHeight2.
 			priority2 = domainX(priority2, {maxHeight2});
@@ -74,14 +74,14 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			candidatesDom = domain(candidates);
 			for(n <- nodesMaxHeight1) {
 				if(n notin candidatesDom) {
-					priority1 += [<height(c), c> | &T <: node c <- getChildren(n)];
+					priority1 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
 				}
 			}
 			
 			candidatesRang = range(candidates);
 			for(n <- nodesMaxHeight2) {
 				if(n notin candidatesRang) {
-					priority2 += [<height(c), c> | &T <: node c <- getChildren(n)];
+					priority2 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
 				}
 			}
 		}

@@ -6,24 +6,19 @@ import Map;
 import Node;
 import Set;
 import Type;
+import util::Math;
 
 
 int height(&T <: node n) {
 	maxHeight = 0;
 	children = getNodeChildren(n);
 	
-	for(c <- children) {
-		if(&R <: node e := c) {
-			maxHeight = updateHeight(maxHeight, e);
-		}
+	for(c <- children, &R <: node e := c) {
+		nodeHeight = height(e);
+		maxHeight = max(nodeHeight, maxHeight);
 	}
 	
 	return maxHeight + 1;
-}
-
-private int updateHeight(int maxHeight, node n) {
-	nodeHeight = height(n);
-	return (nodeHeight > maxHeight) ? nodeHeight : maxHeight;
 }
 
 list[value] descendants(value n) {
@@ -34,8 +29,8 @@ list[value] descendants(value n) {
 @doc{
 	Only children with a node subtype are retrieved.
 }
-list[value] getNodeChildren(&T <: node n, bool sort=false) {
-	children = getChildrenNorm(n, sort=sort);
+list[value] getNodeChildren(&T <: node n, bool order=false) {
+	children = getChildrenNorm(n, order=order);
 	return [c | c <- children, &T <: node nod := c];
 }
 
@@ -43,15 +38,10 @@ list[value] getNodeChildren(&T <: node n, bool sort=false) {
 	If there is a child c that is a list, set, or map, its 
 	elements e are extracted and replaced by it: c -> e.
 }
-private list[value] getChildrenNorm(value n, bool sort=false) {
+private list[value] getChildrenNorm(value n, bool order=false) {
 	children = (&T <: node nod := n) ? getChildren(nod) : [];
-	
-	if(sort) {
-		return [*(sort(compositeToList(c))) | c <- children];
-	}
-	else {
-		return [*(compositeToList(c)) | c <- children];
-	}
+	return (order) ? [*(sort(compositeToList(c))) | c <- children]
+		: [*(compositeToList(c)) | c <- children];
 }
 
 
@@ -89,26 +79,12 @@ private str canonicalStrBFT(list[list[value]] nodeLists, str canon) {
 	list[list[value]]levelNodes = [];
 	void updateCanonLevelNodes(&T <: node nod) {
 		canon += label(nod);
-		levelNodes += [getChildren(nod)];
+		levelNodes += [getNodeChildren(nod, sort=true)];
 	}
 
 	for(nodes <- nodeLists) {
 		for(n <- nodes) {
-			switch(n) {
-				case &T <: node nod : {
-					updateCanonLevelNodes(nod);
-				}
-				case list[value] l : {
-					// We use default Rascal sorting w.r.t element types 
-					sortl = sort(l);
-					for(e <- sortl, &T <: node nod := e) {
-						updateCanonLevelNodes(nod);
-					}
-				}
-				default : 
-					continue;
-				
-			}			
+			updateCanonLevelNodes(n);		
 		}
 		canon += (!isEmpty(nodes) && /(&T <: node) nod := nodes) ? "$" : "";
 	}
