@@ -8,7 +8,17 @@ import String;
 
 
 @memo
-M3 projectM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
+M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
+	if	(project.scheme == "jar" 
+		|| endsWith(project.path, ".jar")) {
+		return createM3FromJar(project);
+	}
+	else {
+		return m3FromFolder(project);
+	}
+}
+
+M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	if(existFileWithName(project, "pom.xml") 
 		|| existFileWithName(project, "MANIFEST.MF")) {
 		

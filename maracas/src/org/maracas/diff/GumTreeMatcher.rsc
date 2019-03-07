@@ -6,7 +6,7 @@
 	
 	Some modifications have been applied.
 } 
-module org::maracas::diff::GumTreeMatch
+module org::maracas::diff::GumTreeMatcher
 
 import IO;
 import List;
@@ -18,6 +18,13 @@ import Set;
 import util::Math;
 import Type;
 
+import org::maracas::diff::Matcher;
+
+Matcher matcher = matcher(match);
+
+set[Match] match(M3 m) {
+	return {};
+}
 
 list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	priority1 = [];

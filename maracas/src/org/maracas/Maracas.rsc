@@ -16,7 +16,7 @@ BreakingChanges fieldBreakingChanges(loc oldAPI, loc newAPI)
 	= breakingChanges(oldAPI, newAPI, createFieldBC);
 
 private BreakingChanges breakingChanges(loc oldAPI, loc newAPI, BreakingChanges (M3, M3) fun) 
-	= fun(projectM3(oldAPI), projectM3(newAPI));
+	= fun(m3(oldAPI), m3(newAPI));
 
 
 list[Detection] detections(loc client, BreakingChanges bc) 

@@ -1,15 +1,18 @@
-module org::maracas::\test::diff::GumTreeMatchTest
+module org::maracas::\test::diff::GumTreeMatcherTest
 
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import List;
-import org::maracas::diff::GumTreeMatch;
+import org::maracas::diff::GumTreeMatcher;
 
+import Node;
 
 Declaration ast1 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST1.java|, true);
 Declaration ast2 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST2.java|, true);
 Declaration ast3 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST3.java|, true);
 Declaration ast4 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST4.java|, true);
+Declaration ast5 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST5.java|, true);
+
 
 test bool sizeTopDownMatchAST1() = size(topDownMatch(ast1, ast4, 2)) == 1;
 test bool sizeTopDownMatchAST2() = size(topDownMatch(ast4, ast1, 2)) == 1;
@@ -23,4 +26,5 @@ test bool topDownMatchAST3() = topDownMatch(ast2, ast2, 2) == [<ast2, ast2>];
 test bool topDownMatchAST4() = topDownMatch(ast2, ast3, 2) == [];
 test bool topDownMatchAST5() = topDownMatch(ast3, ast2, 2) == [];
 
-list[value] s() = topDownMatch(ast1, ast2, 2);
+list[value] s() = topDownMatch(ast2, ast5, 2);
+list[value] c() = getChildren(ast1);
