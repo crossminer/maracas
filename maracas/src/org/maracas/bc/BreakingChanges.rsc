@@ -284,12 +284,27 @@ private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ
 // Postprocessing
 //----------------------------------------------
 
-private BreakingChanges postproc(BreakingChanges bc) { 
+private BreakingChanges postproc(BreakingChanges bc) {
 	bc = postprocRenamed(bc);
+
+	bc.changedAccessModifier = {<e, m> | <e, m> <- bc.changedAccessModifier, include(e)};
+	bc.changedFinalModifier  = {<e, m> | <e, m> <- bc.changedFinalModifier,  include(e)};
+	bc.changedStaticModifier = {<e, m> | <e, m> <- bc.changedStaticModifier, include(e)};
+	bc.moved   = {<e, m> | <e, m> <- bc.moved,   include(e), include(m[0]), include(m[1])};
+	bc.removed = {<e, m> | <e, m> <- bc.removed, include(e), include(m[0]), include(m[1])};
+	bc.renamed = {<e, m> | <e, m> <- bc.renamed, include(e), include(m[0]), include(m[1])};
+	//bc.changedParamList  = {<e, m> | <e, m> <- bc.changedParamList,  include(e)};
+	//bc.changedReturnType = {<e, m> | <e, m> <- bc.changedReturnType, include(e)};
+	//bc.changedType       = {<e, m> | <e, m> <- bc.changedType,       include(e)};
+
 	switch(bc) {
 		case \method() : return postprocMethodBC(bc);
 		default : return bc; 
 	}
+}
+
+private bool include(loc l) {
+	return /org\/sonar\/api\/internal\// !:= l.uri;
 }
 
 private BreakingChanges postprocMethodBC(BreakingChanges bc) { 
