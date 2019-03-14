@@ -187,20 +187,46 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun) 
 	m3Adds = getAdditions(m3Old, m3New);
 	m3Rems = getRemovals(m3Old, m3New);
 	
-	comp = invert(m3Rems.containment) o m3Adds.containment;
-	rel[loc rem, loc add] candidates = {<r, a> | <r, a> <- comp, fun(r) && fun(a)};
-	
-	real simThreshold = 0.7;
 	result = {};
-	for(r <- candidates.rem) {
-		for(a <- candidates[r]) {
-			str snippet1 = readFile(getFirstFrom(m3Rems.declarations[r]));
-			str snippet2 = readFile(getFirstFrom(m3Adds.declarations[a]));
-			
-			// Hard assumption: Assuming that the first match is the right one
-			if(codeIsSimilar(snippet1, snippet2, simThreshold)) {
-				result += <r, <r, a>>;
-				continue;
+	for (<cont, r> <- m3Rems.containment, fun(r) && include(r)) {
+		for (a <- m3Adds.containment[cont], fun(a) && include(a)) {
+			if (m3Old.id.extension == "jar") {
+				real simThreshold = 0.7;
+				set[loc] d = {};
+				set[loc] e = {};
+
+				if (isClass(r)) {
+					for (methodDecl <- m3Rems.containment[r]) {
+						d += m3Rems.methodInvocation[methodDecl];
+					}
+					for (methodDecl <- m3Adds.containment[a]) {
+						e += m3Adds.methodInvocation[methodDecl];
+					}
+				} else if (isMethod(r)) {
+					d += m3Rems.methodInvocation[r];
+					e += m3Adds.methodInvocation[a];
+				} else if (isField(r)) {
+					//println("Skipping field");
+				};
+
+				if (size(d) > 0 && size(e) > 0) {
+					real score = jaccard(d, e);
+
+					// Hard assumption: Assuming that the first match is the right one
+					if (score > simThreshold) {
+						result += <r, <r, a>>;
+						continue;
+					}
+				}
+			} else {
+				str snippet1 = readFile(getFirstFrom(m3Rems.declarations[r]));
+				str snippet2 = readFile(getFirstFrom(m3Adds.declarations[a]));
+
+				// Hard assumption: Assuming that the first match is the right one
+				if(codeIsSimilar(snippet1, snippet2, simThreshold)) {
+					result += <r, <r, a>>;
+					continue;
+				}
 			}
 		}
 	}
