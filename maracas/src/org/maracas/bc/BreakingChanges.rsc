@@ -8,7 +8,6 @@ import Relation;
 import Set;
 import String;
 
-
 //----------------------------------------------
 // ADT
 //----------------------------------------------
@@ -191,7 +190,7 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun) 
 	for (<cont, r> <- m3Rems.containment, fun(r) && include(r)) {
 		for (a <- m3Adds.containment[cont], fun(a) && include(a)) {
 			if (m3Old.id.extension == "jar") {
-				real simThreshold = 0.7;
+				real simThreshold = 0.7; // FIXME: to be tuned
 				set[loc] d = {};
 				set[loc] e = {};
 
@@ -219,6 +218,7 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun) 
 					}
 				}
 			} else {
+				real simThreshold = 0.7; // FIXME: to be tuned
 				str snippet1 = readFile(getFirstFrom(m3Rems.declarations[r]));
 				str snippet2 = readFile(getFirstFrom(m3Adds.declarations[a]));
 
