@@ -20,4 +20,4 @@ private BreakingChanges breakingChanges(loc oldAPI, loc newAPI, BreakingChanges 
 
 
 list[Detection] detections(loc client, BreakingChanges bc) 
-	= detections(projectM3(client), bc);
+	= detections(m3(client), bc);
