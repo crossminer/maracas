@@ -1,25 +1,30 @@
 module org::maracas::bc::BreakingChanges
 
+import Boolean;
 import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::bc::CodeSimilarity;
+import org::maracas::config::Config;
+import org::maracas::diff::Matcher;
 import Relation;
 import Set;
 import String;
+
 
 //----------------------------------------------
 // ADT
 //----------------------------------------------
 
-// TODO: check if it makes sense to use rel or an alias
 data BreakingChanges (
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedAccessModifier = {},
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedFinalModifier = {},
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedStaticModifier = {},
 	rel[loc elem, Mapping[loc, loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc, loc] mapping] removed = {},
-	rel[loc elem, Mapping[loc, loc] mapping] renamed = {})
+	rel[loc elem, Mapping[loc, loc] mapping] renamed = {},
+	rel[loc elem, Mapping[loc, loc] mapping] deprecated = {},
+	map[str, str] config = ())
 	= class (
 		Mapping[loc, loc] id)
 	| method (
@@ -41,6 +46,7 @@ alias Mapping[&T, &T] = tuple[&T from, &T to];
 @memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
 @memo M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
 
+// TODO: add config parameter
 @memo
 BreakingChanges createClassBC(M3 m3Old, M3 m3New) {
 	id = createBCId(m3Old, m3New);
@@ -74,6 +80,7 @@ private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc) {
 	bc.changedFinalModifier = changedFinalModifier(m3Old, m3New, bc);
 	bc.changedStaticModifier = changedStaticModifier(m3Old, m3New, bc);
 	//TODO: moved
+	bc.deprecated = deprecated(m3Old, m3New, bc);
 	bc.removed = removed(m3Old, m3New, bc);
 	bc.renamed = renamed(m3Old, m3New, bc);
 	return bc;
@@ -146,13 +153,32 @@ private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New
 
 
 /*
+ * Identifying deprecated elements
+ * TODO: annotations rel in M3 from source code is not working properly.  
+ */
+private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
+	load = org::maracas::config::Config::DEP_MATCHES_LOAD in bc.config
+		&& fromString(bc.config[org::maracas::config::Config::DEP_MATCHES_LOAD]);
+		
+	if(load) {
+		url = |file://| + bc.config[org::maracas::config::Config::DEP_MATCHES_LOC];
+		matches = loadMatches(url);
+		return {<from, <from, to>>| <c, <from, to>> <- matches};
+	}
+	
+	// FIXME: implement cases where we do not know the actual mappings.
+	return {<e, <e, a>> | <e, a> <- m3Old.annotations, a == |java+interface:///java/lang/Deprecated|};
+}
+
+ 
+/*
  * Identifying removed elements
  */
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<c, <p,c>> | <p,c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
+	return {<c, <p, c>> | <p, c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
 }
 
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \method(_)) 

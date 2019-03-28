@@ -5,12 +5,12 @@ import lang::java::m3::ClassPaths;
 import lang::java::m3::Core;
 import org::maracas::io::File;
 import String;
+import ValueIO;
 
 
 @memo
 M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
-	if	(project.scheme == "jar" 
-		|| endsWith(project.path, ".jar")) {
+	if(project.scheme == "jar" || project.extension == "jar") {
 		return createM3FromJar(project);
 	}
 	else {
@@ -47,7 +47,7 @@ private set[loc] fetchFilesByExtension(loc directory, str extension) {
 			if(isDirectory(f)) {
 				files += fetchFilesByExtension(f, extension);
 			}
-			if(isFile(f) && endsWith(f.path, ".<extension>")) {
+			if(isFile(f) && f.extension == "<extension>") {
 				files += f;
 			}
 		}
