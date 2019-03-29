@@ -36,15 +36,15 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	priority2 += <height(t2), t2>;
 	
 	terminate = false;
-	while(!terminate){
+	while (!terminate) {
 		maxHeight1 = max(domain(priority1));
 		maxHeight2 = max(domain(priority2));
 				
-		if(min(maxHeight1, maxHeight2) <= minHeight) {
+		if (min(maxHeight1, maxHeight2) <= minHeight) {
 			terminate = true;
 		}
 		
-		if(maxHeight1 > maxHeight2) {
+		if (maxHeight1 > maxHeight2) {
 			// Add children from nodes with height = maxHeight1.
 			priority1 += [<height(c), c> |
 				<h, n> <- domainR(priority1, {maxHeight1}), 
@@ -54,7 +54,7 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			priority1 = domainX(priority1, {maxHeight1});
 		}
 			
-		else if(maxHeight1 < maxHeight2) {
+		else if (maxHeight1 < maxHeight2) {
 			// Add children from nodes with height = maxHeight2.
 			priority2 += [<height(c), c> |
 				<h, n> <- domainR(priority2, {maxHeight2}),
@@ -71,23 +71,23 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			priority2 = domainX(priority2, {maxHeight2});
 			
 			cartesian = nodesMaxHeight1 * nodesMaxHeight2;
-			for(<t1, t2> <- cartesian) {
-				if(isomorphic(t1, t2)) {
+			for (<t1, t2> <- cartesian) {
+				if (isomorphic(t1, t2)) {
 					candidates += <t1, t2>;
 					terminate = true;
 				}
 			}
 			
 			candidatesDom = domain(candidates);
-			for(n <- nodesMaxHeight1) {
-				if(n notin candidatesDom) {
+			for (n <- nodesMaxHeight1) {
+				if (n notin candidatesDom) {
 					priority1 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
 				}
 			}
 			
 			candidatesRang = range(candidates);
-			for(n <- nodesMaxHeight2) {
-				if(n notin candidatesRang) {
+			for (n <- nodesMaxHeight2) {
+				if (n notin candidatesRang) {
 					priority2 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
 				}
 			}
@@ -96,8 +96,8 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	
 	// Identify one-to-one mappings, and remove them from candidates.
 	candidatesInv = invert(candidates);
-	for(<n1, n2> <- candidates) {
-		if(size(candidates[n1]) == 1 && size(candidatesInv[n2]) == 1) {
+	for (<n1, n2> <- candidates) {
+		if (size(candidates[n1]) == 1 && size(candidatesInv[n2]) == 1) {
 			mappings += <n1, n2>;
 			candidates -= <n1, n2>;
 		}

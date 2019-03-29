@@ -5,7 +5,7 @@ import lang::java::m3::Core;
 
 
 data Matcher = matcher(
-	set[Match] (M3 added, M3 removed) match);
+	set[Match] (M3 additions, M3 removals, bool (loc) fun) match);
 
 alias Match 
 	= tuple[

@@ -1,4 +1,4 @@
-package org.maracas.bc.internal;
+package org.maracas.diff.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
@@ -20,5 +20,11 @@ public class CodeSimilarity {
 		NormalizedLevenshtein levenshtein = new NormalizedLevenshtein();
 		double distance = levenshtein.distance(snippet1.getValue(), snippet2.getValue());
 		return factory.bool(distance <= (1 - threshold.doubleValue()));
+	}
+	
+	public IReal levenshteinSimilarity(IString snippet1, IString snippet2, IEvaluatorContext eval) {
+		NormalizedLevenshtein levenshtein = new NormalizedLevenshtein();
+		double distance = levenshtein.distance(snippet1.getValue(), snippet2.getValue());
+		return factory.real(distance);
 	}
 }
