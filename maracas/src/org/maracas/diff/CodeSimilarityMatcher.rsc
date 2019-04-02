@@ -17,14 +17,14 @@ set[Match] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 			if (additions.id.extension == "jar") {
 				;
 			}
-			
 			else {
 				snippet1 = readFile(getFirstFrom(removals.declarations[r]));
 				snippet2 = readFile(getFirstFrom(additions.declarations[a]));
+				similarity = levenshteinSimilarity(snippet1, snippet2);
 				
 				// Hard assumption: Assuming that the first match is the right one
-				if (levenshteinSimilarity(snippet1, snippet2) > simThreshold) {
-					result += <r, <r, a>>;
+				if (similarity > simThreshold) { 
+					result += <similarity, <r, a>>;
 					continue;
 				}
 			}
@@ -64,7 +64,7 @@ set[Match] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 
 				// Hard assumption: Assuming that the first match is the right one
 				if (score > simThreshold) {
-					result += <r, <r, a>>;
+					result += <score, <r, a>>;
 					continue;
 				}
 			}
@@ -77,7 +77,7 @@ set[Match] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 
 @javaClass{org.maracas.diff.internal.CodeSimilarity}
 @reflect{for debugging}
-public java real levenshteinSimilarity(str snippet1, str snippet2);
+java real levenshteinSimilarity(str snippet1, str snippet2);
 
 // FIXME: copied from BreakingChangesBuilder 
 private bool include(loc l) {

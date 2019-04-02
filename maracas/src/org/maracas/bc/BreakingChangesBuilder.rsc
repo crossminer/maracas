@@ -4,11 +4,13 @@ import Boolean;
 import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
+import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::bc::CodeSimilarity;
 import org::maracas::config::Config;
 import org::maracas::diff::CodeSimilarityMatcher;
 import org::maracas::diff::Matcher;
+import org::maracas::io::properties::IO;
 import Relation;
 import Set;
 import String;
@@ -17,36 +19,37 @@ import String;
 @memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
 @memo M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
 
-// TODO: add config parameter
 @memo
-BreakingChanges createClassBC(M3 m3Old, M3 m3New) {
+BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	id = createBCId(m3Old, m3New);
 	bc = class(id);
-	bc = addCoreBCs(m3Old, m3New, bc);
+	bc = addCoreBCs(m3Old, m3New, bc, optionsFile);
 	return postproc(bc);
 }
 
 @memo
-BreakingChanges createMethodBC(M3 m3Old, M3 m3New) {
+BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	id = createBCId(m3Old, m3New);
 	bc = method(id);
 	bc.changedParamList = changedParamList(m3Old, m3New);
 	bc.changedReturnType = changedReturnType(m3Old, m3New);
-	bc = addCoreBCs(m3Old, m3New, bc);
-	return postproc(bc);
+	bc = addCoreBCs(m3Old, m3New, bc, optionsFile);
+	return postproc(bc); 
 }
 
 @memo
-BreakingChanges createFieldBC(M3 m3Old, M3 m3New) {
+BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	id = createBCId(m3Old, m3New);
 	bc = field(id);
-	bc = addCoreBCs(m3Old, m3New, bc);
+	bc = addCoreBCs(m3Old, m3New, bc, optionsFile);
 	return postproc(bc);
 }
 
 private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
-private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc) {
+private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc, loc optionsFile) {
+	bc.options = readProperties(optionsFile);
+	
 	bc.changedAccessModifier = changedAccessModifier(m3Old, m3New, bc);
 	bc.changedFinalModifier = changedFinalModifier(m3Old, m3New, bc);
 	bc.changedStaticModifier = changedStaticModifier(m3Old, m3New, bc);
@@ -76,12 +79,13 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 	removals = getRemovals(m3Old, m3New);
 	
 	accMods = {\public(), \private(), \protected()};
-	newElems = {<e,m> | <e,m> <- additions.modifiers, fun(e), m in accMods};
-	oldElems = {<e,m> | <e,m> <- removals.modifiers, fun(e), m in accMods};
+	elemsNew = {<elem, modif> | <elem, modif> <- additions.modifiers, fun(elem), modif in accMods};
+	elemsOld = {<elem, modif> | <elem, modif> <- removals.modifiers, fun(elem), modif in accMods};
 	
-	oldDomain = domain(oldElems);
-	newDomain = domain(newElems);
-	return {<e, <getFirstFrom(oldElems[e]), getFirstFrom(newElems[e])>> | e <- newDomain, e in oldDomain, newElems[e] != oldElems[e]};
+	domainOld = domain(elemsOld);
+	domainNew = domain(elemsNew);
+	return {<elem, <getFirstFrom(elemsOld[elem]), getFirstFrom(elemsNew[elem])>> 
+		| elem <- domainNew, elem in domainOld, elemsNew[elem] != elemsOld[elem]};
 }
 
 
@@ -119,8 +123,8 @@ private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3
 private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New, bool (loc) fun, Modifier modifier) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);	
-	return {<e, <\default(), m>> | <e,m> <- additions.modifiers, m := modifier, fun(e)}
-		+ {<e, <m, \default()>> | <e,m> <- removals.modifiers, m := modifier, fun(e)};
+	return {<elem, <\default(), modif>> | <elem, modif> <- additions.modifiers, modif := modifier, fun(elem)}
+		+ {<elem, <modif, \default()>> | <elem, modif> <- removals.modifiers, modif := modifier, fun(elem)};
 }
 
 
@@ -129,13 +133,13 @@ private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
 private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
-	load = org::maracas::config::Config::DEP_MATCHES_LOAD in bc.config
-		&& fromString(bc.config[org::maracas::config::Config::DEP_MATCHES_LOAD]);
+	load = org::maracas::config::Config::DEP_MATCHES_LOAD in bc.options
+		&& fromString(bc.options[org::maracas::config::Config::DEP_MATCHES_LOAD]);
 		
 	if(load) {
-		url = |file://| + bc.config[org::maracas::config::Config::DEP_MATCHES_LOC];
+		url = |file://| + bc.options[org::maracas::config::Config::DEP_MATCHES_LOC];
 		matches = loadMatches(url);
-		return {<from, <from, to>>| <c, <from, to>> <- matches};
+		return {<from, <from, to>>| <c, <from, to>> <- matches}; 
 	}
 	
 	// FIXME: implement cases where we do not know the actual mappings.
@@ -145,12 +149,13 @@ private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChang
  
 /*
  * Identifying removed elements
+ * TODO: check that removed elements are not listed in renamed or moved sets
  */
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<c, <p, c>> | <p, c> <- m3Diff.containment, isPackage(p), isClass(c) || isInterface(c)};
+	return {<elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, isPackage(parent), isType(elem)};
 }
 
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \method(_)) 
@@ -161,7 +166,7 @@ private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \field(_))
 
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<e, <p, e>> | <p, e> <- m3Diff.containment, fun(e), isClass(p) || isInterface(p)};
+	return {<elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, fun(elem), isType(parent)};
 }
 
 
@@ -171,7 +176,7 @@ private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) 
 private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
-	return renamed(m3Old, m3New, isClass);
+	return renamed(m3Old, m3New, isType);
 }
 
 private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \method(_)) 
@@ -217,22 +222,25 @@ private rel[loc, Mapping[&T, &T]] changedMethodSignature(M3 m3Old, M3 m3New, &T 
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
-	newMeths = {<m,t> | <m,t> <- additions.types, isMethod(m) || isConstructor(m)};
-	oldMeths = {<m,t> | <m,t> <- removals.types, isMethod(m) || isConstructor(m)};
+	methsNew = {<meth, typ> | <meth, typ> <- additions.types, isMethod(meth) || isConstructor(meth)};
+	methsOld = {<meth, typ> | <meth, typ> <- removals.types, isMethod(meth) || isConstructor(meth)};
 	
 	result = {};
-	for (<newMeth, newType> <- newMeths) {
-		for (<oldMeth, oldType> <- oldMeths, sameMethodQualName(newMeth,oldMeth)) {
-			newElems = fun(newType);
-			oldElems = fun(oldType);
+	for (<methNew, typeNew> <- methsNew) {
+		for (<methOld, typeOld> <- methsOld, sameMethodQualName(methNew, methOld)) {
+			elemsNew = fun(typeNew);
+			elemsOld = fun(typeOld);
 			
-			if (oldElems != newElems) {
-					result += <oldMeth, <oldElems, newElems>>;
+			if (elemsOld != elemsNew) {
+				result += <methOld, <elemsOld, elemsNew>>;
 			}
 		}
 	}
 	return result;
 }
+
+// TODO: consider moving this function to Rascal module lang::java::m3::Core
+private bool isType(loc entity) = isClass(entity) || isInterface(entity);
 
 private bool sameMethodQualName(loc m1, loc m2) {
 	m1Name = methodQualName(m1);
@@ -243,7 +251,7 @@ private bool sameMethodQualName(loc m1, loc m2) {
 private str methodQualName(loc m) = (/<mPath: [a-zA-Z0-9.$\/]+>(<mParams: [a-zA-Z0-9.$\/]*>)/ := m.path) ? mPath : "";
 private str methodName(loc m) = substring(methodQualName(m), (findLast(methodQualName(m), "/") + 1));
 private list[TypeSymbol] methodParams(TypeSymbol typ) = (\method(_,_,_,params) := typ) ? params : [];
-private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ) ? ret : \void();
+private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ) ? ret : lang::java::m3::TypeSymbol::\void();
 
 
 //----------------------------------------------

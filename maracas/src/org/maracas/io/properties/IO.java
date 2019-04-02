@@ -1,0 +1,46 @@
+package org.maracas.io.properties;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Properties;
+
+import org.rascalmpl.interpreter.IEvaluatorContext;
+import org.rascalmpl.uri.URIResolverRegistry;
+
+import io.usethesource.vallang.IMap;
+import io.usethesource.vallang.IMapWriter;
+import io.usethesource.vallang.ISourceLocation;
+import io.usethesource.vallang.IValueFactory;
+
+
+public class IO {
+
+	private final IValueFactory factory;
+	private URIResolverRegistry registry;
+	
+	public IO(IValueFactory factory) {
+		this.factory = factory;
+		this.registry = URIResolverRegistry.getInstance();
+	}
+	
+	public IMap readProperties(ISourceLocation loc, IEvaluatorContext eval) {
+		IMapWriter writer = factory.mapWriter();
+		
+		try {
+			Properties prop = new Properties();
+			InputStream stream = registry.getInputStream(loc);
+			prop.load(stream);
+			
+			for(Object keyObj : prop.keySet()) {
+				String key = keyObj.toString();
+				writer.put(factory.string(key), factory.string(prop.getProperty(key)));
+			}
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return writer.done();
+	} 
+}

@@ -8,11 +8,11 @@ data BreakingChanges (
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedAccessModifier = {},
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedFinalModifier = {},
 	rel[loc elem, Mapping[Modifier, Modifier] mapping] changedStaticModifier = {},
+	rel[loc elem, Mapping[loc, loc] mapping] deprecated = {},
 	rel[loc elem, Mapping[loc, loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc, loc] mapping] removed = {},
 	rel[loc elem, Mapping[loc, loc] mapping] renamed = {},
-	rel[loc elem, Mapping[loc, loc] mapping] deprecated = {},
-	map[str, str] config = ())
+	map[str, str] options = ())
 	= class (
 		Mapping[loc, loc] id)
 	| method (
