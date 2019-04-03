@@ -1,12 +1,10 @@
 module org::maracas::bc::BreakingChangesBuilder
 
 import Boolean;
-import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::CodeSimilarity;
 import org::maracas::config::Config;
 import org::maracas::diff::CodeSimilarityMatcher;
 import org::maracas::diff::Matcher;
@@ -133,13 +131,12 @@ private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
 private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
-	load = org::maracas::config::Config::DEP_MATCHES_LOAD in bc.options
-		&& fromString(bc.options[org::maracas::config::Config::DEP_MATCHES_LOAD]);
+	load = DEP_MATCHES_LOAD in bc.options && fromString(bc.options[DEP_MATCHES_LOAD]);
 		
 	if(load) {
 		url = |file://| + bc.options[org::maracas::config::Config::DEP_MATCHES_LOC];
 		matches = loadMatches(url);
-		return {<from, <from, to>>| <c, <from, to>> <- matches}; 
+		return {<from, <from, to>>| <from, to, conf> <- matches};
 	}
 	
 	// FIXME: implement cases where we do not know the actual mappings.
@@ -172,35 +169,64 @@ private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) 
 
 /*
  * Identifying renamed elements
- */
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \class(_)) {
-	m3Old.containment = m3Old.containment+;
-	m3New.containment = m3New.containment+;
-	return renamed(m3Old, m3New, isType);
+ */ 
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, BreakingChanges bc) {
+	switch(bc) {
+		case \class(_) : {
+			m3Old.containment = m3Old.containment+;
+			m3New.containment = m3New.containment+;
+			return renamed(m3Old, m3New, isType, bc.options);
+		}
+		case \method(_) : return renamed(m3Old, m3New, isMethod, bc.options);
+		case \field(_) : return renamed(m3Old, m3New, isField, bc.options);
+		default : return {};
+	}
 }
-
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \method(_)) 
-	= renamed(m3Old, m3New, isMethod);
-
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, \field(_)) 
-	= renamed(m3Old, m3New, isField);
 	
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun) {
+private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
+	matchers = (MATCHERS in options) ? split(",", options[MATCHERS]) : [];
+	rel[loc, tuple[loc, loc]] result = {};
 	
-	
-	if (m3Old.id.extension == "jar") {
+	// Default matcher: Jaccard
+	if(matchers == []) {
 		Matcher jaccardMatcher = matcher(jaccardMatch); 
-		jaccardMatcher.match(additions, removals, fun);
+		matches = jaccardMatcher.match(additions, removals, fun);
+		result = { <from, <from, to>> | <from, to, conf> <- matches };
 	}
 	else {
-		// TODO: return matches
-		Matcher levenshteinMatcher = matcher(levenshteinMatch); 
-		levenshteinMatcher.match(additions, removals, fun);
+		for(m <- matchers) { 
+			Matcher currentMatcher = matcher(jaccardMatch); 
+			
+			switch(trim(m)) {
+				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
+				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
+				default : currentMatcher = matcher(jaccardMatch);
+			}
+			
+			matches = currentMatcher.match(additions, removals, fun);
+			// Removing tuples related to elements that have been checked by other matchers 
+			matches = domainX(matches, domain(result));
+			
+			for(from <- domain(matches)) {
+				bestConf = -1;
+				bestTo = from;
+				
+				for(<to, conf> <- matches[from]) {
+					if(conf > bestConf) {
+						bestConf = conf;
+						bestTo = to;
+					}
+				} 
+				
+				// Select the best match for each location
+				result += <from, <from, bestTo>>;
+				// Let's not iterate over the same elements
+				matches = domainX(matches, {from});
+			}
+		}
 	}
-	
-	result = {};
 	return result;
 }
 

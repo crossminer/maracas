@@ -22,9 +22,8 @@ set[Match] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 				snippet2 = readFile(getFirstFrom(additions.declarations[a]));
 				similarity = levenshteinSimilarity(snippet1, snippet2);
 				
-				// Hard assumption: Assuming that the first match is the right one
 				if (similarity > simThreshold) { 
-					result += <similarity, <r, a>>;
+					result += <r, a, similarity>;
 					continue;
 				}
 			}
@@ -64,7 +63,7 @@ set[Match] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 
 				// Hard assumption: Assuming that the first match is the right one
 				if (score > simThreshold) {
-					result += <score, <r, a>>;
+					result += <r, a, score>;
 					continue;
 				}
 			}

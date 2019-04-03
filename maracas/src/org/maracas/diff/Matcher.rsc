@@ -9,8 +9,9 @@ data Matcher = matcher(
 
 alias Match 
 	= tuple[
-		real confidence, 
-		tuple[loc from, loc to] match
+		loc from, 
+		loc to,
+		real confidence
 	];
 
 /*
@@ -19,5 +20,5 @@ alias Match
 set[Match] loadMatches(loc csv) {
 	matches = readCSV(#rel[loc from, loc to], csv);
 	// If matches are given, then confidence must be equal to 1.
-	return {1.0} * matches;
+	return matches * 1.0;
 }

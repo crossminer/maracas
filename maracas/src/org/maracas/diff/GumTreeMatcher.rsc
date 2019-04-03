@@ -9,20 +9,20 @@
 module org::maracas::diff::GumTreeMatcher
 
 import IO;
+import lang::java::m3::Core;
 import List;
 import ListRelation;
-import Node;
+import Node; 
 import org::maracas::diff::Tree;
 import org::maracas::util::Math;
 import Set;
 import util::Math;
-import Type;
 
 import org::maracas::diff::Matcher;
 
 Matcher matcher = matcher(match);
 
-set[Match] match(M3 m) {
+set[Match] match(M3 additions, M3 removals, bool (loc) fun) {
 	return {};
 }
 
