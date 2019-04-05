@@ -34,7 +34,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedParamList = changedParamList(m3Old, m3New);
 	bc.changedReturnType = changedReturnType(m3Old, m3New);
 	bc = addCoreBCs(m3Old, m3New, bc, optionsFile);
-	return postproc(bc); 
+	return postproc(bc);
 }
 
 @memo
@@ -78,14 +78,14 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
-	accMods = {\public(), \private(), \protected()};
-	elemsNew = {<elem, modif> | <elem, modif> <- additions.modifiers, fun(elem), modif in accMods};
-	elemsOld = {<elem, modif> | <elem, modif> <- removals.modifiers, fun(elem), modif in accMods};
+	accMods = { \public(), \private(), \protected() };
+	elemsNew = { <elem, modif> | <elem, modif> <- additions.modifiers, fun(elem), modif in accMods };
+	elemsOld = { <elem, modif> | <elem, modif> <- removals.modifiers, fun(elem), modif in accMods };
 	
 	domainOld = domain(elemsOld);
 	domainNew = domain(elemsNew);
-	return {<elem, <getFirstFrom(elemsOld[elem]), getFirstFrom(elemsNew[elem])>> 
-		| elem <- domainNew, elem in domainOld, elemsNew[elem] != elemsOld[elem]};
+	return { <elem, <getFirstFrom(elemsOld[elem]), getFirstFrom(elemsNew[elem])>> 
+		| elem <- domainNew, elem in domainOld, elemsNew[elem] != elemsOld[elem] };
 }
 
 
@@ -123,8 +123,8 @@ private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3
 private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New, bool (loc) fun, Modifier modifier) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);	
-	return {<elem, <\default(), modif>> | <elem, modif> <- additions.modifiers, modif := modifier, fun(elem)}
-		+ {<elem, <modif, \default()>> | <elem, modif> <- removals.modifiers, modif := modifier, fun(elem)};
+	return { <elem, <\default(), modif>> | <elem, modif> <- additions.modifiers, modif := modifier, fun(elem) }
+		+ { <elem, <modif, \default()>> | <elem, modif> <- removals.modifiers, modif := modifier, fun(elem) };
 }
 
 
@@ -153,13 +153,14 @@ private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fu
 	if (load) {
 		url = |file://| + options[DEP_MATCHES_LOC];
 		matches = loadMatches(url);
-		return {<from, <from, to>>| <from, to, conf> <- matches};
+		return { <from, <from, to>>| <from, to, conf> <- matches };
 	}
 	
-	additions = getAdditions(m3Old, m3New);
-	elemsDeprecated = {e | <e, a> <- m3New.annotations, fun(e), 
+	elemsDeprecated = { e | <e, a> <- m3New.annotations, fun(e), 
 						a == |java+interface:///java/lang/Deprecated|,
-						|java+interface:///java/lang/Deprecated| notin m3Old.annotations[e]};
+						m3Old.declarations[e] != {},
+						|java+interface:///java/lang/Deprecated| notin m3Old.annotations[e] };
+	additions = filterM3(getAdditions(m3Old, m3New), elemsDeprecated);
 	deprecate = filterM3(m3New, elemsDeprecated);
 	
 	return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
@@ -212,7 +213,7 @@ private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, isPackage(parent), isType(elem)};
+	return { <elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, isPackage(parent), isType(elem) };
 }
 
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \method(_)) 
@@ -223,7 +224,7 @@ private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \field(_))
 
 private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Diff = getRemovals(m3Old, m3New);	
-	return {<elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, fun(elem), isType(parent)};
+	return { <elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, fun(elem), isType(parent) };
 }
 
 
@@ -260,10 +261,10 @@ rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) 
 		result = { <from, <from, to>> | <from, to, conf> <- matches };
 	}
 	else {
-		for(m <- matchers) { 
+		for (m <- matchers) { 
 			Matcher currentMatcher = matcher(jaccardMatch); 
 				
-			switch(trim(m)) {
+			switch (trim(m)) {
 				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
 				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
 				default : currentMatcher = matcher(jaccardMatch);
@@ -273,12 +274,12 @@ rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) 
 			// Removing tuples related to elements that have been checked by other matchers 
 			matches = domainX(matches, domain(result));
 				
-			for(from <- domain(matches)) {
+			for (from <- domain(matches)) {
 				bestConf = -1.0;
 				bestTo = from;
 					
-				for(<to, conf> <- matches[from]) {
-					if(conf > bestConf) {
+				for (<to, conf> <- matches[from]) {
+					if (conf > bestConf) {
 						bestConf = conf;
 						bestTo = to;
 					}
@@ -312,8 +313,8 @@ private rel[loc, Mapping[&T, &T]] changedMethodSignature(M3 m3Old, M3 m3New, &T 
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
-	methsNew = {<meth, typ> | <meth, typ> <- additions.types, isMethod(meth) || isConstructor(meth)};
-	methsOld = {<meth, typ> | <meth, typ> <- removals.types, isMethod(meth) || isConstructor(meth)};
+	methsNew = { <meth, typ> | <meth, typ> <- additions.types, isMethod(meth) || isConstructor(meth) };
+	methsOld = { <meth, typ> | <meth, typ> <- removals.types, isMethod(meth) || isConstructor(meth) };
 	
 	result = {};
 	for (<methNew, typeNew> <- methsNew) {
@@ -351,12 +352,12 @@ private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ
 private BreakingChanges postproc(BreakingChanges bc) {
 	bc = postprocRenamed(bc);
 
-	bc.changedAccessModifier = {<e, m> | <e, m> <- bc.changedAccessModifier, include(e)};
-	bc.changedFinalModifier  = {<e, m> | <e, m> <- bc.changedFinalModifier,  include(e)};
-	bc.changedStaticModifier = {<e, m> | <e, m> <- bc.changedStaticModifier, include(e)};
-	bc.moved   = {<e, m> | <e, m> <- bc.moved,   include(e), include(m[0]), include(m[1])};
-	bc.removed = {<e, m> | <e, m> <- bc.removed, include(e), include(m[0]), include(m[1])};
-	bc.renamed = {<e, m> | <e, m> <- bc.renamed, include(e), include(m[0]), include(m[1])};
+	bc.changedAccessModifier = { <e, m> | <e, m> <- bc.changedAccessModifier, include(e) };
+	bc.changedFinalModifier  = { <e, m> | <e, m> <- bc.changedFinalModifier,  include(e) };
+	bc.changedStaticModifier = { <e, m> | <e, m> <- bc.changedStaticModifier, include(e) };
+	bc.moved   = { <e, m> | <e, m> <- bc.moved,   include(e), include(m[0]), include(m[1]) };
+	bc.removed = { <e, m> | <e, m> <- bc.removed, include(e), include(m[0]), include(m[1]) };
+	bc.renamed = { <e, m> | <e, m> <- bc.renamed, include(e), include(m[0]), include(m[1]) };
 	//bc.changedParamList  = {<e, m> | <e, m> <- bc.changedParamList,  include(e)};
 	//bc.changedReturnType = {<e, m> | <e, m> <- bc.changedReturnType, include(e)};
 	//bc.changedType       = {<e, m> | <e, m> <- bc.changedType,       include(e)};

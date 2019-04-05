@@ -23,7 +23,7 @@ int height(&T <: node n) {
 
 list[value] descendants(value n) {
 	children = getChildrenNorm(n);
-	return [*(c + descendants(c)) | c <- children];
+	return [ *(c + descendants(c)) | c <- children ];
 }
 
 @doc{
@@ -31,7 +31,7 @@ list[value] descendants(value n) {
 }
 list[value] getNodeChildren(&T <: node n, bool order=false) {
 	children = getChildrenNorm(n, order=order);
-	return [c | c <- children, &T <: node nod := c];
+	return [ c | c <- children, &T <: node nod := c ];
 }
 
 @doc {
@@ -40,8 +40,8 @@ list[value] getNodeChildren(&T <: node n, bool order=false) {
 }
 private list[value] getChildrenNorm(value n, bool order=false) {
 	children = (&T <: node nod := n) ? getChildren(nod) : [];
-	return (order) ? [*(sort(compositeToList(c))) | c <- children]
-		: [*(compositeToList(c)) | c <- children];
+	return (order) ? [ *(sort(compositeToList(c))) | c <- children ]
+		: [ *(compositeToList(c)) | c <- children ];
 }
 
 

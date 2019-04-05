@@ -17,7 +17,7 @@ Program rewrite(Program p, BC m) {
 
 Statement rewrite((Statement)`<Id invoker>.<Id meth> ( <{Id ","}* args> );`, BC m) {
 	renamings = {<(Id)`add`, (Id)`sum`>};
-	if(renamings[meth] != {}) {
+	if (renamings[meth] != {}) {
 		Id methModf = getFirstFrom(renamings[meth]);
 		return (Statement)`<Id invoker>.<Id methModf> ( <{Id ","}* args> );`;
 	} 

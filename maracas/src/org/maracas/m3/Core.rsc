@@ -41,7 +41,7 @@ private list[loc] classPath(loc project, loc mvnExec) =
 
 private list[loc] classPathFromMaven(loc project, loc mvnExec) {
 	classPaths = getClassPath(project, mavenExecutable=mvnExec);
-	return [*classPaths[cp] | cp <- classPaths];
+	return [ *classPaths[cp] | cp <- classPaths ];
 }
 
 private list[loc] classPathFromJars(loc project) {

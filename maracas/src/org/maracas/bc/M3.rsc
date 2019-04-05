@@ -37,7 +37,7 @@ M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apac
 
 private list[loc] projectClassPath(loc project, loc mvnExec) {
 	classPaths = getClassPath(project, mavenExecutable=mvnExec);
-	return [*classPaths[cp] | cp <- classPaths];
+	return [ *classPaths[cp] | cp <- classPaths ];
 }
 
 private set[loc] fetchFilesByExtension(loc directory, str extension) {

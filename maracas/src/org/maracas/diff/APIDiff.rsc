@@ -31,8 +31,8 @@ tuple[M3,M3] matchM3s(M3 m3Old, M3 m3New) {
  * TODO: what if its semantics change?
  */
 set[loc] apiElements(M3 m) = 
-	{e | <e,l> <- m.declarations, isPackage(e) 
+	{ e | <e,l> <- m.declarations, isPackage(e) 
 		|| isClass(e) 
 		|| isInterface(e) 
 		|| isEnum(e) 
-		|| \public() in m.modifiers[e]};
+		|| \public() in m.modifiers[e] };

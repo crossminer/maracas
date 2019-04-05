@@ -46,9 +46,9 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 		
 		if (maxHeight1 > maxHeight2) {
 			// Add children from nodes with height = maxHeight1.
-			priority1 += [<height(c), c> |
+			priority1 += [ <height(c), c> |
 				<h, n> <- domainR(priority1, {maxHeight1}), 
-				&T <: node c <- getNodeChildren(n)];
+				&T <: node c <- getNodeChildren(n) ];
 				
 			// Remove nodes from list with height = maxHeight1.
 			priority1 = domainX(priority1, {maxHeight1});
@@ -56,9 +56,9 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			
 		else if (maxHeight1 < maxHeight2) {
 			// Add children from nodes with height = maxHeight2.
-			priority2 += [<height(c), c> |
+			priority2 += [ <height(c), c> |
 				<h, n> <- domainR(priority2, {maxHeight2}),
-				&T <: node c <- getNodeChildren(n)];
+				&T <: node c <- getNodeChildren(n) ];
 				
 			// Remove nodes from list with height = maxHeight2.
 			priority2 = domainX(priority2, {maxHeight2});
@@ -81,14 +81,14 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 			candidatesDom = domain(candidates);
 			for (n <- nodesMaxHeight1) {
 				if (n notin candidatesDom) {
-					priority1 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
+					priority1 += [ <height(c), c> | &S <: node c <- getNodeChildren(n) ];
 				}
 			}
 			
 			candidatesRang = range(candidates);
 			for (n <- nodesMaxHeight2) {
 				if (n notin candidatesRang) {
-					priority2 += [<height(c), c> | &S <: node c <- getNodeChildren(n)];
+					priority2 += [ <height(c), c> | &S <: node c <- getNodeChildren(n) ];
 				}
 			}
 		}
@@ -110,8 +110,8 @@ list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 		= c1 > c2;
 		
 	// Sort candidates using dice function.
-	candidatesDice = [<diceCoefficient(n1, n2, mappings), <n1, n2>>
-		| <n1, n2> <- candidates];
+	candidatesDice = [ <diceCoefficient(n1, n2, mappings), <n1, n2>>
+		| <n1, n2> <- candidates ];
 	candidatesDiceSort = sort(candidatesDice, diceLessThan);
 	mappings += range(candidatesDiceSort);
 	
@@ -125,8 +125,8 @@ real diceCoefficient(&T <: node t1, &T <: node t2, lrel[node, node] mappings) {
 	// TODO: there can be repeated children? Consider using other structure.
 	descendantsT1 = descendants(t1);
 	descendantsT2 = descendants(t2);
-	commonDescendants = (0 | it + 1 
-		|d <- descendantsT1, m <- mappings[d], m in descendantsT2);
+	commonDescendants = ( 0 | it + 1 
+		|d <- descendantsT1, m <- mappings[d], m in descendantsT2 );
 		
 	return 0.0 + ((2 * commonDescendants) / (size(descendantsT1) + size(descendantsT2)));
 }

@@ -4,7 +4,7 @@ public class AST1 {
 	
 	public boolean lessThan(int i, int j) {
 		boolean resp = false;
-		if(i > j) {
+		if (i > j) {
 			resp = true;
 		}
 		else {

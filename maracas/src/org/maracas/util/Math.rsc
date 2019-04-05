@@ -11,7 +11,7 @@ int max(list[int] integers) {
 	}
 	
 	global = 0;
-	for(i <- integers) {
+	for (i <- integers) {
 		global = max(global, i);
 	}
 	return global;
