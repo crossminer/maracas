@@ -20,5 +20,5 @@ alias Match
 set[Match] loadMatches(loc csv) {
 	matches = readCSV(#rel[loc from, loc to], csv);
 	// If matches are given, then confidence must be equal to 1.
-	return matches * 1.0;
+	return matches join {1.0}; 
 }

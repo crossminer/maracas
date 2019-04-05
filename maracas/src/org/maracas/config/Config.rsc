@@ -7,6 +7,7 @@ module org::maracas::config::Config
 
 public str DEP_MATCHES_LOAD = "deprecatedMatchesLoad";
 public str DEP_MATCHES_LOC = "deprecatedMatchesLoc";
+public str DEP_MATCHERS = "deprecatedMatchers";
 public str MATCHERS = "matchers";
 
 

@@ -2,6 +2,7 @@ module org::maracas::diff::CodeSimilarityMatcher
 
 import IO;
 import lang::java::m3::Core;
+import List;
 import org::maracas::diff::Matcher;
 import Set;
 
@@ -12,20 +13,24 @@ set[Match] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 	
 	for (<cont, r> <- removals.containment, fun(r) && include(r)) {
 		for (a <- additions.containment[cont], fun(a) && include(a)) {
-		
-			// In the case of M3 generated from jars we do not count with code
+			snippet1 = ""; 
+			snippet2 = "";
+			
 			if (additions.id.extension == "jar") {
-				;
+				// Considering contained declaration locs
+				// Warning: we don't take into account declarations ordering 
+				snippet1 = toString(sort(removals.containment[r]));
+				snippet2 = toString(sort(additions.containment[a]));
 			}
 			else {
 				snippet1 = readFile(getFirstFrom(removals.declarations[r]));
 				snippet2 = readFile(getFirstFrom(additions.declarations[a]));
-				similarity = levenshteinSimilarity(snippet1, snippet2);
-				
-				if (similarity > simThreshold) { 
-					result += <r, a, similarity>;
-					continue;
-				}
+			}
+			
+			similarity = levenshteinSimilarity(snippet1, snippet2);	
+			if (similarity > simThreshold) { 
+				result += <r, a, similarity>;
+				continue;
 			}
 		}
 	}

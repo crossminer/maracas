@@ -1,5 +1,6 @@
 module org::maracas::bc::BreakingChangesBuilder
 
+import IO;
 import Boolean;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
@@ -12,6 +13,7 @@ import org::maracas::io::properties::IO;
 import Relation;
 import Set;
 import String;
+import Type;
 
 
 @memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
@@ -127,20 +129,78 @@ private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New
 
 
 /*
- * Identifying deprecated elements
+ * Identifying deprecated elements. It only considers deprecated elements
+ * introduced in m3New.
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
 private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
-	load = DEP_MATCHES_LOAD in bc.options && fromString(bc.options[DEP_MATCHES_LOAD]);
-		
-	if(load) {
-		url = |file://| + bc.options[org::maracas::config::Config::DEP_MATCHES_LOC];
+	switch (bc) {
+		case \class(_) : {
+			m3Old.containment = m3Old.containment+;
+			m3New.containment = m3New.containment+;
+			return deprecated(m3Old, m3New, isType, bc.options);
+		}
+		case \method(_) : return deprecated(m3Old, m3New, isMethod, bc.options);
+		case \field(_) : return deprecated(m3Old, m3New, isField, bc.options);
+		default : return {};
+	}
+}
+
+private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
+	load = DEP_MATCHES_LOAD in options && fromString(options[DEP_MATCHES_LOAD]);
+	
+	// TODO: check that we only load matches from a certain kind (i.e. class, method, field)	
+	if (load) {
+		url = |file://| + options[DEP_MATCHES_LOC];
 		matches = loadMatches(url);
 		return {<from, <from, to>>| <from, to, conf> <- matches};
 	}
 	
-	// FIXME: implement cases where we do not know the actual mappings.
-	return {<e, <e, a>> | <e, a> <- m3Old.annotations, a == |java+interface:///java/lang/Deprecated|};
+	additions = getAdditions(m3Old, m3New);
+	elemsDeprecated = {e | <e, a> <- m3New.annotations, fun(e), 
+						a == |java+interface:///java/lang/Deprecated|,
+						|java+interface:///java/lang/Deprecated| notin m3Old.annotations[e]};
+	deprecate = filterM3(m3New, elemsDeprecated);
+	
+	return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
+}
+
+private M3 filterM3(M3 m, set[loc] elems) {
+	m3Filtered = m3(m.id);
+
+	// Core M3 relations
+	m3Filtered.declarations 	= filterElements(m.declarations, elems);
+	m3Filtered.types 			= filterElements(m.types, elems);
+	m3Filtered.uses 			= filterElements(m.uses, elems);
+	m3Filtered.containment 		= filterElements(m.containment, elems);
+	m3Filtered.names 			= filterElements(m.names, elems);
+	m3Filtered.documentation 	= filterElements(m.documentation, elems);
+	m3Filtered.modifiers 		= filterElements(m.modifiers, elems);
+
+	// Java M3 relations
+	m3Filtered.extends 			= filterElements(m.extends, elems);
+	m3Filtered.implements 		= filterElements(m.implements, elems);
+	m3Filtered.methodInvocation = filterElements(m.methodInvocation, elems);
+	m3Filtered.fieldAccess 		= filterElements(m.fieldAccess, elems);
+	m3Filtered.typeDependency 	= filterElements(m.typeDependency, elems);
+	m3Filtered.methodOverrides 	= filterElements(m.methodOverrides, elems);
+	m3Filtered.annotations 		= filterElements(m.annotations, elems);
+	
+	return m3Filtered;
+}
+	
+private rel[&T, &R] filterElements(rel[&T, &R] relToFilter, set[&S] elems) {
+	result = {};
+	if (relToFilter != {} && elems != {}) {
+		elemRel = getOneFrom(relToFilter);
+		elemSet = getOneFrom(elems);
+		
+		if (<first, second> := elemRel) {
+			result += (typeOf(first) == typeOf(elemSet)) ? domainR(relToFilter, elems) : {};
+			result += (typeOf(second) == typeOf(elemSet)) ? rangeR(relToFilter, elems) : {};
+		}
+	}
+	return result;
 }
 
  
@@ -186,11 +246,15 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, BreakingChanges 
 private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
-	matchers = (MATCHERS in options) ? split(",", options[MATCHERS]) : [];
+	return applyMatchers(additions, removals, fun, options, MATCHERS);
+}
+
+rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
+	matchers = (option in options) ? split(",", options[option]) : [];
 	rel[loc, tuple[loc, loc]] result = {};
 	
 	// Default matcher: Jaccard
-	if(matchers == []) {
+	if (matchers == []) {
 		Matcher jaccardMatcher = matcher(jaccardMatch); 
 		matches = jaccardMatcher.match(additions, removals, fun);
 		result = { <from, <from, to>> | <from, to, conf> <- matches };
@@ -198,28 +262,28 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, 
 	else {
 		for(m <- matchers) { 
 			Matcher currentMatcher = matcher(jaccardMatch); 
-			
+				
 			switch(trim(m)) {
 				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
 				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
 				default : currentMatcher = matcher(jaccardMatch);
 			}
-			
+				
 			matches = currentMatcher.match(additions, removals, fun);
 			// Removing tuples related to elements that have been checked by other matchers 
 			matches = domainX(matches, domain(result));
-			
-			for(from <- domain(matches)) {
-				bestConf = -1;
-				bestTo = from;
 				
+			for(from <- domain(matches)) {
+				bestConf = -1.0;
+				bestTo = from;
+					
 				for(<to, conf> <- matches[from]) {
 					if(conf > bestConf) {
 						bestConf = conf;
 						bestTo = to;
 					}
 				} 
-				
+					
 				// Select the best match for each location
 				result += <from, <from, bestTo>>;
 				// Let's not iterate over the same elements
@@ -227,9 +291,9 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, 
 			}
 		}
 	}
+	
 	return result;
 }
-
 
 /*
  * Identifying changes in method parameter lists
