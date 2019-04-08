@@ -1,4 +1,4 @@
-module org::maracas::config::Config
+module org::maracas::config::Options
 
 
 // -------------------------------
@@ -15,5 +15,7 @@ public str MATCHERS = "matchers";
 // Values
 // -------------------------------
 
+public str MATCH_LOAD = "load";
+public str MATCH_SIGNATURE = "signature";
 public str MATCH_LEVENSHTEIN = "levenshtein";
 public str MATCH_JACCARD = "jaccard";

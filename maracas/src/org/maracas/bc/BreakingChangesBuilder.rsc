@@ -6,7 +6,7 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
-import org::maracas::config::Config;
+import org::maracas::config::Options;
 import org::maracas::diff::CodeSimilarityMatcher;
 import org::maracas::diff::Matcher;
 import org::maracas::io::properties::IO;
@@ -45,7 +45,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	return postproc(bc);
 }
 
-private Mapping[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
+private tuple[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
 private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc, loc optionsFile) {
 	bc.options = readProperties(optionsFile);
@@ -65,16 +65,16 @@ private BreakingChanges addCoreBCs(M3 m3Old, M3 m3New, BreakingChanges bc, loc o
  * Identifying changes in access modifiers
  */
 // TODO: manage package modifier.
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \class(_)) 
+private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \class(_)) 
 	= changedAccessModifier(m3Old, m3New, isClass);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \method(_)) 
+private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \method(_)) 
 	= changedAccessModifier(m3Old, m3New, isMethod);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \field(_)) 
+private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, \field(_)) 
 	= changedAccessModifier(m3Old, m3New, isField);
 
-private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
+private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 m3Old, M3 m3New, bool (loc) fun) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
@@ -84,7 +84,8 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 	
 	domainOld = domain(elemsOld);
 	domainNew = domain(elemsNew);
-	return { <elem, <getFirstFrom(elemsOld[elem]), getFirstFrom(elemsNew[elem])>> 
+	// The confidence of the mapping is 1 if the signature is the same
+	return { <elem, <getFirstFrom(elemsOld[elem]), getFirstFrom(elemsNew[elem]), 1.0, MATCH_SIGNATURE>> 
 		| elem <- domainNew, elem in domainOld, elemsNew[elem] != elemsOld[elem] };
 }
 
@@ -92,39 +93,43 @@ private rel[loc, Mapping[Modifier, Modifier]] changedAccessModifier(M3 m3Old, M3
 /*
  * Identifying changes in final modifiers
  */
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \class(_)) 
+private rel[loc, Mapping[Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \class(_)) 
 	= changedFinalModifier(m3Old, m3New, isClass);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \method(_)) 
+private rel[loc, Mapping[Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \method(_)) 
 	= changedFinalModifier(m3Old, m3New, isMethod);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \field(_)) 
+private rel[loc, Mapping[Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, \field(_)) 
 	= changedFinalModifier(m3Old, m3New, isField);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
+private rel[loc, Mapping[Modifier]] changedFinalModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
 	= changedModifier(m3Old, m3New, fun, \final());
 
 
 /*
  * Identifying changes in static modifiers
  */
-private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \class(_)) 
+private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \class(_)) 
 	= changedStaticModifier(m3Old, m3New, isClass);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \method(_)) 
+private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \method(_)) 
 	= changedStaticModifier(m3Old, m3New, isMethod);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \field(_)) 
+private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, \field(_)) 
 	= changedStaticModifier(m3Old, m3New, isField);
 	
-private rel[loc, Mapping[Modifier, Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
+private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 m3Old, M3 m3New, bool (loc) fun) 
 	= changedModifier(m3Old, m3New, fun, \static());
 
-private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New, bool (loc) fun, Modifier modifier) {
+private rel[loc, Mapping[Modifier]] changedModifier(M3 m3Old, M3 m3New, bool (loc) fun, Modifier modifier) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);	
-	return { <elem, <\default(), modif>> | <elem, modif> <- additions.modifiers, modif := modifier, fun(elem) }
-		+ { <elem, <modif, \default()>> | <elem, modif> <- removals.modifiers, modif := modifier, fun(elem) };
+	
+	// The confidence of the mapping is 1 if the signature is the same
+	return { <elem, <\default(), modif, 1.0, MATCH_SIGNATURE>> 
+		| <elem, modif> <- additions.modifiers, modif := modifier, fun(elem) }
+		+ { <elem, <modif, \default(), 1.0, MATCH_SIGNATURE>> 
+		| <elem, modif> <- removals.modifiers, modif := modifier, fun(elem) };
 }
 
 
@@ -133,7 +138,7 @@ private rel[loc, Mapping[Modifier, Modifier]] changedModifier(M3 m3Old, M3 m3New
  * introduced in m3New.
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
-private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
+private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
 	switch (bc) {
 		case \class(_) : {
 			m3Old.containment = m3Old.containment+;
@@ -146,14 +151,14 @@ private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, BreakingChang
 	}
 }
 
-private rel[loc, Mapping[loc, loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
+private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
 	load = DEP_MATCHES_LOAD in options && fromString(options[DEP_MATCHES_LOAD]);
 	
 	// TODO: check that we only load matches from a certain kind (i.e. class, method, field)	
 	if (load) {
 		url = |file://| + options[DEP_MATCHES_LOC];
 		matches = loadMatches(url);
-		return { <from, <from, to>>| <from, to, conf> <- matches };
+		return { <from, <from, to, conf, meth>>| <from, to, conf, meth> <- matches };
 	}
 	
 	elemsDeprecated = { e | <e, a> <- m3New.annotations, fun(e), 
@@ -209,29 +214,33 @@ private rel[&T, &R] filterElements(rel[&T, &R] relToFilter, set[&S] elems) {
  * Identifying removed elements
  * TODO: check that removed elements are not listed in renamed or moved sets
  */
-private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
+private rel[loc, Mapping[loc]] removed(M3 m3Old, M3 m3New, \class(_)) {
 	m3Old.containment = m3Old.containment+;
 	m3New.containment = m3New.containment+;
 	m3Diff = getRemovals(m3Old, m3New);	
-	return { <elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, isPackage(parent), isType(elem) };
+	// FIXME: match signature?
+	return { <elem, <parent, elem, 1.0, MATCH_SIGNATURE>> 
+		| <parent, elem> <- m3Diff.containment, isPackage(parent), isType(elem) };
 }
 
-private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \method(_)) 
+private rel[loc, Mapping[loc]] removed(M3 m3Old, M3 m3New, \method(_)) 
 	= removed(m3Old, m3New, isMethod);
 	
-private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, \field(_)) 
+private rel[loc, Mapping[loc]] removed(M3 m3Old, M3 m3New, \field(_)) 
 	= removed(m3Old, m3New, isField);
 
-private rel[loc, Mapping[loc, loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) {
+private rel[loc, Mapping[loc]] removed(M3 m3Old, M3 m3New, bool (loc) fun) {
 	m3Diff = getRemovals(m3Old, m3New);	
-	return { <elem, <parent, elem>> | <parent, elem> <- m3Diff.containment, fun(elem), isType(parent) };
+	// FIXME: match signature?
+	return { <elem, <parent, elem, 1.0, MATCH_SIGNATURE>> 
+		| <parent, elem> <- m3Diff.containment, fun(elem), isType(parent) };
 }
 
 
 /*
  * Identifying renamed elements
  */ 
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, BreakingChanges bc) {
+private rel[loc, Mapping[loc]] renamed(M3 m3Old, M3 m3New, BreakingChanges bc) {
 	switch(bc) {
 		case \class(_) : {
 			m3Old.containment = m3Old.containment+;
@@ -244,21 +253,21 @@ private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, BreakingChanges 
 	}
 }
 	
-private rel[loc, Mapping[loc, loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
+private rel[loc, Mapping[loc]] renamed(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	return applyMatchers(additions, removals, fun, options, MATCHERS);
 }
 
-rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
-	matchers = (option in options) ? split(",", options[option]) : [];
-	rel[loc, tuple[loc, loc]] result = {};
+rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
+	matchers = (option in options) ? split(",", options[option]) : []; 
+	result = {};
 	
 	// Default matcher: Jaccard
 	if (matchers == []) {
 		Matcher jaccardMatcher = matcher(jaccardMatch); 
 		matches = jaccardMatcher.match(additions, removals, fun);
-		result = { <from, <from, to>> | <from, to, conf> <- matches };
+		result = { <from, <from, to, conf, meth>> | <from, to, conf, meth> <- matches };
 	}
 	else {
 		for (m <- matchers) { 
@@ -277,16 +286,18 @@ rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) 
 			for (from <- domain(matches)) {
 				bestConf = -1.0;
 				bestTo = from;
+				bestMeth = "";
 					
-				for (<to, conf> <- matches[from]) {
+				for (<to, conf, meth> <- matches[from]) {
 					if (conf > bestConf) {
 						bestConf = conf;
 						bestTo = to;
+						bestMeth = meth;
 					}
 				} 
 					
 				// Select the best match for each location
-				result += <from, <from, bestTo>>;
+				result += <from, <from, bestTo, bestConf, bestMeth>>;
 				// Let's not iterate over the same elements
 				matches = domainX(matches, {from});
 			}
@@ -299,17 +310,17 @@ rel[loc, Mapping[loc, loc]] applyMatchers(M3 additions, M3 removals, bool (loc) 
 /*
  * Identifying changes in method parameter lists
  */
-private rel[loc, Mapping[list[TypeSymbol], list[TypeSymbol]]] changedParamList(M3 m3Old, M3 m3New) 
+private rel[loc, Mapping[list[TypeSymbol]]] changedParamList(M3 m3Old, M3 m3New) 
 	= changedMethodSignature(m3Old, m3New, methodParams);
 
 
 /*
  * Identifying changes in method return types
  */
-private rel[loc, Mapping[TypeSymbol, TypeSymbol]] changedReturnType(M3 m3Old, M3 m3New)
+private rel[loc, Mapping[TypeSymbol]] changedReturnType(M3 m3Old, M3 m3New)
 	= changedMethodSignature(m3Old, m3New, methodReturnType);
 	
-private rel[loc, Mapping[&T, &T]] changedMethodSignature(M3 m3Old, M3 m3New, &T (&U) fun) {
+private rel[loc, Mapping[&T]] changedMethodSignature(M3 m3Old, M3 m3New, &T (&U) fun) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
