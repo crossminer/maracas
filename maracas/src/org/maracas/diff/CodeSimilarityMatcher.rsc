@@ -12,8 +12,8 @@ set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 	
-	for (<cont, r> <- removals.containment, fun(r) && include(r)) {
-		for (a <- additions.containment[cont], fun(a) && include(a)) {
+	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
+		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
 			snippet1 = ""; 
 			snippet2 = "";
 			
@@ -42,9 +42,11 @@ set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 set[Mapping[loc]] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
-	
-	for (<cont, r> <- removals.containment, fun(r) && include(r)) {
-		for (a <- additions.containment[cont], fun(a) && include(a)) {
+	println("removals: <(0 | it + 1 | <r, declr> <- removals.containment, fun(r) && include(r))>");
+	println("additions: <(0 | it + 1 | <r, declr> <- additions.containment, fun(r) && include(r))>");
+
+	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
+		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
 			set[loc] d = {};
 			set[loc] e = {};
 
@@ -66,7 +68,7 @@ set[Mapping[loc]] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 			
 			if (size(d) > 0 && size(e) > 0) {
 				real score = jaccard(d, e);
-
+				
 				// Hard assumption: Assuming that the first match is the right one
 				if (score > simThreshold) {
 					result += <r, a, score, MATCH_JACCARD>;
