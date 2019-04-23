@@ -30,6 +30,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
+	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -50,6 +51,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
+	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -72,6 +74,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
+	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -141,6 +144,18 @@ private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 removals, M3 additi
 	
 private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 removals, M3 additions, bool (loc) fun) 
 	= changedModifier(removals, additions, fun, \static());
+
+/*
+ * Identifying changes in abstract modifiers
+ */
+private rel[loc, Mapping[Modifier]] changedAbstractModifier(M3 removals, M3 additions, \class(_)) 
+	= changedAbstractModifier(removals, additions, isClass);
+
+private rel[loc, Mapping[Modifier]] changedAbstractModifier(M3 removals, M3 additions, \method(_)) 
+	= changedAbstractModifier(removals, additions, isMethod);
+
+private rel[loc, Mapping[Modifier]] changedAbstractModifier(M3 removals, M3 additions, bool (loc) fun) 
+	= changedModifier(removals, additions, fun, \abstract());
 
 // The confidence of the mapping is 1 if the signature is the same
 private rel[loc, Mapping[Modifier]] changedModifier(M3 removals, M3 additions, bool (loc) fun, Modifier modifier) 
@@ -391,6 +406,7 @@ private BreakingChanges postproc(BreakingChanges bc) {
 	bc.changedAccessModifier = { <e, m> | <e, m> <- bc.changedAccessModifier, include(e) };
 	bc.changedFinalModifier  = { <e, m> | <e, m> <- bc.changedFinalModifier,  include(e) };
 	bc.changedStaticModifier = { <e, m> | <e, m> <- bc.changedStaticModifier, include(e) };
+	bc.changedAbstractModifier = { <e, m> | <e, m> <- bc.changedAbstractModifier, include(e) };
 	bc.moved   = { <e, m> | <e, m> <- bc.moved,   include(e), include(m[0]), include(m[1]) };
 	bc.removed = { <e, m> | <e, m> <- bc.removed, include(e), include(m[0]), include(m[1]) };
 	bc.renamed = { <e, m> | <e, m> <- bc.renamed, include(e), include(m[0]), include(m[1]) };
