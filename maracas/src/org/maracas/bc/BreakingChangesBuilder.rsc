@@ -359,7 +359,7 @@ private rel[loc, Mapping[&T]] changedMethodSignature(M3 removals, M3 additions, 
 			elemsRemoved = fun(typeRemoved);
 			
 			if (elemsRemoved != elemsAdded) {
-				result += <methRemoved, <elemsRemoved, elemsAdded>>;
+				result += <methRemoved, <elemsRemoved, elemsAdded, 1.0, MATCH_SIGNATURE>>;
 			}
 		}
 	}
