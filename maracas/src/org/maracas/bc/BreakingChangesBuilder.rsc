@@ -77,7 +77,6 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
-	//bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -195,14 +194,15 @@ private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, ma
 		return { <from, <from, to, conf, meth>>| <from, to, conf, meth> <- matches };
 	}
 	
-	elemsDeprecated = { e | <e, a> <- m3New.annotations, fun(e), 
+	// For now, only mark @Deprecated elements
+	return { <e, <e, e, 1.0, MATCH_SIGNATURE>> | <e, a> <- m3New.annotations, fun(e),
 						a == |java+interface:///java/lang/Deprecated|,
 						m3Old.declarations[e] != {},
 						|java+interface:///java/lang/Deprecated| notin m3Old.annotations[e] };
-	additions = getAdditions(m3Old, m3New);
-	deprecate = filterM3(m3New, elemsDeprecated);
-	
-	return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
+
+	//additions = getAdditions(m3Old, m3New);
+	//deprecate = filterM3(m3New, elemsDeprecated);
+	//return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
 }
 
 private M3 filterM3(M3 m, set[loc] elems) {
