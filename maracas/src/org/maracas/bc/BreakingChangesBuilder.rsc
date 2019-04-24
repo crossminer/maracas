@@ -8,8 +8,8 @@ import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::config::Options;
 import org::maracas::diff::CodeSimilarityMatcher;
-import org::maracas::diff::Matcher;
 import org::maracas::io::properties::IO;
+import org::maracas::diff::Matcher;
 import Relation;
 import Set;
 import String;
@@ -41,8 +41,13 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 
 @memo
 BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
-	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
+	additions = getAdditions(m3Old, m3New);
+	
+	//iprintln("Removals");
+	//iprintln(removals);
+	//iprintln("Additions");
+	//iprintln(additions);
 	
 	id = createBCId(m3Old, m3New);
 	bc = method(id);
@@ -50,12 +55,19 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
-	//TODO: moved
-	bc.deprecated = deprecated(m3Old, m3New, bc);
-	//bc.removed = removed(m3Old, additions, bc);
-	bc.renamed = renamed(removals, additions, bc);
 	bc.changedParamList = changedParamList(removals, additions);
 	bc.changedReturnType = changedReturnType(removals, additions);
+	bc.deprecated = deprecated(m3Old, m3New, bc);
+	
+	// After changedParamList computation we filter its domain from additions
+	// and removals models. 
+	// TODO: naive solution. More needs to be done here. changedXModifier are also affected.
+	additions = filterM3(additions, bc.changedParamList.elem);
+	additions = filterM3(additions, bc.changedParamList.elem);
+	bc.renamed = renamed(removals, additions, bc);
+	
+	//TODO: moved
+	//bc.removed = removed(m3Old, additions, bc);
 	
 	//return postproc(bc);
 	return bc;
@@ -100,7 +112,6 @@ private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additi
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, bool (loc) fun) {
 	accMods = { \public(), \private(), \protected() };
 	result = {};
-
 	// The confidence of the mapping is 1 if the signature is the same
 	for (<elem, modifAdded> <- additions.modifiers, fun(elem), modifAdded in accMods) {
 		for (modifRemoved <- removals.modifiers[elem], modifRemoved in accMods) {
@@ -109,7 +120,6 @@ private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additi
 	}
 	return result;
 }
-
 
 /*
  * Identifying changes in final modifiers
@@ -141,6 +151,7 @@ private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 removals, M3 additi
 	
 private rel[loc, Mapping[Modifier]] changedStaticModifier(M3 removals, M3 additions, bool (loc) fun) 
 	= changedModifier(removals, additions, fun, \static());
+//	= changedModifier(removals, additions, fun, \static());
 
 // The confidence of the mapping is 1 if the signature is the same
 private rel[loc, Mapping[Modifier]] changedModifier(M3 removals, M3 additions, bool (loc) fun, Modifier modifier) 
@@ -260,13 +271,18 @@ private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, bool (loc) fun
  */ 
 private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, BreakingChanges bc) {
 	switch(bc) {
-		case \class(_) : {
-			// TODO: refactor
-			//m3Old.containment = m3Old.containment+;
-			//m3New.containment = m3New.containment+;
-			return renamed(removals, additions, isType, bc.options);
+		case \class(_) : return renamed(removals, additions, isType, bc.options);
+		case \method(_) : {
+		// TODO: remove this code once changedParamList is correctly computed: 
+		// additions and removals must be filtered first 
+			result = renamed(removals, additions, isMethod, bc.options);
+			for (<elem, <from, to, conf, meth>> <- result) {
+				if (methodQualName(from) == methodQualName(to)) {
+					result = domainX(result, {elem});
+				}
+			}
+			return result;
 		}
-		case \method(_) : return renamed(removals, additions, isMethod, bc.options);
 		case \field(_) : return renamed(removals, additions, isField, bc.options);
 		default : return {};
 	}
@@ -276,6 +292,7 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun
 	result = {};
 	
 	for (<cont, r> <- removals.containment, removals.declarations[r] != {}, fun(r)) {
+		// Search in the same container of removed elements
 		elemsSameLoc = {a | a <- additions.containment[cont], additions.declarations[a] != {}, fun(a)};
 		removals = filterM3(removals, {r});
 		additions = filterM3(additions, elemsSameLoc);
@@ -359,7 +376,7 @@ private rel[loc, Mapping[&T]] changedMethodSignature(M3 removals, M3 additions, 
 			elemsRemoved = fun(typeRemoved);
 			
 			if (elemsRemoved != elemsAdded) {
-				result += <methRemoved, <elemsRemoved, elemsAdded>>;
+				result += <methRemoved, <elemsRemoved, elemsAdded, 1.0, MATCH_SIGNATURE>>;
 			}
 		}
 	}

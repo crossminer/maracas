@@ -12,7 +12,7 @@ public BreakingChanges fbc = fieldBreakingChanges(api0, api1);
 public BreakingChanges mbc = methodBreakingChanges(api0, api1);
 public BreakingChanges cbc = classBreakingChanges(api0, api1);
 
-
+BreakingChanges mbcm() = methodBreakingChanges(api0, api1);
 test bool fieldChangedAccessModifier() 
 	= fbc.changedAccessModifier == {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,"signature">>,
@@ -66,8 +66,9 @@ test bool fieldChangedStaticModifier()
 test bool methodChangedStaticModifier()
 	= mbc.changedStaticModifier == {
 		<|java+method:///p1/ChangedStaticModifier2/m1()|,<\default(),\static(),1.0,"signature">>,
+		<|java+method:///p1/ChangedStaticModifier2/m2()|,<\static(),\default(),1.0,"signature">>,
  		<|java+method:///p1/ChangedStaticModifier2/m3()|,<\static(),\default(),1.0,"signature">>,
- 		<|java+method:///p1/ChangedStaticModifier2/m2()|,<\static(),\default(),1.0,"signature">>,
+ 		<|java+method:///p1/ChangedStaticModifier2/m4()|,<\default(),\static(),1.0,"signature">>,
   		<|java+initializer:///p1/ChangedStaticModifier3/ChangedStaticModifier3$initializer|,<\static(),\default(),1.0,"signature">>
 	};
 	

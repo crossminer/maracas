@@ -14,7 +14,7 @@ public class ChangedStaticModifier2 {
 		
 	}
 	
-	private int m4() {
+	private static int m4() {
 		return 1;
 	}
 	
