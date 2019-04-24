@@ -1,8 +1,10 @@
 module org::maracas::\test::bc::BreakingChangesBuilderTest
 
 import lang::java::m3::AST;
+import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::Maracas;
+import Set;
 import IO;
 
 
@@ -13,7 +15,6 @@ public BreakingChanges fbc = fieldBreakingChanges(api0, api1);
 public BreakingChanges mbc = methodBreakingChanges(api0, api1);
 public BreakingChanges cbc = classBreakingChanges(api0, api1);
 
-BreakingChanges mbcm() = methodBreakingChanges(api0, api1);
 test bool fieldChangedAccessModifier() 
 	= fbc.changedAccessModifier == {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,"signature">>,
@@ -77,6 +78,38 @@ test bool methodChangedStaticModifier()
 // TODO: what happens with inner classes?
 test bool classChangedStaticModifier()
 	= cbc.changedStaticModifier == {};
+
+
+test bool changedParamList1() {
+	meth = |java+method:///p3/ChangeParamList/m2(int%5B%5D%5B%5D)|;
+	list[TypeSymbol] from = [lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2)];
+	list[TypeSymbol] to = 	[lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2),
+							lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
+   							lang::java::m3::TypeSymbol::\int()];
+    return changedParamList(meth, from, to);
+}
+
+test bool changedParamList2() {
+	meth = |java+method:///p3/ChangeParamList/m3(java.lang.String,int,boolean)|;
+	list[TypeSymbol] from = [lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
+    						lang::java::m3::TypeSymbol::\int(),
+    						lang::java::m3::TypeSymbol::\boolean()];
+	list[TypeSymbol] to = 	[lang::java::m3::TypeSymbol::\int(),
+    						lang::java::m3::TypeSymbol::\boolean(),
+    						lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|,[])];
+    return changedParamList(meth, from, to);
+}
+
+bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
+	if (mbc.changedParamList[meth] != {}) {
+		tuple[list[TypeSymbol] from, list[TypeSymbol] to, real conf, str meth] mapping 
+			= getOneFrom(mbc.changedParamList[meth]);
+    	return (from == mapping.from) && (to == mapping.to);
+	}
+	else {
+		return false;
+	}
+}  
 
 
 test bool methodRenamed() {

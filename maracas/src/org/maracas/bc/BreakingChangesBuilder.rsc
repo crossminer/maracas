@@ -368,7 +368,6 @@ rel[loc, Mapping[TypeSymbol]] changedReturnType(M3 removals, M3 additions)
 	
 
 private rel[loc, Mapping[&T]] changedMethodSignature(M3 removals, M3 additions, &T (&U) fun) {
-	// FIXME: M3 types relation is empty when generating it from a jar. Change it in the rascal side
 	methsAdded = { <meth, typ> | <meth, typ> <- additions.types, isMethod(meth) || isConstructor(meth) };
 	methsRemoved = { <meth, typ> | <meth, typ> <- removals.types, isMethod(meth) || isConstructor(meth) };
 		
