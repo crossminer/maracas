@@ -20,15 +20,20 @@ set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 			if (additions.id.extension == "jar") {
 				// Considering contained declaration locs
 				// Warning: we don't take into account declarations ordering 
-				snippet1 = toString(sort(removals.containment[r]));
-				snippet2 = toString(sort(additions.containment[a]));
+				snippet1 = toString(sort(removals.containment[r]))
+					+ toString(sort(removals.methodInvocation[r]))
+					+ toString(sort(removals.fieldAccess[r]));
+					
+				snippet2 = toString(sort(additions.containment[a]))
+					+ toString(sort(additions.methodInvocation[a]))
+					+ toString(sort(additions.fieldAccess[a]));
 			}
 			else {
 				snippet1 = readFile(getFirstFrom(removals.declarations[r]));
 				snippet2 = readFile(getFirstFrom(additions.declarations[a]));
 			}
 			
-			similarity = levenshteinSimilarity(snippet1, snippet2);	
+			similarity = levenshteinSimilarity(snippet1, snippet2);					
 			if (similarity > simThreshold) { 
 				result += <r, a, similarity, MATCH_LEVENSHTEIN>;
 				continue;
@@ -42,8 +47,6 @@ set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 set[Mapping[loc]] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
-	println("removals: <(0 | it + 1 | <r, declr> <- removals.containment, fun(r) && include(r))>");
-	println("additions: <(0 | it + 1 | <r, declr> <- additions.containment, fun(r) && include(r))>");
 
 	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
 		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
@@ -66,9 +69,9 @@ set[Mapping[loc]] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
 				//println("Skipping field");
 			};
 			
+			
 			if (size(d) > 0 && size(e) > 0) {
 				real score = jaccard(d, e);
-				
 				// Hard assumption: Assuming that the first match is the right one
 				if (score > simThreshold) {
 					result += <r, a, score, MATCH_JACCARD>;
@@ -88,5 +91,6 @@ java real levenshteinSimilarity(str snippet1, str snippet2);
 
 // FIXME: copied from BreakingChangesBuilder 
 private bool include(loc l) {
-	return /org\/sonar\/api\/internal\// !:= l.uri;
+return true;
+	//return /org\/sonar\/api\/internal\// !:= l.uri;
 }

@@ -3,6 +3,7 @@ module org::maracas::\test::bc::BreakingChangesBuilderTest
 import lang::java::m3::AST;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::Maracas;
+import IO;
 
 
 loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
@@ -76,3 +77,25 @@ test bool methodChangedStaticModifier()
 // TODO: what happens with inner classes?
 test bool classChangedStaticModifier()
 	= cbc.changedStaticModifier == {};
+
+
+test bool methodRenamed() {
+	renamed = { <from, to> | <elem, <from, to, conf, meth>> <- mbc.renamed };
+	return renamed == {
+		<|java+method:///p2/Renamed1/setF2(int)|,|java+method:///p2/RenamedRenamed1/setF2(int)|>,
+		<|java+method:///p2/Renamed1/getF1()|,|java+method:///p2/RenamedRenamed1/getF1()|>,
+		<|java+method:///p2/Renamed1/getF2()|,|java+method:///p2/RenamedRenamed1/getF2()|>,
+		<|java+method:///p2/Renamed1/isF3()|,|java+method:///p2/RenamedRenamed1/isF3()|>,
+		<|java+method:///p2/Renamed1/setF3(boolean)|,|java+method:///p2/RenamedRenamed1/setF3(boolean)|>,
+		<|java+method:///p2/Renamed1/setF1(java.lang.String)|,|java+method:///p2/RenamedRenamed1/setF1(java.lang.String)|>,
+		<|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|>,
+		<|java+constructor:///p2/Renamed1/Renamed1(java.lang.String,int,boolean)|,|java+constructor:///p2/RenamedRenamed1/RenamedRenamed1(java.lang.String,int,boolean)|>
+	};
+}
+
+test bool classRenamed() {
+	renamed = { <from, to> | <elem, <from, to, conf, meth>> <- cbc.renamed };
+	return renamed == {
+		<|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|>
+	};
+}

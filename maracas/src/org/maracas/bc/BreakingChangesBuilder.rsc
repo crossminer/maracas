@@ -45,11 +45,6 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
 	
-	//iprintln("Removals");
-	//iprintln(removals);
-	//iprintln("Additions");
-	//iprintln(additions);
-	
 	id = createBCId(m3Old, m3New);
 	bc = method(id);
 	bc.options = readProperties(optionsFile);
@@ -60,12 +55,8 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedParamList = changedParamList(removals, additions);
 	bc.changedReturnType = changedReturnType(removals, additions);
 	bc.deprecated = deprecated(m3Old, m3New, bc);
-	
-	// After changedParamList computation we filter its domain from additions
+	// TODO: After changedParamList computation we filter its domain from additions
 	// and removals models. 
-	// TODO: naive solution. More needs to be done here. changedXModifier are also affected.
-	additions = filterM3(additions, bc.changedParamList.elem);
-	additions = filterM3(additions, bc.changedParamList.elem);
 	bc.renamed = renamed(removals, additions, bc);
 	
 	//TODO: moved
@@ -86,7 +77,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
-	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
+	//bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -305,15 +296,12 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, BreakingChange
 	
 private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun, map[str,str] options) {
 	result = {};
-	
-	for (<cont, r> <- removals.containment, removals.declarations[r] != {}, fun(r)) {
-		// Search in the same container of removed elements
-		elemsSameLoc = {a | a <- additions.containment[cont], additions.declarations[a] != {}, fun(a)};
-		removals = filterM3(removals, {r});
-		additions = filterM3(additions, elemsSameLoc);
-		result += applyMatchers(additions, removals, fun, options, MATCHERS);
+	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, fun(elem)) {
+		elemsSameCont = { a | a <- additions.containment[cont], additions.declarations[a] != {}, fun(a) };
+		removalsTemp = filterM3(removals, {elem});
+		additionsTemp = filterM3(additions, elemsSameCont);
+		result += applyMatchers(additionsTemp, removalsTemp, fun, options, MATCHERS);
 	}
-	
 	return result;
 }
 

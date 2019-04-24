@@ -25,6 +25,6 @@ public class CodeSimilarity {
 	public IReal levenshteinSimilarity(IString snippet1, IString snippet2, IEvaluatorContext eval) {
 		NormalizedLevenshtein levenshtein = new NormalizedLevenshtein();
 		double distance = levenshtein.distance(snippet1.getValue(), snippet2.getValue());
-		return factory.real(distance);
+		return factory.real(1 - distance);
 	}
 }
