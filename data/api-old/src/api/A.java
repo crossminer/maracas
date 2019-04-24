@@ -6,12 +6,21 @@ import java.util.Map;
 import java.util.Set;
 
 public class A {
-	private int fAccessModifier;
+	public int fPublicToPrivate;
+	int fDefaultToPrivate;
+	public int fPublicToDefault;
+	
 	public String fFinalModifier;
 	static float fStaticModifier;
 	public String fType;
 
-	private void mAccessModifier() {}
+	private void mAccessModifierPrivateToPublic() {}
+	public void mAccessModifierPublicToPrivate() {}
+	void mAccessModifierDefaultToPrivate() {}
+	void mAccessModifierDefaultToPublic() {}
+	private void mAccessModifierPrivateToDefault() {}
+	public void mAccessModifierPublicToDefault() {}
+	
 	public final void mFinalModifier() {}
 	private static void mStaticModifier() {}
 	public void mDeprecated() {}
