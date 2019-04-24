@@ -8,6 +8,7 @@ data BreakingChanges (
 	rel[loc elem, Mapping[Modifier] mapping] changedAccessModifier = {},
 	rel[loc elem, Mapping[Modifier] mapping] changedFinalModifier = {},
 	rel[loc elem, Mapping[Modifier] mapping] changedStaticModifier = {},
+	rel[loc elem, Mapping[Modifier] mapping] changedAbstractModifier = {},
 	rel[loc elem, Mapping[loc] mapping] deprecated = {},
 	rel[loc elem, Mapping[loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc] mapping] removed = {},
