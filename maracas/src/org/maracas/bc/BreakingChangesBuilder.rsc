@@ -16,10 +16,24 @@ import String;
 import Type;
 
 
-@memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
-@memo M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
+@memo
+M3 getRemovals(M3 m3Old, M3 m3New) {
+	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3Old), fillDefaultVisibility(m3New)]);
+}
 
 @memo
+M3 getAdditions(M3 m3Old, M3 m3New) {
+	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3New), fillDefaultVisibility(m3Old)]);
+}
+
+private M3 fillDefaultVisibility(M3 m3) {
+	m3.modifiers = m3.modifiers +
+		{ <elem, \default()> | elem <- domain(m3.declarations),
+		                       elem notin domain(m3.modifiers) };
+
+	return m3;
+}
+
 BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
@@ -112,9 +126,10 @@ private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additi
 	= changedAccessModifier(removals, additions, isField);
 
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, bool (loc) fun) {
-	accMods = { \public(), \private(), \protected() };
+	accMods = { \default(), \public(), \private(), \protected() };
 	result = {};
 	// The confidence of the mapping is 1 if the signature is the same
+
 	for (<elem, modifAdded> <- additions.modifiers, fun(elem), modifAdded in accMods) {
 		for (modifRemoved <- removals.modifiers[elem], modifRemoved in accMods) {
 			result += { <elem, <modifRemoved, modifAdded, 1.0, MATCH_SIGNATURE>> };
