@@ -86,7 +86,6 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
-	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
