@@ -15,6 +15,11 @@ import Set;
 import String;
 import Type;
 
+// extends lang::java::m3::AST::Modifier
+// Could be moved to M3 creation itself
+// but this is the quickest way :)
+data Modifier =
+	\defaultAccess();
 
 @memo
 M3 getRemovals(M3 m3Old, M3 m3New) {
@@ -26,10 +31,12 @@ M3 getAdditions(M3 m3Old, M3 m3New) {
 	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3New), fillDefaultVisibility(m3Old)]);
 }
 
-private M3 fillDefaultVisibility(M3 m3) {
+M3 fillDefaultVisibility(M3 m3) {
+	accMods = { \defaultAccess(), \public(), \private(), \protected() };
+
 	m3.modifiers = m3.modifiers +
-		{ <elem, \default()> | elem <- domain(m3.declarations),
-		                       elem notin domain(m3.modifiers) };
+		{ <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+		                             (m3.modifiers[elem] & accMods) == {} };
 
 	return m3;
 }
@@ -117,7 +124,7 @@ private tuple[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
  */
 // TODO: manage package modifier.
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, \class(_)) 
-	= changedAccessModifier(removals, additions, isClass);
+	= changedAccessModifier(removals, additions, isType);
 	
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, \method(_)) 
 	= changedAccessModifier(removals, additions, isMethod);
@@ -126,15 +133,16 @@ private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additi
 	= changedAccessModifier(removals, additions, isField);
 
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, bool (loc) fun) {
-	accMods = { \default(), \public(), \private(), \protected() };
+	accMods = { \defaultAccess(), \public(), \private(), \protected() };
 	result = {};
-	// The confidence of the mapping is 1 if the signature is the same
 
+	// The confidence of the mapping is 1 if the signature is the same
 	for (<elem, modifAdded> <- additions.modifiers, fun(elem), modifAdded in accMods) {
 		for (modifRemoved <- removals.modifiers[elem], modifRemoved in accMods) {
 			result += { <elem, <modifRemoved, modifAdded, 1.0, MATCH_SIGNATURE>> };
 		}
 	}
+
 	return result;
 }
 

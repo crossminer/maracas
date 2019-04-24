@@ -1,5 +1,5 @@
 package api;
 
-public interface InterfaceAccessModifierAdded {
+interface InterfaceAccessModifierAdded {
 
 }

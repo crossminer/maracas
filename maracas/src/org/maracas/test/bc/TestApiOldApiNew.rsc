@@ -4,6 +4,7 @@ import IO;
 import Set;
 import lang::java::m3::AST;
 import org::maracas::bc::BreakingChanges;
+import org::maracas::bc::BreakingChangesBuilder;
 import org::maracas::Maracas;
 
 // TODO: what about constructors?
@@ -46,16 +47,26 @@ test bool classNoMoreAbstractModifiers() =
 
 // public api.AccessModifierRemoved -> api.AccessModifierRemoved
 test bool classAccessModifierRemoved() =
-	<|java+class:///api/AccessModifierRemoved|, <\public(), \default(), 1.0, "signature">>
+	<|java+class:///api/AccessModifierRemoved|, <\public(), \defaultAccess(), 1.0, "signature">>
 	in cbc.changedAccessModifier;
 
 // api.AccessModifierAdded -> public api.AccessModifierAdded
 test bool classAccessModifierRemoved() =
-	<|java+class:///api/AccessModifierAdded|, <\default(), \public(), 1.0, "signature">>
+	<|java+class:///api/AccessModifierAdded|, <\defaultAccess(), \public(), 1.0, "signature">>
+	in cbc.changedAccessModifier;
+
+// interface api.InterfaceAccessModifierAdded -> public interface api.InterfaceAccessModifierAdded
+test bool interfaceAccessModifierAdded() =
+	<|java+interface:///api/InterfaceAccessModifierAdded|, <\defaultAccess(), \public(), 1.0, "signature">>
+	in cbc.changedAccessModifier;
+
+// public interface api.InterfaceAccessModifierRemoved-> interface api.InterfaceAccessModifierRemoved
+test bool interfaceAccessModifierRemoved() =
+	<|java+interface:///api/InterfaceAccessModifierRemoved|, <\public(), \defaultAccess(), 1.0, "signature">>
 	in cbc.changedAccessModifier;
 
 test bool classNoMoreAccessModifiers() =
-	size(cbc.changedAccessModifier) == 2;
+	size(cbc.changedAccessModifier) == 4;
 
 // api.DeprecatedAdded -> @Deprecated api.DeprecatedAdded
 test bool classDeprecated() =
@@ -67,12 +78,12 @@ test bool classNoMoreDeprecated() =
 
 // api.AccessModifierAdded.AccessModifierAdded() -> public api.AccessModifierAdded.AccessModifierAdded()
 test bool constructorAccessModifierAdded() =
-	<|java+constructor:///api/AccessModifierAdded/AccessModifierAdded()|, <\default(), \public(), 1.0, "signature">>
+	<|java+constructor:///api/AccessModifierAdded/AccessModifierAdded()|, <\defaultAccess(), \public(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 // api.AccessModifierRemoved.AccessModifierRemoved() -> public api.AccessModifierRemoved.AccessModifierRemoved()
 test bool constructorAccessModifierRemoved() =
-	<|java+constructor:///api/AccessModifierRemoved/AccessModifierRemoved()|, <\public(), \default(), 1.0, "signature">>
+	<|java+constructor:///api/AccessModifierRemoved/AccessModifierRemoved()|, <\public(), \defaultAccess(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 // private api.A.mAccessModifierPrivateToPublic() -> public api.A.mAccessModifierPrivateToPublic()
@@ -87,22 +98,22 @@ test bool methodAccessModifierPublicToPrivate() =
 
 // api.A.mAccessModifierDefaultToPrivate() -> private api.A.mAccessModifierDefaultToPrivate()
 test bool methodAccessModifierDefaultToPrivate() =
-	<|java+method:///api/A/mAccessModifierDefaultToPrivate()|, <\default(), \private(), 1.0, "signature">>
+	<|java+method:///api/A/mAccessModifierDefaultToPrivate()|, <\defaultAccess(), \private(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 // api.A.mAccessModifierDefaultToPublic() -> public api.A.mAccessModifierDefaultToPublic()
 test bool methodAccessModifierDefaultToPublic() =
-	<|java+method:///api/A/mAccessModifierDefaultToPublic()|, <\default(), \public(), 1.0, "signature">>
+	<|java+method:///api/A/mAccessModifierDefaultToPublic()|, <\defaultAccess(), \public(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 // private api.A.mAccessModifierPrivateToDefault() -> api.A.mAccessModifierPrivateToDefault()
 test bool methodAccessModifierPrivateToDefault() =
-	<|java+method:///api/A/mAccessModifierPrivateToDefault()|, <\private(), \default(), 1.0, "signature">>
+	<|java+method:///api/A/mAccessModifierPrivateToDefault()|, <\private(), \defaultAccess(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 // public api.A.mAccessModifierPublicToDefault() -> api.A.mAccessModifierPublicToDefault()
 test bool methodAccessModifierPublicToDefault() =
-	<|java+method:///api/A/mAccessModifierPublicToDefault()|, <\public(), \default(), 1.0, "signature">>
+	<|java+method:///api/A/mAccessModifierPublicToDefault()|, <\public(), \defaultAccess(), 1.0, "signature">>
 	in mbc.changedAccessModifier;
 
 test bool methodNoMoreAccessModifiers() =
@@ -123,12 +134,12 @@ test bool fieldPublicToPrivate() =
 
 // api.A.fDefaultToPrivate -> private api.A.fDefaultToPrivate
 test bool fieldDefaultToPrivate() =
-	<|java+field:///api/A/fDefaultToPrivate|, <\default(), \private(), 1.0, "signature">>
+	<|java+field:///api/A/fDefaultToPrivate|, <\defaultAccess(), \private(), 1.0, "signature">>
 	in fbc.changedAccessModifier;
 
 // public api.A.fPublicToDefault -> api.A.fPublicToDefault
 test bool fieldPublicToDefault() =
-	<|java+field:///api/A/fPublicToDefault|, <\public(), \default(), 1.0, "signature">>
+	<|java+field:///api/A/fPublicToDefault|, <\public(), \defaultAccess(), 1.0, "signature">>
 	in fbc.changedAccessModifier;
 
 test bool fieldNoMoreAccessModifiers() =
