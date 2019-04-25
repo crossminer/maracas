@@ -54,9 +54,8 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
-	//bc.removed = removed(m3Old, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
-	
+	//bc.removed = removed(m3Old, additions, bc);
 	//return postproc(bc);
 	return bc;
 }
@@ -79,7 +78,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	// TODO: After changedParamList computation we filter its domain from additions
 	// and removals models. 
 	bc.renamed = renamed(removals, additions, bc);
-	
+	bc.moved = moved(removals, additions, bc);
 	//TODO: moved
 	//bc.removed = removed(m3Old, additions, bc);
 	
@@ -228,26 +227,32 @@ private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, ma
 	//return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
 }
 
-private M3 filterM3(M3 m, set[loc] elems) {
+private M3 filterM3(M3 m, set[loc] elems) 
+	= filterM3(m, elems, filterElements);
+
+private M3 filterXM3(M3 m, set[loc] elems) 
+	= filterM3(m, elems, filterXElements);
+
+private M3 filterM3(M3 m, set[loc] elems, rel[&T, &R] (rel[&T, &R], set[&S]) fun) {
 	m3Filtered = m3(m.id);
 
 	// Core M3 relations
-	m3Filtered.declarations 	= filterElements(m.declarations, elems);
-	m3Filtered.types 			= filterElements(m.types, elems);
-	m3Filtered.uses 			= filterElements(m.uses, elems);
-	m3Filtered.containment 		= filterElements(m.containment, elems);
-	m3Filtered.names 			= filterElements(m.names, elems);
-	m3Filtered.documentation 	= filterElements(m.documentation, elems);
-	m3Filtered.modifiers 		= filterElements(m.modifiers, elems);
+	m3Filtered.declarations 	= fun(m.declarations, elems);
+	m3Filtered.types 			= fun(m.types, elems);
+	m3Filtered.uses 			= fun(m.uses, elems);
+	m3Filtered.containment 		= fun(m.containment, elems);
+	m3Filtered.names 			= fun(m.names, elems);
+	m3Filtered.documentation 	= fun(m.documentation, elems);
+	m3Filtered.modifiers 		= fun(m.modifiers, elems);
 
 	// Java M3 relations
-	m3Filtered.extends 			= filterElements(m.extends, elems);
-	m3Filtered.implements 		= filterElements(m.implements, elems);
-	m3Filtered.methodInvocation = filterElements(m.methodInvocation, elems);
-	m3Filtered.fieldAccess 		= filterElements(m.fieldAccess, elems);
-	m3Filtered.typeDependency 	= filterElements(m.typeDependency, elems);
-	m3Filtered.methodOverrides 	= filterElements(m.methodOverrides, elems);
-	m3Filtered.annotations 		= filterElements(m.annotations, elems);
+	m3Filtered.extends 			= fun(m.extends, elems);
+	m3Filtered.implements 		= fun(m.implements, elems);
+	m3Filtered.methodInvocation = fun(m.methodInvocation, elems);
+	m3Filtered.fieldAccess 		= fun(m.fieldAccess, elems);
+	m3Filtered.typeDependency 	= fun(m.typeDependency, elems);
+	m3Filtered.methodOverrides 	= fun(m.methodOverrides, elems);
+	m3Filtered.annotations 		= fun(m.annotations, elems);
 	
 	return m3Filtered;
 }
@@ -267,6 +272,9 @@ private rel[&T, &R] filterElements(rel[&T, &R] relToFilter, set[&S] elems) {
 	return relToFilter;
 }
 
+private rel[&T, &R] filterXElements(rel[&T, &R] relToFilter, set[&S] elems)
+	= relToFilter - filterElements(relToFilter, elems);
+ 
  
 /*
  * Identifying removed elements
@@ -328,6 +336,14 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun
 	return result;
 }
 
+private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, BreakingChanges bc) {
+	// Filter additions and removals M3 models for the sake of performance
+	removals = filterM3(removals, bc.renamed.elem);
+	additions = filterM3(additions, bc.renamed.elem);
+	
+	return {};
+}
+
 rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
 	matchers = (option in options) ? split(",", options[option]) : []; 
 	result = {};
@@ -381,6 +397,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, 
  */
 rel[loc, Mapping[list[TypeSymbol]]] changedParamList(M3 removals, M3 additions) 
 	= changedMethodSignature(removals, additions, methodParams);
+
 
 
 /*

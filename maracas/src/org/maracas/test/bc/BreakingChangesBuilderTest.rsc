@@ -3,6 +3,7 @@ module org::maracas::\test::bc::BreakingChangesBuilderTest
 import lang::java::m3::AST;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
+import org::maracas::bc::BreakingChangesBuilder;
 import org::maracas::Maracas;
 import Set;
 import IO;
@@ -34,8 +35,12 @@ test bool methodChangedAccessModifier()
 
 // FIXME: the jar M3 always identifies a public inner class. Is it an error, or just the compiler?
 // java+constructor can be used
-test bool classChangedAccessModifier() = cbc.changedAccessModifier == {};
-
+test bool classChangedAccessModifier() { 
+	return cbc.changedAccessModifier == {
+		<|java+class:///p1/ChangedAccesModifier1$Inner1|,<\public(),\defaultAccess(),1.0,"signature">>,
+  		<|java+class:///p1/ChangedAccesModifier1$Inner2|,<\defaultAccess(),\public(),1.0,"signature">>
+	};
+}
 
 test bool fieldChangedFinalModifier()
 	= fbc.changedFinalModifier == {
@@ -82,21 +87,29 @@ test bool classChangedStaticModifier()
 
 test bool changedParamList1() {
 	meth = |java+method:///p3/ChangeParamList/m2(int%5B%5D%5B%5D)|;
-	list[TypeSymbol] from = [lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2)];
-	list[TypeSymbol] to = 	[lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2),
-							lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
-   							lang::java::m3::TypeSymbol::\int()];
+	list[TypeSymbol] from = [ 
+		lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2)
+	];
+	list[TypeSymbol] to = [
+		lang::java::m3::TypeSymbol::\array(lang::java::m3::TypeSymbol::\int(), 2),
+		lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
+   		lang::java::m3::TypeSymbol::\int()
+   	];
     return changedParamList(meth, from, to);
 }
 
 test bool changedParamList2() {
 	meth = |java+method:///p3/ChangeParamList/m3(java.lang.String,int,boolean)|;
-	list[TypeSymbol] from = [lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
-    						lang::java::m3::TypeSymbol::\int(),
-    						lang::java::m3::TypeSymbol::\boolean()];
-	list[TypeSymbol] to = 	[lang::java::m3::TypeSymbol::\int(),
-    						lang::java::m3::TypeSymbol::\boolean(),
-    						lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|,[])];
+	list[TypeSymbol] from = [
+		lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|, []),
+    	lang::java::m3::TypeSymbol::\int(),
+    	lang::java::m3::TypeSymbol::\boolean() 
+    ];
+	list[TypeSymbol] to = [
+		lang::java::m3::TypeSymbol::\int(),
+    	lang::java::m3::TypeSymbol::\boolean(),
+    	lang::java::m3::TypeSymbol::\class(|java+class:///java/lang/String|,[]) 
+    ];
     return changedParamList(meth, from, to);
 }
 
