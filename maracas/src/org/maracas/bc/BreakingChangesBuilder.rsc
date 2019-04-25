@@ -15,11 +15,32 @@ import Set;
 import String;
 import Type;
 
-
-@memo M3 getRemovals(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3Old, m3New]);
-@memo M3 getAdditions(M3 m3Old, M3 m3New) = diffJavaM3(m3Old.id, [m3New, m3Old]);
+// extends lang::java::m3::AST::Modifier
+// Could be moved to M3 creation itself
+// but this is the quickest way :)
+data Modifier =
+	\defaultAccess();
 
 @memo
+M3 getRemovals(M3 m3Old, M3 m3New) {
+	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3Old), fillDefaultVisibility(m3New)]);
+}
+
+@memo
+M3 getAdditions(M3 m3Old, M3 m3New) {
+	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3New), fillDefaultVisibility(m3Old)]);
+}
+
+M3 fillDefaultVisibility(M3 m3) {
+	accMods = { \defaultAccess(), \public(), \private(), \protected() };
+
+	m3.modifiers = m3.modifiers +
+		{ <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+		                             (m3.modifiers[elem] & accMods) == {} };
+
+	return m3;
+}
+
 BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
@@ -94,7 +115,7 @@ private tuple[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
  */
 // TODO: manage package modifier.
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, \class(_)) 
-	= changedAccessModifier(removals, additions, isClass);
+	= changedAccessModifier(removals, additions, isType);
 	
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, \method(_)) 
 	= changedAccessModifier(removals, additions, isMethod);
@@ -103,14 +124,16 @@ private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additi
 	= changedAccessModifier(removals, additions, isField);
 
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, bool (loc) fun) {
-	accMods = { \public(), \private(), \protected() };
+	accMods = { \defaultAccess(), \public(), \private(), \protected() };
 	result = {};
+
 	// The confidence of the mapping is 1 if the signature is the same
 	for (<elem, modifAdded> <- additions.modifiers, fun(elem), modifAdded in accMods) {
 		for (modifRemoved <- removals.modifiers[elem], modifRemoved in accMods) {
 			result += { <elem, <modifRemoved, modifAdded, 1.0, MATCH_SIGNATURE>> };
 		}
 	}
+
 	return result;
 }
 
