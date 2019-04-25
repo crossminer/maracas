@@ -2,17 +2,25 @@ package api;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.util.concurrent.Monitor.Guard;
 
 public class A {
 	private int fPublicToPrivate;
 	private int fDefaultToPrivate;
 	int fPublicToDefault;
 	
-	public final String fFinalModifier = "";
-	float fStaticModifier;
-	public int fType;
+	@Deprecated public int fDeprecated;
+	public final String fFinalModifierAdded = "";
+	public String fFinalModifierRemoved;
+	static float fStaticModifierAdded;
+	float fStaticModifierRemoved;
+	public int fStringToInt;
+	public List<String> fStringToList;
+	private Guard fLimiterToGuard;
 	
 	public void mAccessModifierPrivateToPublic() {}
 	private void mAccessModifierPublicToPrivate() {}
