@@ -144,3 +144,37 @@ test bool fieldPublicToDefault() =
 
 test bool fieldNoMoreAccessModifiers() =
 	size(fbc.changedAccessModifier) == 3;
+
+// String api.A.fFinalModifierAdded -> final String api.A.fFinalModifierAdded
+test bool fieldFinalModifierAdded() =
+	<|java+field:///api/A/fFinalModifierAdded|, <\default(), \final(), 1.0, "signature">>
+	in fbc.changedFinalModifier;
+
+// final String api.A.fFinalModifierRemoved -> String api.A.fFinalModifierRemoved
+test bool fieldFinalModifierRemoved() =
+	<|java+field:///api/A/fFinalModifierRemoved|, <\final(), \default(), 1.0, "signature">>
+	in fbc.changedFinalModifier;
+
+test bool fieldNoMoreFinalModifiers() =
+	size(fbc.changedFinalModifier) == 2;
+
+// float api.A.fStaticModifierAdded -> static float api.A.fStaticModifierAdded
+test bool fieldStaticModifierAdded() =
+	<|java+field:///api/A/fStaticModifierAdded|, <\default(), \static(), 1.0, "signature">>
+	in fbc.changedStaticModifier;
+
+// static float api.A.fStaticModifierRemoved -> float api.A.fStaticModifierRemoved
+test bool fieldStaticModifierRemoved() =
+	<|java+field:///api/A/fStaticModifierRemoved|, <\static(), \default(), 1.0, "signature">>
+	in fbc.changedStaticModifier;
+
+test bool fieldNoMoreStaticModifiers() =
+	size(fbc.changedStaticModifier) == 2;
+
+// int api.A.fDeprecated -> @Deprecated int api.A.fDeprecated
+test bool fieldDeprecated() =
+	<|java+field:///api/A/fDeprecated|, <|java+field:///api/A/fDeprecated|, |java+field:///api/A/fDeprecated|, 1.0, "signature">>
+	in fbc.deprecated;
+
+test bool fieldNoMoreDeprecated() =
+	size(fbc.deprecated) == 1;

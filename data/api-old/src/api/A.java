@@ -5,14 +5,21 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 public class A {
 	public int fPublicToPrivate;
 	int fDefaultToPrivate;
 	public int fPublicToDefault;
 	
-	public String fFinalModifier;
-	static float fStaticModifier;
-	public String fType;
+	public int fDeprecated;
+	public String fFinalModifierAdded;
+	public final String fFinalModifierRemoved = "";
+	float fStaticModifierAdded;
+	static float fStaticModifierRemoved;
+	public String fStringToInt;
+	public String fStringToList;
+	private RateLimiter fLimiterToGuard;
 
 	private void mAccessModifierPrivateToPublic() {}
 	public void mAccessModifierPublicToPrivate() {}
