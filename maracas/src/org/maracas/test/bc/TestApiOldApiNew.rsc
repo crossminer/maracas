@@ -246,3 +246,21 @@ test bool fieldExternalTypeToExternalType() =
 
 test bool fieldNoMoreChangedType() =
 	size(fbc.changedType) == 3;
+
+// api.ClassExtendsRemoved extends api.A -> api.ClassExtendsRemoved
+test bool classExtendsRemoved() =
+	<|java+class:///api/ClassExtendsRemoved|, <|java+class:///api/A|, |unknown:///|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+// api.ClassExtendsAdded -> api.ClassExtendsAdded extends api.A
+test bool classExtendsAdded() =
+	<|java+class:///api/ClassExtendsAdded|, <|unknown:///|, |java+class:///api/A|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+// api.ClassExtendsChanged extends api.ClassExtendsAdded -> api.ClassExtendsChanged extends api.ClassExtendsRemoved
+test bool classExtendsChanged() =
+	<|java+class:///api/ClassExtendsChanged|, <|java+class:///api/ClassExtendsAdded|, |java+class:///api/ClassExtendsRemoved|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+test bool classNoMoreExtends() =
+	size(cbc.changedExtends) == 3;
