@@ -121,6 +121,53 @@ test bool methodAccessModifierPublicToDefault() =
 test bool methodNoMoreAccessModifiers() =
 	size(mbc.changedAccessModifier) == 8;
 
+// final api.A.mFinalModifierRemoved -> api.A.mFinalModifierRemoved
+test bool methodFinalModifierRemoved() =
+	<|java+method:///api/A/mFinalModifierRemoved()|, <\final(), \default(), 1.0, MATCH_SIGNATURE>>
+	in mbc.changedFinalModifier;
+
+// api.A.mFinalModifierAdded -> final api.A.mFinalModifierAdded
+test bool methodFinalModifierAdded() =
+	<|java+method:///api/A/mFinalModifierAdded()|, <\default(), \final(), 1.0, MATCH_SIGNATURE>>
+	in mbc.changedFinalModifier;
+
+test bool methodNoMoreFinalModifier() =
+	size(mbc.changedFinalModifier) == 2;
+
+// static api.A.mStaticModifierRemoved -> api.A.mStaticModifierRemoved
+test bool methodStaticModifierRemoved() =
+	<|java+method:///api/A/mStaticModifierRemoved()|, <\static(), \default(), 1.0, MATCH_SIGNATURE>>
+	in mbc.changedStaticModifier;
+
+// api.A.mStaticModifierAdded -> static api.A.mStaticModifierAdded
+test bool methodStaticModifierAdded() =
+	<|java+method:///api/A/mStaticModifierAdded()|, <\default(), \static(), 1.0, MATCH_SIGNATURE>>
+	in mbc.changedStaticModifier;
+
+test bool methodNoMoreFinalModifier() =
+	size(mbc.changedStaticModifier) == 2;
+
+// api.A.mParameterRemoved(int a, int b) -> api.A.mParameterRemoved(int a)
+test bool methodParameterRemoved() =
+	<|java+method:///api/A/mParameterRemoved(int,int)|, <[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">>
+	in mbc.changedParamList;
+
+// api.A.mParameterAdded(int a) -> api.A.mParameterAdded(int a, int b)
+test bool methodParameterAdded() =
+	<|java+method:///api/A/mParameterAdded(int)|, <[TypeSymbol::\int()], [TypeSymbol::\int(), TypeSymbol::\int()], 1.0, "signature">>
+	in mbc.changedParamList;
+
+test bool noMoreParamChanged() =
+	size(mbc.changedParamList) == 2;
+
+// String api.A.mChangedType(int a) -> int api.A.mChangedType(int a)
+test bool methodChangedType() =
+	<|java+method:///api/A/mChangedType(int)|, <TypeSymbol::\class(|java+class:///java/lang/String|, []), TypeSymbol::\int(), 1.0, "signature">>
+	in mbc.changedReturnType;
+
+test bool methodNoMoreChangedType() =
+	size(mbc.changedReturnType) == 1;
+
 // api.A.mDeprecated -> @Deprecated api.A.mDeprecated
 test bool methodDeprecated() =
 	<|java+method:///api/A/mDeprecated()|, <|java+method:///api/A/mDeprecated()|, |java+method:///api/A/mDeprecated()|, 1.0, MATCH_SIGNATURE>>
