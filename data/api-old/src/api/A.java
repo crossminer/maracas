@@ -28,8 +28,10 @@ public class A {
 	private void mAccessModifierPrivateToDefault() {}
 	public void mAccessModifierPublicToDefault() {}
 	
-	public final void mFinalModifier() {}
-	private static void mStaticModifier() {}
+	public final void mFinalModifierRemoved() {}
+	public void mFinalModifierAdded() {}
+	private void mStaticModifierAdded() {}
+	private static void mStaticModifierRemoved() {}
 	public void mDeprecated() {}
 
 	public int mMoved() { return 0; }
@@ -46,6 +48,7 @@ public class A {
 		}
 	}
 
-	public void mParamList(int a, int b) {}
-	public String mReturnType(int a) { return ""; }
+	public void mParameterAdded(int a) {}
+	public void mParameterRemoved(int a, int b) {}
+	public String mChangedType(int a) { return ""; }
 }
