@@ -6,6 +6,7 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
+import org::maracas::bc::M3;
 import org::maracas::config::Options;
 import org::maracas::diff::CodeSimilarityMatcher;
 import org::maracas::io::properties::IO;
@@ -14,6 +15,7 @@ import Relation;
 import Set;
 import String;
 import Type;
+
 
 // extends lang::java::m3::AST::Modifier
 // Could be moved to M3 creation itself
@@ -56,6 +58,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
 	//bc.removed = removed(m3Old, additions, bc);
+	
 	//return postproc(bc);
 	return bc;
 }
@@ -74,8 +77,6 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedParamList = changedParamList(removals, additions);
 	bc.changedReturnType = changedReturnType(removals, additions);
 	bc.deprecated = deprecated(m3Old, m3New, bc);
-	// TODO: After changedParamList computation we filter its domain from additions
-	// and removals models. 
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -95,11 +96,10 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
 	bc.changedType = changedType(removals, additions);
-	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
-	//bc.removed = removed(m3Old, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
-	bc.moved = moved(removals, additions, bc);
+	//bc.removed = removed(m3Old, additions, bc);
+	
 	//return postproc(bc);
 	return bc;
 }
@@ -224,54 +224,6 @@ private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, ma
 	//deprecate = filterM3(m3New, elemsDeprecated);
 	//return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
 }
-
-private M3 filterM3(M3 m, set[loc] elems) 
-	= filterM3(m, elems, filterElements);
-
-private M3 filterXM3(M3 m, set[loc] elems) 
-	= filterM3(m, elems, filterXElements);
-
-private M3 filterM3(M3 m, set[loc] elems, rel[&T, &R] (rel[&T, &R], set[&S]) fun) {
-	m3Filtered = m3(m.id);
-
-	// Core M3 relations
-	m3Filtered.declarations 	= fun(m.declarations, elems);
-	m3Filtered.types 			= fun(m.types, elems);
-	m3Filtered.uses 			= fun(m.uses, elems);
-	m3Filtered.containment 		= fun(m.containment, elems);
-	m3Filtered.names 			= fun(m.names, elems);
-	m3Filtered.documentation 	= fun(m.documentation, elems);
-	m3Filtered.modifiers 		= fun(m.modifiers, elems);
-
-	// Java M3 relations
-	m3Filtered.extends 			= fun(m.extends, elems);
-	m3Filtered.implements 		= fun(m.implements, elems);
-	m3Filtered.methodInvocation = fun(m.methodInvocation, elems);
-	m3Filtered.fieldAccess 		= fun(m.fieldAccess, elems);
-	m3Filtered.typeDependency 	= fun(m.typeDependency, elems);
-	m3Filtered.methodOverrides 	= fun(m.methodOverrides, elems);
-	m3Filtered.annotations 		= fun(m.annotations, elems);
-	
-	return m3Filtered;
-}
-	
-private rel[&T, &R] filterElements(rel[&T, &R] relToFilter, set[&S] elems) {
-	if (relToFilter != {} && elems != {}) {
-		result = {};
-		elemRel = getOneFrom(relToFilter);
-		elemSet = getOneFrom(elems);
-		
-		if (<first, second> := elemRel) {
-			result += (typeOf(first) == typeOf(elemSet)) ? domainR(relToFilter, elems) : {};
-			result += (typeOf(second) == typeOf(elemSet)) ? rangeR(relToFilter, elems) : {};
-		}
-		return result;
-	}
-	return relToFilter;
-}
-
-private rel[&T, &R] filterXElements(rel[&T, &R] relToFilter, set[&S] elems)
-	= relToFilter - filterElements(relToFilter, elems);
  
  
 /*
@@ -318,11 +270,28 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, BreakingChange
 	
 private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun, map[str,str] options) {
 	result = {};
+	
 	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, fun(elem)) {
-		elemsSameCont = { a | a <- additions.containment[cont], additions.declarations[a] != {}, fun(a) };
-		removalsTemp = filterM3(removals, {elem});
-		additionsTemp = filterM3(additions, elemsSameCont);
-		result += applyMatchers(additionsTemp, removalsTemp, fun, options, MATCHERS);
+		// In type cases we need the owner package instead of its compilation unit.
+		if (isCompilationUnit(cont)) {
+			cont = getOneFrom(invert(removals.containment)[cont]);
+		}
+		
+		elemsSameCont = {};
+		for (a <- additions.containment[cont], additions.declarations[a] != {}) {
+			if (isCompilationUnit(a)) {
+				a = getOneFrom(additions.containment[a]);
+			}
+			if (fun(a)) {
+				elemsSameCont += a;
+			}
+		}
+		
+		if (elemsSameCont != {}) {
+			removalsTemp = filterM3(removals, {elem});
+			additionsTemp = filterM3(additions, elemsSameCont);
+			result += applyMatchers(additionsTemp, removalsTemp, fun, options, MATCHERS);
+		}
 	}
 	return result;
 }
