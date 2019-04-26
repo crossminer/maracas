@@ -110,7 +110,6 @@ private tuple[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 /*
  * Identifying changes in access modifiers
  */
-// TODO: manage package modifier.
 private rel[loc, Mapping[Modifier]] changedAccessModifier(M3 removals, M3 additions, \class(_)) 
 	= changedAccessModifier(removals, additions, isType);
 	
@@ -300,7 +299,6 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun
 private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, BreakingChanges bc) {
 	// Filter additions and removals M3 models for the sake of performance
 	removals = filterXM3(removals, bc.renamed.mapping<0>);
-	removals = filterXM3(removals, bc.changedStaticModifier.elem);
 	additions = filterXM3(additions, bc.renamed.mapping<1>);
 	
 	switch(bc) {
@@ -377,7 +375,6 @@ rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, 
  */
 rel[loc, Mapping[list[TypeSymbol]]] changedParamList(M3 removals, M3 additions) 
 	= changedMethodSignature(removals, additions, methodParams);
-
 
 
 /*
