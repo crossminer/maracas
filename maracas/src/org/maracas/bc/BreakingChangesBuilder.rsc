@@ -52,15 +52,14 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
 	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
-	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	bc.renamed = renamed(removals, additions, bc);
+	bc.moved = moved(removals, additions, bc);
 	//bc.removed = removed(m3Old, additions, bc);
 	//return postproc(bc);
 	return bc;
 }
 
-@memo
 BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
@@ -79,14 +78,12 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	// and removals models. 
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
-	//TODO: moved
 	//bc.removed = removed(m3Old, additions, bc);
 	
 	//return postproc(bc);
 	return bc;
 }
 
-@memo
 BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
@@ -101,7 +98,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
-	
+	bc.moved = moved(removals, additions, bc);
 	//return postproc(bc);
 	return bc;
 }
@@ -310,15 +307,8 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, BreakingChange
 	switch(bc) {
 		case \class(_) : return renamed(removals, additions, isType, bc.options);
 		case \method(_) : {
-		// TODO: remove this code once changedParamList is correctly computed: 
-		// additions and removals must be filtered first 
-			result = renamed(removals, additions, isMethod, bc.options);
-			for (<elem, <from, to, conf, meth>> <- result) {
-				if (methodQualName(from) == methodQualName(to)) {
-					result = domainX(result, {elem});
-				}
-			}
-			return result;
+			removals = filterXM3(removals, bc.changedParamList.elem);
+			return renamed(removals, additions, isMethod, bc.options);
 		}
 		case \field(_) : return renamed(removals, additions, isField, bc.options);
 		default : return {};
@@ -336,13 +326,33 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun
 	return result;
 }
 
+
 private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, BreakingChanges bc) {
 	// Filter additions and removals M3 models for the sake of performance
-	removals = filterM3(removals, bc.renamed.elem);
-	additions = filterM3(additions, bc.renamed.elem);
+	removals = filterXM3(removals, bc.renamed.mapping<0>);
+	removals = filterXM3(removals, bc.changedStaticModifier.elem);
+	additions = filterXM3(additions, bc.renamed.mapping<1>);
 	
-	return {};
+	switch(bc) {
+		case \class(_) : return moved(removals, additions, isType, bc.options);
+		case \method(_) : {
+			removals = filterXM3(removals, bc.changedParamList.elem);
+			return moved(removals, additions, isMethod, bc.options);
+		}
+		case \field(_) : return moved(removals, additions, isField, bc.options);
+		default : return {};
+	}
 }
+
+private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, bool (loc) fun, map[str,str] options) {
+	result = {};
+	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, fun(elem)) {
+		removalsTemp = filterM3(removals, {elem});
+		result += applyMatchers(additions, removalsTemp, fun, options, MATCHERS);
+	}
+	return result;
+}
+
 
 rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
 	matchers = (option in options) ? split(",", options[option]) : []; 

@@ -79,8 +79,7 @@ test bool methodChangedStaticModifier()
   		<|java+initializer:///p1/ChangedStaticModifier3/ChangedStaticModifier3$initializer|,<\static(),\default(),1.0,"signature">>
 	};
 	
-// TODO: check if we should take it out from the adt.
-// TODO: what happens with inner classes?
+// TODO: add nested classes.
 test bool classChangedStaticModifier()
 	= cbc.changedStaticModifier == {};
 
