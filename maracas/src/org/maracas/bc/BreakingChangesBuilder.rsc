@@ -97,6 +97,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedAccessModifier = changedAccessModifier(removals, additions, bc);
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
+	bc.changedType = changedType(removals, additions);
 	//TODO: moved
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	//bc.removed = removed(m3Old, additions, bc);
@@ -422,6 +423,25 @@ private rel[loc, Mapping[&T]] changedMethodSignature(M3 removals, M3 additions, 
 			}
 		}
 	}
+	return result;
+}
+
+/*
+ * Identifying changes in field return types
+ */
+rel[loc, Mapping[TypeSymbol]] changedType(M3 removals, M3 additions) {
+	fieldsAdded =   { <f, typ> | <f, typ> <- additions.types, isField(f) };
+	fieldsRemoved = { <f, typ> | <f, typ> <- removals.types,  isField(f) };
+
+	result = {};
+	for (<fieldAdded, typeAdded> <- fieldsAdded) {
+		for (<fieldRemoved, typeRemoved> <- fieldsRemoved,
+				fieldAdded == fieldRemoved,
+				typeAdded  != typeRemoved) {
+			result += <fieldRemoved, <typeRemoved, typeAdded, 1.0, MATCH_SIGNATURE>>;
+		}
+	}
+
 	return result;
 }
 
