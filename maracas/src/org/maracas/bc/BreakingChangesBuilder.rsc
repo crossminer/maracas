@@ -57,6 +57,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.moved = moved(removals, additions, bc);
 	//bc.removed = removed(m3Old, additions, bc);
 	bc.changedExtends = changedExtends(removals, additions);
+	bc.changedImplements = changedImplements(removals, additions);
 	//return postproc(bc);
 	return bc;
 }
@@ -475,6 +476,16 @@ rel[loc, Mapping[loc]] changedExtends(M3 removals, M3 additions) {
 	}
 	
 	return result;
+}
+
+rel[loc, Mapping[set[loc]]] changedImplements(M3 removals, M3 additions) {
+	return { <typ,
+				<removals.implements[typ],
+				additions.implements[typ],
+				1.0,
+				MATCH_SIGNATURE>
+			 > | typ <- domain(removals.implements) + domain(additions.implements)
+			};
 }
 
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
