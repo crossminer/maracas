@@ -15,7 +15,8 @@ data BreakingChanges (
 	rel[loc elem, Mapping[loc] mapping] renamed = {},
 	map[str, str] options = ())
 	= class (
-		tuple[loc, loc] id)
+		tuple[loc, loc] id,
+		rel[loc elem, Mapping[loc] mapping] changedExtends = {})
 	| method (
 		tuple[loc, loc] id,
 		rel[loc elem, Mapping[list[TypeSymbol]] mapping] changedParamList = {},
