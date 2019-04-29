@@ -156,3 +156,19 @@ test bool classMoved() {
 		<|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|>
 	};
 }
+
+test bool methodRemoved() {
+	removed = mbc.removed.elem;
+	return removed >= {
+		|java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,
+		|java+method:///p2/Removed1/toString()|,
+		|java+method:///p2/Removed2/populateMatrices()|
+	};
+}
+
+test bool classRemoved() {
+	removed = cbc.removed.elem;
+	return removed >= {
+		|java+class:///p2/Removed1|
+	};
+}

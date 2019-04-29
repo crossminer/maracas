@@ -57,7 +57,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
-	//bc.removed = removed(m3Old, additions, bc);
+	bc.removed = removed(removals, additions, bc);
 	bc.changedExtends = changedExtends(removals, additions);
 	bc.changedImplements = changedImplements(removals, additions);
 	//return postproc(bc);
@@ -80,7 +80,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
-	//bc.removed = removed(m3Old, additions, bc);
+	bc.removed = removed(removals, additions, bc);
 	
 	//return postproc(bc);
 	return bc;
@@ -99,7 +99,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedType = changedType(removals, additions);
 	bc.deprecated = deprecated(m3Old, m3New, bc);
 	bc.renamed = renamed(removals, additions, bc);
-	//bc.removed = removed(m3Old, additions, bc);
+	bc.removed = removed(removals, additions, bc);
 	
 	//return postproc(bc);
 	return bc;
@@ -224,33 +224,6 @@ private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, ma
 	//deprecate = filterM3(m3New, elemsDeprecated);
 	//return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
 }
- 
- 
-/*
- * Identifying removed elements
- * TODO: check that removed elements are not listed in renamed or moved sets
- */
-private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, \class(_)) {
-	//TODO: refactor this
-	//m3Old.containment = m3Old.containment+;
-	//m3New.containment = m3New.containment+;
-	//m3Diff = getRemovals(m3Old, m3New);	
-	
-	// FIXME: match signature?
-	return { <elem, <parent, elem, 1.0, MATCH_SIGNATURE>> 
-		| <parent, elem> <- removals.containment, isPackage(parent), isType(elem) };
-}
-
-private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, \method(_)) 
-	= removed(removals, additions, isMethod);
-	
-private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, \field(_)) 
-	= removed(removals, additions, isField);
-
-// FIXME: match signature?
-private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, bool (loc) fun)
-	= { <elem, <parent, elem, 1.0, MATCH_SIGNATURE>> 
-	| <parent, elem> <- removals.containment, fun(elem), isType(parent) };
 
 
 /*
@@ -260,7 +233,8 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, BreakingChange
 	switch(bc) {
 		case \class(_) : return renamed(removals, additions, isType, bc.options);
 		case \method(_) : {
-			removals = filterXM3(removals, bc.changedParamList.elem);
+			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			removals = filterXM3(removals, elemsRemovals);
 			return renamed(removals, additions, isMethod, bc.options);
 		}
 		case \field(_) : return renamed(removals, additions, isField, bc.options);
@@ -299,13 +273,17 @@ private rel[loc, Mapping[loc]] renamed(M3 removals, M3 additions, bool (loc) fun
 
 private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, BreakingChanges bc) {
 	// Filter additions and removals M3 models for the sake of performance
-	removals = filterXM3(removals, bc.renamed.mapping<0>);
-	additions = filterXM3(additions, bc.renamed.mapping<1>);
+	elemsRemovals = (!isEmpty(bc.renamed)) ? bc.renamed.mapping<0> : {};
+	elemsAdditions = (!isEmpty(bc.renamed)) ? bc.renamed.mapping<1> : {};
+		
+	removals = filterXM3(removals, elemsRemovals);
+	additions = filterXM3(additions, elemsAdditions);
 	
 	switch(bc) {
 		case \class(_) : return moved(removals, additions, isType, bc.options);
 		case \method(_) : {
-			removals = filterXM3(removals, bc.changedParamList.elem);
+			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			removals = filterXM3(removals, elemsRemovals);
 			return moved(removals, additions, isMethod, bc.options);
 		}
 		case \field(_) : return moved(removals, additions, isField, bc.options);
@@ -323,6 +301,36 @@ private rel[loc, Mapping[loc]] moved(M3 removals, M3 additions, bool (loc) fun, 
 }
 
 
+/*
+ * Identifying removed elements
+ */
+private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, BreakingChanges bc) {
+	elemsRemovals = ((!isEmpty(bc.renamed)) ? bc.renamed.mapping<0> : {}) 
+		+ ((!isEmpty(bc.moved)) ? bc.moved.mapping<0> : {});
+	elemsAdditions = ((!isEmpty(bc.renamed)) ? bc.renamed.mapping<1> : {}) 
+		+ ((!isEmpty(bc.moved)) ? bc.moved.mapping<1> : {});
+		
+	removals = filterXM3(removals, elemsRemovals);
+	additions = filterXM3(additions, elemsAdditions);
+	
+	switch(bc) {
+		case \class(_) : return removed(removals, additions, isType);
+		case \method(_) : {
+			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			removals = filterXM3(removals, elemsRemovals);
+			return removed(removals, additions, isMethod);
+		}
+		case \field(_) : return removed(removals, additions, isField);
+		default : return {};
+	}
+}
+
+// FIXME: match signature?
+private rel[loc, Mapping[loc]] removed(M3 removals, M3 additions, bool (loc) fun)
+	= { <elem, <elem, |unknown:///|, 1.0, MATCH_SIGNATURE>> 
+	| <parent, elem> <- removals.containment, fun(elem) };
+	
+	
 rel[loc, Mapping[loc]] applyMatchers(M3 additions, M3 removals, bool (loc) fun, map[str,str] options, str option) {
 	matchers = (option in options) ? split(",", options[option]) : []; 
 	result = {};
