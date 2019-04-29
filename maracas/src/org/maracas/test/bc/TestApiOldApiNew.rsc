@@ -246,3 +246,49 @@ test bool fieldExternalTypeToExternalType() =
 
 test bool fieldNoMoreChangedType() =
 	size(fbc.changedType) == 3;
+
+// api.ClassExtendsRemoved extends api.A -> api.ClassExtendsRemoved
+test bool classExtendsRemoved() =
+	<|java+class:///api/ClassExtendsRemoved|, <|java+class:///api/A|, |unknown:///|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+// api.ClassExtendsAdded -> api.ClassExtendsAdded extends api.A
+test bool classExtendsAdded() =
+	<|java+class:///api/ClassExtendsAdded|, <|unknown:///|, |java+class:///api/A|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+// api.ClassExtendsChanged extends api.ClassExtendsAdded -> api.ClassExtendsChanged extends api.ClassExtendsRemoved
+test bool classExtendsChanged() =
+	<|java+class:///api/ClassExtendsChanged|, <|java+class:///api/ClassExtendsAdded|, |java+class:///api/ClassExtendsRemoved|, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedExtends;
+
+test bool classNoMoreExtends() =
+	size(cbc.changedExtends) == 3;
+
+// api.ClassImplementsAdded -> api.ClassImplementsAdded implements InterfaceExtendsRemoved
+test bool classImplementsAdded() =
+	<|java+class:///api/ClassImplementsAdded|, <{}, {|java+interface:///api/InterfaceExtendsRemoved|}, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedImplements;
+
+// api.ClassImplementsRemoved implements api.InterfaceExtendsAdded -> api.ClassImplementsRemoved
+test bool classImplementsRemoved() =
+	<|java+class:///api/ClassImplementsRemoved|, <{|java+interface:///api/InterfaceExtendsAdded|}, {}, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedImplements;
+
+// api.ClassImplementsChanged -> api.ClassImplementsChanged
+test bool classImplementsChanged() =
+	<|java+class:///api/ClassImplementsChanged|, <{|java+interface:///api/InterfaceAccessModifierAdded|}, {|java+interface:///api/InterfaceExtendsAdded|}, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedImplements;
+
+// api.InterfaceExtendsAdded -> api.InterfaceExtendsAdded extends api.InterfaceExtendsRemoved
+test bool interfaceExtendsAdded() =
+	<|java+interface:///api/InterfaceExtendsAdded|, <{}, {|java+interface:///api/InterfaceExtendsRemoved|}, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedImplements;
+
+// api.InterfaceExtendsRemoved extends api.InterfaceExtendsAdded -> api.InterfaceExtendsRemoved
+test bool interfaceExtendsRemoved() =
+	<|java+interface:///api/InterfaceExtendsRemoved|, <{|java+interface:///api/InterfaceExtendsAdded|}, {}, 1.0, MATCH_SIGNATURE>>
+	in cbc.changedImplements;
+
+test bool noMoreImplements() =
+	size(cbc.changedImplements) == 5;
