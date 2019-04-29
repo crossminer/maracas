@@ -26,20 +26,20 @@ test bool fieldChangedAccessModifier()
 
 test bool methodChangedAccessModifier() 
 	= mbc.changedAccessModifier == {
-		<|java+method:///p1/ChangedAccesModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
-    	<|java+method:///p1/ChangedAccesModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
-    	<|java+method:///p1/ChangedAccesModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
-    	<|java+constructor:///p1/ChangedAccesModifier1$Inner3/ChangedAccesModifier1$Inner3(p1.ChangedAccesModifier1)|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
-    	<|java+constructor:///p1/ChangedAccesModifier1$Inner2/ChangedAccesModifier1$Inner2(p1.ChangedAccesModifier1)|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
-    	<|java+constructor:///p1/ChangedAccesModifier1$Inner1/ChangedAccesModifier1$Inner1(p1.ChangedAccesModifier1)|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
+		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
+    	<|java+method:///p1/ChangedAccessModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
+    	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
+    	<|java+constructor:///p1/ChangedAccessModifier1$Inner3/ChangedAccesModifier1$Inner3(p1.ChangedAccessModifier1)|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
+    	<|java+constructor:///p1/ChangedAccessModifier1$Inner2/ChangedAccessModifier1$Inner2(p1.ChangedAccessModifier1)|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
+    	<|java+constructor:///p1/ChangedAccessModifier1$Inner1/ChangedAccessModifier1$Inner1(p1.ChangedAccessModifier1)|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
 
 // FIXME: the jar M3 always identifies a public inner class. Is it an error, or just the compiler?
 // java+constructor can be used
 test bool classChangedAccessModifier() { 
 	return cbc.changedAccessModifier == {
-		<|java+class:///p1/ChangedAccesModifier1$Inner1|,<\public(),\defaultAccess(),1.0,MATCH_SIGNATURE>>,
-  		<|java+class:///p1/ChangedAccesModifier1$Inner2|,<\defaultAccess(),\public(),1.0,MATCH_SIGNATURE>>
+		<|java+class:///p1/ChangedAccessModifier1$Inner1|,<\public(),\defaultAccess(),1.0,MATCH_SIGNATURE>>,
+  		<|java+class:///p1/ChangedAccessModifier1$Inner2|,<\defaultAccess(),\public(),1.0,MATCH_SIGNATURE>>
 	};
 }
 

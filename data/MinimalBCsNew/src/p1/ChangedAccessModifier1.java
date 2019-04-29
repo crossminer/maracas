@@ -1,6 +1,6 @@
 package p1;
 
-public class ChangedAccesModifier1 {
+public class ChangedAccessModifier1 {
 
 	private class Inner1 {
 		

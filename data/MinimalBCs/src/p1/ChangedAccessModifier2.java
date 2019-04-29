@@ -1,16 +1,16 @@
 package p1;
 
-public class ChangedAccesModifier2 {
+public class ChangedAccessModifier2 {
 	
-	private void m1() {
+	public void m1() {
 		
 	}
 	
-	protected int m2() {
+	private int m2() {
 		return 11;
 	}
 	
-	public String m3() {
+	protected String m3() {
 		return "Hi";
 	}
 	

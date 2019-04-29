@@ -12,19 +12,25 @@ import Relation;
 
 data Detection = detection (
 	loc elem,
-	loc used, 
-	Mapping[&T,&U] mapping, 
+	loc used,
+	Mapping[&T] mapping, 
 	BCType typ
 );
 
 data BCType
 	= changedAccessModifier()
 	| changedFinalModifier()
+	| changedStaticModifier()
+	| changedAbstractModifier()
+	| deprecated()
 	| moved()
 	| removed()
 	| renamed()
 	| changedParamList()
 	| changedReturnType()
+	| changedType()
+	| changedExtends()
+	| changedImplements()
 	;
 	
 
@@ -32,10 +38,10 @@ data BCType
 // Builder
 //----------------------------------------------
 
-list[Detection] detections(M3 client, BreakingChanges bc)
+set[Detection] detections(M3 client, BreakingChanges bc)
 	= detectionsCore(client, bc) + detectionsExtra(client, bc);
 	
-private list[Detection] detectionsCore(M3 client, BreakingChanges bc)
+private set[Detection] detectionsCore(M3 client, BreakingChanges bc)
 	= detections(client, bc, changedAccessModifier())
 	+ detections(client, bc, changedFinalModifier())
 	+ detections(client, bc, moved())
@@ -43,40 +49,75 @@ private list[Detection] detectionsCore(M3 client, BreakingChanges bc)
 	+ detections(client, bc, renamed())
 	;
 
-private list[Detection] detectionsExtra(M3 client, BreakingChanges bc) {
+private set[Detection] detectionsExtra(M3 client, BreakingChanges bc) {
 	return switch (bc) {
+		case \class(_): return detectionsExtraClass(client, bc);
 		case \method(_): return detectionsExtraMethod(client, bc);
+		case \field(_): return detectionsExtraField(client, bc);
 		default: return [];
 	}
 }
 
-private list[Detection] detectionsExtraMethod(M3 client, BreakingChanges bc)
+private set[Detection] detectionsExtraClass(M3 client, BreakingChanges bc)
+	= detections(client, bc, changedExtends())
+	+ detections(client, bc, changedImplements())
+	;
+	
+private set[Detection] detectionsExtraMethod(M3 client, BreakingChanges bc)
 	= detections(client, bc, changedParamList())
 	+ detections(client, bc, changedReturnType())
 	;
 
-private list[Detection] detections(M3 client, BreakingChanges bc, changedAccessModifier()) 
+private set[Detection] detectionsExtraField(M3 client, BreakingChanges bc)
+	= detections(client, bc, changedType())
+	;
+
+private set[Detection] detections(M3 client, BreakingChanges bc, changedAccessModifier()) 
 	= detections(client, bc.changedAccessModifier, changedAccessModifier());
 
-private list[Detection] detections(M3 client, BreakingChanges bc, changedFinalModifier()) 
+private set[Detection] detections(M3 client, BreakingChanges bc, changedFinalModifier()) 
 	= detections(client, bc.changedFinalModifier, changedFinalModifier());
+
+private set[Detection] detections(M3 client, BreakingChanges bc, changedStaticModifier()) 
+	= detections(client, bc.changedStaticModifier, changedStaticModifier());
+
+private set[Detection] detections(M3 client, BreakingChanges bc, changedAbstractModifier()) 
+	= detections(client, bc.changedAbstractModifier, changedAbstractModifier());
+
+private set[Detection] detections(M3 client, BreakingChanges bc, deprecated()) 
+	= detections(client, bc.deprecated, deprecated());
+
+private set[Detection] detections(M3 client, BreakingChanges bc, renamed()) 
+	= detections(client, bc.renamed, renamed());
 	
-private list[Detection] detections(M3 client, BreakingChanges bc, moved()) 
+private set[Detection] detections(M3 client, BreakingChanges bc, moved()) 
 	= detections(client, bc.moved, moved());
 
-private list[Detection] detections(M3 client, BreakingChanges bc, removed()) 
+private set[Detection] detections(M3 client, BreakingChanges bc, removed()) 
 	= detections(client, bc.removed, removed());
-	
-private list[Detection] detections(M3 client, BreakingChanges bc, renamed()) 
-	= detections(client, bc.renamed, renamed());
 
-private list[Detection] detections(M3 client, BreakingChanges bc, changedParamList()) 
+private set[Detection] detections(M3 client, BreakingChanges bc, changedExtends()) 
+	= detections(client, bc.changedExtends, changedExtends());
+	
+private set[Detection] detections(M3 client, BreakingChanges bc, changedImplements()) 
+	= detections(client, bc.changedImplements, changedImplements());
+	
+private set[Detection] detections(M3 client, BreakingChanges bc, changedParamList()) 
 	= detections(client, bc.changedParamList, changedParamList());
 
-private list[Detection] detections(M3 client, BreakingChanges bc, changedReturnType()) 
+private set[Detection] detections(M3 client, BreakingChanges bc, changedReturnType()) 
 	= detections(client, bc.changedReturnType, changedReturnType());
-	
-private list[Detection] detections(M3 client, rel[loc, Mapping[&T, &T]] bcSet, BCType \type) {
-	uses = rangeR(client.uses, domain(bcSet));
-	return [detection(elem, used, mapping, \type) | <elem, used> <- uses, mapping <- bcSet[used]];
+
+private set[Detection] detections(M3 client, BreakingChanges bc, changedType()) 
+	= detections(client, bc.changedType, changedType());
+		
+private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] bcRel, BCType typ) {	
+	set[loc] domain = domain(bcRel);
+	uses = rangeR(client.typeDependency, domain)
+		+ rangeR(client.methodInvocation, domain)
+		+ rangeR(client.fieldAccess, domain)
+		+ rangeR(client.implements, domain)
+		+ rangeR(client.extends, domain);
+		
+	return { detection(elem, used, mapping, moved()) | <loc elem, loc used> <- uses, mapping <- bcRel[used] };
 }

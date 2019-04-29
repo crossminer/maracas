@@ -20,5 +20,5 @@ private BreakingChanges breakingChanges(loc oldAPI, loc newAPI, BreakingChanges 
 	= fun(m3(oldAPI), m3(newAPI));
 
 
-list[Detection] detections(loc client, BreakingChanges bc) 
+set[Detection] detections(loc client, BreakingChanges bc) 
 	= detections(m3(client), bc);
