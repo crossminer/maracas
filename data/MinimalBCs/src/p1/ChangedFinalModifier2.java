@@ -14,7 +14,7 @@ public class ChangedFinalModifier2 {
 		
 	}
 	
-	private int m4() {
+	public int m4() {
 		return 11;
 	}
 	

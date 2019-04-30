@@ -17,6 +17,10 @@ public BreakingChanges fbc = fieldBreakingChanges(api0, api1);
 public BreakingChanges mbc = methodBreakingChanges(api0, api1);
 public BreakingChanges cbc = classBreakingChanges(api0, api1);
 
+
+//----------------------------------------------
+// Changed access modifier tests
+//----------------------------------------------
 test bool fieldChangedAccessModifier() 
 	= fbc.changedAccessModifier == {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
@@ -29,7 +33,7 @@ test bool methodChangedAccessModifier()
 		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
-    	<|java+constructor:///p1/ChangedAccessModifier1$Inner3/ChangedAccesModifier1$Inner3(p1.ChangedAccessModifier1)|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
+    	<|java+constructor:///p1/ChangedAccessModifier1$Inner3/ChangedAccessModifier1$Inner3(p1.ChangedAccessModifier1)|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+constructor:///p1/ChangedAccessModifier1$Inner2/ChangedAccessModifier1$Inner2(p1.ChangedAccessModifier1)|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
     	<|java+constructor:///p1/ChangedAccessModifier1$Inner1/ChangedAccessModifier1$Inner1(p1.ChangedAccessModifier1)|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
@@ -43,6 +47,10 @@ test bool classChangedAccessModifier() {
 	};
 }
 
+
+//----------------------------------------------
+// Changed final modifier tests
+//----------------------------------------------
 test bool fieldChangedFinalModifier()
 	= fbc.changedFinalModifier == {
 		<|java+field:///p1/ChangedFinalModifier3/field1|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,

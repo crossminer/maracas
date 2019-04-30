@@ -119,5 +119,5 @@ private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] bcRel, BCType
 		+ rangeR(client.implements, domain)
 		+ rangeR(client.extends, domain);
 		
-	return { detection(elem, used, mapping, moved()) | <loc elem, loc used> <- uses, mapping <- bcRel[used] };
+	return { detection(elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- bcRel[used] };
 }
