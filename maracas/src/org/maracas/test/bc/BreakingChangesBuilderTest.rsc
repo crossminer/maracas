@@ -73,6 +73,9 @@ test bool classChangedFinalModifier()
 	};
 
 
+//----------------------------------------------
+// Changed static modifier tests
+//----------------------------------------------
 test bool fieldChangedStaticModifier()
 	= fbc.changedStaticModifier == {
 		<|java+field:///p1/ChangedStaticModifier3/field1|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
@@ -87,10 +90,28 @@ test bool methodChangedStaticModifier()
  		<|java+method:///p1/ChangedStaticModifier2/m4()|,<\default(),\static(),1.0,MATCH_SIGNATURE>>,
   		<|java+initializer:///p1/ChangedStaticModifier3/ChangedStaticModifier3$initializer|,<\static(),\default(),1.0,MATCH_SIGNATURE>>
 	};
-	
+
 // TODO: add nested classes.
 test bool classChangedStaticModifier()
 	= cbc.changedStaticModifier == {};
+	
+
+//----------------------------------------------
+// Changed abstract modifier tests
+//----------------------------------------------
+test bool classChangedAbstractModifier()
+	= cbc.changedAbstractModifier == {
+		<|java+class:///p1/ChangedAbstractModifier1$Inner1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
+    	<|java+class:///p1/ChangedAbstractModifier1$Inner2|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
+    	<|java+class:///p1/ChangedAbstractModifier1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>
+    };
+
+test bool methodChangedAbstractModifier()
+	= mbc.changedAbstractModifier == {
+		<|java+method:///p1/ChangedAbstractModifier2/m1()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
+	    <|java+method:///p1/ChangedAbstractModifier2/m2()|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
+	    <|java+method:///p1/ChangedAbstractModifier2/m3()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>
+    };
 
 
 test bool changedParamList1() {

@@ -10,9 +10,9 @@ data BreakingChanges (
 	rel[loc elem, Mapping[Modifier] mapping] changedStaticModifier = {},
 	rel[loc elem, Mapping[Modifier] mapping] changedAbstractModifier = {},
 	rel[loc elem, Mapping[loc] mapping] deprecated = {},
+	rel[loc elem, Mapping[loc] mapping] renamed = {},
 	rel[loc elem, Mapping[loc] mapping] moved = {},
 	rel[loc elem, Mapping[loc] mapping] removed = {},
-	rel[loc elem, Mapping[loc] mapping] renamed = {},
 	map[str, str] options = ())
 	= class (
 		tuple[loc, loc] id,

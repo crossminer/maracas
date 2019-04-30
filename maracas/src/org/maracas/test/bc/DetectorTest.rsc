@@ -89,3 +89,63 @@ test bool classChangedFinalModifier2()
 	    <\default(),\final(),1.0,MATCH_SIGNATURE>,
 	    changedFinalModifier())
     in cd;
+    
+
+//----------------------------------------------
+// Changed static modifier tests
+//----------------------------------------------
+test bool fieldChangedStaticModifier() 
+	= { detection(
+			|java+method:///client/ChangedStaticModifier/fieldChangedStaticModifier()|,
+			|java+field:///p1/ChangedStaticModifier3/field1|,
+			<\static(),\default(),1.0,MATCH_SIGNATURE>,
+			changedStaticModifier()),
+		detection(
+			|java+method:///client/ChangedStaticModifier/fieldChangedStaticModifier()|,
+			|java+field:///p1/ChangedStaticModifier3/field2|,
+			<\default(),\static(),1.0,MATCH_SIGNATURE>,
+			changedStaticModifier()) }
+	<= fd;
+    
+test bool methodChangedStaticModifier() 
+	= { detection(
+			|java+method:///client/ChangedStaticModifier/methodChangedStaticModifier()|,
+		    |java+method:///p1/ChangedStaticModifier2/m1()|,
+		    <\default(),\static(),1.0,MATCH_SIGNATURE>,
+		    changedStaticModifier()),
+		detection(
+			|java+method:///client/ChangedStaticModifier/methodChangedStaticModifier()|,
+		    |java+method:///p1/ChangedStaticModifier2/m2()|,
+		    <\static(),\default(),1.0,MATCH_SIGNATURE>,
+		    changedStaticModifier()) }
+	<= md;
+
+
+//----------------------------------------------
+// Changed abstract modifier tests
+//----------------------------------------------
+test bool methodChangedAbstractModifier() 
+	= { detection(
+		    |java+method:///client/ChangedAbstractModifier/methodChangedAccessModifier()|,
+		    |java+method:///p1/ChangedAbstractModifier2/m2()|,
+		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
+		    changedAbstractModifier()),
+	  	detection(
+		    |java+method:///client/ChangedAbstractModifier/methodChangedAccessModifier()|,
+		    |java+method:///p1/ChangedAbstractModifier2/m1()|,
+		    <\abstract(),\default(),1.0,MATCH_SIGNATURE>,
+		    changedAbstractModifier()) }
+    <= md;
+
+test bool classChangedAbstractModifier() 
+	= { detection(
+			|java+field:///client/ChangedAbstractModifier/classField|,
+		    |java+class:///p1/ChangedAbstractModifier1|,
+		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
+		    changedAbstractModifier()),
+		detection(
+		    |java+method:///client/ChangedAbstractModifier/classChangedAccessModifier()|,
+		    |java+class:///p1/ChangedAbstractModifier1|,
+		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
+		    changedAbstractModifier()) }
+    <= cd;
