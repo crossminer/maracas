@@ -149,3 +149,46 @@ test bool classChangedAbstractModifier()
 		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
 		    changedAbstractModifier()) }
     <= cd;
+    
+    
+//----------------------------------------------
+// Deprecated tests
+//----------------------------------------------
+test bool fieldDeprecated() 
+	= { detection(
+		    |java+method:///client/Deprecated/fieldDeprecated()|,
+		    |java+field:///p2/Deprecated3/field1|,
+		    <|java+field:///p2/Deprecated3/field1|,|java+field:///p2/Deprecated3/field1|,1.0,"signature">,
+		    deprecated()),
+		detection(
+		    |java+method:///client/Deprecated/fieldDeprecated()|,
+		    |java+field:///p2/Deprecated3/field3|,
+		    <|java+field:///p2/Deprecated3/field3|,|java+field:///p2/Deprecated3/field3|,1.0,"signature">,
+		    deprecated()) }
+	<= fd;
+	
+test bool methodDeprecated() 
+	= { detection(
+		    |java+method:///client/Deprecated/methodDeprecated()|,
+		    |java+method:///p2/Deprecated2/m1()|,
+		    <|java+method:///p2/Deprecated2/m1()|,|java+method:///p2/Deprecated2/m1()|,1.0,"signature">,
+		    deprecated()), 
+		detection(
+		    |java+method:///client/Deprecated/methodDeprecated()|,
+		    |java+method:///p2/Deprecated2/m3()|,
+		    <|java+method:///p2/Deprecated2/m3()|,|java+method:///p2/Deprecated2/m3()|,1.0,"signature">,
+		    deprecated()) }
+    <= md;
+
+test bool classDeprecated()
+	= { detection(
+			|java+method:///client/Deprecated/classDeprecated()|,
+		    |java+class:///p2/Deprecated1|,
+		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,"signature">,
+		    deprecated()),
+		detection(
+		    |java+field:///client/Deprecated/classField|,
+		    |java+class:///p2/Deprecated1|,
+		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,"signature">,
+		    deprecated()) }
+	<= cd;

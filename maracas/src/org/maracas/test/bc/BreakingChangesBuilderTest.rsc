@@ -114,6 +114,33 @@ test bool methodChangedAbstractModifier()
     };
 
 
+//----------------------------------------------
+// Deprecated tests
+//----------------------------------------------
+test bool classDeprecated() {
+	deprecated = cbc.deprecated.elem;
+	return deprecated == {
+		|java+class:///p2/Deprecated1|,
+		|java+class:///p2/Deprecated1$Inner1|
+	};
+}
+
+test bool methodDeprecated() {
+	deprecated = mbc.deprecated.elem;
+	return deprecated == {
+		|java+method:///p2/Deprecated2/m1()|,
+		|java+method:///p2/Deprecated2/m3()|
+	};
+}
+
+test bool fieldDeprecated() {
+	deprecated = fbc.deprecated.elem;
+	return deprecated == {
+		|java+field:///p2/Deprecated3/field1|,
+		|java+field:///p2/Deprecated3/field3|
+	};
+}
+    
 test bool changedParamList1() {
 	meth = |java+method:///p3/ChangeParamList/m2(int%5B%5D%5B%5D)|;
 	list[TypeSymbol] from = [ 
