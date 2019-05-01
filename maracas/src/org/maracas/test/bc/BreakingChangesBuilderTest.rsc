@@ -140,7 +140,70 @@ test bool fieldDeprecated() {
 		|java+field:///p2/Deprecated3/field3|
 	};
 }
+
+
+//----------------------------------------------
+// Renamed tests
+//----------------------------------------------
+test bool methodRenamed() {
+	renamed = mbc.renamed.mapping <0,1>;
+	return renamed == {
+		<|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|>
+	};
+}
+
+test bool classRenamed() {
+	renamed = cbc.renamed.mapping <0,1>;
+	return renamed == {
+		<|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|>
+	};
+}
+
+
+//----------------------------------------------
+// Moved tests
+//----------------------------------------------
+test bool methodMoved() {
+	moved = mbc.moved.mapping <0,1>;
+	return moved >= {
+		<|java+method:///p2/Moved1/m1()|,|java+method:///p2_1/Moved1/m1()|>,
+		<|java+method:///p2/Moved1/m2()|,|java+method:///p2_1/Moved1/m2()|>,
+		<|java+method:///p2/Moved1/m3()|,|java+method:///p2_1/Moved1/m3()|>,
+		<|java+method:///p2/Moved1/m4()|,|java+method:///p2_1/Moved1/m4()|>
+	};
+}
     
+test bool classMoved() {
+	moved = cbc.moved.mapping <0,1>;
+	return moved == {
+		<|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|>
+	};
+}
+
+
+//----------------------------------------------
+// Removed tests
+//----------------------------------------------
+test bool methodRemoved() {
+	removed = mbc.removed.elem;
+	return removed >= {
+		|java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,
+		|java+method:///p2/Removed1/toString()|,
+		|java+method:///p2/Removed2/populateMatrices()|
+	};
+}
+
+test bool classRemoved() {
+	removed = cbc.removed.elem;
+	return removed >= {
+		|java+class:///p2/Removed1|
+	};
+}
+
+
+//----------------------------------------------
+// Changed param list tests
+//----------------------------------------------
 test bool changedParamList1() {
 	meth = |java+method:///p3/ChangeParamList/m2(int%5B%5D%5B%5D)|;
 	list[TypeSymbol] from = [ 
@@ -179,52 +242,3 @@ bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
 		return false;
 	}
 }  
-
-
-test bool methodRenamed() {
-	renamed = mbc.renamed.mapping <0,1>;
-	return renamed == {
-		<|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|>
-	};
-}
-
-test bool classRenamed() {
-	renamed = cbc.renamed.mapping <0,1>;
-	return renamed == {
-		<|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|>
-	};
-}
-
-
-test bool methodMoved() {
-	moved = mbc.moved.mapping <0,1>;
-	return moved >= {
-		<|java+method:///p2/Moved1/m1()|,|java+method:///p2_1/Moved1/m1()|>,
-		<|java+method:///p2/Moved1/m2()|,|java+method:///p2_1/Moved1/m2()|>,
-		<|java+method:///p2/Moved1/m3()|,|java+method:///p2_1/Moved1/m3()|>,
-		<|java+method:///p2/Moved1/m4()|,|java+method:///p2_1/Moved1/m4()|>
-	};
-}
-    
-test bool classMoved() {
-	moved = cbc.moved.mapping <0,1>;
-	return moved == {
-		<|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|>
-	};
-}
-
-test bool methodRemoved() {
-	removed = mbc.removed.elem;
-	return removed >= {
-		|java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,
-		|java+method:///p2/Removed1/toString()|,
-		|java+method:///p2/Removed2/populateMatrices()|
-	};
-}
-
-test bool classRemoved() {
-	removed = cbc.removed.elem;
-	return removed >= {
-		|java+class:///p2/Removed1|
-	};
-}

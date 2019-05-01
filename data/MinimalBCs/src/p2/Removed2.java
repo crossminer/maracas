@@ -18,7 +18,7 @@ public class Removed2 {
 		populateMatrices();
 	}
 	
-	private void populateMatrices() {
+	public void populateMatrices() {
 		for (int i = 0; i < f3; i++) {
 			for (int j = 0; j < f3; j++) {
 				f1[i][j] = i + j;

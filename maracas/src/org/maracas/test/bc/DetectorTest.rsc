@@ -5,7 +5,7 @@ import org::maracas::bc::BreakingChanges;
 import org::maracas::bc::Detector;
 import org::maracas::config::Options;
 import org::maracas::Maracas;
-
+import Relation;
 
 loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
@@ -158,12 +158,12 @@ test bool fieldDeprecated()
 	= { detection(
 		    |java+method:///client/Deprecated/fieldDeprecated()|,
 		    |java+field:///p2/Deprecated3/field1|,
-		    <|java+field:///p2/Deprecated3/field1|,|java+field:///p2/Deprecated3/field1|,1.0,"signature">,
+		    <|java+field:///p2/Deprecated3/field1|,|java+field:///p2/Deprecated3/field1|,1.0,MATCH_SIGNATURE>,
 		    deprecated()),
 		detection(
 		    |java+method:///client/Deprecated/fieldDeprecated()|,
 		    |java+field:///p2/Deprecated3/field3|,
-		    <|java+field:///p2/Deprecated3/field3|,|java+field:///p2/Deprecated3/field3|,1.0,"signature">,
+		    <|java+field:///p2/Deprecated3/field3|,|java+field:///p2/Deprecated3/field3|,1.0,MATCH_SIGNATURE>,
 		    deprecated()) }
 	<= fd;
 	
@@ -171,12 +171,12 @@ test bool methodDeprecated()
 	= { detection(
 		    |java+method:///client/Deprecated/methodDeprecated()|,
 		    |java+method:///p2/Deprecated2/m1()|,
-		    <|java+method:///p2/Deprecated2/m1()|,|java+method:///p2/Deprecated2/m1()|,1.0,"signature">,
+		    <|java+method:///p2/Deprecated2/m1()|,|java+method:///p2/Deprecated2/m1()|,1.0,MATCH_SIGNATURE>,
 		    deprecated()), 
 		detection(
 		    |java+method:///client/Deprecated/methodDeprecated()|,
 		    |java+method:///p2/Deprecated2/m3()|,
-		    <|java+method:///p2/Deprecated2/m3()|,|java+method:///p2/Deprecated2/m3()|,1.0,"signature">,
+		    <|java+method:///p2/Deprecated2/m3()|,|java+method:///p2/Deprecated2/m3()|,1.0,MATCH_SIGNATURE>,
 		    deprecated()) }
     <= md;
 
@@ -184,11 +184,130 @@ test bool classDeprecated()
 	= { detection(
 			|java+method:///client/Deprecated/classDeprecated()|,
 		    |java+class:///p2/Deprecated1|,
-		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,"signature">,
+		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,MATCH_SIGNATURE>,
 		    deprecated()),
 		detection(
 		    |java+field:///client/Deprecated/classField|,
 		    |java+class:///p2/Deprecated1|,
-		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,"signature">,
+		    <|java+class:///p2/Deprecated1|,|java+class:///p2/Deprecated1|,1.0,MATCH_SIGNATURE>,
 		    deprecated()) }
 	<= cd;
+	
+	
+//----------------------------------------------
+// Renamed tests
+//----------------------------------------------
+test bool methodRenamed() 
+	= detection(
+		|java+method:///client/Renamed/methodRenamed()|,
+	    |java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,
+	    <|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|,0.9911504424778761,"levenshtein">,
+	    renamed())
+	in md;
+
+test bool classRenamed() 
+	= { detection(
+		    |java+field:///client/Renamed/classField|,
+		    |java+class:///p2/Renamed1|,
+		    <|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|,0.8444444444444444,"levenshtein">,
+		    renamed()),
+		detection(
+		    |java+method:///client/Renamed/classRenamed()|,
+		    |java+class:///p2/Renamed1|,
+		    <|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|,0.8444444444444444,"levenshtein">,
+		    renamed()) } 
+	<= cd;
+	
+
+//----------------------------------------------
+// Moved tests
+//----------------------------------------------
+test bool methodMovedDueToRenamedClass() 
+	= { detection(
+		    |java+method:///client/Renamed/classRenamed()|,
+		    |java+method:///p2/Renamed1/getF2()|,
+		    <|java+method:///p2/Renamed1/getF2()|,|java+method:///p2/RenamedRenamed1/getF2()|,0.8372093023255813,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+method:///client/Renamed/classRenamed()|,
+		    |java+method:///p2/Renamed1/isF3()|,
+		    <|java+method:///p2/Renamed1/isF3()|,|java+method:///p2/RenamedRenamed1/isF3()|,0.8372093023255813,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+method:///client/Renamed/classRenamed()|,
+		    |java+method:///p2/Renamed1/getF1()|,
+		    <|java+method:///p2/Renamed1/getF1()|,|java+method:///p2/RenamedRenamed1/getF1()|,0.9705882352941176,"levenshtein">,
+		    moved()) }
+    <= md;
+
+test bool methodMovedDueToMovedClass() 
+	= { detection(
+		    |java+method:///client/Moved/movedClass()|,
+		    |java+method:///p2/Moved1/getF3()|,
+		    <|java+method:///p2/Moved1/getF3()|,|java+method:///p2_1/Moved1/getF3()|,0.9444444444444444,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+method:///client/Moved/movedClass()|,
+		    |java+method:///p2/Moved1/getF4()|,
+		    <|java+method:///p2/Moved1/getF4()|,|java+method:///p2_1/Moved1/getF4()|,0.9444444444444444,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+method:///client/Moved/movedClass()|,
+		    |java+method:///p2/Moved1/getF5()|,
+		    <|java+method:///p2/Moved1/getF5()|,|java+method:///p2_1/Moved1/getF5()|,0.9444444444444444,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+method:///client/Moved/movedClass()|,
+		    |java+method:///p2/Moved1/getF6()|,
+		    <|java+method:///p2/Moved1/getF6()|,|java+method:///p2_1/Moved1/getF6()|,0.9444444444444444,"levenshtein">,
+		    moved()) }
+	<= md;
+  
+    
+test bool classMoved() 
+	= { detection(
+		    |java+method:///client/Moved/movedClass()|,
+		    |java+class:///p2/Moved1|,
+		    <|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|,0.9484304932735426,"levenshtein">,
+		    moved()),
+		detection(
+		    |java+field:///client/Moved/classField|,
+		    |java+class:///p2/Moved1|,
+		    <|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|,0.9484304932735426,"levenshtein">,
+		    moved()) }
+	<= cd;
+	
+	
+//----------------------------------------------
+// Removed tests
+//----------------------------------------------
+test bool methodRemovedClassConstructor() 
+	= detection(
+	    |java+method:///client/Removed/classRemoved()|,
+	    |java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,
+	    <|java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,|unknown:///|,1.0,MATCH_SIGNATURE>,
+	    removed())
+    in md;
+
+test bool methodRemoved()
+	= detection(
+	    |java+method:///client/Removed/methodRemoved()|,
+	    |java+method:///p2/Removed2/populateMatrices()|,
+	    <|java+method:///p2/Removed2/populateMatrices()|,|unknown:///|,1.0,MATCH_SIGNATURE>,
+	    removed())
+    in md;
+
+test bool classRemoved() 
+	= { detection(
+		    |java+method:///client/Removed/classRemoved()|,
+		    |java+class:///p2/Removed1|,
+		    <|java+class:///p2/Removed1|,|unknown:///|,1.0,MATCH_SIGNATURE>,
+		    removed()),
+		detection(
+		    |java+field:///client/Removed/classField|,
+		    |java+class:///p2/Removed1|,
+		    <|java+class:///p2/Removed1|,|unknown:///|,1.0,MATCH_SIGNATURE>,
+		    removed()) }
+    <= cd;
+
+
