@@ -36,8 +36,9 @@ M3 getAdditions(M3 m3Old, M3 m3New) {
 M3 fillDefaultVisibility(M3 m3) {
 	accMods = { \defaultAccess(), \public(), \private(), \protected() };
 
-	m3.modifiers = m3.modifiers +
-		{ <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+	allDecls = domain(m3.declarations);
+	m3.modifiers +=
+		{ <elem, \defaultAccess()> | elem <- allDecls,
 		                             (m3.modifiers[elem] & accMods) == {} };
 
 	return m3;
