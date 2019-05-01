@@ -20,10 +20,15 @@ void runAll(loc libv1, loc libv2, loc dataset) {
 
 	println("Computing CBC...");
 	BreakingChanges cbc = classBreakingChanges(libv1, libv2);
+	writeBinaryValueFile(dataset + "Classes.cbc", cbc);
+
 	println("Computing MBC...");
 	BreakingChanges mbc = methodBreakingChanges(libv1, libv2);
+	writeBinaryValueFile(dataset + "Methods.cbc", mbc);
+
 	println("Computing FBC...");
 	BreakingChanges fbc = fieldBreakingChanges(libv1, libv2);
+	writeBinaryValueFile(dataset + "Fields.cbc", fbc);
 
 	int i = 0;
 	for (client <- clients) {
