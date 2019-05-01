@@ -4,5 +4,5 @@ Bundle-Name: maracas
 Bundle-SymbolicName: maracas
 Bundle-Version: 1.0.0
 Require-Bundle: rascal_eclipse,
- rascal_java_build_manager;bundle-version="0.0.1"
+ rascal_java_build_manager;bundle-version="0.0.1";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
