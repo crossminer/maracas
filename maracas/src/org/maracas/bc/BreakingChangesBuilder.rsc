@@ -23,14 +23,20 @@ import Type;
 data Modifier =
 	\defaultAccess();
 
+// Both are extremely slow, my bad, temporary.
 @memo
 M3 getRemovals(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3Old), fillDefaultVisibility(m3New)]);
+	return diffJavaM3(m3Old.id,
+			[fillDefaultVisibility(filterAnonymousClasses(m3Old)),
+			fillDefaultVisibility(filterAnonymousClasses(m3New))]);
 }
 
+// Both are extremely slow, my bad, temporary.
 @memo
 M3 getAdditions(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id, [fillDefaultVisibility(m3New), fillDefaultVisibility(m3Old)]);
+	return diffJavaM3(m3Old.id, [
+			fillDefaultVisibility(filterAnonymousClasses(m3New)),
+			fillDefaultVisibility(filterAnonymousClasses(m3Old))]);
 }
 
 M3 fillDefaultVisibility(M3 m3) {

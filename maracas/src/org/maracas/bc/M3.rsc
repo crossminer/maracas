@@ -9,7 +9,8 @@ import Set;
 import String;
 import Type;
 import ValueIO;
-
+import Node;
+import Type;
 
 @memo
 M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
@@ -56,6 +57,33 @@ private set[loc] fetchFilesByExtension(loc directory, str extension) {
 		}
 	}
 	return files;
+}
+
+// Temporary. To be unified with filterM3() below.
+M3 filterAnonymousClasses(M3 m) {
+	m3Filtered = m3(m.id);
+
+	isAnonymous = bool (value v) {
+		if (loc l := v)
+			return /\$[0-9]+/ := l.uri;
+		return false;
+	};
+
+	map[str, value] keywordParams = ();
+	// Traverse all rel[value, value] relations of the M3 model
+	visit (#M3.definitions[\adt("M3", [])]) {
+		// A rel[value, value] relation relName of the M3 model
+		case \label(relName, \set(\tuple(_))) : {
+			value v = getKeywordParameters(m)[relName]; // Value of the relation relName
+			if (rel[value, value] relation := v) { // As a rel[value, value]
+				keywordParams[relName] = { <a, b> | <a, b> <- relation, !isAnonymous(a), !isAnonymous(b) };
+			}
+		}
+	};
+
+	m3Filtered = setKeywordParameters(m3Filtered, keywordParams);
+
+	return m3Filtered;
 }
 
 M3 filterM3(M3 m, set[loc] elems) 
