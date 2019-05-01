@@ -54,7 +54,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
 	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
-	bc.deprecated = deprecated(m3Old, m3New, bc);
+	bc.deprecated = deprecated(removals, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
 	bc.removed = removed(removals, additions, bc);
@@ -77,7 +77,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	bc.changedAbstractModifier = changedAbstractModifier(removals, additions, bc);
 	bc.changedParamList = changedParamList(removals, additions);
 	bc.changedReturnType = changedReturnType(removals, additions);
-	bc.deprecated = deprecated(m3Old, m3New, bc);
+	bc.deprecated = deprecated(removals, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
 	bc.moved = moved(removals, additions, bc);
 	bc.removed = removed(removals, additions, bc);
@@ -97,7 +97,7 @@ BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	bc.changedFinalModifier = changedFinalModifier(removals, additions, bc);
 	bc.changedStaticModifier = changedStaticModifier(removals, additions, bc);
 	bc.changedType = changedType(removals, additions);
-	bc.deprecated = deprecated(m3Old, m3New, bc);
+	bc.deprecated = deprecated(removals, additions, bc);
 	bc.renamed = renamed(removals, additions, bc);
 	bc.removed = removed(removals, additions, bc);
 	
@@ -188,23 +188,21 @@ private rel[loc, Mapping[Modifier]] changedModifier(M3 removals, M3 additions, b
 
 /*
  * Identifying deprecated elements. It only considers deprecated elements
- * introduced in m3New.
+ * introduced in the new version.
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
-private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, BreakingChanges bc) {
+private rel[loc, Mapping[loc]] deprecated(M3 removals, M3 additions, BreakingChanges bc) {
 	switch (bc) {
 		case \class(_) : {
-			m3Old.containment = m3Old.containment+;
-			m3New.containment = m3New.containment+;
-			return deprecated(m3Old, m3New, isType, bc.options);
+			return deprecated(removals, additions, isType, bc.options);
 		}
-		case \method(_) : return deprecated(m3Old, m3New, isMethod, bc.options);
-		case \field(_) : return deprecated(m3Old, m3New, isField, bc.options);
+		case \method(_) : return deprecated(removals, additions, isMethod, bc.options);
+		case \field(_) : return deprecated(removals, additions, isField, bc.options);
 		default : return {};
 	}
 }
 
-private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, map[str,str] options) {
+private rel[loc, Mapping[loc]] deprecated(M3 removals, M3 additions, bool (loc) fun, map[str,str] options) {
 	load = DEP_MATCHES_LOAD in options && fromString(options[DEP_MATCHES_LOAD]);
 	
 	// TODO: check that we only load matches from a certain kind (i.e. class, method, field)	
@@ -215,10 +213,8 @@ private rel[loc, Mapping[loc]] deprecated(M3 m3Old, M3 m3New, bool (loc) fun, ma
 	}
 	
 	// For now, only mark @Deprecated elements
-	return { <e, <e, e, 1.0, MATCH_SIGNATURE>> | <e, a> <- m3New.annotations, fun(e),
-						a == |java+interface:///java/lang/Deprecated|,
-						m3Old.declarations[e] != {},
-						|java+interface:///java/lang/Deprecated| notin m3Old.annotations[e] };
+	return { <e, <e, e, 1.0, MATCH_SIGNATURE>> | <e, a> <- additions.annotations, fun(e),
+						a == |java+interface:///java/lang/Deprecated|};
 
 	//additions = getAdditions(m3Old, m3New);
 	//deprecate = filterM3(m3New, elemsDeprecated);
