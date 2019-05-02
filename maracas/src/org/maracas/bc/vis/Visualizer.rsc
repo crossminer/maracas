@@ -47,13 +47,17 @@ str renderHtml(BreakingChanges bc) {
 
 		if (rel[loc, Mapping[&T]] relation := v) {
 			blocks += h4(friendlyNames[relName]);
-			blocks +=
-				table(class("striped"),
-					thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
-					tbody(
-						[tr(td(l), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
-					)
-				);
+			
+			if (Relation::size(relation) > 0)
+				blocks +=
+					table(class("striped"),
+						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
+						tbody(
+							[tr(td(l), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
+						)
+					);
+			else
+				blocks += p("No changes");
 		}
 	}
 
