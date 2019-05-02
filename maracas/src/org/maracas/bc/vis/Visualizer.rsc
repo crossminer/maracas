@@ -3,6 +3,13 @@ module org::maracas::bc::vis::Visualizer
 import IO;
 import vis::Figure;
 import vis::Render;
+import Node;
+import Type;
+import Relation;
+
+import lang::html5::DOM;
+
+import org::maracas::bc::BreakingChanges;
 
 void renderBCList(str title, str msg, rel[str,str] mapping) {
 	t = text("Breaking Change: <title>", fontSize(20), fontColor("blue"));
@@ -19,4 +26,52 @@ void renderBCList(str title, str msg, rel[str,str] mapping) {
 	bcs = grid(rows);
 	fig = vcat([t, m, bcs]);
 	render("Breaking Changes", fig);
+}
+
+str renderHtml(BreakingChanges bc) {
+	kws = getKeywordParameters(bc);
+	list[value] blocks = [];
+	for (str relName <- kws) {
+		value v = kws[relName];
+
+		if (rel[loc, Mapping[&T]] relation := v) {
+			blocks += h4(friendlyNames[relName]);
+			blocks += table(class("striped"),
+						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
+						tbody(
+							[tr(td(l), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
+						));
+		}
+	}
+
+	return lang::html5::DOM::toString(
+		html(
+			head(
+				title("BreakingChange model for <bc.id>"),
+				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"))
+			),
+			body(blocks))
+		);
+}
+
+map[str, str] friendlyNames = (
+	"changedAccessModifier"   : "Access modifiers changed",
+	"changedFinalModifier"    : "Final modifiers changed",
+	"changedStaticModifier"   : "Static modifiers changed",
+	"changedAbstractModifier" : "Abstract modifiers changed",
+	"deprecated"              : "Deprecated elements",
+	"renamed"                 : "Renamed elements",
+	"moved"                   : "Moved elements",
+	"removed"                 : "Removed elements",
+	"changedExtends"          : "Class extension changed",
+	"changedImplements"       : "Class/Interface implementation changed",
+	"changedParamsList"       : "Method parameters changed",
+	"changedReturnType"       : "Method return types changed",
+	"changedType"             : "Field types changed"
+);
+
+void writeHtml(BreakingChanges bc) {
+	loc out = |file:///home/dig/bc.html|;
+
+	writeFile(out, renderHtml(bc));
 }
