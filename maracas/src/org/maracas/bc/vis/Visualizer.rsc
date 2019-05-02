@@ -71,6 +71,10 @@ str renderHtml(BreakingChanges bc) {
 	);
 }
 
+void writeHtml(loc out, BreakingChanges bc) {
+	writeFile(out, renderHtml(bc));
+}
+
 map[str, str] friendlyNames = (
 	"changedAccessModifier"   : "Access modifiers changed",
 	"changedFinalModifier"    : "Final modifiers changed",
@@ -82,13 +86,7 @@ map[str, str] friendlyNames = (
 	"removed"                 : "Removed elements",
 	"changedExtends"          : "Class extension changed",
 	"changedImplements"       : "Class/Interface implementation changed",
-	"changedParamsList"       : "Method parameters changed",
+	"changedParamList"        : "Method parameters changed",
 	"changedReturnType"       : "Method return types changed",
 	"changedType"             : "Field types changed"
 );
-
-void writeHtml(BreakingChanges bc) {
-	loc out = |file:///home/dig/bc.html|;
-
-	writeFile(out, renderHtml(bc));
-}
