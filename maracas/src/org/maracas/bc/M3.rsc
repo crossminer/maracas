@@ -2,6 +2,7 @@ module org::maracas::bc::M3
 
 import IO;
 import lang::java::m3::ClassPaths;
+import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::io::File;
 import Relation;
@@ -12,14 +13,20 @@ import ValueIO;
 import Node;
 import Type;
 
+// extends lang::java::m3::AST::Modifier
+// Could be moved to M3 creation itself
+// but this is the quickest way :)
+data Modifier =
+	\defaultAccess();
+
+// TODO: consider moving this function to Rascal module lang::java::m3::Core
+bool isType(loc entity) = isClass(entity) || isInterface(entity);
+
 @memo
 M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
-	if (project.scheme == "jar" || project.extension == "jar") {
-		return createM3FromJar(project);
-	}
-	else {
-		return m3FromFolder(project);
-	}
+	M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
+
+	return fillDefaultVisibility(filterAnonymousClasses(m));
 }
 
 M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
@@ -59,6 +66,23 @@ private set[loc] fetchFilesByExtension(loc directory, str extension) {
 	return files;
 }
 
+M3 fillDefaultVisibility(M3 m3) {
+	accMods = { \defaultAccess(), \public(), \private(), \protected() };
+
+	// Concise version, *extremely* slow (?)
+	//m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+	//					(isType(elem) || isMethod(elem) || isField(elem))
+	//					&& isEmpty(m3.modifiers[elem] & accMods) }; 
+
+	m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+						(isType(elem) || isMethod(elem) || isField(elem))
+						&& <elem, \public()> notin m3.modifiers
+						&& <elem, \protected()> notin m3.modifiers
+						&& <elem, \private()> notin m3.modifiers };
+
+	return m3;
+}
+
 M3 filterAnonymousClasses(M3 m)
 	= filterM3(m, bool (value v) {
 		if (loc l := v)
@@ -72,7 +96,7 @@ M3 filterAnonymousClasses(M3 m)
  * or predicate(b) does not hold
  */
 private M3 filterM3(M3 m, bool (value v) predicate) {
-	m3Filtered = m3(m.id);
+	m3Filtered = lang::java::m3::Core::m3(m.id);
 
 	map[str, value] kws = getKeywordParameters(m);
 	for (str relName <- kws) {

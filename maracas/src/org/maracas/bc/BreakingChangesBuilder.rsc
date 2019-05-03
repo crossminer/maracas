@@ -16,44 +16,14 @@ import Set;
 import String;
 import Type;
 
-
-// extends lang::java::m3::AST::Modifier
-// Could be moved to M3 creation itself
-// but this is the quickest way :)
-data Modifier =
-	\defaultAccess();
-
-// Both are extremely slow, my bad, temporary.
 @memo
 M3 getRemovals(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id,
-			[fillDefaultVisibility(filterAnonymousClasses(m3Old)),
-			fillDefaultVisibility(filterAnonymousClasses(m3New))]);
+	return diffJavaM3(m3Old.id, [m3Old, m3New]);
 }
 
-// Both are extremely slow, my bad, temporary.
 @memo
 M3 getAdditions(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id, [
-			fillDefaultVisibility(filterAnonymousClasses(m3New)),
-			fillDefaultVisibility(filterAnonymousClasses(m3Old))]);
-}
-
-M3 fillDefaultVisibility(M3 m3) {
-	accMods = { \defaultAccess(), \public(), \private(), \protected() };
-
-	// Concise version, *extremely* slow (?)
-	//m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
-	//					(isType(elem) || isMethod(elem) || isField(elem))
-	//					&& isEmpty(m3.modifiers[elem] & accMods) }; 
-
-	m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
-						(isType(elem) || isMethod(elem) || isField(elem))
-						&& <elem, \public()> notin m3.modifiers
-						&& <elem, \protected()> notin m3.modifiers
-						&& <elem, \private()> notin m3.modifiers };
-
-	return m3;
+	return diffJavaM3(m3Old.id, [m3New, m3Old]);
 }
 
 BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
@@ -469,9 +439,6 @@ rel[loc, Mapping[set[loc]]] changedImplements(M3 removals, M3 additions) {
 			 > | typ <- domain(removals.implements) + domain(additions.implements)
 			};
 }
-
-// TODO: consider moving this function to Rascal module lang::java::m3::Core
-private bool isType(loc entity) = isClass(entity) || isInterface(entity);
 
 private bool sameMethodQualName(loc m1, loc m2) {
 	m1Name = methodQualName(m1);

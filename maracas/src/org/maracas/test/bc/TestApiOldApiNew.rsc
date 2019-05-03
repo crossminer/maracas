@@ -2,6 +2,7 @@ module org::maracas::\test::bc::TestApiOldApiNew
 
 import IO;
 import Set;
+import org::maracas::bc::M3;
 import lang::java::m3::AST;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
