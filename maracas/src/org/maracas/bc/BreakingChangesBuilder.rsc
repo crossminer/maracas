@@ -42,10 +42,16 @@ M3 getAdditions(M3 m3Old, M3 m3New) {
 M3 fillDefaultVisibility(M3 m3) {
 	accMods = { \defaultAccess(), \public(), \private(), \protected() };
 
-	allDecls = domain(m3.declarations);
-	m3.modifiers +=
-		{ <elem, \defaultAccess()> | elem <- allDecls,
-		                             (m3.modifiers[elem] & accMods) == {} };
+	// Concise version, *extremely* slow (?)
+	//m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+	//					(isType(elem) || isMethod(elem) || isField(elem))
+	//					&& isEmpty(m3.modifiers[elem] & accMods) }; 
+
+	m3.modifiers += { <elem, \defaultAccess()> | elem <- domain(m3.declarations),
+						(isType(elem) || isMethod(elem) || isField(elem))
+						&& <elem, \public()> notin m3.modifiers
+						&& <elem, \protected()> notin m3.modifiers
+						&& <elem, \private()> notin m3.modifiers };
 
 	return m3;
 }
