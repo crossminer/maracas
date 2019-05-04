@@ -10,25 +10,34 @@ import Set;
 import Relation;
 import org::maracas::Maracas;
 import org::maracas::bc::BreakingChanges;
+import org::maracas::bc::vis::Visualizer;
 import lang::java::m3::Core;
 import org::maracas::bc::Detector;
 
-void runAll(loc libv1, loc libv2, loc dataset) {
-	loc clientsPath = dataset + "clients/";
-	set[loc] clients = walkJARs(clientsPath);
+void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, bool serializeHtml) {
+	set[loc] clients = walkJARs(clients);
 	int count = size(clients);
 
 	println("Computing CBC...");
 	BreakingChanges cbc = classBreakingChanges(libv1, libv2);
-	writeBinaryValueFile(dataset + "Classes.cbc", cbc);
 
 	println("Computing MBC...");
 	BreakingChanges mbc = methodBreakingChanges(libv1, libv2);
-	writeBinaryValueFile(dataset + "Methods.cbc", mbc);
 
 	println("Computing FBC...");
 	BreakingChanges fbc = fieldBreakingChanges(libv1, libv2);
-	writeBinaryValueFile(dataset + "Fields.cbc", fbc);
+
+	if (serializeBC) {
+		writeBinaryValueFile(report + "Classes.cbc", cbc);
+		writeBinaryValueFile(report + "Methods.cbc", mbc);
+		writeBinaryValueFile(report + "Fields.cbc", fbc);
+	}
+
+	if (serializeHtml) {
+		writeHtml(report + "html" + "Classes.html", cbc);
+		writeHtml(report + "html" + "Methods.html", mbc);
+		writeHtml(report + "html" + "Fields.html", fbc);
+	}
 
 	int i = 0;
 	for (client <- clients) {
@@ -41,11 +50,11 @@ void runAll(loc libv1, loc libv2, loc dataset) {
 		set[Detection] fDetections = detections(m3, fbc);
 
 		if (size(cDetections) > 0)
-			writeBinaryValueFile(dataset + (client.file + ".cbc.detection"), cDetections);
+			writeBinaryValueFile(report + (client.file + ".cbc.detection"), cDetections);
 		if (size(mDetections) > 0)
-			writeBinaryValueFile(dataset + (client.file + ".mbc.detection"), mDetections);
+			writeBinaryValueFile(report + (client.file + ".mbc.detection"), mDetections);
 		if (size(fDetections) > 0)
-			writeBinaryValueFile(dataset + (client.file + ".fbc.detection"), fDetections);
+			writeBinaryValueFile(report + (client.file + ".fbc.detection"), fDetections);
 	}
 }
 
