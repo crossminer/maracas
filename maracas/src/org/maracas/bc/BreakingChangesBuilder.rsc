@@ -26,7 +26,7 @@ M3 getAdditions(M3 m3Old, M3 m3New) {
 	return diffJavaM3(m3Old.id, [m3New, m3Old]);
 }
 
-BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |cwd:///config/config.properties|) {
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
 	
@@ -47,7 +47,7 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	return bc;
 }
 
-BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |cwd:///config/config.properties|) {
 	removals = getRemovals(m3Old, m3New);
 	additions = getAdditions(m3Old, m3New);
 	
@@ -69,7 +69,7 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	return bc;
 }
 
-BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |cwd:///config/config.properties|) {
 	additions = getAdditions(m3Old, m3New);
 	removals = getRemovals(m3Old, m3New);
 	
