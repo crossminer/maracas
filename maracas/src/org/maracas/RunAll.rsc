@@ -28,9 +28,9 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, boo
 	BreakingChanges fbc = fieldBreakingChanges(libv1, libv2);
 
 	if (serializeBC) {
-		writeBinaryValueFile(report + "Classes.cbc", cbc);
-		writeBinaryValueFile(report + "Methods.cbc", mbc);
-		writeBinaryValueFile(report + "Fields.cbc", fbc);
+		writeBinaryValueFile(report + "bc" + "Classes.cbc", cbc);
+		writeBinaryValueFile(report + "bc" + "Methods.cbc", mbc);
+		writeBinaryValueFile(report + "bc" + "Fields.cbc", fbc);
 	}
 
 	if (serializeHtml) {
@@ -42,7 +42,7 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, boo
 	int i = 0;
 	for (client <- clients) {
 		i = i + 1;
-		print("[<i>/<count>] Computing detection model for <client>... ");		
+		println("[<i>/<count>] Computing detection model for <client>... ");
 
 		M3 m3 = createM3FromJar(client);	
 		set[Detection] cDetections = detections(m3, cbc);
@@ -50,11 +50,11 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, boo
 		set[Detection] fDetections = detections(m3, fbc);
 
 		if (size(cDetections) > 0)
-			writeBinaryValueFile(report + (client.file + ".cbc.detection"), cDetections);
+			writeBinaryValueFile(report + "detection" + (client.file + ".cbc.detection"), cDetections);
 		if (size(mDetections) > 0)
-			writeBinaryValueFile(report + (client.file + ".mbc.detection"), mDetections);
+			writeBinaryValueFile(report + "detection" + (client.file + ".mbc.detection"), mDetections);
 		if (size(fDetections) > 0)
-			writeBinaryValueFile(report + (client.file + ".fbc.detection"), fDetections);
+			writeBinaryValueFile(report + "detection" + (client.file + ".fbc.detection"), fDetections);
 	}
 }
 
