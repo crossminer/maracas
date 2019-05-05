@@ -1,32 +1,12 @@
 module org::maracas::bc::vis::Visualizer
 
 import IO;
-import vis::Figure;
-import vis::Render;
+import Set;
 import Node;
-import Type;
-import Relation;
 
 import lang::html5::DOM;
 
 import org::maracas::bc::BreakingChanges;
-
-void renderBCList(str title, str msg, rel[str,str] mapping) {
-	t = text("Breaking Change: <title>", fontSize(20), fontColor("blue"));
-	m = text("<msg>", fontSize(12), fontColor("black"));
-
-	rows = [];
-	for(<p, n> <- mapping) {
-		rows += [[ 
-			text("<p>", fontSize(20), fontColor("red")),
-			text("<n>", fontSize(20), fontColor("green"))
-		]];
-	}
-	
-	bcs = grid(rows);
-	fig = vcat([t, m, bcs]);
-	render("Breaking Changes", fig);
-}
 
 str renderHtml(BreakingChanges bc) {
 	kws = getKeywordParameters(bc);
@@ -36,7 +16,7 @@ str renderHtml(BreakingChanges bc) {
 		table(class("striped"),
 			thead(tr(th("Type"), th("Count"))),
 			tbody(
-				[tr(td(friendlyNames[relName]), td(Relation::size(r))) |
+				[tr(td(friendlyNames[relName]), td(size(r))) |
 					relName <- kws, rel[loc, Mapping[&T]] r := kws[relName]]
 			)
 		)
@@ -48,7 +28,7 @@ str renderHtml(BreakingChanges bc) {
 		if (rel[loc, Mapping[&T]] relation := v) {
 			blocks += h4(friendlyNames[relName]);
 			
-			if (Relation::size(relation) > 0)
+			if (size(relation) > 0)
 				blocks +=
 					table(class("striped"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
@@ -61,8 +41,9 @@ str renderHtml(BreakingChanges bc) {
 		}
 	}
 
-	return lang::html5::DOM::toString(
-		html(
+	// Should be lang::html5::DOM::toString()
+	// but see bug below
+	return toString(html(
 			head(
 				title("BreakingChanges model between <bc.id[0].file> and <bc.id[1].file>"),
 				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"))
@@ -94,3 +75,55 @@ map[str, str] friendlyNames = (
 	"changedReturnType"       : "Method return types changed",
 	"changedType"             : "Field types changed"
 );
+
+/**
+ * Bug: weird function overloading happening when
+ * invoking renderHtml()from Java.. (between
+ * Node::toString() && DOM::toString()??) resulting
+ * in a complete HTML structure without any String value.
+ * Copying toString() & co. from DOM here as a dirty workaround
+ */
+// ------------------------------------------------------
+str kidsToString(list[value] kids)
+  = ("" | it + kidToString(k) | k <- kids );
+
+str kidToString(HTML5Node elt)  = toString(elt);
+str kidToString(HTML5Attr x)  = "";
+
+default str kidToString(value x)  = "<x>";
+
+str nodeToString(str n, set[HTML5Attr] attrs, list[value] kids) {
+      str s = "";
+      if (isVoid(n)) {
+        // ignore kids...
+        s += startTag(n, attrs);
+      }
+      else if (isRawText(n)) {
+        s += startTag(n, attrs);
+        s += rawText(kids);
+        s += endTag(n);
+      }
+      else if (isEscapableRawText(n)) {
+        s += startTag(n, attrs);
+        s += escapableRawText(kids);
+        s += endTag(n);
+      }
+      else if (isBlockLevel(n)) {
+        s += "<startTag(n, attrs)>
+             '  <for (k <- kids) {><kidToString(k)>
+             '  <}><endTag(n)>";
+      }
+      else {
+        s += startTag(n, attrs);
+        s += kidsToString(kids);
+        s += endTag(n);
+      }
+      return s;
+}
+
+str toString(HTML5Node x) {
+  attrs = { k | HTML5Attr k <- x.kids };
+  kids = [ k | value k <- x.kids, HTML5Attr _ !:= k ];
+  return nodeToString(x.name, attrs, kids);
+}
+// ------------------------------------------------------
