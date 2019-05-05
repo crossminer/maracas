@@ -58,17 +58,19 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, boo
 	}
 }
 
-void readDetectionFiles(loc dataset) {
-	int total = 0;
+rel[str, set[Detection]] parseDetectionFiles(loc report) {
+	rel[str, set[Detection]] result = {};
 
-	for (e <- listEntries(dataset), endsWith(e, ".detection")) {
-		loc entry = dataset + e;
-
-		set[Detection] detections = readBinaryValueFile(#set[Detection], entry);
-		total += size(detections);
+	for (e <- listEntries(report), endsWith(e, ".detection")) {
+		if (/^<name: \S*>\.jar\.(cbc|mbc|fbc)\.detection$/ := e) {
+			loc entry = report + e;
+			set[Detection] detections = readBinaryValueFile(#set[Detection], entry);
+			result[name] += detections;
+		} else
+			throw "Shouldn\'t be here";
 	}
 
-	println("detections=<total>");
+	return result;
 }
 
 set[loc] walkJARs(loc dataset) {
