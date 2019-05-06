@@ -6,7 +6,7 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::M3;
+import org::maracas::m3::Core;
 import org::maracas::config::Options;
 import org::maracas::diff::CodeSimilarityMatcher;
 import org::maracas::io::properties::IO;

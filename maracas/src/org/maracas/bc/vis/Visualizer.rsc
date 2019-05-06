@@ -8,7 +8,7 @@ import String;
 import lang::html5::DOM;
 
 import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::M3;
+import org::maracas::m3::Core;
 
 str renderHtml(BreakingChanges bc) {
 	kws = getKeywordParameters(bc);

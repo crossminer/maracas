@@ -4,7 +4,7 @@ import lang::java::m3::Core;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::bc::BreakingChangesBuilder;
 import org::maracas::bc::Detector;
-import org::maracas::bc::M3;
+import org::maracas::m3::Core;
 
 
 BreakingChanges classBreakingChanges(loc oldAPI, loc newAPI) 
