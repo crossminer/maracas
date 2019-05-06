@@ -27,6 +27,18 @@ public class Maracas {
 	private Evaluator evaluator = createRascalEvaluator(vf);
 	private IRascalMonitor mon = new NullRascalMonitor();
 
+	/**
+	 * Run the full Maracas pipeline (build M3 models -> build BreakingChanges model
+	 * -> build Detections model), cf. RunAll.rsc. Output of the analysis is
+	 * serialized in {@code report}.
+	 * 
+	 * @param libPath1 Absolute path to the JAR of the 1st version of the library
+	 * @param libPath2 Absolute path to the JAR of the 2nd version of the library
+	 * @param clients  Absolute path to the directory containing all clients of
+	 *                 libPath1
+	 * @param report   Absolute path to the output directory where analysis results
+	 *                 are serialized
+	 */
 	public void runAll(String libPath1, String libPath2, String clients, String report) {
 		ISourceLocation loc1 = vf.sourceLocation(libPath1);
 		ISourceLocation loc2 = vf.sourceLocation(libPath2);
@@ -36,6 +48,15 @@ public class Maracas {
 		evaluator.call("runAll", loc1, loc2, locClients, locReport, vf.bool(true), vf.bool(true));
 	}
 
+	/**
+	 * Parses the analysis results to map to each client JAR of a library its
+	 * detection models
+	 * 
+	 * @param Absolute path to the output directory where analysis results of
+	 *                 {@code runAll} were serialized.
+	 * @return A Multimap associating to each client JAR the detections that were
+	 *         found
+	 */
 	public Multimap<String, Detection> parseDetections(String report) {
 		Multimap<String, Detection> result = ArrayListMultimap.create();
 		ISourceLocation locReport = vf.sourceLocation(report);
