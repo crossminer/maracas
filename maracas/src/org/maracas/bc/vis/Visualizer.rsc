@@ -3,10 +3,12 @@ module org::maracas::bc::vis::Visualizer
 import IO;
 import Set;
 import Node;
+import String;
 
 import lang::html5::DOM;
 
 import org::maracas::bc::BreakingChanges;
+import org::maracas::bc::M3;
 
 str renderHtml(BreakingChanges bc) {
 	kws = getKeywordParameters(bc);
@@ -33,7 +35,7 @@ str renderHtml(BreakingChanges bc) {
 					table(class("striped"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
 						tbody(
-							[tr(td(l), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
+							[tr(td(div(l, br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(getSourceCode(bc.id[0], l))))), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
 						)
 					);
 			else
@@ -46,7 +48,8 @@ str renderHtml(BreakingChanges bc) {
 	return toString(html(
 			head(
 				title("BreakingChanges model between <bc.id[0].file> and <bc.id[1].file>"),
-				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"))
+				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css")),
+				script(src("https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"))
 			),
 			body(
 				h2("BreakingChanges model between <bc.id[0].file> and <bc.id[1].file>") +
@@ -58,6 +61,10 @@ str renderHtml(BreakingChanges bc) {
 
 void writeHtml(loc out, BreakingChanges bc) {
 	writeFile(out, renderHtml(bc));
+}
+
+str toHtml(str code) {
+	return replaceAll(code, "\n", "\<br\>");
 }
 
 map[str, str] friendlyNames = (

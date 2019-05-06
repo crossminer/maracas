@@ -66,6 +66,27 @@ private set[loc] fetchFilesByExtension(loc directory, str extension) {
 	return files;
 }
 
+@memo
+M3 createM3FromDirectoryCached(loc directory) {
+	return createM3FromDirectory(directory);
+}
+
+str getSourceCode(loc jarLocation, loc logical) {
+	loc sourcesLocation = jarLocation;
+	sourcesLocation.extension = "";
+	sourcesLocation.file = sourcesLocation.file + "-sources";
+
+	if (isDirectory(sourcesLocation)) {
+		sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
+		found = sourcesM3.declarations[logical];
+
+		if (size(found) > 0)
+			return readFile(getOneFrom(sourcesM3.declarations[logical]));
+	}
+
+	return "";
+}
+
 M3 fillDefaultVisibility(M3 m3) {
 	accMods = { \defaultAccess(), \public(), \private(), \protected() };
 
