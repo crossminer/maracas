@@ -1,8 +1,8 @@
-module org::maracas::\test::bc::DetectorTest
+module org::maracas::\test::delta::DetectorTest
 
 import lang::java::m3::AST;
-import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::Detector;
+import org::maracas::delta::Delta;
+import org::maracas::delta::Detector;
 import org::maracas::config::Options;
 import org::maracas::Maracas;
 import Relation;
@@ -11,9 +11,9 @@ loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 loc client = |project://maracas/src/org/maracas/test/data/minimalbc-client.1.0.jar|;
 
-public BreakingChanges fbc = fieldBreakingChanges(api0, api1);
-public BreakingChanges mbc = methodBreakingChanges(api0, api1);
-public BreakingChanges cbc = classBreakingChanges(api0, api1);
+public Delta fbc = fieldDelta(api0, api1);
+public Delta mbc = methodDelta(api0, api1);
+public Delta cbc = classDelta(api0, api1);
 
 public set[Detection] fd = detections(client, fbc);
 public set[Detection] md = detections(client, mbc);

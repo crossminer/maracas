@@ -1,4 +1,4 @@
-module org::maracas::bc::vis::Visualizer
+module org::maracas::delta::vis::Visualizer
 
 import IO;
 import Set;
@@ -7,11 +7,11 @@ import String;
 
 import lang::html5::DOM;
 
-import org::maracas::bc::BreakingChanges;
+import org::maracas::delta::Delta;
 import org::maracas::m3::Core;
 
-str renderHtml(BreakingChanges bc) {
-	kws = getKeywordParameters(bc);
+str renderHtml(Delta delta) {
+	kws = getKeywordParameters(delta);
 
 	list[value] blocks = [
 		h3("Statistics"),
@@ -35,7 +35,7 @@ str renderHtml(BreakingChanges bc) {
 					table(class("striped"), HTML5Attr::style("width:auto;"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
 						tbody(
-							[tableRow(bc, change) | change <- relation]
+							[tableRow(delta, change) | change <- relation]
 						)
 					);
 			else
@@ -47,21 +47,21 @@ str renderHtml(BreakingChanges bc) {
 	// but see bug below
 	return toString(html(
 			head(
-				title("BreakingChanges model between <bc.id[0].file> and <bc.id[1].file>"),
+				title("Delta model between <delta.id[0].file> and <delta.id[1].file>"),
 				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css")),
 				script(src("https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"))
 			),
 			body(
-				h2("BreakingChanges model between <bc.id[0].file> and <bc.id[1].file>") +
+				h2("Delta model between <delta.id[0].file> and <delta.id[1].file>") +
 				blocks
 			)
 		)
 	);
 }
 
-HTML5Node tableRow(BreakingChanges bc, tuple[loc, Mapping[&T]] change) {
-	loc v1 = bc.id[0];
-	loc v2 = bc.id[1];
+HTML5Node tableRow(Delta delta, tuple[loc, Mapping[&T]] change) {
+	loc v1 = delta.id[0];
+	loc v2 = delta.id[1];
 
 	if (<l, <loc src, loc tgt, score, _>> := change)
 		return tr(td(sourceCodeDiv(v1, l)), td(sourceCodeDiv(v1, src)), td(sourceCodeDiv(v2, tgt)), td(score));
@@ -82,8 +82,8 @@ HTML5Node sourceCodeDiv(loc sources, loc l) {
 	return div(firstCol);
 }
 
-void writeHtml(loc out, BreakingChanges bc) {
-	writeFile(out, renderHtml(bc));
+void writeHtml(loc out, Delta delta) {
+	writeFile(out, renderHtml(delta));
 }
 
 str toHtml(str code) {

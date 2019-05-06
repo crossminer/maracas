@@ -1,9 +1,9 @@
-module org::maracas::\test::bc::BreakingChangesBuilderTest
+module org::maracas::\test::delta::DeltaBuilderTest
 
 import lang::java::m3::AST;
 import lang::java::m3::TypeSymbol;
-import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::BreakingChangesBuilder;
+import org::maracas::delta::Delta;
+import org::maracas::delta::DeltaBuilder;
 import org::maracas::m3::Core;
 import org::maracas::config::Options;
 import org::maracas::Maracas;
@@ -14,9 +14,9 @@ import IO;
 loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 
-public BreakingChanges fbc = fieldBreakingChanges(api0, api1);
-public BreakingChanges mbc = methodBreakingChanges(api0, api1);
-public BreakingChanges cbc = classBreakingChanges(api0, api1);
+public Delta fbc = fieldDelta(api0, api1);
+public Delta mbc = methodDelta(api0, api1);
+public Delta cbc = classDelta(api0, api1);
 
 
 //----------------------------------------------

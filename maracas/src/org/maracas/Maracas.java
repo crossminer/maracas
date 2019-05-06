@@ -29,7 +29,7 @@ public class Maracas {
 	private IRascalMonitor mon = new NullRascalMonitor();
 
 	/**
-	 * Run the full Maracas pipeline (build M3 models -> build BreakingChanges model
+	 * Run the full Maracas pipeline (build M3 models -> build Delta model
 	 * -> build Detections model), cf. RunAll.rsc. Output of the analysis is
 	 * serialized in {@code report}.
 	 * 
@@ -89,7 +89,7 @@ public class Maracas {
 		String clients = args[2];
 		String report = args[3];
 
-		// Build BreakingChanges/Detections models in /home/dig/guava-report
+		// Build Delta/Detections models in /home/dig/guava-report
 		m.runAll(lib1, lib2, clients, report);
 
 		// Parse the Detections models and build the Multimap
@@ -118,7 +118,7 @@ public class Maracas {
 		eval.addRascalSearchPath(vf.sourceLocation(Paths.get("src").toAbsolutePath().toString()));
 		eval.doImport(mon, "org::maracas::RunAll");
 		eval.doImport(mon, "org::maracas::Maracas");
-		eval.doImport(mon, "org::maracas::bc::vis::Visualizer");
+		eval.doImport(mon, "org::maracas::delta::vis::Visualizer");
 
 		return eval;
 	}

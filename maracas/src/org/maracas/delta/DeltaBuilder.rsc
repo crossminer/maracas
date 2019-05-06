@@ -1,14 +1,14 @@
-module org::maracas::bc::BreakingChangesBuilder
+module org::maracas::delta::DeltaBuilder
 
 import IO;
 import Boolean;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
-import org::maracas::bc::BreakingChanges;
 import org::maracas::config::Options;
-import org::maracas::diff::CodeSimilarityMatcher;
-import org::maracas::diff::Matcher;
+import org::maracas::delta::Delta;
+import org::maracas::match::CodeSimilarityMatcher;
+import org::maracas::match::Matcher;
 import org::maracas::io::properties::IO;
 import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
@@ -17,76 +17,67 @@ import Set;
 import String;
 import Type;
 
-@memo
-M3 getRemovals(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id, [m3Old, m3New]);
-}
 
-@memo
-M3 getAdditions(M3 m3Old, M3 m3New) {
-	return diffJavaM3(m3Old.id, [m3New, m3Old]);
-}
-
-BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
+Delta createClassDelta(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
 	
-	id = createBCId(m3Old, m3New);
-	bc = class(id);
-	bc.options = readProperties(optionsFile);
-	bc.changedAccessModifier = changedAccessModifier(diff, bc);
-	bc.changedFinalModifier = changedFinalModifier(diff, bc);
-	bc.changedStaticModifier = changedStaticModifier(diff, bc);
-	bc.changedAbstractModifier = changedAbstractModifier(diff, bc);
-	bc.deprecated = deprecated(diff, bc);
-	bc.renamed = renamed(diff, bc);
-	bc.moved = moved(diff, bc);
-	bc.removed = removed(diff, bc);
-	bc.changedExtends = changedExtends(diff);
-	bc.changedImplements = changedImplements(diff);
-	//return postproc(bc);
-	return bc;
+	id = createDeltaId(m3Old, m3New);
+	delta = class(id);
+	delta.options = readProperties(optionsFile);
+	delta.changedAccessModifier = changedAccessModifier(diff, delta);
+	delta.changedFinalModifier = changedFinalModifier(diff, delta);
+	delta.changedStaticModifier = changedStaticModifier(diff, delta);
+	delta.changedAbstractModifier = changedAbstractModifier(diff, delta);
+	delta.deprecated = deprecated(diff, delta);
+	delta.renamed = renamed(diff, delta);
+	delta.moved = moved(diff, delta);
+	delta.removed = removed(diff, delta);
+	delta.changedExtends = changedExtends(diff);
+	delta.changedImplements = changedImplements(diff);
+	//return postproc(delta);
+	return delta;
 }
 
-BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
+Delta createMethodDelta(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
 	
-	id = createBCId(m3Old, m3New);
-	bc = method(id);
-	bc.options = readProperties(optionsFile);
-	bc.changedAccessModifier = changedAccessModifier(diff, bc);
-	bc.changedFinalModifier = changedFinalModifier(diff, bc);
-	bc.changedStaticModifier = changedStaticModifier(diff, bc);
-	bc.changedAbstractModifier = changedAbstractModifier(diff, bc);
-	bc.changedParamList = changedParamList(diff);
-	bc.changedReturnType = changedReturnType(diff);
-	bc.deprecated = deprecated(diff, bc);
-	bc.renamed = renamed(diff, bc);
-	bc.moved = moved(diff, bc);
-	bc.removed = removed(diff, bc);
+	id = createDeltaId(m3Old, m3New);
+	delta = method(id);
+	delta.options = readProperties(optionsFile);
+	delta.changedAccessModifier = changedAccessModifier(diff, delta);
+	delta.changedFinalModifier = changedFinalModifier(diff, delta);
+	delta.changedStaticModifier = changedStaticModifier(diff, delta);
+	delta.changedAbstractModifier = changedAbstractModifier(diff, delta);
+	delta.changedParamList = changedParamList(diff);
+	delta.changedReturnType = changedReturnType(diff);
+	delta.deprecated = deprecated(diff, delta);
+	delta.renamed = renamed(diff, delta);
+	delta.moved = moved(diff, delta);
+	delta.removed = removed(diff, delta);
 	
-	//return postproc(bc);
-	return bc;
+	//return postproc(delta);
+	return delta;
 }
 
-BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
+Delta createFieldDelta(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
 	
-	id = createBCId(m3Old, m3New);
-	bc = field(id);
-	bc.options = readProperties(optionsFile);
-	bc.changedAccessModifier = changedAccessModifier(diff, bc);
-	bc.changedFinalModifier = changedFinalModifier(diff, bc);
-	bc.changedStaticModifier = changedStaticModifier(diff, bc);
-	bc.changedType = changedType(diff);
-	bc.deprecated = deprecated(diff, bc);
-	bc.renamed = renamed(diff, bc);
-	bc.removed = removed(diff, bc);
+	id = createDeltaId(m3Old, m3New);
+	delta = field(id);
+	delta.options = readProperties(optionsFile);
+	delta.changedAccessModifier = changedAccessModifier(diff, delta);
+	delta.changedFinalModifier = changedFinalModifier(diff, delta);
+	delta.changedStaticModifier = changedStaticModifier(diff, delta);
+	delta.changedType = changedType(diff);
+	delta.deprecated = deprecated(diff, delta);
+	delta.renamed = renamed(diff, delta);
+	delta.removed = removed(diff, delta);
 	
-	//return postproc(bc);
-	return bc;
+	//return postproc(delta);
+	return delta;
 }
 
-private tuple[loc,loc] createBCId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
+private tuple[loc,loc] createDeltaId(M3 m3Old, M3 m3New) = <m3Old.id, m3New.id>;
 
 
 /*
@@ -172,13 +163,13 @@ private rel[loc, Mapping[Modifier]] changedModifier(M3Diff diff, bool (loc) fun,
  * introduced in the new version.
  * TODO: annotations rel in M3 from source code is not working properly.  
  */
-private rel[loc, Mapping[loc]] deprecated(M3Diff diff, BreakingChanges bc) {
-	switch (bc) {
+private rel[loc, Mapping[loc]] deprecated(M3Diff diff, Delta delta) {
+	switch (delta) {
 		case \class(_) : {
-			return deprecated(diff, isType, bc.options);
+			return deprecated(diff, isType, delta.options);
 		}
-		case \method(_) : return deprecated(diff, isMethod, bc.options);
-		case \field(_) : return deprecated(diff, isField, bc.options);
+		case \method(_) : return deprecated(diff, isMethod, delta.options);
+		case \field(_) : return deprecated(diff, isField, delta.options);
 		default : return {};
 	}
 }
@@ -206,15 +197,15 @@ private rel[loc, Mapping[loc]] deprecated(M3Diff diff, bool (loc) fun, map[str,s
 /*
  * Identifying renamed elements
  */ 
-private rel[loc, Mapping[loc]] renamed(M3Diff diff, BreakingChanges bc) {
-	switch(bc) {
-		case \class(_) : return renamed(diff, isType, bc.options);
+private rel[loc, Mapping[loc]] renamed(M3Diff diff, Delta delta) {
+	switch(delta) {
+		case \class(_) : return renamed(diff, isType, delta.options);
 		case \method(_) : {
-			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			elemsRemovals = (!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {};
 			diff.removals = filterXM3(diff.removals, elemsRemovals);
-			return renamed(diff, isMethod, bc.options);
+			return renamed(diff, isMethod, delta.options);
 		}
-		case \field(_) : return renamed(diff, isField, bc.options);
+		case \field(_) : return renamed(diff, isField, delta.options);
 		default : return {};
 	}
 }
@@ -251,22 +242,22 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff, bool (loc) fun, map[str,str]
 }
 
 
-private rel[loc, Mapping[loc]] moved(M3Diff diff, BreakingChanges bc) {
+private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 	// Filter additions and removals M3 models for the sake of performance
-	elemsRemovals = (!isEmpty(bc.renamed)) ? bc.renamed.mapping<0> : {};
-	elemsAdditions = (!isEmpty(bc.renamed)) ? bc.renamed.mapping<1> : {};
+	elemsRemovals = (!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {};
+	elemsAdditions = (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
 		
 	diff.removals = filterXM3(diff.removals, elemsRemovals);
 	diff.additions = filterXM3(diff.additions, elemsAdditions);
 	
-	switch(bc) {
-		case \class(_) : return moved(diff, isType, bc.options);
+	switch(delta) {
+		case \class(_) : return moved(diff, isType, delta.options);
 		case \method(_) : {
-			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			elemsRemovals = (!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {};
 			diff.removals = filterXM3(diff.removals, elemsRemovals);
-			return moved(diff, isMethod, bc.options);
+			return moved(diff, isMethod, delta.options);
 		}
-		case \field(_) : return moved(diff, isField, bc.options);
+		case \field(_) : return moved(diff, isField, delta.options);
 		default : return {};
 	}
 }
@@ -289,19 +280,19 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, bool (loc) fun, map[str,str] o
 /*
  * Identifying removed elements
  */
-private rel[loc, Mapping[loc]] removed(M3Diff diff, BreakingChanges bc) {
-	elemsRemovals = ((!isEmpty(bc.renamed)) ? bc.renamed.mapping<0> : {}) 
-		+ ((!isEmpty(bc.moved)) ? bc.moved.mapping<0> : {});
-	elemsAdditions = ((!isEmpty(bc.renamed)) ? bc.renamed.mapping<1> : {}) 
-		+ ((!isEmpty(bc.moved)) ? bc.moved.mapping<1> : {});
+private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta) {
+	elemsRemovals = ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {}) 
+		+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<0> : {});
+	elemsAdditions = ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {}) 
+		+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<1> : {});
 		
 	diff.removals = filterXM3(diff.removals, elemsRemovals);
 	diff.additions = filterXM3(diff.additions, elemsAdditions);
 	
-	switch(bc) {
+	switch(delta) {
 		case \class(_) : return removed(diff, isType);
 		case \method(_) : {
-			elemsRemovals = (!isEmpty(bc.changedParamList)) ? bc.changedParamList.elem : {};
+			elemsRemovals = (!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {};
 			diff.removals = filterXM3(diff.removals, elemsRemovals);
 			return removed(diff, isMethod);
 		}
@@ -463,23 +454,23 @@ private TypeSymbol methodReturnType(TypeSymbol typ) = (\method(_,_,ret,_) := typ
 // Postprocessing
 //----------------------------------------------
 
-private BreakingChanges postproc(BreakingChanges bc) {
-	bc = postprocRenamed(bc);
+private Delta postproc(Delta delta) {
+	delta = postprocRenamed(delta);
 
-	bc.changedAccessModifier = { <e, m> | <e, m> <- bc.changedAccessModifier, include(e) };
-	bc.changedFinalModifier  = { <e, m> | <e, m> <- bc.changedFinalModifier,  include(e) };
-	bc.changedStaticModifier = { <e, m> | <e, m> <- bc.changedStaticModifier, include(e) };
-	bc.changedAbstractModifier = { <e, m> | <e, m> <- bc.changedAbstractModifier, include(e) };
-	bc.moved   = { <e, m> | <e, m> <- bc.moved,   include(e), include(m[0]), include(m[1]) };
-	bc.removed = { <e, m> | <e, m> <- bc.removed, include(e), include(m[0]), include(m[1]) };
-	bc.renamed = { <e, m> | <e, m> <- bc.renamed, include(e), include(m[0]), include(m[1]) };
-	//bc.changedParamList  = {<e, m> | <e, m> <- bc.changedParamList,  include(e)};
-	//bc.changedReturnType = {<e, m> | <e, m> <- bc.changedReturnType, include(e)};
-	//bc.changedType       = {<e, m> | <e, m> <- bc.changedType,       include(e)};
+	delta.changedAccessModifier = { <e, m> | <e, m> <- delta.changedAccessModifier, include(e) };
+	delta.changedFinalModifier  = { <e, m> | <e, m> <- delta.changedFinalModifier,  include(e) };
+	delta.changedStaticModifier = { <e, m> | <e, m> <- delta.changedStaticModifier, include(e) };
+	delta.changedAbstractModifier = { <e, m> | <e, m> <- delta.changedAbstractModifier, include(e) };
+	delta.moved   = { <e, m> | <e, m> <- delta.moved,   include(e), include(m[0]), include(m[1]) };
+	delta.removed = { <e, m> | <e, m> <- delta.removed, include(e), include(m[0]), include(m[1]) };
+	delta.renamed = { <e, m> | <e, m> <- delta.renamed, include(e), include(m[0]), include(m[1]) };
+	//delta.changedParamList  = {<e, m> | <e, m> <- delta.changedParamList,  include(e)};
+	//delta.changedReturnType = {<e, m> | <e, m> <- delta.changedReturnType, include(e)};
+	//delta.changedType       = {<e, m> | <e, m> <- delta.changedType,       include(e)};
 
-	switch (bc) {
-		case \method(_) : return postprocMethodBC(bc);
-		default : return bc; 
+	switch (delta) {
+		case \method(_) : return postprocMethodBC(delta);
+		default : return delta; 
 	}
 }
 
@@ -487,17 +478,17 @@ private bool include(loc l) {
 	return /org\/sonar\/api\/internal\// !:= l.uri;
 }
  
-private BreakingChanges postprocMethodBC(BreakingChanges bc) { 
-	bc = postprocChangedParamList(bc);
-	return bc;
+private Delta postprocMethodBC(Delta delta) { 
+	delta = postprocChangedParamList(delta);
+	return delta;
 }
 
-private BreakingChanges postprocRenamed(BreakingChanges bc) {
-	bc.removed = domainX(bc.removed, (bc.removed.elem & bc.renamed.elem));
-	return bc;
+private Delta postprocRenamed(Delta delta) {
+	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.renamed.elem));
+	return delta;
 }
 
-private BreakingChanges postprocChangedParamList(BreakingChanges bc) {
-	bc.removed = domainX(bc.removed, (bc.removed.elem & bc.changedParamList.elem));
-	return bc;
+private Delta postprocChangedParamList(Delta delta) {
+	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.changedParamList.elem));
+	return delta;
 }

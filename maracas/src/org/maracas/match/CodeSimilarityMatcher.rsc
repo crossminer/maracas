@@ -1,9 +1,9 @@
-module org::maracas::diff::CodeSimilarityMatcher
+module org::maracas::match::CodeSimilarityMatcher
 
 import IO;
 import List;
 import lang::java::m3::Core;
-import org::maracas::bc::BreakingChanges;
+import org::maracas::delta::Delta;
 import org::maracas::config::Options;
 import org::maracas::m3::M3Diff;
 import Set;
@@ -91,11 +91,11 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 }
 
 
-@javaClass{org.maracas.diff.internal.CodeSimilarity}
+@javaClass{org.maracas.match.internal.CodeSimilarity}
 @reflect{for debugging}
 java real levenshteinSimilarity(str snippet1, str snippet2);
 
-// FIXME: copied from BreakingChangesBuilder 
+// FIXME: copied from DeltaBuilder 
 private bool include(loc l) {
 return true;
 	//return /org\/sonar\/api\/internal\// !:= l.uri;

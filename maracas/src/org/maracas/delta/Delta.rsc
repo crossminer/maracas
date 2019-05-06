@@ -1,10 +1,10 @@
-module org::maracas::bc::BreakingChanges
+module org::maracas::delta::Delta
 
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 
 
-data BreakingChanges (
+data Delta (
 	rel[loc elem, Mapping[Modifier] mapping] changedAccessModifier = {},
 	rel[loc elem, Mapping[Modifier] mapping] changedFinalModifier = {},
 	rel[loc elem, Mapping[Modifier] mapping] changedStaticModifier = {},

@@ -23,10 +23,10 @@ public class Detection {
 		// detection(elem, used, mapping, typ)
 		String client = ((ISourceLocation) detection.get(0)).toString();
 		String library = ((ISourceLocation) detection.get(1)).toString();
-		IConstructor bcType = (IConstructor) detection.get(3);
+		IConstructor deltaType = (IConstructor) detection.get(3);
 
 		Type type;
-		switch (bcType.getName()) {
+		switch (deltaType.getName()) {
 			case "changedAccessModifier": type = Type.ACCESS_MODIFIER; break;
 			case "changedFinalModifier": type = Type.FINAL_MODIFIER; break;
 			case "changedStaticModifier": type = Type.STATIC_MODIFIER; break;

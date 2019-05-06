@@ -1,12 +1,12 @@
-module org::maracas::\test::bc::TestApiOldApiNew
+module org::maracas::\test::delta::TestApiOldApiNew
 
 import IO;
 import Set;
 import org::maracas::m3::Core;
 import lang::java::m3::AST;
 import lang::java::m3::TypeSymbol;
-import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::BreakingChangesBuilder;
+import org::maracas::delta::Delta;
+import org::maracas::delta::DeltaBuilder;
 import org::maracas::Maracas;
 import org::maracas::config::Options;
 
@@ -16,9 +16,9 @@ import org::maracas::config::Options;
 loc v1 = |project://api-old/target/old-0.0.1-SNAPSHOT.jar|;
 loc v2 = |project://api-new/target/new-0.0.1-SNAPSHOT.jar|;
 
-BreakingChanges cbc = classBreakingChanges(v1, v2);
-BreakingChanges mbc = methodBreakingChanges(v1, v2);
-BreakingChanges fbc = fieldBreakingChanges(v1, v2);
+Delta cbc = classDelta(v1, v2);
+Delta mbc = methodDelta(v1, v2);
+Delta fbc = fieldDelta(v1, v2);
 
 // final api.FinalModifierRemoved -> api.FinalModifierRemoved
 test bool classFinalModifierRemoved() =

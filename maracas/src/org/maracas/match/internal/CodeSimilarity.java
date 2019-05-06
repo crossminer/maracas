@@ -1,4 +1,4 @@
-package org.maracas.diff.internal;
+package org.maracas.match.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
