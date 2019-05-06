@@ -4,7 +4,7 @@ import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.ISourceLocation;
 
 public class Detection {
-	enum Type {
+	public enum Type {
 		ACCESS_MODIFIER, FINAL_MODIFIER, STATIC_MODIFIER, ABSTRACT_MODIFIER, DEPRECATED, RENAMED, MOVED, REMOVED,
 		PARAMS_LIST, RETURN_TYPE, TYPE, EXTENDS, IMPLEMENTS
 	}
@@ -50,7 +50,7 @@ public class Detection {
 		return clientLocation;
 	}
 
-	public String getClienLibraryLocation() {
+	public String getLibraryLocation() {
 		return libraryLocation;
 	}
 

@@ -67,3 +67,10 @@ Once your environment is ready:
 
 Alternatively, Maracas can be manipulated through a basic API.
 See [Maracas.java](https://github.com/crossminer/maracas/blob/master/maracas/src/org/maracas/Maracas.java) for more details.
+
+The full pipeline can be invoked from Maven directly, for instance for Guava:
+
+```
+mvn package exec:java -Dexec.mainClass="org.maracas.Maracas" -Dexec.args="/path/to/guava-18.0.jar /path/to/guava-19.0.jar /path/to/guava-clients /path/to/guava-report"
+```
+
