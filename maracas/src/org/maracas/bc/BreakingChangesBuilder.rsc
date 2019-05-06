@@ -420,13 +420,13 @@ rel[loc, Mapping[loc]] changedExtends(M3Diff diff) {
 	result = {};
 	
 	for (<cls, oldSup> <- diff.removals.extends) {
-		newSup = additions.extends[cls];
+		newSup = diff.additions.extends[cls];
 		newSupLoc = size(newSup) == 1 ? getOneFrom(newSup) : |unknown:///|;
 		result += <cls, <oldSup, newSupLoc, 1.0, MATCH_SIGNATURE>>;
 	}
 
 	for (<cls, newSup> <- diff.additions.extends) {
-		oldSup = removals.extends[cls];
+		oldSup = diff.removals.extends[cls];
 		oldSupLoc = size(oldSup) == 1 ? getOneFrom(oldSup) : |unknown:///|;
 		result += <cls, <oldSupLoc, newSup, 1.0, MATCH_SIGNATURE>>;
 	}
