@@ -15,7 +15,7 @@ str renderHtml(BreakingChanges bc) {
 
 	list[value] blocks = [
 		h3("Statistics"),
-		table(class("striped"),
+		table(class("striped"), HTML5Attr::style("width:auto;"),
 			thead(tr(th("Type"), th("Count"))),
 			tbody(
 				[tr(td(friendlyNames[relName]), td(size(r))) |
@@ -32,10 +32,10 @@ str renderHtml(BreakingChanges bc) {
 			
 			if (size(relation) > 0)
 				blocks +=
-					table(class("striped"),
+					table(class("striped"), HTML5Attr::style("width:auto;"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
 						tbody(
-							[tr(td(div(l, br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(getSourceCode(bc.id[0], l))))), td(src), td(tgt), td(score)) | <l, <src, tgt, score, _>> <- relation]
+							[tableRow(bc, change) | change <- relation]
 						)
 					);
 			else
@@ -57,6 +57,29 @@ str renderHtml(BreakingChanges bc) {
 			)
 		)
 	);
+}
+
+HTML5Node tableRow(BreakingChanges bc, tuple[loc, Mapping[&T]] change) {
+	loc v1 = bc.id[0];
+	loc v2 = bc.id[1];
+
+	if (<l, <loc src, loc tgt, score, _>> := change)
+		return tr(td(sourceCodeDiv(v1, l)), td(sourceCodeDiv(v1, src)), td(sourceCodeDiv(v2, tgt)), td(score));
+	else if (<l, <src, tgt, score, _>> := change)
+		return tr(td(sourceCodeDiv(v1, l)), td(src), td(tgt), td(score));
+
+	return div();
+}
+
+HTML5Node sourceCodeDiv(loc sources, loc l) {
+	list[value] firstCol = [l];
+	str sourceCode = getSourceCode(sources, l);
+
+	if (!isEmpty(sourceCode)) {
+		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(sourceCode[..200] + (size(sourceCode) > 200 ? "\n[truncated]" : "")))];
+	}
+
+	return div(firstCol);
 }
 
 void writeHtml(loc out, BreakingChanges bc) {
