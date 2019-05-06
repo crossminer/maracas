@@ -337,9 +337,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] o
 			}
 				
 			matches = currentMatcher.match(diff, fun);
-			// Removing tuples related to elements that have been checked by other matchers 
-			matches = domainX(matches, domain(result));
-				
+			
 			for (from <- domain(matches)) {
 				bestConf = -1.0;
 				bestTo = from;
