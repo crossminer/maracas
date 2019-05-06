@@ -6,11 +6,11 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::bc::BreakingChanges;
-import org::maracas::m3::Core;
 import org::maracas::config::Options;
 import org::maracas::diff::CodeSimilarityMatcher;
-import org::maracas::io::properties::IO;
 import org::maracas::diff::Matcher;
+import org::maracas::io::properties::IO;
+import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
 import Relation;
 import Set;
@@ -27,11 +27,8 @@ M3 getAdditions(M3 m3Old, M3 m3New) {
 	return diffJavaM3(m3Old.id, [m3New, m3Old]);
 }
 
-BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
-	
-	removals = getRemovals(m3Old, m3New);
-	additions = getAdditions(m3Old, m3New);
 	
 	id = createBCId(m3Old, m3New);
 	bc = class(id);
@@ -50,11 +47,8 @@ BreakingChanges createClassBC(M3 m3Old, M3 m3New, loc optionsFile = |project://m
 	return bc;
 }
 
-BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
-	
-	removals = getRemovals(m3Old, m3New);
-	additions = getAdditions(m3Old, m3New);
 	
 	id = createBCId(m3Old, m3New);
 	bc = method(id);
@@ -74,11 +68,8 @@ BreakingChanges createMethodBC(M3 m3Old, M3 m3New, loc optionsFile = |project://
 	return bc;
 }
 
-BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |project://maracas/config/config.properties|) {
+BreakingChanges createFieldBC(M3 m3Old, M3 m3New, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(m3Old, m3New);
-	
-	additions = getAdditions(m3Old, m3New);
-	removals = getRemovals(m3Old, m3New);
 	
 	id = createBCId(m3Old, m3New);
 	bc = field(id);
@@ -332,7 +323,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] o
 	// Default matcher: Jaccard
 	if (matchers == []) {
 		Matcher jaccardMatcher = matcher(jaccardMatch); 
-		matches = jaccardMatcher.match(diff.additions, diff.removals, fun);
+		matches = jaccardMatcher.match(diff, fun);
 		result = { <from, <from, to, conf, meth>> | <from, to, conf, meth> <- matches };
 	}
 	else {
@@ -345,7 +336,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] o
 				default : currentMatcher = matcher(jaccardMatch);
 			}
 				
-			matches = currentMatcher.match(diff.additions, diff.removals, fun);
+			matches = currentMatcher.match(diff, fun);
 			// Removing tuples related to elements that have been checked by other matchers 
 			matches = domainX(matches, domain(result));
 				

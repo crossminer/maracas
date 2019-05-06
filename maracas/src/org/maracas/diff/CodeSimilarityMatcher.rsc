@@ -1,14 +1,18 @@
 module org::maracas::diff::CodeSimilarityMatcher
 
 import IO;
-import lang::java::m3::Core;
 import List;
+import lang::java::m3::Core;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::config::Options;
+import org::maracas::m3::M3Diff;
 import Set;
 
 
-set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
+set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
+	removals = diff.removals;
+	additions = diff.additions;
+	
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 	
@@ -44,7 +48,9 @@ set[Mapping[loc]] levenshteinMatch(M3 additions, M3 removals, bool (loc) fun) {
 }
 
 
-set[Mapping[loc]] jaccardMatch(M3 additions, M3 removals, bool (loc) fun) {
+set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
+	removals = diff.removals;
+	additions = diff.additions;
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 

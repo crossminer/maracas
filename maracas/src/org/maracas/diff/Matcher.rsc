@@ -1,13 +1,13 @@
 module org::maracas::diff::Matcher
 
 import lang::csv::IO;
-import lang::java::m3::Core;
 import org::maracas::bc::BreakingChanges;
 import org::maracas::config::Options;
+import org::maracas::m3::M3Diff;
 
 
 data Matcher = matcher(
-	set[Mapping[loc]] (M3 additions, M3 removals, bool (loc) fun) match);
+	set[Mapping[loc]] (M3Diff diff, bool (loc) fun) match);
 	
 
 /*

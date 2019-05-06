@@ -22,7 +22,7 @@ import org::maracas::diff::Matcher;
 
 Matcher matcher = matcher(match);
 
-set[Match] match(M3 additions, M3 removals, bool (loc) fun) {
+set[Match] match(M3Diff diff, bool (loc) fun) {
 	return {};
 }
 
