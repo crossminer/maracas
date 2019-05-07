@@ -39,40 +39,21 @@ data DeltaType
 //----------------------------------------------
 
 set[Detection] detections(M3 client, Delta delta)
-	= detectionsCore(client, delta) + detectionsExtra(client, delta);
+	= detectionsCore(client, delta);
 	
 private set[Detection] detectionsCore(M3 client, Delta delta)
 	= detections(client, delta, changedAccessModifier())
 	+ detections(client, delta, changedFinalModifier())
 	+ detections(client, delta, changedStaticModifier())
 	+ detections(client, delta, changedAbstractModifier())
+	+ detections(client, delta, changedParamList())
+	+ detections(client, delta, changedType())
+	+ detections(client, delta, changedExtends())
+	+ detections(client, delta, changedImplements())
 	+ detections(client, delta, deprecated())
 	+ detections(client, delta, renamed())
 	+ detections(client, delta, moved())
 	+ detections(client, delta, removed())
-	;
-
-private set[Detection] detectionsExtra(M3 client, Delta delta) {
-	return switch (delta) {
-		case \class(_): return detectionsExtraClass(client, delta);
-		case \method(_): return detectionsExtraMethod(client, delta);
-		case \field(_): return detectionsExtraField(client, delta);
-		default: return [];
-	}
-}
-
-private set[Detection] detectionsExtraClass(M3 client, Delta delta)
-	= detections(client, delta, changedExtends())
-	+ detections(client, delta, changedImplements())
-	;
-	
-private set[Detection] detectionsExtraMethod(M3 client, Delta delta)
-	= detections(client, delta, changedParamList())
-	+ detections(client, delta, changedReturnType())
-	;
-
-private set[Detection] detectionsExtraField(M3 client, Delta delta)
-	= detections(client, delta, changedType())
 	;
 
 private set[Detection] detections(M3 client, Delta delta, changedAccessModifier()) 
