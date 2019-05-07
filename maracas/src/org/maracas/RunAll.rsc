@@ -29,8 +29,8 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, boo
 
 	if (serializeBC) {
 		writeBinaryValueFile(report + "bc" + "Classes.cbc", cbc);
-		writeBinaryValueFile(report + "bc" + "Methods.cbc", mbc);
-		writeBinaryValueFile(report + "bc" + "Fields.cbc", fbc);
+		writeBinaryValueFile(report + "bc" + "Methods.mbc", mbc);
+		writeBinaryValueFile(report + "bc" + "Fields.fbc", fbc);
 	}
 
 	if (serializeHtml) {

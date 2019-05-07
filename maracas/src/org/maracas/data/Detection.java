@@ -1,7 +1,10 @@
 package org.maracas.data;
 
 import io.usethesource.vallang.IConstructor;
+import io.usethesource.vallang.IReal;
 import io.usethesource.vallang.ISourceLocation;
+import io.usethesource.vallang.ITuple;
+import io.usethesource.vallang.IValue;
 
 public class Detection {
 	public enum Type {
@@ -10,48 +13,97 @@ public class Detection {
 	}
 
 	private final String clientLocation;
-	private final String libraryLocation;
+	private final String oldLibraryLocation;
+	private final String newLibraryLocation;
 	private final Type type;
+	private final double score;
 
-	public Detection(String client, String library, Type type) {
+	public Detection(String client, String oldLibrary, String newLibrary, Type type, double score) {
 		this.clientLocation = client;
-		this.libraryLocation = library;
+		this.oldLibraryLocation = oldLibrary;
+		this.newLibraryLocation = newLibrary;
 		this.type = type;
+		this.score = score;
 	}
 
 	public static Detection fromRascalDetection(IConstructor detection) {
-		// detection(elem, used, mapping, typ)
+		// detection(loc elem, loc used, tuple[&T from, &T to, real conf, str m], BCTyp
+		// typ)
 		String client = ((ISourceLocation) detection.get(0)).toString();
-		String library = ((ISourceLocation) detection.get(1)).toString();
+		String oldLibrary = ((ISourceLocation) detection.get(1)).toString();
+		String newLibrary = "";
+		ITuple mapping = (ITuple) detection.get(2);
+		IValue to = mapping.get(1);
+		double score = ((IReal) mapping.get(2)).doubleValue();
 		IConstructor bcType = (IConstructor) detection.get(3);
 
 		Type type;
 		switch (bcType.getName()) {
-			case "changedAccessModifier": type = Type.ACCESS_MODIFIER; break;
-			case "changedFinalModifier": type = Type.FINAL_MODIFIER; break;
-			case "changedStaticModifier": type = Type.STATIC_MODIFIER; break;
-			case "changedAbstractModifier": type = Type.ABSTRACT_MODIFIER; break;
-			case "deprecated": type = Type.DEPRECATED; break;
-			case "renamed": type = Type.RENAMED; break;
-			case "moved": type = Type.MOVED; break;
-			case "removed": type = Type.REMOVED; break;
-			case "changedParamList": type = Type.PARAMS_LIST; break;
-			case "changedReturnType": type = Type.RETURN_TYPE; break;
-			case "changedType": type = Type.TYPE; break;
-			case "changedExtends": type = Type.EXTENDS; break;
-			case "changedImplements": type = Type.IMPLEMENTS; break;
-			default: throw new RuntimeException("Ugh, nope.");
+			case "changedAccessModifier":
+				type = Type.ACCESS_MODIFIER;
+				newLibrary = oldLibrary;
+				break;
+			case "changedFinalModifier":
+				type = Type.FINAL_MODIFIER;
+				newLibrary = oldLibrary;
+				break;
+			case "changedStaticModifier":
+				type = Type.STATIC_MODIFIER;
+				newLibrary = oldLibrary;
+				break;
+			case "changedAbstractModifier":
+				type = Type.ABSTRACT_MODIFIER;
+				newLibrary = oldLibrary;
+				break;
+			case "deprecated":
+				type = Type.DEPRECATED;
+				newLibrary = ((ISourceLocation) to).toString();
+				break;
+			case "renamed":
+				type = Type.RENAMED;
+				newLibrary = ((ISourceLocation) to).toString();
+				break;
+			case "moved":
+				type = Type.MOVED;
+				newLibrary = ((ISourceLocation) to).toString();
+				break;
+			case "removed":
+				type = Type.REMOVED;
+				break;
+			case "changedParamList":
+				type = Type.PARAMS_LIST;
+				break;
+			case "changedReturnType":
+				type = Type.RETURN_TYPE;
+				break;
+			case "changedType":
+				type = Type.TYPE;
+				break;
+			case "changedExtends":
+				type = Type.EXTENDS;
+				newLibrary = oldLibrary;
+				break;
+			case "changedImplements":
+				type = Type.IMPLEMENTS;
+				newLibrary = oldLibrary;
+				break;
+			default:
+				throw new RuntimeException("Unexpected BCType");
 		}
 
-		return new Detection(client, library, type);
+		return new Detection(client, oldLibrary, newLibrary, type, score);
 	}
 
 	public String getClientLocation() {
 		return clientLocation;
 	}
 
-	public String getLibraryLocation() {
-		return libraryLocation;
+	public String getOldLibraryLocation() {
+		return oldLibraryLocation;
+	}
+
+	public String getNewLibraryLocation() {
+		return newLibraryLocation;
 	}
 
 	public Type getType() {
@@ -60,6 +112,7 @@ public class Detection {
 
 	@Override
 	public String toString() {
-		return String.format("%s uses %s [%s]", clientLocation, libraryLocation, type);
+		return String.format("[%s] %s uses %s, replaced with %s [%.2f]", type, clientLocation, oldLibraryLocation,
+				newLibraryLocation, score);
 	}
 }

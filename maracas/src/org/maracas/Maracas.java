@@ -89,11 +89,11 @@ public class Maracas {
 		String clients = args[2];
 		String report = args[3];
 
-		// Build BreakingChanges/Detections models in /home/dig/guava-report
+		// Build BreakingChanges/Detections models in 'report'
 		m.runAll(lib1, lib2, clients, report);
 
 		// Parse the Detections models and build the Multimap
-		Multimap<String, Detection> detections = m.parseDetections(report);
+		Multimap<String, Detection> detections = m.parseDetections(report + "/detection");
 		System.out.println(detections.size() + " usages found.");
 
 		// Example usage: list usages of @Deprecated methods
@@ -102,7 +102,7 @@ public class Maracas {
 
 			clientDetections.stream().filter(d -> d.getType().equals(Detection.Type.DEPRECATED)).forEach(d -> {
 				System.out.println(String.format("%s uses method % which has been deprecated", d.getClientLocation(),
-						d.getLibraryLocation()));
+						d.getOldLibraryLocation()));
 			});
 		}
 	}
