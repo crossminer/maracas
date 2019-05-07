@@ -27,19 +27,18 @@ public class Detection {
 
 		Type type;
 		switch (deltaType.getName()) {
-			case "changedAccessModifier": type = Type.ACCESS_MODIFIER; break;
-			case "changedFinalModifier": type = Type.FINAL_MODIFIER; break;
-			case "changedStaticModifier": type = Type.STATIC_MODIFIER; break;
-			case "changedAbstractModifier": type = Type.ABSTRACT_MODIFIER; break;
+			case "accessModifiers": type = Type.ACCESS_MODIFIER; break;
+			case "finalModifiers": type = Type.FINAL_MODIFIER; break;
+			case "staticModifiers": type = Type.STATIC_MODIFIER; break;
+			case "abstractModifiers": type = Type.ABSTRACT_MODIFIER; break;
+			case "paramLists": type = Type.PARAMS_LIST; break;
+			case "types": type = Type.TYPE; break;
+			case "extends": type = Type.EXTENDS; break;
+			case "implements": type = Type.IMPLEMENTS; break;
 			case "deprecated": type = Type.DEPRECATED; break;
 			case "renamed": type = Type.RENAMED; break;
 			case "moved": type = Type.MOVED; break;
 			case "removed": type = Type.REMOVED; break;
-			case "changedParamList": type = Type.PARAMS_LIST; break;
-			case "changedReturnType": type = Type.RETURN_TYPE; break;
-			case "changedType": type = Type.TYPE; break;
-			case "changedExtends": type = Type.EXTENDS; break;
-			case "changedImplements": type = Type.IMPLEMENTS; break;
 			default: throw new RuntimeException("Ugh, nope.");
 		}
 

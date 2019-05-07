@@ -20,21 +20,21 @@ import Type;
 
 Delta createDelta(M3 from, M3 to, loc optionsFile = |file:///maracas/config.properties|) {
 	M3Diff diff = createM3Diff(from, to);
-	
 	Delta delta = delta(<from.id, to.id>);
-	delta.options = readProperties(optionsFile);
-	delta.changedAccessModifier = changedAccessModifier(diff); 
-	delta.changedFinalModifier = changedFinalModifier(diff);
-	delta.changedStaticModifier = changedStaticModifier(diff);
-	delta.changedAbstractModifier = changedAbstractModifier(diff);
-	delta.changedParamList = changedParamList(diff);
-	delta.changedType = changedReturnType(diff) + changedType(diff);
-	delta.changedExtends = changedExtends(diff);
-	delta.changedImplements = changedImplements(diff);
-	delta.deprecated = deprecated(diff, delta);
-	delta.renamed = renamed(diff, delta);
-	delta.moved = moved(diff, delta);
-	delta.removed = removed(diff, delta);
+	
+	delta.options 			= readProperties(optionsFile);
+	delta.accessModifiers 	= accessModifiers(diff); 
+	delta.finalModifiers 	= finalModifiers(diff);
+	delta.staticModifiers 	= staticModifiers(diff);
+	delta.abstractModifiers = abstractModifiers(diff);
+	delta.paramLists 		= paramLists(diff);
+	delta.types 			= returnTypes(diff) + types(diff);
+	delta.extends 			= extends(diff);
+	delta.implements 		= implements(diff);
+	delta.deprecated 		= deprecated(diff, delta);
+	delta.renamed 			= renamed(diff, delta);
+	delta.moved 			= moved(diff, delta);
+	delta.removed 			= removed(diff, delta);
 	
 	//return postproc(delta);
 	return delta;
@@ -44,7 +44,7 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |file:///maracas/config.prop
 /*
  * Identifying changes in access modifiers
  */
-private rel[loc, Mapping[Modifier]] changedAccessModifier(M3Diff diff) {
+private rel[loc, Mapping[Modifier]] accessModifiers(M3Diff diff) {
 	result = {};
 	// The confidence of the mapping is 1 if the signature is the same
 	for (<e, addMod> <- diff.additions.modifiers, isTargetMember(e), isAccessModifier(addMod)) {
@@ -69,13 +69,13 @@ private bool isAccessModifier(Modifier m) {
 /*
  * Identifying changes in final, static, and abstract modifiers
  */
-private rel[loc, Mapping[Modifier]] changedFinalModifier(M3Diff diff) 
+private rel[loc, Mapping[Modifier]] finalModifiers(M3Diff diff) 
 	= changedModifier(diff, \final());
 
-private rel[loc, Mapping[Modifier]] changedStaticModifier(M3Diff diff) 
+private rel[loc, Mapping[Modifier]] staticModifiers(M3Diff diff) 
 	= changedModifier(diff, \static());
 
-private rel[loc, Mapping[Modifier]] changedAbstractModifier(M3Diff diff) 
+private rel[loc, Mapping[Modifier]] abstractModifiers(M3Diff diff) 
 	= changedModifier(diff, \abstract());
 
 // The confidence of the mapping is 1 if the signature is the same
@@ -143,7 +143,7 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 }
 
 private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
-	elemsRemovals = (!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {};
+	elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
 	diff.removals = filterXM3(diff.removals, elemsRemovals);
 	return diff;
 }
@@ -166,7 +166,7 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 
 private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
 	elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
-					+ ((!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {});
+					+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
 	elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
 		
 	diff.removals = filterXM3(diff.removals, elemsRemovals);
@@ -189,7 +189,7 @@ private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta) {
 private M3Diff filterDiffRemoved(M3Diff diff, Delta delta) {
 	elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
 					+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<0> : {})
-					+ ((!isEmpty(delta.changedParamList)) ? delta.changedParamList.elem : {});
+					+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
 		
 	elemsAdditions 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {})
 					+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<1> : {});
@@ -249,14 +249,14 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] o
 /*
  * Identifying changes in method parameter lists
  */
-rel[loc, Mapping[list[TypeSymbol]]] changedParamList(M3Diff diff) 
+rel[loc, Mapping[list[TypeSymbol]]] paramLists(M3Diff diff) 
 	= changedMethodSignature(diff, methodParams);
 
 
 /*
  * Identifying changes in method return types
  */
-rel[loc, Mapping[TypeSymbol]] changedReturnType(M3Diff diff)
+rel[loc, Mapping[TypeSymbol]] returnTypes(M3Diff diff)
 	= changedMethodSignature(diff, methodReturnType);
 	
 
@@ -281,7 +281,7 @@ private rel[loc, Mapping[&T]] changedMethodSignature(M3Diff diff, &T (&U) fun) {
 /*
  * Identifying changes in field return types
  */
-rel[loc, Mapping[TypeSymbol]] changedType(M3Diff diff) {
+rel[loc, Mapping[TypeSymbol]] types(M3Diff diff) {
 	fieldsAdded =   { <f, typ> | <f, typ> <- diff.additions.types, isField(f) };
 	fieldsRemoved = { <f, typ> | <f, typ> <- diff.removals.types,  isField(f) };
 
@@ -300,7 +300,7 @@ rel[loc, Mapping[TypeSymbol]] changedType(M3Diff diff) {
 /*
  * Identifying changes in class/interface extends/implements relations
  */
-rel[loc, Mapping[loc]] changedExtends(M3Diff diff) {
+rel[loc, Mapping[loc]] extends(M3Diff diff) {
 	result = {};
 	
 	for (<cls, oldSup> <- diff.removals.extends) {
@@ -318,7 +318,7 @@ rel[loc, Mapping[loc]] changedExtends(M3Diff diff) {
 	return result;
 }
 
-rel[loc, Mapping[set[loc]]] changedImplements(M3Diff diff) {
+rel[loc, Mapping[set[loc]]] implements(M3Diff diff) {
 	removals = diff.removals;
 	additions = diff.additions;
 	
@@ -371,16 +371,16 @@ private TypeSymbol methodReturnType(TypeSymbol typ)
 private Delta postproc(Delta delta) {
 	delta = postprocRenamed(delta);
 
-	delta.changedAccessModifier = { <e, m> | <e, m> <- delta.changedAccessModifier, include(e) };
-	delta.changedFinalModifier  = { <e, m> | <e, m> <- delta.changedFinalModifier,  include(e) };
-	delta.changedStaticModifier = { <e, m> | <e, m> <- delta.changedStaticModifier, include(e) };
-	delta.changedAbstractModifier = { <e, m> | <e, m> <- delta.changedAbstractModifier, include(e) };
+	delta.accessModifiers = { <e, m> | <e, m> <- delta.accessModifiers, include(e) };
+	delta.finalModifiers  = { <e, m> | <e, m> <- delta.finalModifiers,  include(e) };
+	delta.staticModifiers = { <e, m> | <e, m> <- delta.staticModifiers, include(e) };
+	delta.abstractModifiers = { <e, m> | <e, m> <- delta.abstractModifiers, include(e) };
 	delta.moved   = { <e, m> | <e, m> <- delta.moved,   include(e), include(m[0]), include(m[1]) };
 	delta.removed = { <e, m> | <e, m> <- delta.removed, include(e), include(m[0]), include(m[1]) };
 	delta.renamed = { <e, m> | <e, m> <- delta.renamed, include(e), include(m[0]), include(m[1]) };
-	//delta.changedParamList  = {<e, m> | <e, m> <- delta.changedParamList,  include(e)};
+	//delta.paramLists  = {<e, m> | <e, m> <- delta.paramLists,  include(e)};
 	//delta.changedReturnType = {<e, m> | <e, m> <- delta.changedReturnType, include(e)};
-	//delta.changedType       = {<e, m> | <e, m> <- delta.changedType,       include(e)};
+	//delta.types       = {<e, m> | <e, m> <- delta.types,       include(e)};
 
 	switch (delta) {
 		case \method(_) : return postprocMethodBC(delta);
@@ -403,6 +403,6 @@ private Delta postprocRenamed(Delta delta) {
 }
 
 private Delta postprocChangedParamList(Delta delta) {
-	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.changedParamList.elem));
+	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.paramLists.elem));
 	return delta;
 }

@@ -91,19 +91,18 @@ str toHtml(str code) {
 }
 
 map[str, str] friendlyNames = (
-	"changedAccessModifier"   : "Access modifiers changed",
-	"changedFinalModifier"    : "Final modifiers changed",
-	"changedStaticModifier"   : "Static modifiers changed",
-	"changedAbstractModifier" : "Abstract modifiers changed",
-	"deprecated"              : "Deprecated elements",
-	"renamed"                 : "Renamed elements",
-	"moved"                   : "Moved elements",
-	"removed"                 : "Removed elements",
-	"changedExtends"          : "Class extension changed",
-	"changedImplements"       : "Class/Interface implementation changed",
-	"changedParamList"        : "Method parameters changed",
-	"changedReturnType"       : "Method return types changed",
-	"changedType"             : "Field types changed"
+	"accessModifiers"   : "Access modifiers changed",
+	"finalModifiers"    : "Final modifiers changed",
+	"staticModifiers"   : "Static modifiers changed",
+	"abstractModifiers" : "Abstract modifiers changed",
+	"paramLists"        : "Method parameters changed",
+	"types"             : "Field and method types changed",
+	"extends"           : "Class extension changed",
+	"implements"        : "Class/Interface implementation changed",
+	"deprecated"        : "Deprecated elements",
+	"renamed"           : "Renamed elements",
+	"moved"             : "Moved elements",
+	"removed"           : "Removed elements"
 );
 
 /**

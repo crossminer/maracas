@@ -18,19 +18,19 @@ data Detection = detection (
 );
 
 data DeltaType
-	= changedAccessModifier()
-	| changedFinalModifier()
-	| changedStaticModifier()
-	| changedAbstractModifier()
+	= accessModifiers()
+	| finalModifiers()
+	| staticModifiers()
+	| abstractModifiers()
 	| deprecated()
 	| renamed()
 	| moved()
 	| removed()
-	| changedParamList()
+	| paramLists()
 	| changedReturnType()
-	| changedType()
-	| changedExtends()
-	| changedImplements()
+	| types()
+	| extends()
+	| implements()
 	;
 	
 
@@ -42,31 +42,31 @@ set[Detection] detections(M3 client, Delta delta)
 	= detectionsCore(client, delta);
 	
 private set[Detection] detectionsCore(M3 client, Delta delta)
-	= detections(client, delta, changedAccessModifier())
-	+ detections(client, delta, changedFinalModifier())
-	+ detections(client, delta, changedStaticModifier())
-	+ detections(client, delta, changedAbstractModifier())
-	+ detections(client, delta, changedParamList())
-	+ detections(client, delta, changedType())
-	+ detections(client, delta, changedExtends())
-	+ detections(client, delta, changedImplements())
+	= detections(client, delta, accessModifiers())
+	+ detections(client, delta, finalModifiers())
+	+ detections(client, delta, staticModifiers())
+	+ detections(client, delta, abstractModifiers())
+	+ detections(client, delta, paramLists())
+	+ detections(client, delta, types())
+	+ detections(client, delta, extends())
+	+ detections(client, delta, implements())
 	+ detections(client, delta, deprecated())
 	+ detections(client, delta, renamed())
 	+ detections(client, delta, moved())
 	+ detections(client, delta, removed())
 	;
 
-private set[Detection] detections(M3 client, Delta delta, changedAccessModifier()) 
-	= detections(client, delta.changedAccessModifier, changedAccessModifier());
+private set[Detection] detections(M3 client, Delta delta, accessModifiers()) 
+	= detections(client, delta.accessModifiers, accessModifiers());
 
-private set[Detection] detections(M3 client, Delta delta, changedFinalModifier()) 
-	= detections(client, delta.changedFinalModifier, changedFinalModifier());
+private set[Detection] detections(M3 client, Delta delta, finalModifiers()) 
+	= detections(client, delta.finalModifiers, finalModifiers());
 
-private set[Detection] detections(M3 client, Delta delta, changedStaticModifier()) 
-	= detections(client, delta.changedStaticModifier, changedStaticModifier());
+private set[Detection] detections(M3 client, Delta delta, staticModifiers()) 
+	= detections(client, delta.staticModifiers, staticModifiers());
 
-private set[Detection] detections(M3 client, Delta delta, changedAbstractModifier()) 
-	= detections(client, delta.changedAbstractModifier, changedAbstractModifier());
+private set[Detection] detections(M3 client, Delta delta, abstractModifiers()) 
+	= detections(client, delta.abstractModifiers, abstractModifiers());
 
 private set[Detection] detections(M3 client, Delta delta, deprecated()) 
 	= detections(client, delta.deprecated, deprecated());
@@ -80,20 +80,20 @@ private set[Detection] detections(M3 client, Delta delta, moved())
 private set[Detection] detections(M3 client, Delta delta, removed()) 
 	= detections(client, delta.removed, removed());
 
-private set[Detection] detections(M3 client, Delta delta, changedExtends()) 
-	= detections(client, delta.changedExtends, changedExtends());
+private set[Detection] detections(M3 client, Delta delta, extends()) 
+	= detections(client, delta.extends, extends());
 	
-private set[Detection] detections(M3 client, Delta delta, changedImplements()) 
-	= detections(client, delta.changedImplements, changedImplements());
+private set[Detection] detections(M3 client, Delta delta, implements()) 
+	= detections(client, delta.implements, implements());
 	
-private set[Detection] detections(M3 client, Delta delta, changedParamList()) 
-	= detections(client, delta.changedParamList, changedParamList());
+private set[Detection] detections(M3 client, Delta delta, paramLists()) 
+	= detections(client, delta.paramLists, paramLists());
 
 private set[Detection] detections(M3 client, Delta delta, changedReturnType()) 
 	= detections(client, delta.changedReturnType, changedReturnType());
 
-private set[Detection] detections(M3 client, Delta delta, changedType()) 
-	= detections(client, delta.changedType, changedType());
+private set[Detection] detections(M3 client, Delta delta, types()) 
+	= detections(client, delta.types, types());
 		
 private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, DeltaType typ) {	
 	set[loc] domain = domain(deltaRel);

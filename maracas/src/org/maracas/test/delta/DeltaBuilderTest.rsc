@@ -23,15 +23,15 @@ public Delta cbc = classDelta(delta);
 //----------------------------------------------
 // Changed access modifier tests
 //----------------------------------------------
-test bool fieldChangedAccessModifier() 
-	= fbc.changedAccessModifier == {
+test bool fieldAccessModifiers() 
+	= fbc.accessModifiers == {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field2|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field3|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
 
-test bool methodChangedAccessModifier() 
-	= mbc.changedAccessModifier == {
+test bool methodAccessModifiers() 
+	= mbc.accessModifiers == {
 		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
@@ -42,8 +42,8 @@ test bool methodChangedAccessModifier()
 
 // FIXME: the jar M3 always identifies a public inner class. Is it an error, or just the compiler?
 // java+constructor can be used
-test bool classChangedAccessModifier() { 
-	return cbc.changedAccessModifier == {
+test bool classAccessModifiers() { 
+	return cbc.accessModifiers == {
 		<|java+class:///p1/ChangedAccessModifier1$Inner1|,<\public(),\defaultAccess(),1.0,MATCH_SIGNATURE>>,
   		<|java+class:///p1/ChangedAccessModifier1$Inner2|,<\defaultAccess(),\public(),1.0,MATCH_SIGNATURE>>
 	};
@@ -53,22 +53,22 @@ test bool classChangedAccessModifier() {
 //----------------------------------------------
 // Changed final modifier tests
 //----------------------------------------------
-test bool fieldChangedFinalModifier()
-	= fbc.changedFinalModifier == {
+test bool fieldFinalModifiers()
+	= fbc.finalModifiers == {
 		<|java+field:///p1/ChangedFinalModifier3/field1|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedFinalModifier3/field2|,<\default(),\final(),1.0,MATCH_SIGNATURE>>
 	};
 
-test bool methodChangedFinalModifier()
-	= mbc.changedFinalModifier == {
+test bool methodFinalModifiers()
+	= mbc.finalModifiers == {
 		<|java+method:///p1/ChangedFinalModifier2/m1()|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedFinalModifier2/m2()|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedFinalModifier2/m3()|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedFinalModifier2/m4()|,<\default(),\final(),1.0,MATCH_SIGNATURE>>
     };
 
-test bool classChangedFinalModifier()
-	= cbc.changedFinalModifier == {
+test bool classFinalModifiers()
+	= cbc.finalModifiers == {
 		<|java+class:///p1/ChangedFinalModifier1|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedFinalModifier1$Inner1|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedFinalModifier1$Inner2|,<\final(),\default(),1.0,MATCH_SIGNATURE>>
@@ -78,14 +78,14 @@ test bool classChangedFinalModifier()
 //----------------------------------------------
 // Changed static modifier tests
 //----------------------------------------------
-test bool fieldChangedStaticModifier()
-	= fbc.changedStaticModifier == {
+test bool fieldStaticModifiers()
+	= fbc.staticModifiers == {
 		<|java+field:///p1/ChangedStaticModifier3/field1|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedStaticModifier3/field2|,<\default(),\static(),1.0,MATCH_SIGNATURE>>
 	};
 	
-test bool methodChangedStaticModifier()
-	= mbc.changedStaticModifier == {
+test bool methodStaticModifiers()
+	= mbc.staticModifiers == {
 		<|java+method:///p1/ChangedStaticModifier2/m1()|,<\default(),\static(),1.0,MATCH_SIGNATURE>>,
 		<|java+method:///p1/ChangedStaticModifier2/m2()|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
  		<|java+method:///p1/ChangedStaticModifier2/m3()|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
@@ -94,22 +94,22 @@ test bool methodChangedStaticModifier()
 	};
 
 // TODO: add nested classes.
-test bool classChangedStaticModifier()
-	= cbc.changedStaticModifier == {};
+test bool classStaticModifiers()
+	= cbc.staticModifiers == {};
 	
 
 //----------------------------------------------
 // Changed abstract modifier tests
 //----------------------------------------------
-test bool classChangedAbstractModifier()
-	= cbc.changedAbstractModifier == {
+test bool classAbstractModifiers()
+	= cbc.abstractModifiers == {
 		<|java+class:///p1/ChangedAbstractModifier1$Inner1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedAbstractModifier1$Inner2|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedAbstractModifier1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>
     };
 
-test bool methodChangedAbstractModifier()
-	= mbc.changedAbstractModifier == {
+test bool methodAbstractModifiers()
+	= mbc.abstractModifiers == {
 		<|java+method:///p1/ChangedAbstractModifier2/m1()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
 	    <|java+method:///p1/ChangedAbstractModifier2/m2()|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
 	    <|java+method:///p1/ChangedAbstractModifier2/m3()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>
@@ -206,7 +206,7 @@ test bool classRemoved() {
 //----------------------------------------------
 // Changed param list tests
 //----------------------------------------------
-test bool changedParamList1() {
+test bool paramLists1() {
 	meth = |java+method:///p3/ChangeParamList/m2(int%5B%5D%5B%5D)|;
 	list[TypeSymbol] from = [ 
 		TypeSymbol::\array(TypeSymbol::\int(), 2)
@@ -219,7 +219,7 @@ test bool changedParamList1() {
     return changedParamList(meth, from, to);
 }
 
-test bool changedParamList2() {
+test bool paramLists2() {
 	meth = |java+method:///p3/ChangeParamList/m3(java.lang.String,int,boolean)|;
 	list[TypeSymbol] from = [
 		TypeSymbol::\class(|java+class:///java/lang/String|, []),
@@ -235,9 +235,9 @@ test bool changedParamList2() {
 }
 
 bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
-	if (mbc.changedParamList[meth] != {}) {
+	if (mbc.paramLists[meth] != {}) {
 		tuple[list[TypeSymbol] from, list[TypeSymbol] to, real conf, str meth] mapping 
-			= getOneFrom(mbc.changedParamList[meth]);
+			= getOneFrom(mbc.paramLists[meth]);
     	return (from == mapping.from) && (to == mapping.to);
 	}
 	else {

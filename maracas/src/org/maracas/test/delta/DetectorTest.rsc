@@ -24,20 +24,20 @@ public set[Detection] cd = detections(client, cbc);
 //----------------------------------------------
 // Changed access modifier tests
 //----------------------------------------------
-test bool fieldChangedAccessModifier() 
+test bool fieldAccessModifiers() 
 	= detection(
 		|java+method:///client/ChangedAccessModifier/fieldChangedAccessModifier()|,
 		|java+field:///p1/ChangedAccessModifier3/field3|,
 		<\public(),\private(),1.0,MATCH_SIGNATURE>,
-		changedAccessModifier())
+		accessModifiers())
 	in fd;
     
-test bool methodChangedAccessModifier() 
+test bool methodAccessModifiers() 
 	= detection(
 		|java+method:///client/ChangedAccessModifier/methodChangedAccessModifier()|,
 	    |java+method:///p1/ChangedAccessModifier2/m1()|,
 	    <\public(),\private(),1.0,MATCH_SIGNATURE>,
-	    changedAccessModifier())
+	    accessModifiers())
 	in md;
 
 
@@ -49,12 +49,12 @@ test bool fieldChangedFinalModifier()
 		    |java+method:///client/ChangedFinalModifier/fieldChangedFinalModifier()|,
 		    |java+field:///p1/ChangedFinalModifier3/field1|,
 		    <\final(),\default(),1.0,MATCH_SIGNATURE>,
-		    changedFinalModifier()),
+		    finalModifiers()),
 		detection(
 		    |java+method:///client/ChangedFinalModifier/fieldChangedFinalModifier()|,
 		    |java+field:///p1/ChangedFinalModifier3/field2|,
 		    <\default(),\final(),1.0,MATCH_SIGNATURE>,
-		    changedFinalModifier()) }
+		    finalModifiers()) }
     <= fd;
 
 test bool methodChangedFinalModifier() 
@@ -62,17 +62,17 @@ test bool methodChangedFinalModifier()
 		    |java+method:///client/ChangedFinalModifier/methodChangedFinalModifier()|,
 		    |java+method:///p1/ChangedFinalModifier2/m1()|,
 		    <\default(),\final(),1.0,MATCH_SIGNATURE>,
-		    changedFinalModifier()),
+		    finalModifiers()),
     	detection(
 		    |java+method:///client/ChangedFinalModifier/methodChangedFinalModifier()|,
 		    |java+method:///p1/ChangedFinalModifier2/m2()|,
 		    <\final(),\default(),1.0,MATCH_SIGNATURE>,
-		    changedFinalModifier()),
+		    finalModifiers()),
   		detection(
 		    |java+method:///client/ChangedFinalModifier/methodChangedFinalModifier()|,
 		    |java+method:///p1/ChangedFinalModifier2/m4()|,
 		    <\default(),\final(),1.0,MATCH_SIGNATURE>,
-		    changedFinalModifier()) }
+		    finalModifiers()) }
 	<= md;
 
 test bool classChangedFinalModifier1() 
@@ -80,7 +80,7 @@ test bool classChangedFinalModifier1()
     	|java+field:///client/ChangedFinalModifier/classField|,
     	|java+class:///p1/ChangedFinalModifier1|,
     	<\default(),\final(),1.0,MATCH_SIGNATURE>,
-    	changedFinalModifier())
+    	finalModifiers())
     in cd;
 
 test bool classChangedFinalModifier2() 
@@ -88,67 +88,67 @@ test bool classChangedFinalModifier2()
 	    |java+method:///client/ChangedFinalModifier/classChangedFinalModifier()|,
 	    |java+class:///p1/ChangedFinalModifier1|,
 	    <\default(),\final(),1.0,MATCH_SIGNATURE>,
-	    changedFinalModifier())
+	    finalModifiers())
     in cd;
     
 
 //----------------------------------------------
 // Changed static modifier tests
 //----------------------------------------------
-test bool fieldChangedStaticModifier() 
+test bool fieldStaticModifiers() 
 	= { detection(
 			|java+method:///client/ChangedStaticModifier/fieldChangedStaticModifier()|,
 			|java+field:///p1/ChangedStaticModifier3/field1|,
 			<\static(),\default(),1.0,MATCH_SIGNATURE>,
-			changedStaticModifier()),
+			staticModifiers()),
 		detection(
 			|java+method:///client/ChangedStaticModifier/fieldChangedStaticModifier()|,
 			|java+field:///p1/ChangedStaticModifier3/field2|,
 			<\default(),\static(),1.0,MATCH_SIGNATURE>,
-			changedStaticModifier()) }
+			staticModifiers()) }
 	<= fd;
     
-test bool methodChangedStaticModifier() 
+test bool methodStaticModifiers() 
 	= { detection(
 			|java+method:///client/ChangedStaticModifier/methodChangedStaticModifier()|,
 		    |java+method:///p1/ChangedStaticModifier2/m1()|,
 		    <\default(),\static(),1.0,MATCH_SIGNATURE>,
-		    changedStaticModifier()),
+		    staticModifiers()),
 		detection(
 			|java+method:///client/ChangedStaticModifier/methodChangedStaticModifier()|,
 		    |java+method:///p1/ChangedStaticModifier2/m2()|,
 		    <\static(),\default(),1.0,MATCH_SIGNATURE>,
-		    changedStaticModifier()) }
+		    staticModifiers()) }
 	<= md;
 
 
 //----------------------------------------------
 // Changed abstract modifier tests
 //----------------------------------------------
-test bool methodChangedAbstractModifier() 
+test bool methodAbstractModifiers() 
 	= { detection(
 		    |java+method:///client/ChangedAbstractModifier/methodChangedAccessModifier()|,
 		    |java+method:///p1/ChangedAbstractModifier2/m2()|,
 		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
-		    changedAbstractModifier()),
+		    abstractModifiers()),
 	  	detection(
 		    |java+method:///client/ChangedAbstractModifier/methodChangedAccessModifier()|,
 		    |java+method:///p1/ChangedAbstractModifier2/m1()|,
 		    <\abstract(),\default(),1.0,MATCH_SIGNATURE>,
-		    changedAbstractModifier()) }
+		    abstractModifiers()) }
     <= md;
 
-test bool classChangedAbstractModifier() 
+test bool classAbstractModifiers() 
 	= { detection(
 			|java+field:///client/ChangedAbstractModifier/classField|,
 		    |java+class:///p1/ChangedAbstractModifier1|,
 		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
-		    changedAbstractModifier()),
+		    abstractModifiers()),
 		detection(
 		    |java+method:///client/ChangedAbstractModifier/classChangedAccessModifier()|,
 		    |java+class:///p1/ChangedAbstractModifier1|,
 		    <\default(),\abstract(),1.0,MATCH_SIGNATURE>,
-		    changedAbstractModifier()) }
+		    abstractModifiers()) }
     <= cd;
     
     
