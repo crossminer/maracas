@@ -71,20 +71,43 @@ M3 createM3FromDirectoryCached(loc directory) {
 	return createM3FromDirectory(directory);
 }
 
-str getSourceCode(loc jarLocation, loc logical) {
+str sourceCode(loc jarLocation, loc logical) {
 	loc sourcesLocation = jarLocation;
 	sourcesLocation.extension = "";
 	sourcesLocation.file = sourcesLocation.file + "-sources";
 
 	if (isDirectory(sourcesLocation)) {
-		sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
-		found = sourcesM3.declarations[logical];
+		M3 sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
+		set[loc] found = sourcesM3.declarations[logical];
 
 		if (size(found) > 0)
 			return readFile(getOneFrom(sourcesM3.declarations[logical]));
 	}
 
 	return "";
+}
+
+str javadoc(loc jarLocation, loc logical) {
+	loc sourcesLocation = jarLocation;
+	sourcesLocation.extension = "";
+	sourcesLocation.file = sourcesLocation.file + "-sources";
+
+	if (isDirectory(sourcesLocation)) {
+		M3 sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
+		set[str] javadocs = { readFile(l) | l <- sourcesM3.documentation[logical] };
+		return ("" | it + "<doc>" | doc <- javadocs);
+	}
+
+	return "";
+}
+
+list[str] javadocLinks(loc jarLocation, loc logical) {
+	str doc = replaceAll(javadoc(jarLocation, logical), "\n", "");
+
+	if (!isEmpty(doc))
+		return [ trim(replaceAll(link, "*", "")) | /\{@link <link: [^}]*>\}/ := doc ];
+	else
+		return [];
 }
 
 M3 fillDefaultVisibility(M3 m3) {

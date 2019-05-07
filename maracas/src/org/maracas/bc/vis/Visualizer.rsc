@@ -73,7 +73,7 @@ HTML5Node tableRow(BreakingChanges bc, tuple[loc, Mapping[&T]] change) {
 
 HTML5Node sourceCodeDiv(loc sources, loc l) {
 	list[value] firstCol = [l];
-	str sourceCode = getSourceCode(sources, l);
+	str sourceCode = sourceCode(sources, l);
 
 	if (!isEmpty(sourceCode)) {
 		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(sourceCode[..200] + (size(sourceCode) > 200 ? "\n[truncated]" : "")))];
