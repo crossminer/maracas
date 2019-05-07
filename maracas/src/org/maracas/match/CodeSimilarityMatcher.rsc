@@ -16,8 +16,8 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 	
-	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
-		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
+	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
+		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
 			snippet1 = ""; 
 			snippet2 = "";
 			
@@ -54,8 +54,8 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 
-	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
-		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
+	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
+		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
 			set[loc] d = {};
 			set[loc] e = {};
 
@@ -94,9 +94,3 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 @javaClass{org.maracas.match.internal.CodeSimilarity}
 @reflect{for debugging}
 java real levenshteinSimilarity(str snippet1, str snippet2);
-
-// FIXME: copied from DeltaBuilder 
-private bool include(loc l) {
-return true;
-	//return /org\/sonar\/api\/internal\// !:= l.uri;
-}

@@ -27,14 +27,14 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |file:///maracas/config.prop
 	delta.changedFinalModifier = changedFinalModifier(diff);
 	delta.changedStaticModifier = changedStaticModifier(diff);
 	delta.changedAbstractModifier = changedAbstractModifier(diff);
+	delta.changedParamList = changedParamList(diff);
+	delta.changedType = changedReturnType(diff) + changedType(diff);
+	delta.changedExtends = changedExtends(diff);
+	delta.changedImplements = changedImplements(diff);
 	delta.deprecated = deprecated(diff, delta);
 	delta.renamed = renamed(diff, delta);
 	delta.moved = moved(diff, delta);
 	delta.removed = removed(diff, delta);
-	delta.changedExtends = changedExtends(diff);
-	delta.changedImplements = changedImplements(diff);
-	delta.changedParamList = changedParamList(diff);
-	delta.changedType = changedReturnType(diff) + changedType(diff);
 	
 	//return postproc(delta);
 	return delta;
@@ -118,19 +118,25 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 	
 	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, isTargetMember(elem)) {
 		// In type cases we need the owner package instead of its compilation unit.
-		cont = (isCompilationUnit(cont)) ? getOneFrom(invert(removals.containment)[cont]) : cont;
-		elemsSameCont = {};
+		if (isCompilationUnit(cont)) {
+			cont = getOneFrom(invert(removals.containment)[cont]);
+		}
 		
-		for (a <- additions.containment[cont], additions.declarations[a] != {}, isTargetMember(a)) {
-			a = (isCompilationUnit(a)) ? getOneFrom(additions.containment[a]) : a;
-			elemsSameCont += a;
+		elemsSameCont = {};
+		for (a <- additions.containment[cont], additions.declarations[a] != {}) {
+			if (isCompilationUnit(a)) {
+				a = getOneFrom(additions.containment[a]);
+			}
+			if (a.scheme == elem.scheme) {
+				elemsSameCont += a;
+			}
 		}
 		
 		if (elemsSameCont != {}) {
 			diffTemp = diff;
 			diffTemp.removals = filterM3(removals, {elem});
 			diffTemp.additions = filterM3(additions, elemsSameCont);
-			result += applyMatchers(diffTemp, isTargetMember, options, MATCHERS);
+			result += applyMatchers(diffTemp, isTargetMember, delta.options, MATCHERS);
 		}
 	}
 	return result;
@@ -152,7 +158,7 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, isTargetMember(elem)) {
 		diffTemp = diff;
 		diffTemp.removals = filterM3(removals, {elem});
-		result += applyMatchers(diffTemp, isTargetMember, options, MATCHERS);
+		result += applyMatchers(diffTemp, isTargetMember, delta.options, MATCHERS);
 	}
 	
 	return result;
