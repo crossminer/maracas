@@ -19,13 +19,13 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 	int count = size(clients);
 
 	println("Computing CBC...");
-	Delta cbc = classDelta(libv1, libv2);
+	Delta cbc = delta(libv1, libv2);
 
 	println("Computing MBC...");
-	Delta mbc = methodDelta(libv1, libv2);
+	Delta mbc = delta(libv1, libv2);
 
 	println("Computing FBC...");
-	Delta fbc = fieldDelta(libv1, libv2);
+	Delta fbc = delta(libv1, libv2);
 
 	if (serializeDelta) {
 		writeBinaryValueFile(report + "bc" + "Classes.cbc", cbc);
