@@ -14,9 +14,10 @@ import IO;
 loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 
-public Delta fbc = delta(api0, api1);
-public Delta mbc = delta(api0, api1);
-public Delta cbc = delta(api0, api1);
+public Delta delta = delta(api0, api1);
+public Delta fbc = fieldDelta(delta);
+public Delta mbc = methodDelta(delta);
+public Delta cbc = classDelta(delta);
 
 
 //----------------------------------------------

@@ -16,9 +16,10 @@ import org::maracas::config::Options;
 loc v1 = |project://api-old/target/old-0.0.1-SNAPSHOT.jar|;
 loc v2 = |project://api-new/target/new-0.0.1-SNAPSHOT.jar|;
 
-Delta cbc = delta(v1, v2);
-Delta mbc = delta(v1, v2);
-Delta fbc = delta(v1, v2);
+Delta delta = delta(v1, v2);
+Delta fbc = fieldDelta(delta);
+Delta mbc = methodDelta(delta);
+Delta cbc = classDelta(delta);
 
 // final api.FinalModifierRemoved -> api.FinalModifierRemoved
 test bool classFinalModifierRemoved() =
