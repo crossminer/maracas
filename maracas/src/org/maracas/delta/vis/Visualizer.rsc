@@ -30,7 +30,9 @@ str renderHtml(Delta delta) {
 		if (rel[loc, Mapping[&T]] relation := v) {
 			blocks += h4(friendlyNames[relName]);
 			
-			if (size(relation) > 0)
+			if (relName == "removed" || relName == "added")
+				blocks += p("Not shown for the sake of conciseness");
+			else if (size(relation) > 0)
 				blocks +=
 					table(class("striped"), HTML5Attr::style("width:auto;"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),
@@ -71,10 +73,10 @@ HTML5Node tableRow(Delta delta, tuple[loc, Mapping[&T]] change) {
 
 HTML5Node sourceCodeDiv(loc sources, loc l) {
 	list[value] firstCol = [l];
-	str sourceCode = sourceCode(sources, l);
+	str source = sourceCode(sources, l);
 
-	if (!isEmpty(sourceCode)) {
-		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(sourceCode[..200] + (size(sourceCode) > 200 ? "\n[truncated]" : "")))];
+	if (!isEmpty(source)) {
+		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(source[..200] + (size(source) > 200 ? "\n[truncated]" : "")))];
 	}
 
 	return div(firstCol);
