@@ -57,3 +57,13 @@ private Delta getFilteredDelta(Delta delta, bool (loc) fun) {
 	
 	return delta;
 }
+
+
+tuple[loc, Mapping[&T]] buildDeltaMapping(loc elem, &T from, &T to, real score, str meth)
+	= <elem, buildMapping(from, to, score, meth)>;
+
+tuple[loc, Mapping[&T]] buildDeltaMapping(loc elem, Mapping[&T] mapping)
+	= <elem, mapping>;
+	
+Mapping[&T] buildMapping(&T from, &T to, real score, str meth)
+	= <from, to, score, meth>;

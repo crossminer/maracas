@@ -7,7 +7,7 @@ import org::maracas::m3::M3Diff;
 
 
 data Matcher = matcher(
-	set[Mapping[loc]] (M3Diff diff, bool (loc) fun) match);
+	set[Mapping[loc]] (M3Diff diff, real threshold) match);
 	
 
 /*

@@ -4,6 +4,7 @@ import IO;
 import lang::java::m3::ClassPaths;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
+import lang::java::m3::TypeSymbol;
 import org::maracas::io::File;
 import Relation;
 import Set;
@@ -174,4 +175,102 @@ private M3 filterM3(M3 m, bool (value v) predicate, bool (bool, bool) predicateR
 	};
 
 	return setKeywordParameters(m3Filtered, kws);
+} 
+
+str methodQualName(loc m) {
+	if (isMethod(m)) {
+		return (/<mPath: [a-zA-Z0-9.$\/]+>(<mParams: [a-zA-Z0-9.$\/]*>)/ := m.path) ? mPath : "";
+	}
+	else {
+		throw "Cannot get a method qualified name from <m>.";
+	}
+}
+
+bool sameMethodQualName(loc m1, loc m2) {
+	if (isMethod(m1) && isMethod(m2)) {
+		m1Name = methodQualName(m1);
+		m2Name = methodQualName(m2);
+		return m1Name == m2Name;
+	}
+	else {
+		throw "Cannot compare <m1> and <m2>. Wrong scheme(s).";
+	}
+}
+
+str methodName(loc m) {
+	if (isMethod(m)) {
+		return substring(methodQualName(m), (findLast(methodQualName(m), "/") + 1));
+	}
+	else {
+		throw "Cannot get a method name from <m>.";
+	}
+}
+
+str methodSignature(loc m) {
+	if (isMethod(m)) {
+		return substring(m.path, (findLast(m.path, "/") + 1));
+	}
+	else {
+		throw "Cannot get a method signature from <m>.";
+	}
+}
+
+list[TypeSymbol] methodParams(TypeSymbol typ) 
+	= (\method(_,_,_,params) := typ) ? params : [];
+	
+TypeSymbol methodReturnType(TypeSymbol typ) 
+	= (\method(_,_,ret,_) := typ) ? ret : TypeSymbol::\void();
+
+str memberDeclaration(loc elem, M3 m) {
+	if (isType(elem)) {
+		return typeDeclaration(elem, m);
+	}
+	if (isMethod(elem)) {
+		return methodDeclaration(elem, m);
+	}
+	if (isField(elem, m)) {
+		return fieldDeclaration(elem, m);
+	}	
+	throw "<elem> is not part of the scoped members.";
+}
+
+str typeDeclaration(loc typ, M3 m) {
+	if (isType(typ)) {
+		modifiers = sort(m.modifiers[typ]);
+		name = getOneFrom(m.names[typ]);
+		super = getOneFrom(m.extends[typ]);
+		interfaces = m.implements[typ];
+		
+		return "<modifiers> <name> <super> <interfaces>";
+	}
+	else {
+		throw "Cannot compute a type declaration from <typ>";
+	}
+}
+
+str methodDeclaration(loc meth, M3 m) {
+	if (isMethod(m)) {
+		modifiers = sort(m.modifiers[meth]);
+		methType = getOneFrom(m.types[meth]);
+		returnType = methodReturnType(methType);
+		signature = methodSignature(meth);
+		
+		return "<modifiers> <returnType> <signature>";
+	}
+	else {
+		throw "Cannot compute a method declaration from <meth>";
+	}
+}
+
+str fieldDeclaration(loc field, M3 m) {
+	if (isField(field)) {
+		modifiers = sort(m.modifiers[field]);
+		fieldType = getOneFrom(m.types[field]);
+		name = getOneFrom(m.names[field]);
+		
+		return "<modifiers> <fieldType> <name>";
+	}
+	else {
+		throw "Cannot compute a field declaration from <field>";
+	}
 }

@@ -6,14 +6,13 @@ import lang::java::m3::Core;
 import org::maracas::delta::Delta;
 import org::maracas::config::Options;
 import org::maracas::m3::M3Diff;
+import org::maracas::match::metric::StringSimilarity;
 import Set;
 
 
-set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
+set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
 	removals = diff.removals;
 	additions = diff.additions;
-	
-	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 	
 	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
@@ -38,7 +37,7 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
 			}
 			
 			similarity = levenshteinSimilarity(snippet1, snippet2);					
-			if (similarity > simThreshold) { 
+			if (similarity > threshold) { 
 				result += <r, a, similarity, MATCH_LEVENSHTEIN>;
 				continue;
 			}
@@ -48,10 +47,9 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
 }
 
 
-set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
+set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
 	removals = diff.removals;
 	additions = diff.additions;
-	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 
 	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
@@ -79,7 +77,7 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 			if (size(d) > 0 && size(e) > 0) {
 				real score = jaccard(d, e);
 				// Hard assumption: Assuming that the first match is the right one
-				if (score > simThreshold) {
+				if (score > threshold) {
 					result += <r, a, score, MATCH_JACCARD>;
 					continue;
 				}
@@ -91,6 +89,4 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 }
 
 
-@javaClass{org.maracas.match.internal.CodeSimilarity}
-@reflect{for debugging}
-java real levenshteinSimilarity(str snippet1, str snippet2);
+

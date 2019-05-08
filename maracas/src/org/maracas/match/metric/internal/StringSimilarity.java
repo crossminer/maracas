@@ -1,4 +1,4 @@
-package org.maracas.match.internal;
+package org.maracas.match.metric.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
@@ -8,11 +8,11 @@ import io.usethesource.vallang.IReal;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValueFactory;
 
-public class CodeSimilarity {
+public class StringSimilarity {
 
 	private final IValueFactory factory;
 	
-	public CodeSimilarity(IValueFactory factory) {
+	public StringSimilarity(IValueFactory factory) {
 		this.factory = factory;
 	}
 	
