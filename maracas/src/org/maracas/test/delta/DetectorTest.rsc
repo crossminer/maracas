@@ -11,14 +11,14 @@ loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 loc client = |project://maracas/src/org/maracas/test/data/minimalbc-client.1.0.jar|;
 
-public Delta delta = delta(api0, api1);
-public Delta fbc = fieldDelta(delta);
-public Delta mbc = methodDelta(delta);
-public Delta cbc = classDelta(delta);
+Delta delta = delta(api0, api1);
+Delta fbc = fieldDelta(delta);
+Delta mbc = methodDelta(delta);
+Delta cbc = classDelta(delta);
 
-public set[Detection] fd = detections(client, fbc);
-public set[Detection] md = detections(client, mbc);
-public set[Detection] cd = detections(client, cbc);
+set[Detection] fd = detections(client, fbc);
+set[Detection] md = detections(client, mbc);
+set[Detection] cd = detections(client, cbc);
 
 
 //----------------------------------------------

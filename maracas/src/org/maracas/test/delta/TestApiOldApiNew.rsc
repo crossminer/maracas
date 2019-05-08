@@ -165,10 +165,10 @@ test bool noMoreParamChanged() =
 // String api.A.mChangedType(int a) -> int api.A.mChangedType(int a)
 test bool methodChangedType() =
 	<|java+method:///api/A/mChangedType(int)|, <TypeSymbol::\class(|java+class:///java/lang/String|, []), TypeSymbol::\int(), 1.0, "signature">>
-	in mbc.changedReturnType;
+	in mbc.types;
 
 test bool methodNoMoreChangedType() =
-	size(mbc.changedReturnType) == 1;
+	size(mbc.types) == 1;
 
 // api.A.mDeprecated -> @Deprecated api.A.mDeprecated
 test bool methodDeprecated() =
