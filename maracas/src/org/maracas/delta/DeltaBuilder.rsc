@@ -22,19 +22,19 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |file:///maracas/config.prop
 	M3Diff diff = createM3Diff(from, to);
 	Delta delta = delta(<from.id, to.id>);
 	
-	delta.options 			= readProperties(optionsFile);
-	delta.accessModifiers 	= accessModifiers(diff); 
-	delta.finalModifiers 	= finalModifiers(diff);
-	delta.staticModifiers 	= staticModifiers(diff);
+	delta.options           = readProperties(optionsFile);
+	delta.accessModifiers   = accessModifiers(diff); 
+	delta.finalModifiers    = finalModifiers(diff);
+	delta.staticModifiers   = staticModifiers(diff);
 	delta.abstractModifiers = abstractModifiers(diff);
-	delta.paramLists 		= paramLists(diff);
-	delta.types 			= returnTypes(diff) + types(diff);
-	delta.extends 			= extends(diff);
-	delta.implements 		= implements(diff);
-	delta.deprecated 		= deprecated(diff, delta);
-	delta.renamed 			= renamed(diff, delta);
-	delta.moved 			= moved(diff, delta);
-	delta.removed 			= removed(diff, delta);
+	delta.paramLists        = paramLists(diff);
+	delta.types             = returnTypes(diff) + types(diff);
+	delta.extends           = extends(diff);
+	delta.implements        = implements(diff);
+	delta.deprecated        = deprecated(diff, delta);
+	delta.renamed           = renamed(diff, delta);
+	delta.moved             = moved(diff, delta);
+	delta.removed           = removed(diff, delta);
 	
 	//return postproc(delta);
 	return delta;
@@ -181,8 +181,13 @@ private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
 // FIXME: match signature?
 private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta)
 	= { buildMapping(e, e, |unknown:///|, 1.0, MATCH_SIGNATURE) 
-	  | <_, e> <- diff.removals.declarations, isTargetMember(e) };
+	  | <e, _> <- diff.removals.declarations, isTargetMember(e) };
 
+
+private rel[loc, Mapping[loc]] added(M3Diff diff, Delta delta)
+	= { buildMapping(e, |unknown:///|, e, 1.0, MATCH_SIGNATURE) 
+	  | <e, _> <- diff.additions.declarations, isTargetMember(e) };
+	  
 
 // Default matcher: Jaccard
 rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] options, str option) {
