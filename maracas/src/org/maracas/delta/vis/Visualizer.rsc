@@ -43,9 +43,7 @@ str renderHtml(Delta delta) {
 		}
 	}
 
-	// Should be lang::html5::DOM::toString()
-	// but see bug below
-	return toString(html(
+	return lang::html5::DOM::toString(html(
 			head(
 				title("Delta model between <delta.id[0].file> and <delta.id[1].file>"),
 				link(\rel("stylesheet"), href("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css")),
@@ -105,55 +103,3 @@ map[str, str] friendlyNames = (
 	"removed"           : "Removed elements",
 	"added"             : "Added elements"
 );
-
-/**
- * Bug: weird function overloading happening when
- * invoking renderHtml()from Java.. (between
- * Node::toString() && DOM::toString()??) resulting
- * in a complete HTML structure without any String value.
- * Copying toString() & co. from DOM here as a dirty workaround
- */
-// ------------------------------------------------------
-str kidsToString(list[value] kids)
-  = ("" | it + kidToString(k) | k <- kids );
-
-str kidToString(HTML5Node elt)  = toString(elt);
-str kidToString(HTML5Attr x)  = "";
-
-default str kidToString(value x)  = "<x>";
-
-str nodeToString(str n, set[HTML5Attr] attrs, list[value] kids) {
-      str s = "";
-      if (isVoid(n)) {
-        // ignore kids...
-        s += startTag(n, attrs);
-      }
-      else if (isRawText(n)) {
-        s += startTag(n, attrs);
-        s += rawText(kids);
-        s += endTag(n);
-      }
-      else if (isEscapableRawText(n)) {
-        s += startTag(n, attrs);
-        s += escapableRawText(kids);
-        s += endTag(n);
-      }
-      else if (isBlockLevel(n)) {
-        s += "<startTag(n, attrs)>
-             '  <for (k <- kids) {><kidToString(k)>
-             '  <}><endTag(n)>";
-      }
-      else {
-        s += startTag(n, attrs);
-        s += kidsToString(kids);
-        s += endTag(n);
-      }
-      return s;
-}
-
-str toString(HTML5Node x) {
-  attrs = { k | HTML5Attr k <- x.kids };
-  kids = [ k | value k <- x.kids, HTML5Attr _ !:= k ];
-  return nodeToString(x.name, attrs, kids);
-}
-// ------------------------------------------------------
