@@ -66,25 +66,52 @@ private set[loc] fetchFilesByExtension(loc directory, str extension) {
 	return files;
 }
 
+// In JAR M3s, inner classes are denoted with '$'.
+// In source code M3s, inner classes are denoted either with
+// '/' in uri.path, or with '.' in uri.file (e.g. param types)
+// Also, type erasure; e.g. JAR=Map$Entry, source=Map.Entry%3CK,V%3E,
+// and JAR=java.lang.Object, source=E
+// I did not solve that yet.
+loc jarLocToSourceLoc(loc l) {
+	// If typedecl, replace '$' with '/' in file
+	if (isType(l) || isEnum(l))
+		l.file = replaceAll(l.file, "$", "/");
+	// If method/field/constructor/initializer,
+	// replace '$' with '/' in path and '$' with
+	// '.' in file
+	else if (isMethod(l) || isField(l)) {
+		l.file = replaceAll(l.file, "$", ".");
+		l.path = replaceAll(l.path, "$", "/");
+	}
+
+	return l;
+}
+
 @memo
 M3 createM3FromDirectoryCached(loc directory) {
 	return createM3FromDirectory(directory);
 }
 
 str sourceCode(loc jarLocation, loc logical) {
+	if (logical == |unknown:///|)
+		return "";
+
 	loc sourcesLocation = jarLocation;
 	sourcesLocation.extension = "";
 	sourcesLocation.file = sourcesLocation.file + "-sources";
 
 	if (isDirectory(sourcesLocation)) {
 		M3 sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
-		set[loc] found = sourcesM3.declarations[logical];
+		loc sourceLoc = jarLocToSourceLoc(logical);
+		set[loc] found = sourcesM3.declarations[sourceLoc];
 
 		if (size(found) > 0)
-			return readFile(getOneFrom(sourcesM3.declarations[logical]));
+			return readFile(getOneFrom(found));
+		else
+			return "Couldn\'t find source for <logical>";
 	}
 
-	return "";
+	return "No sources available";
 }
 
 str javadoc(loc jarLocation, loc logical) {
