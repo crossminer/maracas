@@ -35,6 +35,7 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |file:///maracas/config.prop
 	delta.renamed           = renamed(diff, delta);
 	delta.moved             = moved(diff, delta);
 	delta.removed           = removed(diff, delta);
+	delta.added             = added(diff, delta);
 	
 	//return postproc(delta);
 	return delta;

@@ -102,7 +102,8 @@ map[str, str] friendlyNames = (
 	"deprecated"        : "Deprecated elements",
 	"renamed"           : "Renamed elements",
 	"moved"             : "Moved elements",
-	"removed"           : "Removed elements"
+	"removed"           : "Removed elements",
+	"added"             : "Added elements"
 );
 
 /**
