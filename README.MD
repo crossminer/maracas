@@ -41,26 +41,27 @@ Once your environment is ready:
     > locClient = |file:///Users/your/path/client-of-myjar-0.1.0.jar|;
     ```
 
-    3.  Build the breaking changes model between the two versions of the API.
+    3.  Build the delta model between the two versions of the API. Then, we can filter it by target memeber (i.e. type, method, or field).
     ```
-    > cbc = classBreakingChanges(locApi1, locApi2);
-    > mbc = methodBreakingChanges(locApi1, locApi2);
-    > fbc = fieldBreakingChanges(locApi1, locApi2);
+    > Delta delta = delta(locApi1, locApi2);
+    > cdelta = classDelta(delta);
+    > mdelta = methodDelta(delta);
+    > fdelta = fieldDelta(delta);
     ```
 
     4. List the changes (detections) that the client needs to consider to migrate its code to the newest version of the API.
     ```
-    > classDetection = detections(locClient, cbc);
-    > methodDetection = detections(locClient, mbc);
-    > fieldDetection = detections(locClient, fbc);
+    > cdetection = detections(locClient, cdelta);
+    > mdetection = detections(locClient, mdelta);
+    > fdetection = detections(locClient, fdelta);
     ```
     
-    5. Optionally, output user-friendly breaking changes model in HTML:
+    5. Optionally, output user-friendly delta model in HTML:
     ```
-    > import org::maracas::bc::vis::Visualizer;
-    > writeHtml(|file:///Users/your/path/ClassBreakingChanges.html|, cbc);
-    > writeHtml(|file:///Users/your/path/MethodBreakingChanges.html|, mbc);
-    > writeHtml(|file:///Users/your/path/FieldBreakingChanges.html|, fbc);
+    > import org::maracas::delta::vis::Visualizer;
+    > writeHtml(|file:///Users/your/path/ClassDelta.html|, cdelta);
+    > writeHtml(|file:///Users/your/path/MethodDelta.html|, mdelta);
+    > writeHtml(|file:///Users/your/path/FieldDelta.html|, fdelta);
     ```
 
 ## Running Maracas from plain Java

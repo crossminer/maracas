@@ -39,19 +39,19 @@ public class Detection {
 
 		Type type;
 		switch (bcType.getName()) {
-			case "changedAccessModifier":
+			case "accessModifiers":
 				type = Type.ACCESS_MODIFIER;
 				newLibrary = oldLibrary;
 				break;
-			case "changedFinalModifier":
+			case "finalModifiers":
 				type = Type.FINAL_MODIFIER;
 				newLibrary = oldLibrary;
 				break;
-			case "changedStaticModifier":
+			case "staticModifiers":
 				type = Type.STATIC_MODIFIER;
 				newLibrary = oldLibrary;
 				break;
-			case "changedAbstractModifier":
+			case "abstractModifiers":
 				type = Type.ABSTRACT_MODIFIER;
 				newLibrary = oldLibrary;
 				break;
@@ -70,20 +70,17 @@ public class Detection {
 			case "removed":
 				type = Type.REMOVED;
 				break;
-			case "changedParamList":
+			case "paramLists":
 				type = Type.PARAMS_LIST;
 				break;
-			case "changedReturnType":
-				type = Type.RETURN_TYPE;
-				break;
-			case "changedType":
+			case "types":
 				type = Type.TYPE;
 				break;
-			case "changedExtends":
+			case "extends":
 				type = Type.EXTENDS;
 				newLibrary = oldLibrary;
 				break;
-			case "changedImplements":
+			case "implements":
 				type = Type.IMPLEMENTS;
 				newLibrary = oldLibrary;
 				break;

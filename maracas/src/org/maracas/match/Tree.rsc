@@ -1,4 +1,4 @@
-module org::maracas::diff::Tree
+module org::maracas::match::Tree
 
 import IO;
 import List;

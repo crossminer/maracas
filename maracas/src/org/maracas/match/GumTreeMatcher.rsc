@@ -6,19 +6,19 @@
 	
 	Some modifications have been applied.
 } 
-module org::maracas::diff::GumTreeMatcher
+module org::maracas::match::GumTreeMatcher
 
 import IO;
 import lang::java::m3::Core;
 import List;
 import ListRelation;
 import Node; 
-import org::maracas::diff::Tree;
+import org::maracas::match::Tree;
 import org::maracas::util::Math;
 import Set;
 import util::Math;
 
-import org::maracas::diff::Matcher;
+import org::maracas::match::Matcher;
 
 Matcher matcher = matcher(match);
 

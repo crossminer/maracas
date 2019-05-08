@@ -1,9 +1,9 @@
-module org::maracas::diff::CodeSimilarityMatcher
+module org::maracas::match::CodeSimilarityMatcher
 
 import IO;
 import List;
 import lang::java::m3::Core;
-import org::maracas::bc::BreakingChanges;
+import org::maracas::delta::Delta;
 import org::maracas::config::Options;
 import org::maracas::m3::M3Diff;
 import Set;
@@ -16,8 +16,8 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 	
-	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
-		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
+	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
+		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
 			snippet1 = ""; 
 			snippet2 = "";
 			
@@ -54,8 +54,8 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 	simThreshold = 0.7;// FIXME: to be tuned
 	result = {};
 
-	for (<contr, r> <- removals.containment, fun(r) && include(r)) {
-		for (<conta, a> <- additions.containment, fun(a) && include(a)) {
+	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
+		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
 			set[loc] d = {};
 			set[loc] e = {};
 
@@ -91,12 +91,6 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, bool (loc) fun) {
 }
 
 
-@javaClass{org.maracas.diff.internal.CodeSimilarity}
+@javaClass{org.maracas.match.internal.CodeSimilarity}
 @reflect{for debugging}
 java real levenshteinSimilarity(str snippet1, str snippet2);
-
-// FIXME: copied from BreakingChangesBuilder 
-private bool include(loc l) {
-return true;
-	//return /org\/sonar\/api\/internal\// !:= l.uri;
-}

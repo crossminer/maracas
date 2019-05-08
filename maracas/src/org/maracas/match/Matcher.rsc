@@ -1,7 +1,7 @@
-module org::maracas::diff::Matcher
+module org::maracas::match::Matcher
 
 import lang::csv::IO;
-import org::maracas::bc::BreakingChanges;
+import org::maracas::delta::Delta;
 import org::maracas::config::Options;
 import org::maracas::m3::M3Diff;
 

@@ -1,24 +1,23 @@
 module org::maracas::Maracas
 
 import lang::java::m3::Core;
-import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::BreakingChangesBuilder;
-import org::maracas::bc::Detector;
+import org::maracas::delta::Delta;
+import org::maracas::delta::DeltaBuilder;
+import org::maracas::delta::Detector;
 import org::maracas::m3::Core;
 
 
-BreakingChanges classBreakingChanges(loc oldAPI, loc newAPI) 
-	= breakingChanges(oldAPI, newAPI, createClassBC);
+Delta delta(loc oldAPI, loc newAPI) 
+	= createDelta(m3(oldAPI), m3(newAPI));
+
+Delta classDelta(Delta delta)
+	= getClassDelta(delta);
+
+Delta methodDelta(Delta delta)
+	= getMethodDelta(delta);
 	
-BreakingChanges methodBreakingChanges(loc oldAPI, loc newAPI) 
-	= breakingChanges(oldAPI, newAPI, createMethodBC);
+Delta fieldDelta(Delta delta)
+	= getFieldDelta(delta);
 	
-BreakingChanges fieldBreakingChanges(loc oldAPI, loc newAPI) 
-	= breakingChanges(oldAPI, newAPI, createFieldBC);
-
-private BreakingChanges breakingChanges(loc oldAPI, loc newAPI, BreakingChanges (M3, M3) fun) 
-	= fun(m3(oldAPI), m3(newAPI));
-
-
-set[Detection] detections(loc client, BreakingChanges bc) 
-	= detections(m3(client), bc);
+set[Detection] detections(loc client, Delta delta) 
+	= detections(m3(client), delta);

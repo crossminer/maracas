@@ -39,7 +39,8 @@ public class IO {
 			else
 				stream = new FileInputStream(loc.toString().replaceAll("project://maracas", System.getProperty("user.dir"))
 															.replaceAll("\\|", ""));
-			
+
+			prop.load(stream);
 			for(Object keyObj : prop.keySet()) {
 				String key = keyObj.toString();
 				writer.put(factory.string(key), factory.string(prop.getProperty(key)));
@@ -48,7 +49,7 @@ public class IO {
 			stream.close();
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+			eval.getStdErr().println(e.getMessage());
 		}
 		
 		return writer.done();

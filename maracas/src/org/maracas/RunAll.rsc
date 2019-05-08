@@ -9,25 +9,25 @@ import String;
 import Set;
 import Relation;
 import org::maracas::Maracas;
-import org::maracas::bc::BreakingChanges;
-import org::maracas::bc::vis::Visualizer;
+import org::maracas::delta::Delta;
+import org::maracas::delta::vis::Visualizer;
 import lang::java::m3::Core;
-import org::maracas::bc::Detector;
+import org::maracas::delta::Detector;
 
-void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeBC, bool serializeHtml) {
+void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, bool serializeHtml) {
 	set[loc] clients = walkJARs(clients);
 	int count = size(clients);
 
 	println("Computing CBC...");
-	BreakingChanges cbc = classBreakingChanges(libv1, libv2);
+	Delta cbc = delta(libv1, libv2);
 
 	println("Computing MBC...");
-	BreakingChanges mbc = methodBreakingChanges(libv1, libv2);
+	Delta mbc = delta(libv1, libv2);
 
 	println("Computing FBC...");
-	BreakingChanges fbc = fieldBreakingChanges(libv1, libv2);
+	Delta fbc = delta(libv1, libv2);
 
-	if (serializeBC) {
+	if (serializeDelta) {
 		writeBinaryValueFile(report + "bc" + "Classes.cbc", cbc);
 		writeBinaryValueFile(report + "bc" + "Methods.mbc", mbc);
 		writeBinaryValueFile(report + "bc" + "Fields.fbc", fbc);
