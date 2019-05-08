@@ -15,23 +15,23 @@ loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 
 Delta delta = delta(api0, api1);
-Delta fbc = fieldDelta(delta);
-Delta mbc = methodDelta(delta);
-Delta cbc = classDelta(delta);
+Delta fdelta = fieldDelta(delta);
+Delta mdelta = methodDelta(delta);
+Delta cdelta = classDelta(delta);
 
 
 //----------------------------------------------
 // Changed access modifier tests
 //----------------------------------------------
 test bool fieldAccessModifiers() 
-	= fbc.accessModifiers == {
+	= fdelta.accessModifiers == {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field2|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field3|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
 
 test bool methodAccessModifiers() 
-	= mbc.accessModifiers == {
+	= mdelta.accessModifiers == {
 		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
@@ -43,7 +43,7 @@ test bool methodAccessModifiers()
 // FIXME: the jar M3 always identifies a public inner class. Is it an error, or just the compiler?
 // java+constructor can be used
 test bool classAccessModifiers() { 
-	return cbc.accessModifiers == {
+	return cdelta.accessModifiers == {
 		<|java+class:///p1/ChangedAccessModifier1$Inner1|,<\public(),\defaultAccess(),1.0,MATCH_SIGNATURE>>,
   		<|java+class:///p1/ChangedAccessModifier1$Inner2|,<\defaultAccess(),\public(),1.0,MATCH_SIGNATURE>>
 	};
@@ -54,13 +54,13 @@ test bool classAccessModifiers() {
 // Changed final modifier tests
 //----------------------------------------------
 test bool fieldFinalModifiers()
-	= fbc.finalModifiers == {
+	= fdelta.finalModifiers == {
 		<|java+field:///p1/ChangedFinalModifier3/field1|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedFinalModifier3/field2|,<\default(),\final(),1.0,MATCH_SIGNATURE>>
 	};
 
 test bool methodFinalModifiers()
-	= mbc.finalModifiers == {
+	= mdelta.finalModifiers == {
 		<|java+method:///p1/ChangedFinalModifier2/m1()|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedFinalModifier2/m2()|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedFinalModifier2/m3()|,<\final(),\default(),1.0,MATCH_SIGNATURE>>,
@@ -68,7 +68,7 @@ test bool methodFinalModifiers()
     };
 
 test bool classFinalModifiers()
-	= cbc.finalModifiers == {
+	= cdelta.finalModifiers == {
 		<|java+class:///p1/ChangedFinalModifier1|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedFinalModifier1$Inner1|,<\default(),\final(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedFinalModifier1$Inner2|,<\final(),\default(),1.0,MATCH_SIGNATURE>>
@@ -79,13 +79,13 @@ test bool classFinalModifiers()
 // Changed static modifier tests
 //----------------------------------------------
 test bool fieldStaticModifiers()
-	= fbc.staticModifiers == {
+	= fdelta.staticModifiers == {
 		<|java+field:///p1/ChangedStaticModifier3/field1|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedStaticModifier3/field2|,<\default(),\static(),1.0,MATCH_SIGNATURE>>
 	};
 	
 test bool methodStaticModifiers()
-	= mbc.staticModifiers == {
+	= mdelta.staticModifiers == {
 		<|java+method:///p1/ChangedStaticModifier2/m1()|,<\default(),\static(),1.0,MATCH_SIGNATURE>>,
 		<|java+method:///p1/ChangedStaticModifier2/m2()|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
  		<|java+method:///p1/ChangedStaticModifier2/m3()|,<\static(),\default(),1.0,MATCH_SIGNATURE>>,
@@ -95,21 +95,21 @@ test bool methodStaticModifiers()
 
 // TODO: add nested classes.
 test bool classStaticModifiers()
-	= cbc.staticModifiers == {};
+	= cdelta.staticModifiers == {};
 	
 
 //----------------------------------------------
 // Changed abstract modifier tests
 //----------------------------------------------
 test bool classAbstractModifiers()
-	= cbc.abstractModifiers == {
+	= cdelta.abstractModifiers == {
 		<|java+class:///p1/ChangedAbstractModifier1$Inner1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedAbstractModifier1$Inner2|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
     	<|java+class:///p1/ChangedAbstractModifier1|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>
     };
 
 test bool methodAbstractModifiers()
-	= mbc.abstractModifiers == {
+	= mdelta.abstractModifiers == {
 		<|java+method:///p1/ChangedAbstractModifier2/m1()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>,
 	    <|java+method:///p1/ChangedAbstractModifier2/m2()|,<\default(),\abstract(),1.0,MATCH_SIGNATURE>>,
 	    <|java+method:///p1/ChangedAbstractModifier2/m3()|,<\abstract(),\default(),1.0,MATCH_SIGNATURE>>
@@ -120,7 +120,7 @@ test bool methodAbstractModifiers()
 // Deprecated tests
 //----------------------------------------------
 test bool classDeprecated() {
-	deprecated = cbc.deprecated.elem;
+	deprecated = cdelta.deprecated.elem;
 	return deprecated == {
 		|java+class:///p2/Deprecated1|,
 		|java+class:///p2/Deprecated1$Inner1|
@@ -128,7 +128,7 @@ test bool classDeprecated() {
 }
 
 test bool methodDeprecated() {
-	deprecated = mbc.deprecated.elem;
+	deprecated = mdelta.deprecated.elem;
 	return deprecated == {
 		|java+method:///p2/Deprecated2/m1()|,
 		|java+method:///p2/Deprecated2/m3()|
@@ -136,7 +136,7 @@ test bool methodDeprecated() {
 }
 
 test bool fieldDeprecated() {
-	deprecated = fbc.deprecated.elem;
+	deprecated = fdelta.deprecated.elem;
 	return deprecated == {
 		|java+field:///p2/Deprecated3/field1|,
 		|java+field:///p2/Deprecated3/field3|
@@ -148,14 +148,14 @@ test bool fieldDeprecated() {
 // Renamed tests
 //----------------------------------------------
 test bool methodRenamed() {
-	renamed = mbc.renamed.mapping <0,1>;
+	renamed = mdelta.renamed.mapping <0,1>;
 	return renamed == {
 		<|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|>
 	};
 }
 
 test bool classRenamed() {
-	renamed = cbc.renamed.mapping <0,1>;
+	renamed = cdelta.renamed.mapping <0,1>;
 	return renamed == {
 		<|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|>
 	};
@@ -166,7 +166,7 @@ test bool classRenamed() {
 // Moved tests
 //----------------------------------------------
 test bool methodMoved() {
-	moved = mbc.moved.mapping <0,1>;
+	moved = mdelta.moved.mapping <0,1>;
 	return moved >= {
 		<|java+method:///p2/Moved1/m1()|,|java+method:///p2_1/Moved1/m1()|>,
 		<|java+method:///p2/Moved1/m2()|,|java+method:///p2_1/Moved1/m2()|>,
@@ -176,7 +176,7 @@ test bool methodMoved() {
 }
     
 test bool classMoved() {
-	moved = cbc.moved.mapping <0,1>;
+	moved = cdelta.moved.mapping <0,1>;
 	return moved == {
 		<|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|>
 	};
@@ -187,7 +187,7 @@ test bool classMoved() {
 // Removed tests
 //----------------------------------------------
 test bool methodRemoved() {
-	removed = mbc.removed.elem;
+	removed = mdelta.removed.elem;
 	return removed >= {
 		|java+constructor:///p2/Removed1/Removed1(boolean,boolean,int,int)|,
 		|java+method:///p2/Removed1/toString()|,
@@ -196,7 +196,7 @@ test bool methodRemoved() {
 }
 
 test bool classRemoved() {
-	removed = cbc.removed.elem;
+	removed = cdelta.removed.elem;
 	return removed >= {
 		|java+class:///p2/Removed1|
 	};
@@ -235,9 +235,9 @@ test bool paramLists2() {
 }
 
 bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
-	if (mbc.paramLists[meth] != {}) {
+	if (mdelta.paramLists[meth] != {}) {
 		tuple[list[TypeSymbol] from, list[TypeSymbol] to, real conf, str meth] mapping 
-			= getOneFrom(mbc.paramLists[meth]);
+			= getOneFrom(mdelta.paramLists[meth]);
     	return (from == mapping.from) && (to == mapping.to);
 	}
 	else {
