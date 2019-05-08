@@ -179,71 +179,29 @@ private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
  * Identifying removed elements
  */
 // FIXME: match signature?
-private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta) {
-	diff = filterDiffRemoved(diff, delta);
-	return 	{ buildMapping(e, e, |unknown:///|, 1.0, MATCH_SIGNATURE) 
-			| <_, e> <- diff.removals.containment, isTargetMember(e) };
-}
-	
+private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta)
+	= { buildMapping(e, e, |unknown:///|, 1.0, MATCH_SIGNATURE) 
+	  | <_, e> <- diff.removals.declarations, isTargetMember(e) };
 
-private M3Diff filterDiffRemoved(M3Diff diff, Delta delta) {
-	elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
-					+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<0> : {})
-					+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
-		
-	elemsAdditions 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {})
-					+ ((!isEmpty(delta.moved)) ? delta.moved.mapping<1> : {});
-		
-	diff.removals = filterXM3(diff.removals, elemsRemovals);
-	diff.additions = filterXM3(diff.additions, elemsAdditions);
-	
-	return diff;
-}
 
+// Default matcher: Jaccard
 rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, bool (loc) fun, map[str,str] options, str option) {
+	Matcher currentMatcher = matcher(jaccardMatch);
 	matchers = (option in options) ? split(",", options[option]) : []; 
-	result = {};
+	matches = {};
 	
-	// Default matcher: Jaccard
-	if (matchers == []) {
-		Matcher jaccardMatcher = matcher(jaccardMatch); 
-		matches = jaccardMatcher.match(diff, fun);
-		result = { <from, <from, to, conf, meth>> | <from, to, conf, meth> <- matches };
-	}
-	else {
-		for (m <- matchers) { 
-			Matcher currentMatcher = matcher(jaccardMatch); 
-				
+	if (matchers != []) {
+		for (m <- matchers) {  
 			switch (trim(m)) {
 				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
 				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
 				default : currentMatcher = matcher(jaccardMatch);
 			}
-				
-			matches = currentMatcher.match(diff, fun);
-			
-			for (from <- domain(matches)) {
-				bestConf = -1.0;
-				bestTo = from;
-				bestMeth = "";
-					
-				for (<to, conf, meth> <- matches[from]) {
-					if (conf > bestConf) {
-						bestConf = conf;
-						bestTo = to;
-						bestMeth = meth;
-					}
-				} 
-					
-				// Select the best match for each location
-				result += <from, <from, bestTo, bestConf, bestMeth>>;
-				// Let's not iterate over the same elements
-				matches = domainX(matches, {from});
-			}
 		}
 	}
 	
-	return result;
+	matches = currentMatcher.match(diff, fun);
+	return { buildMapping(m.from, m) | m <- matches };
 }
 
 /*
