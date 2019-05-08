@@ -117,8 +117,6 @@ public class Maracas {
 		eval.addRascalSearchPathContributor(StandardLibraryContributor.getInstance());
 		eval.addRascalSearchPath(vf.sourceLocation(Paths.get("src").toAbsolutePath().toString()));
 		eval.doImport(mon, "org::maracas::RunAll");
-		eval.doImport(mon, "org::maracas::Maracas");
-		eval.doImport(mon, "org::maracas::delta::vis::Visualizer");
 
 		return eval;
 	}

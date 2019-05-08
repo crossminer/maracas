@@ -72,9 +72,11 @@ public class Detection {
 				break;
 			case "paramLists":
 				type = Type.PARAMS_LIST;
+				// Compute it
 				break;
 			case "types":
 				type = Type.TYPE;
+				newLibrary = oldLibrary;
 				break;
 			case "extends":
 				type = Type.EXTENDS;
