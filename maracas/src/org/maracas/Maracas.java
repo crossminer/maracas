@@ -101,7 +101,7 @@ public class Maracas {
 			Collection<Detection> clientDetections = detections.get(client);
 
 			clientDetections.stream().filter(d -> d.getType().equals(Detection.Type.DEPRECATED)).forEach(d -> {
-				System.out.println(String.format("%s uses method % which has been deprecated", d.getClientLocation(),
+				System.out.println(String.format("%s uses method %s which has been deprecated", d.getClientLocation(),
 						d.getOldLibraryLocation()));
 			});
 		}
