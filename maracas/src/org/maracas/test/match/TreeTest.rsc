@@ -2,7 +2,7 @@ module org::maracas::\test::match::TreeTest
 
 import lang::java::m3::AST;
 import lang::java::m3::Core;
-import org::maracas::match::Tree;
+import org::maracas::match::matcher::Tree;
 import org::maracas::\test::input::ColoredTreeTestInput;
 import ValueIO;
 

@@ -6,25 +6,18 @@
 	
 	Some modifications have been applied.
 } 
-module org::maracas::match::GumTreeMatcher
+module org::maracas::match::matcher::GumTreeMatcher
 
 import IO;
 import lang::java::m3::Core;
 import List;
 import ListRelation;
 import Node; 
-import org::maracas::match::Tree;
+import org::maracas::match::matcher::Tree;
 import org::maracas::util::Math;
 import Set;
 import util::Math;
 
-import org::maracas::match::Matcher;
-
-Matcher matcher = matcher(match);
-
-set[Match] match(M3Diff diff, bool (loc) fun) {
-	return {};
-}
 
 list[value] topDownMatch(&T <: node t1, &R <: node t2, int minHeight) {
 	priority1 = [];

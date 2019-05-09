@@ -3,7 +3,7 @@ module org::maracas::\test::match::GumTreeMatcherTest
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import List;
-import org::maracas::match::GumTreeMatcher;
+import org::maracas::match::matcher::GumTreeMatcher;
 
 import Node;
 

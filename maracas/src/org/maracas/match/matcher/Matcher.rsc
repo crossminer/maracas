@@ -1,4 +1,4 @@
-module org::maracas::match::Matcher
+module org::maracas::match::matcher::Matcher
 
 import lang::csv::IO;
 import org::maracas::delta::Delta;

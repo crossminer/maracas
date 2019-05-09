@@ -1,4 +1,4 @@
-module org::maracas::match::CodeSimilarityMatcher
+module org::maracas::match::matcher::CodeSimilarityMatcher
 
 import IO;
 import List;
