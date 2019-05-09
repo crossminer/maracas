@@ -199,84 +199,104 @@ test bool classDeprecated()
 // Renamed tests
 //----------------------------------------------
 test bool methodRenamed() 
-	= detection(
+	= isInDetections(
 		|java+method:///client/Renamed/methodRenamed()|,
 	    |java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,
-	    <|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|,0.9911504424778761,"levenshtein">,
-	    renamed())
-	in md;
+		renamed(),
+		md
+	);
 
-test bool classRenamed() 
-	= { detection(
-		    |java+field:///client/Renamed/classField|,
-		    |java+class:///p2/Renamed1|,
-		    <|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|,0.8444444444444444,"levenshtein">,
-		    renamed()),
-		detection(
-		    |java+method:///client/Renamed/classRenamed()|,
-		    |java+class:///p2/Renamed1|,
-		    <|java+class:///p2/Renamed1|,|java+class:///p2/RenamedRenamed1|,0.8444444444444444,"levenshtein">,
-		    renamed()) } 
-	<= cd;
+test bool classRenamed1() 
+	= isInDetections(
+		|java+method:///client/Renamed/classRenamed()|,
+		|java+class:///p2/Renamed1|,
+		renamed(),
+		cd
+	);
+
+test bool classRenamed2() 
+	= isInDetections(
+		|java+field:///client/Renamed/classField|,
+		|java+class:///p2/Renamed1|,
+		renamed(),
+		cd
+	);
 	
 
 //----------------------------------------------
 // Moved tests
 //----------------------------------------------
-test bool methodMovedDueToRenamedClass() 
-	= { detection(
-		    |java+method:///client/Renamed/classRenamed()|,
-		    |java+method:///p2/Renamed1/getF2()|,
-		    <|java+method:///p2/Renamed1/getF2()|,|java+method:///p2/RenamedRenamed1/getF2()|,0.8372093023255813,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+method:///client/Renamed/classRenamed()|,
-		    |java+method:///p2/Renamed1/isF3()|,
-		    <|java+method:///p2/Renamed1/isF3()|,|java+method:///p2/RenamedRenamed1/isF3()|,0.8372093023255813,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+method:///client/Renamed/classRenamed()|,
-		    |java+method:///p2/Renamed1/getF1()|,
-		    <|java+method:///p2/Renamed1/getF1()|,|java+method:///p2/RenamedRenamed1/getF1()|,0.9705882352941176,"levenshtein">,
-		    moved()) }
-    <= md;
+test bool methodMovedDueToRenamedClass1() 
+	= isInDetections(
+		|java+method:///client/Renamed/classRenamed()|,
+		|java+method:///p2/Renamed1/getF2()|,
+		moved(),
+		md
+	);
 
-test bool methodMovedDueToMovedClass() 
-	= { detection(
-		    |java+method:///client/Moved/movedClass()|,
-		    |java+method:///p2/Moved1/getF3()|,
-		    <|java+method:///p2/Moved1/getF3()|,|java+method:///p2_1/Moved1/getF3()|,0.9444444444444444,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+method:///client/Moved/movedClass()|,
-		    |java+method:///p2/Moved1/getF4()|,
-		    <|java+method:///p2/Moved1/getF4()|,|java+method:///p2_1/Moved1/getF4()|,0.9444444444444444,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+method:///client/Moved/movedClass()|,
-		    |java+method:///p2/Moved1/getF5()|,
-		    <|java+method:///p2/Moved1/getF5()|,|java+method:///p2_1/Moved1/getF5()|,0.9444444444444444,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+method:///client/Moved/movedClass()|,
-		    |java+method:///p2/Moved1/getF6()|,
-		    <|java+method:///p2/Moved1/getF6()|,|java+method:///p2_1/Moved1/getF6()|,0.9444444444444444,"levenshtein">,
-		    moved()) }
-	<= md;
-  
-    
-test bool classMoved() 
-	= { detection(
-		    |java+method:///client/Moved/movedClass()|,
-		    |java+class:///p2/Moved1|,
-		    <|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|,0.9484304932735426,"levenshtein">,
-		    moved()),
-		detection(
-		    |java+field:///client/Moved/classField|,
-		    |java+class:///p2/Moved1|,
-		    <|java+class:///p2/Moved1|,|java+class:///p2_1/Moved1|,0.9484304932735426,"levenshtein">,
-		    moved()) }
-	<= cd;
+test bool methodMovedDueToRenamedClass2() 
+	= isInDetections(
+		|java+method:///client/Renamed/classRenamed()|,
+		|java+method:///p2/Renamed1/isF3()|,
+		moved(),
+		md
+	);
+
+test bool methodMovedDueToRenamedClass3() 
+	= isInDetections(
+		|java+method:///client/Renamed/classRenamed()|,
+		|java+method:///p2/Renamed1/getF1()|,
+		moved(),
+		md
+	);
+
+test bool methodMovedDueToMovedClass1() 
+	= isInDetections(
+		|java+method:///client/Moved/movedClass()|,
+		|java+method:///p2/Moved1/getF3()|,
+		moved(),
+		md
+	);
+
+test bool methodMovedDueToMovedClass2() 
+	= isInDetections(
+		|java+method:///client/Moved/movedClass()|,
+		|java+method:///p2/Moved1/getF4()|,
+		moved(),
+		md
+	);
+
+test bool methodMovedDueToMovedClass3() 
+	= isInDetections(
+		|java+method:///client/Moved/movedClass()|,
+		|java+method:///p2/Moved1/getF5()|,
+		moved(),
+		md
+	);
+
+test bool methodMovedDueToMovedClass4() 
+	= isInDetections(
+		|java+method:///client/Moved/movedClass()|,
+		|java+method:///p2/Moved1/getF6()|,
+		moved(),
+		md
+	);  
+
+test bool classMoved1() 
+    = isInDetections(
+		|java+method:///client/Moved/movedClass()|,
+		|java+class:///p2/Moved1|,
+		moved(),
+		cd
+	);  
+	
+test bool classMoved2() 
+    = isInDetections(
+		|java+field:///client/Moved/classField|,
+		|java+class:///p2/Moved1|,
+		moved(),
+		cd
+	);  
 	
 	
 //----------------------------------------------
@@ -312,3 +332,71 @@ test bool classRemoved()
     <= cd;
 
 
+//----------------------------------------------
+// isInDetections
+//----------------------------------------------
+
+set[Detection] basicDetections = { 
+	detection(
+	    |java+method:///path/to/a()|,
+	    |java+class:///path/to/A|,
+	    <|java+class:///path/to/A|,|unknown:///|,1.0,MATCH_SIGNATURE>,
+	    removed()),
+	detection(
+	    |java+field:///path/to/a|,
+	    |java+class:///path/to/A|,
+	    <|java+class:///path/to/A|,|java+class:///path/to/Ar|,0.7,MATCH_LEVENSHTEIN>,
+	    moved()),
+	detection(
+	    |java+method:///path/to/a|,
+	    |java+method:///path/to/b()|,
+	    <|java+method:///path/to/b()|,|java+method:///path/to/br()|,0.7,MATCH_JACCARD>,
+	    renamed()) };
+	    
+test bool isInDetections1()
+	= isInDetections(
+		|java+method:///path/to/a()|,
+		|java+class:///path/to/A|,
+		removed(),
+		basicDetections
+	) == true;
+	
+test bool isInDetections2()
+	= isInDetections(
+		|java+field:///path/to/a|,
+	    |java+class:///path/to/A|,
+		moved(),
+		basicDetections
+	) == true;
+	
+test bool isInDetections3()
+	= isInDetections(
+		|java+method:///path/to/a|,
+	    |java+method:///path/to/b()|,
+		renamed(),
+		basicDetections
+	) == true;
+	
+test bool isNotInDetections1()
+	= isInDetections(
+		|java+method:///path/to/a()|,
+		|java+class:///path/to/A|,
+		moved(),
+		basicDetections
+	) == false;
+	
+test bool isNotInDetections2()
+	= isInDetections(
+		|java+field:///path/to/a|,
+	    |java+class:///path/to/B|,
+		moved(),
+		basicDetections
+	) == false;
+	
+test bool isNotInDetections3()
+	= isInDetections(
+		|java+field:///path/to/a|,
+	    |java+method:///path/to/b()|,
+		renamed(),
+		basicDetections
+	) == false;

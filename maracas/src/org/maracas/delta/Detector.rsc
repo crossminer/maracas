@@ -101,3 +101,12 @@ private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, Del
 		
 	return { detection(elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
 }
+
+bool isInDetections(loc elem, loc used, DeltaType typ, set[Detection] detections) {
+	for (d <- detections) {
+		if (detection(elem, used, _, typ) := d) {
+			return true;
+		}
+	}
+	return false;
+}

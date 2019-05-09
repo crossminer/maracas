@@ -10,7 +10,7 @@ import org::maracas::delta::Delta;
 import org::maracas::io::properties::IO;
 import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
-import org::maracas::match::matcher::CodeSimilarityMatcher;
+import org::maracas::match::matcher::SnippetMatcher;
 import org::maracas::match::matcher::Matcher;
 import Relation;
 import Set;
@@ -101,10 +101,6 @@ private rel[loc, Mapping[loc]] deprecated(M3Diff diff, Delta delta) {
 	return { buildDeltaMapping(e, e, e, 1.0, MATCH_SIGNATURE) 
 			| 	<e, a> <- diff.additions.annotations, isTargetMember(e),
 				a == |java+interface:///java/lang/Deprecated|};
-
-	//additions = getAdditions(from, to);
-	//deprecate = filterM3(to, elemsDeprecated);
-	//return applyMatchers(additions, deprecate, fun, options, DEP_MATCHERS);
 }
 
 
@@ -145,7 +141,8 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 
 private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
 	elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
-	diff.removals = filterXM3(diff.removals, elemsRemovals);
+	excepRemovals = domain(diff.removals.declarations);
+	diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
 	return diff;
 }
 
@@ -296,15 +293,6 @@ rel[loc, Mapping[set[loc]]] implements(M3Diff diff) {
 				MATCH_SIGNATURE)
 			| typ <- domain(removals.implements) + domain(additions.implements) };
 }
-
-private bool isTargetMemberExclInterface(loc elem)
-	= isClass(elem)
-	|| isMethod(elem)
-	|| isField(elem);
-
-private bool isTargetMember(loc elem)
-	= isTargetMemberExclInterface(elem)
-	|| isInterface(elem);
 	
 
 //----------------------------------------------

@@ -1,33 +1,36 @@
-module org::maracas::match::matcher::CodeSimilarityMatcher
+module org::maracas::match::matcher::SnippetMatcher
 
 import IO;
 import List;
 import lang::java::m3::Core;
 import org::maracas::delta::Delta;
 import org::maracas::config::Options;
+import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
 import org::maracas::match::metric::StringSimilarity;
 import Set;
 
 
 set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
-	removals = diff.removals;
-	additions = diff.additions;
+	M3 removals = diff.removals;
+	M3 additions = diff.additions;
 	result = {};
 	
 	for (<r, _> <- removals.declarations) {
 		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
-			snippet1 = ""; 
-			snippet2 = "";
+			str snippet1 = ""; 
+			str snippet2 = "";
 			
 			if (additions.id.extension == "jar") {
 				// Considering contained declaration locs
 				// Warning: we don't take into account declarations ordering 
-				snippet1 = toString(sort(removals.containment[r]))
+				snippet1 = memberDeclaration(r, diff.from)
+					+ toString(sort(removals.containment[r]))
 					+ toString(sort(removals.methodInvocation[r]))
 					+ toString(sort(removals.fieldAccess[r]));
 					
-				snippet2 = toString(sort(additions.containment[a]))
+				snippet2 = memberDeclaration(a, diff.to)
+					+ toString(sort(additions.containment[a]))
 					+ toString(sort(additions.methodInvocation[a]))
 					+ toString(sort(additions.fieldAccess[a]));
 			}
@@ -87,6 +90,3 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
 	
 	return result;
 }
-
-
-

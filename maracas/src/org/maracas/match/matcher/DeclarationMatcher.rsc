@@ -10,9 +10,12 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
 	additions = diff.additions;
 	result = {};
 	
-	for (<r, declr> <- removals.declarations) {
-		for (<a, decla> <- additions.declarations, r.scheme == a.scheme) {
-			similarity = levenshteinSimilarity(memberDeclaration(r), memberDeclaration(a));					
+	for (<r, _> <- removals.declarations) {
+		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
+			similarity = levenshteinSimilarity(
+			                    memberDeclaration(r, diff.from), 
+			                    memberDeclaration(a, diff.to)
+			           );					
 			
 			if (similarity > threshold) { 
 				result += buildMapping(r, a, similarity, MATCH_LEVENSHTEIN);

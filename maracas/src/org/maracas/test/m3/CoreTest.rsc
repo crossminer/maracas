@@ -86,11 +86,11 @@ test bool sameMethodQualName4()
 	
 
 //----------------------------------------------
-// methodName
+// memberName
 //----------------------------------------------
-test bool methodNameWrongScheme() {
+test bool memberNameWrongScheme() {
 	try {
-		methodName(|java+field:///|);
+		memberName(|java+compilationUnit:///|);
 		return false;
 	}
 	catch : {
@@ -98,24 +98,56 @@ test bool methodNameWrongScheme() {
 	}
 }
 
-test bool methodNameRightScheme() {
+test bool memberNameMethodScheme() {
 	try {
-		methodName(|java+method:///|);
+		memberName(|java+method:///|);
 		return true;
 	}
 	catch : {
 		return false;
 	}
 }
+
+test bool memberNameFieldScheme() {
+	try {
+		memberName(|java+field:///|);
+		return true;
+	}
+	catch : {
+		return false;
+	}
+}
+
+test bool memberNameClassScheme() {
+	try {
+		memberName(|java+class:///|);
+		return true;
+	}
+	catch : {
+		return false;
+	}
+}
+
+test bool className() 
+	= memberName(|java+class:///path/to/A|) == "A";
+	
+test bool innerClassName() 
+	= memberName(|java+class:///path/to/a/A$A|) == "A$A";
+
+test bool interfaceName() 
+	= memberName(|java+interface:///path/to/IA|) == "IA";
 
 test bool methodName1() 
-	= methodName(|java+method:///path/to/a()|) == "a";
+	= memberName(|java+method:///path/to/a()|) == "a";
 	
 test bool methodName2() 
-	= methodName(|java+method:///path/to/a(java.lang.String%5B%5D)|) == "a";
+	= memberName(|java+method:///path/to/a(java.lang.String%5B%5D)|) == "a";
 
 test bool methodName3() 
-	= methodName(|java+method:///path/to/a(boolean,int)|) == "a";
+	= memberName(|java+method:///path/to/a(boolean,int)|) == "a";
+	
+test bool fieldName() 
+	= memberName(|java+field:///path/to/A/a|) == "a";
 	
 	
 //----------------------------------------------

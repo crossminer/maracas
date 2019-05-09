@@ -23,6 +23,15 @@ data Modifier =
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
 
+bool isTargetMemberExclInterface(loc elem)
+	= isClass(elem)
+	|| isMethod(elem)
+	|| isField(elem);
+
+bool isTargetMember(loc elem)
+	= isTargetMemberExclInterface(elem)
+	|| isInterface(elem);
+	
 @memo
 M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
@@ -260,6 +269,22 @@ str methodSignature(loc m) {
 	}
 }
 
+str memberName(loc m) {
+	if(isMethod(m)) {
+		return memberName(methodQualName(m));
+	}
+	else if (isType(m) || isField(m)) {
+		return memberName(m.path);
+	}
+	else {
+		throw "Cannot get a name from unsupported memeber <m>.";
+	}
+}
+
+private str memberName(str path) 
+	= substring(path, (findLast(path, "/") + 1));
+
+ 
 list[TypeSymbol] methodParams(TypeSymbol typ) 
 	= (\method(_,_,_,params) := typ) ? params : [];
 	
@@ -273,7 +298,7 @@ str memberDeclaration(loc elem, M3 m) {
 	if (isMethod(elem)) {
 		return methodDeclaration(elem, m);
 	}
-	if (isField(elem, m)) {
+	if (isField(elem)) {
 		return fieldDeclaration(elem, m);
 	}	
 	throw "<elem> is not part of the scoped members.";
@@ -281,10 +306,10 @@ str memberDeclaration(loc elem, M3 m) {
 
 str typeDeclaration(loc typ, M3 m) {
 	if (isType(typ)) {
-		modifiers = sort(m.modifiers[typ]);
-		name = getOneFrom(m.names[typ]);
-		super = getOneFrom(m.extends[typ]);
-		interfaces = m.implements[typ];
+		list[Modifier] modifiers = sort(m.modifiers[typ]);
+		str name = memberName(typ);
+		set[loc] super = m.extends[typ];
+		list[loc] interfaces = sort(m.implements[typ]);
 		
 		return "<modifiers> <name> <super> <interfaces>";
 	}
@@ -294,11 +319,11 @@ str typeDeclaration(loc typ, M3 m) {
 }
 
 str methodDeclaration(loc meth, M3 m) {
-	if (isMethod(m)) {
-		modifiers = sort(m.modifiers[meth]);
-		methType = getOneFrom(m.types[meth]);
-		returnType = methodReturnType(methType);
-		signature = methodSignature(meth);
+	if (isMethod(meth)) {
+		list[Modifier] modifiers = sort(m.modifiers[meth]);
+		TypeSymbol methType = getOneFrom(m.types[meth]);
+		TypeSymbol returnType = methodReturnType(methType);
+		str signature = methodSignature(meth);
 		
 		return "<modifiers> <returnType> <signature>";
 	}
@@ -309,9 +334,9 @@ str methodDeclaration(loc meth, M3 m) {
 
 str fieldDeclaration(loc field, M3 m) {
 	if (isField(field)) {
-		modifiers = sort(m.modifiers[field]);
-		fieldType = getOneFrom(m.types[field]);
-		name = getOneFrom(m.names[field]);
+		list[Modifier] modifiers = sort(m.modifiers[field]);
+		set[TypeSymbol] fieldType = m.types[field];
+		str name = memberName(field);
 		
 		return "<modifiers> <fieldType> <name>";
 	}
