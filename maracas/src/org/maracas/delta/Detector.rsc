@@ -22,15 +22,14 @@ data DeltaType
 	| finalModifiers()
 	| staticModifiers()
 	| abstractModifiers()
+	| paramLists()
+	| types()
+	| extends()
+	| implements()
 	| deprecated()
 	| renamed()
 	| moved()
 	| removed()
-	| paramLists()
-	| changedReturnType()
-	| types()
-	| extends()
-	| implements()
 	;
 	
 
@@ -88,9 +87,6 @@ private set[Detection] detections(M3 client, Delta delta, implements())
 	
 private set[Detection] detections(M3 client, Delta delta, paramLists()) 
 	= detections(client, delta.paramLists, paramLists());
-
-private set[Detection] detections(M3 client, Delta delta, changedReturnType()) 
-	= detections(client, delta.changedReturnType, changedReturnType());
 
 private set[Detection] detections(M3 client, Delta delta, types()) 
 	= detections(client, delta.types, types());
