@@ -15,8 +15,8 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
 	additions = diff.additions;
 	result = {};
 	
-	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
-		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
+	for (<r, _> <- removals.declarations) {
+		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
 			snippet1 = ""; 
 			snippet2 = "";
 			
@@ -52,8 +52,8 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
 	additions = diff.additions;
 	result = {};
 
-	for (<contr, r> <- removals.containment, removals.declarations[r] != {}) {
-		for (<conta, a> <- additions.containment, r.scheme == a.scheme, additions.declarations[a] != {}) {
+	for (<r, _> <- removals.declarations) {
+		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
 			set[loc] d = {};
 			set[loc] e = {};
 
