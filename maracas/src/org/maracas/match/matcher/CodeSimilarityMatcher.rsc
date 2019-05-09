@@ -38,7 +38,7 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
 			
 			similarity = levenshteinSimilarity(snippet1, snippet2);					
 			if (similarity > threshold) { 
-				result += <r, a, similarity, MATCH_LEVENSHTEIN>;
+				result += buildMapping(r, a, similarity, MATCH_LEVENSHTEIN);
 				continue;
 			}
 		}
@@ -78,7 +78,7 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
 				real score = jaccard(d, e);
 				// Hard assumption: Assuming that the first match is the right one
 				if (score > threshold) {
-					result += <r, a, score, MATCH_JACCARD>;
+					result += buildMapping(r, a, score, MATCH_JACCARD);
 					continue;
 				}
 			}

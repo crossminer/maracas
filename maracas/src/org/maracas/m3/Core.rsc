@@ -157,40 +157,58 @@ M3 fillDefaultVisibility(M3 m3) {
 
 M3 filterAnonymousClasses(M3 m)
 	= filterM3(m, 
-		bool (value v) {
-			if (loc l := v)
-				return /\$[0-9]+/ !:= l.uri;
-			return true;
-		},
-		predicateConjunction);
+		bool (value v1, value v2) {
+			return isAnonymousClass(v1) && isAnonymousClass(v2);
+		});
+
+private bool isAnonymousClass (value v) {
+	if (loc l := v)
+		return /\$[0-9]+/ !:= l.uri;
+	return true;
+}
 
 M3 filterM3(M3 m, set[loc] elems) 
 	= filterM3(m, 
-		bool (value v) {
-			return v in elems;
-		},
-		predicateDisjunction);
+		bool (value v1, value v2) {
+			return v1 in elems || v2 in elems;
+		});
 
+/**
+ * Filters out all tuples <a, b> from every relation
+ * of the M3 model 'm' where neither 'a' nor 'b' are in
+ * the 'elems' set. 
+ */
 M3 filterXM3(M3 m, set[loc] elems) 
 	= filterM3(m, 
-		bool (value v) {
-			return v notin elems;
-		},
-		predicateConjunction);
+		bool (value v1, value v2) {
+			return v1 notin elems && v2 notin elems;
+		});
 
-private bool predicateConjunction(bool a, bool b)
-	= a && b;
+/**
+ * Filters out all tuples <a, b> from every relation
+ * of the M3 model 'm' where neither 'a' nor 'b' are in
+ * the 'elems' set. 
+ */
+M3 filterXM3WithExcpetions(M3 m, set[loc] elems, set[loc] excep) 
+	= filterM3(m,
+		bool(value v1, value v2) {
+			if (v1 notin elems && v2 in elems) {
+				return v1 in excep;
+			}
+			else if (v2 notin elems && v1 in elems) {
+				return v2 in excep;
+			}
+			else {
+				return v1 notin elems && v2 notin elems;
+			}
+		});
 
-private bool predicateDisjunction(bool a, bool b)
-	= a || b;
-
-	
 /**
  * Filter out all tuples <a, b> from every relation
- * of the M3 model 'm' for which either predicate(a)
- * or predicate(b) does not hold
+ * of the M3 model 'm' for which predicate(a, b)
+ * does not hold
  */
-private M3 filterM3(M3 m, bool (value v) predicate, bool (bool, bool) predicateRel) {
+private M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 	m3Filtered = lang::java::m3::Core::m3(m.id);
 
 	map[str, value] kws = getKeywordParameters(m);
@@ -198,7 +216,7 @@ private M3 filterM3(M3 m, bool (value v) predicate, bool (bool, bool) predicateR
 		value v = kws[relName];
 
 		if (rel[value, value] relation := v)
-			kws[relName] = { <a, b> | <a, b> <- relation, predicateRel(predicate(a), predicate(b)) };
+			kws[relName] = { <a, b> | <a, b> <- relation, predicate(a, b) };
 	};
 
 	return setKeywordParameters(m3Filtered, kws);

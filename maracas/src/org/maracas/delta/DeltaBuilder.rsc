@@ -154,9 +154,10 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 	diff = filterDiffMoved(diff, delta);
 	removals = diff.removals;
 	additions = diff.additions;
+	declarations = domain(removals.declarations);
 	result = {};
 	
-	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, isTargetMember(elem)) {
+	for (<_, elem> <- removals.containment, elem in declarations, isTargetMember(elem)) {
 		diffTemp = diff;
 		diffTemp.removals = filterM3(removals, {elem});
 		result += applyMatchers(diffTemp, delta.options, MATCHERS);
@@ -169,9 +170,11 @@ private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
 	elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
 					+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
 	elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
-		
-	diff.removals = filterXM3(diff.removals, elemsRemovals);
-	diff.additions = filterXM3(diff.additions, elemsAdditions);
+	excepRemovals = domain(diff.removals.declarations);
+	excepAdditions = domain(diff.additions.declarations);
+	
+	diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
+	diff.additions = filterXM3WithExcpetions(diff.additions, elemsAdditions, excepAdditions);
 
 	return diff;
 }
