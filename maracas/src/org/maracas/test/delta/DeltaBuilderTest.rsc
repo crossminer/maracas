@@ -15,21 +15,28 @@ loc api0 = |project://maracas/src/org/maracas/test/data/minimalbc.1.0.jar|;
 loc api1 = |project://maracas/src/org/maracas/test/data/minimalbc.1.1.jar|;
 
 Delta delta = delta(api0, api1);
-Delta fdelta = fieldDelta(delta);
-Delta mdelta = methodDelta(delta);
-Delta cdelta = classDelta(delta);
+public Delta fdelta = fieldDelta(delta);
+public Delta mdelta = methodDelta(delta);
+public Delta cdelta = classDelta(delta);
 
 
 //----------------------------------------------
 // Changed access modifier tests
 //----------------------------------------------
 test bool fieldAccessModifiers() 
-	= fdelta.accessModifiers == {
+	= fdelta.accessModifiers >= {
 		<|java+field:///p1/ChangedAccessModifier3/field1|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field2|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3/field3|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
 
+test bool fieldAccessModifiersInnerClass() 
+	= fdelta.accessModifiers >= {
+		<|java+field:///p1/ChangedAccessModifier3$Inner/ifield1|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
+    	<|java+field:///p1/ChangedAccessModifier3$Inner/ifield2|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
+    	<|java+field:///p1/ChangedAccessModifier3$Inner/ifield3|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
+	};
+    
 test bool methodAccessModifiers() 
 	= mdelta.accessModifiers == {
 		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
@@ -147,6 +154,15 @@ test bool fieldDeprecated() {
 //----------------------------------------------
 // Renamed tests
 //----------------------------------------------
+test bool fieldRenamed() {
+	renamed = fdelta.renamed.mapping <0,1>;
+	return renamed == {
+    	<|java+field:///p2/Renamed3/dog|,|java+field:///p2/Renamed3/doggy|>,
+    	<|java+field:///p2/Renamed3/farm|,|java+field:///p2/Renamed3/familyFarm|>,
+    	<|java+field:///p2/Renamed3/house|,|java+field:///p2/Renamed3/myHouse|>
+	};
+}
+
 test bool methodRenamed() {
 	renamed = mdelta.renamed.mapping <0,1>;
 	return renamed == {
@@ -165,6 +181,18 @@ test bool classRenamed() {
 //----------------------------------------------
 // Moved tests
 //----------------------------------------------
+test bool fieldMoved() {
+	moved = fdelta.moved.mapping <0,1>;
+	return moved >= {
+		<|java+field:///p2/Moved1/f1|,|java+field:///p2_1/Moved1/f1|>,
+		<|java+field:///p2/Moved1/f2|,|java+field:///p2_1/Moved1/f2|>,
+		<|java+field:///p2/Moved1/f3|,|java+field:///p2_1/Moved1/f3|>,
+		<|java+field:///p2/Moved1/f4|,|java+field:///p2_1/Moved1/f4|>,
+		<|java+field:///p2/Moved1/f5|,|java+field:///p2_1/Moved1/f5|>,
+		<|java+field:///p2/Moved1/f6|,|java+field:///p2_1/Moved1/f6|>
+	};
+}
+
 test bool methodMoved() {
 	moved = mdelta.moved.mapping <0,1>;
 	return moved >= {

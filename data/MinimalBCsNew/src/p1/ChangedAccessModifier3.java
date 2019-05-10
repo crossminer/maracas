@@ -10,9 +10,9 @@ public class ChangedAccessModifier3 {
 	public String field6;
 	
 	class Inner {
-		protected int field1;
-		public int field2;
-		private String field3;
+		protected int ifield1;
+		public int ifield2;
+		private String ifield3;
 		private int ifield4;
 		protected int ifield5;
 		public String ifield6;
