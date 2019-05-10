@@ -11,45 +11,25 @@ import org::maracas::match::metric::StringSimilarity;
 import Set;
 
 
-set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
-	M3 removals = diff.removals;
-	M3 additions = diff.additions;
-	result = {};
+set[Mapping[loc]] levenshteinSnippetMatch(M3Diff diff, real threshold) 
+	= levenshteinMatch(diff, threshold, createSnippet);
+
+str createSnippet(loc elem, M3 owner)
+	= (owner.id.extension == "jar") 
+	? createSnippetForJar(elem, owner)
+	: createSnippetForSourceCode(elem, owner);
+
+// We don't take into account declarations ordering 
+private str createSnippetForJar(loc elem, M3 owner) 
+	= memberDeclaration(elem, owner)
+	+ toString(sort(owner.containment[elem]))
+	+ toString(sort(owner.methodInvocation[elem]))
+	+ toString(sort(owner.fieldAccess[elem]));
 	
-	for (<r, _> <- removals.declarations) {
-		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
-			str snippet1 = ""; 
-			str snippet2 = "";
-			
-			if (additions.id.extension == "jar") {
-				// Considering contained declaration locs
-				// Warning: we don't take into account declarations ordering 
-				snippet1 = memberDeclaration(r, diff.from)
-					+ toString(sort(removals.containment[r]))
-					+ toString(sort(removals.methodInvocation[r]))
-					+ toString(sort(removals.fieldAccess[r]));
-					
-				snippet2 = memberDeclaration(a, diff.to)
-					+ toString(sort(additions.containment[a]))
-					+ toString(sort(additions.methodInvocation[a]))
-					+ toString(sort(additions.fieldAccess[a]));
-			}
-			else {
-				snippet1 = readFile(getFirstFrom(removals.declarations[r]));
-				snippet2 = readFile(getFirstFrom(additions.declarations[a]));
-			}
-			
-			similarity = levenshteinSimilarity(snippet1, snippet2);					
-			if (similarity > threshold) { 
-				result += buildMapping(r, a, similarity, MATCH_LEVENSHTEIN);
-				continue;
-			}
-		}
-	}
-	return result;
-}
-
-
+private str createSnippetForSourceCode(loc elem, M3 owner) 
+	= readFile(getOneFrom(owner.declarations[elem]));
+	
+	
 set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
 	removals = diff.removals;
 	additions = diff.additions;

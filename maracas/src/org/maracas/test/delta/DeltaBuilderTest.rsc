@@ -36,17 +36,27 @@ test bool fieldAccessModifiersInnerClass()
     	<|java+field:///p1/ChangedAccessModifier3$Inner/ifield2|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+field:///p1/ChangedAccessModifier3$Inner/ifield3|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
-    
+
+test bool fieldAccessModifiersSize() 
+	= size(fdelta.accessModifiers) == 6;
+	    
 test bool methodAccessModifiers() 
-	= mdelta.accessModifiers == {
+	= mdelta.accessModifiers >= {
 		<|java+method:///p1/ChangedAccessModifier2/m1()|,<\public(),\private(),1.0,MATCH_SIGNATURE>>,
     	<|java+method:///p1/ChangedAccessModifier2/m3()|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
-    	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
+    	<|java+method:///p1/ChangedAccessModifier2/m2()|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>
+    };
+	
+test bool methodAccessModifiersInnerClass() 
+	= mdelta.accessModifiers >= {
     	<|java+constructor:///p1/ChangedAccessModifier1$Inner3/ChangedAccessModifier1$Inner3(p1.ChangedAccessModifier1)|,<\protected(),\public(),1.0,MATCH_SIGNATURE>>,
     	<|java+constructor:///p1/ChangedAccessModifier1$Inner2/ChangedAccessModifier1$Inner2(p1.ChangedAccessModifier1)|,<\private(),\protected(),1.0,MATCH_SIGNATURE>>,
     	<|java+constructor:///p1/ChangedAccessModifier1$Inner1/ChangedAccessModifier1$Inner1(p1.ChangedAccessModifier1)|,<\public(),\private(),1.0,MATCH_SIGNATURE>>
 	};
 
+test bool methodAccessModifiersSize()
+	= size(mdelta.accessModifiers) == 6;
+	
 // FIXME: the jar M3 always identifies a public inner class. Is it an error, or just the compiler?
 // java+constructor can be used
 test bool classAccessModifiers() { 
@@ -56,6 +66,9 @@ test bool classAccessModifiers() {
 	};
 }
 
+test bool classAccessModifiers()
+	= size(cdelta.accessModifiers) == 2;
+	
 
 //----------------------------------------------
 // Changed final modifier tests
@@ -262,7 +275,7 @@ test bool paramLists2() {
     return changedParamList(meth, from, to);
 }
 
-bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
+private bool changedParamList(loc meth, list[TypeSymbol] from, list[TypeSymbol] to) {
 	if (mdelta.paramLists[meth] != {}) {
 		tuple[list[TypeSymbol] from, list[TypeSymbol] to, real conf, str meth] mapping 
 			= getOneFrom(mdelta.paramLists[meth]);

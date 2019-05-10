@@ -200,7 +200,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, map[str,str] options, str opti
 	if (matchers != []) {
 		for (m <- matchers) {  
 			switch (trim(m)) {
-				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
+				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinSnippetMatch);
 				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
 				default : currentMatcher = matcher(jaccardMatch);
 			}

@@ -5,23 +5,8 @@ import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
 
 
-set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) {
-	removals = diff.removals;
-	additions = diff.additions;
-	result = {};
-	
-	for (<r, _> <- removals.declarations) {
-		for (<a, _> <- additions.declarations, r.scheme == a.scheme) {
-			similarity = levenshteinSimilarity(
-			                    memberDeclaration(r, diff.from), 
-			                    memberDeclaration(a, diff.to)
-			           );					
-			
-			if (similarity > threshold) { 
-				result += buildMapping(r, a, similarity, MATCH_LEVENSHTEIN);
-				continue;
-			}
-		}
-	}
-	return result;
-}
+set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold) 
+	= levenshteinMatch(diff, threshold, createSnippet);
+
+private str createSnippet(loc elem, M3 owner)
+	= memberDeclaration(elem, owner);
