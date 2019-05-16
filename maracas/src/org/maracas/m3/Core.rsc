@@ -6,19 +6,35 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::io::File;
+import List;
+import Node;
 import Relation;
 import Set;
 import String;
 import Type;
 import ValueIO;
-import Node;
-import Type;
 
 // extends lang::java::m3::AST::Modifier
 // Could be moved to M3 creation itself
 // but this is the quickest way :)
 data Modifier =
 	\defaultAccess();
+
+
+@memo map[loc, set[loc]] memoizedDeclarations(M3 m) = toMap(m.declarations);
+@memo map[loc, set[TypeSymbol]] memoizedTypes(M3 m) = toMap(m.types);
+@memo map[loc, set[loc]] memoizedContainment(M3 m) = toMap(m.containment);
+@memo map[loc, set[Modifier]] memoizedModifiers(M3 m) = toMap(m.modifiers);
+@memo map[loc, set[loc]] memoizedExtends(M3 m) = toMap(m.extends);
+@memo map[loc, set[loc]] memoizedImplements(M3 m) = toMap(m.implements);
+@memo map[loc, set[loc]] memoizedMethodInvocation(M3 m) = toMap(m.methodInvocation);
+@memo map[loc, set[loc]] memoizedFieldAccess(M3 m) = toMap(m.fieldAccess);
+
+list[value] getM3SortValue(loc elem, map[loc, set[value]] m) 
+	= (elem in m) ? sort(m[elem]) : [];
+
+str getM3SortString(loc elem, map[loc, set[value]] m) 
+	= toString(getM3SortValue(elem, m));
 
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
@@ -306,10 +322,10 @@ str memberDeclaration(loc elem, M3 m) {
 
 str typeDeclaration(loc typ, M3 m) {
 	if (isType(typ)) {
-		list[Modifier] modifiers = sort(m.modifiers[typ]);
+		list[Modifier] modifiers = sort(memoizedModifiers(m)[typ]);
 		str name = memberName(typ);
-		set[loc] super = m.extends[typ];
-		list[loc] interfaces = sort(m.implements[typ]);
+		set[loc] super = (typ in memoizedExtends(m)) ? memoizedExtends(m)[typ] : {};
+		list[loc] interfaces = (typ in memoizedImplements(m)) ? sort(memoizedImplements(m)[typ]) : [];
 		
 		return "<modifiers> <name> <super> <interfaces>";
 	}
@@ -320,8 +336,8 @@ str typeDeclaration(loc typ, M3 m) {
 
 str methodDeclaration(loc meth, M3 m) {
 	if (isMethod(meth)) {
-		list[Modifier] modifiers = sort(m.modifiers[meth]);
-		TypeSymbol methType = getOneFrom(m.types[meth]);
+		list[Modifier] modifiers = sort(memoizedModifiers(m)[meth]);
+		TypeSymbol methType = getOneFrom(memoizedTypes(m)[meth]);
 		TypeSymbol returnType = methodReturnType(methType);
 		str signature = methodSignature(meth);
 		
@@ -334,8 +350,8 @@ str methodDeclaration(loc meth, M3 m) {
 
 str fieldDeclaration(loc field, M3 m) {
 	if (isField(field)) {
-		list[Modifier] modifiers = sort(m.modifiers[field]);
-		set[TypeSymbol] fieldType = m.types[field];
+		list[Modifier] modifiers = sort(memoizedModifiers(m)[field]);
+		set[TypeSymbol] fieldType = memoizedTypes(m)[field];
 		str name = memberName(field);
 		
 		return "<modifiers> <fieldType> <name>";

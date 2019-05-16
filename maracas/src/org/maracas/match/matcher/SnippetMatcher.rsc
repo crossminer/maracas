@@ -21,13 +21,12 @@ str createSnippet(loc elem, M3 owner)
 
 // We don't take into account declarations ordering 
 private str createSnippetForJar(loc elem, M3 owner) 
-	= memberDeclaration(elem, owner)
-	+ toString(sort(owner.containment[elem]))
-	+ toString(sort(owner.methodInvocation[elem]))
-	+ toString(sort(owner.fieldAccess[elem]));
+	= getM3SortString(elem, memoizedContainment(owner))
+	+ getM3SortString(elem, memoizedMethodInvocation(owner))
+	+ getM3SortString(elem, memoizedFieldAccess(owner));
 	
 private str createSnippetForSourceCode(loc elem, M3 owner) 
-	= readFile(getOneFrom(owner.declarations[elem]));
+	= readFile(getFirstFrom(memoizedDeclarations(owner)[elem]));
 	
 	
 set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold) {
