@@ -24,11 +24,15 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 	println("Pruning breaking changes...");
 	d = breakingChanges(d);
 
-	if (serializeDelta)
+	if (serializeDelta) {
+		println("Serializing Delta model...");
 		writeBinaryValueFile(report + "Delta.delta", d);
+	}
 
-	if (serializeHtml)
+	if (serializeHtml) {
+		println("Serializing HTML report...");
 		writeHtml(report + "Delta.html", d);
+	}
 
 	int i = 0;
 	for (client <- clients) {
