@@ -14,6 +14,7 @@ import util::ValueUI;
 //----------------------------------------------
 
 data Detection = detection (
+	loc jar,
 	loc elem,
 	loc used,
 	Mapping[&T] mapping, 
@@ -158,12 +159,12 @@ private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, Del
 		+ rangeR(client.implements, domain) // Transitive closure?
 		+ rangeR(client.extends, domain);   // Transitive closure?
 		
-	return { detection(elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
+	return { detection(client.id, elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
 }
 
 bool isInDetections(loc elem, loc used, DeltaType typ, set[Detection] detections) {
 	for (d <- detections) {
-		if (detection(elem, used, _, typ) := d) {
+		if (detection(_, elem, used, _, typ) := d) {
 			return true;
 		}
 	}
