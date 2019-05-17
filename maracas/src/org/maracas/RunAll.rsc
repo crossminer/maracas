@@ -55,6 +55,14 @@ rel[str, set[Detection]] parseDetectionFiles(loc report) {
 	return result;
 }
 
+Delta parseDeltaFile(loc report) {
+	loc d = report + "Delta.delta";
+
+	if (isFile(d))
+		return readBinaryValueFile(#Delta, d);
+	else throw "<d> not found";
+}
+
 set[loc] walkJARs(loc dataset) {
 	set[loc] result = {};
 
