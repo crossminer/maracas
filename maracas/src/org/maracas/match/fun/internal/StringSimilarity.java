@@ -1,4 +1,4 @@
-package org.maracas.match.metric.internal;
+package org.maracas.match.fun.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
 

@@ -149,18 +149,7 @@ private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
 
 private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 	diff = filterDiffMoved(diff, delta);
-	removals = diff.removals;
-	additions = diff.additions;
-	declarations = domain(removals.declarations);
-	result = {};
-	
-	for (<_, elem> <- removals.containment, elem in declarations, isTargetMember(elem)) {
-		diffTemp = diff;
-		diffTemp.removals = filterM3(removals, {elem});
-		result += applyMatchers(diffTemp, delta.options, MATCHERS);
-	}
-	
-	return result;
+	return applyMatchers(diff, delta.options, MATCHERS);
 }
 
 private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {

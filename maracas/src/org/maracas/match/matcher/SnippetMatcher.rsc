@@ -7,21 +7,35 @@ import org::maracas::delta::Delta;
 import org::maracas::config::Options;
 import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
-import org::maracas::match::metric::StringSimilarity;
+import org::maracas::match::fun::StringSimilarity;
+import org::maracas::match::struc::Data;
+import Relation;
 import Set;
 
 
 set[Mapping[loc]] levenshteinSnippetMatch(M3Diff diff, real threshold) 
-	= levenshteinMatch(diff, threshold, createSnippet);
+	= levenshteinMatch(diff, createRepresentation(diff, threshold));
+
+Data createRepresentation(M3Diff diff, real threshold) {
+	dat = string();
+	dat.threshold = threshold;
+	dat.from = createSnippets(domain(diff.removals.declarations), diff.from);
+	dat.to = createSnippets(domain(diff.additions.declarations), diff.to);
+	return dat;
+}
 
 str createSnippet(loc elem, M3 owner)
 	= (owner.id.extension == "jar") 
 	? createSnippetForJar(elem, owner)
 	: createSnippetForSourceCode(elem, owner);
 
+map[loc, str] createSnippets(set[loc] declarations, M3 m)
+	= (d : createSnippet(d, m) | d <- declarations, isTargetMember(d));
+
 // We don't take into account declarations ordering 
 private str createSnippetForJar(loc elem, M3 owner) 
-	= getM3SortString(elem, memoizedContainment(owner))
+	= memberDeclaration(elem, owner)
+	+ getM3SortString(elem, memoizedContainment(owner))
 	+ getM3SortString(elem, memoizedMethodInvocation(owner))
 	+ getM3SortString(elem, memoizedFieldAccess(owner));
 	
