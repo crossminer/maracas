@@ -169,7 +169,7 @@ test bool fieldDeprecated() {
 //----------------------------------------------
 test bool fieldRenamed() {
 	renamed = fdelta.renamed.mapping <0,1>;
-	return renamed == {
+	return renamed >= {
     	<|java+field:///p2/Renamed3/dog|,|java+field:///p2/Renamed3/doggy|>,
     	<|java+field:///p2/Renamed3/farm|,|java+field:///p2/Renamed3/familyFarm|>,
     	<|java+field:///p2/Renamed3/house|,|java+field:///p2/Renamed3/myHouse|>
@@ -178,7 +178,7 @@ test bool fieldRenamed() {
 
 test bool methodRenamed() {
 	renamed = mdelta.renamed.mapping <0,1>;
-	return renamed == {
+	return renamed >= {
 		<|java+method:///p2/Renamed2/m3(java.lang.String%5B%5D)|,|java+method:///p2/Renamed2/m4(java.lang.String%5B%5D)|>
 	};
 }

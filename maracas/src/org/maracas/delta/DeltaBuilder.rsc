@@ -10,8 +10,8 @@ import org::maracas::delta::Delta;
 import org::maracas::io::properties::IO;
 import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
-import org::maracas::match::matcher::SnippetMatcher;
 import org::maracas::match::matcher::Matcher;
+import org::maracas::match::matcher::Matchers;
 import Relation;
 import Set;
 import String;
@@ -189,7 +189,7 @@ rel[loc, Mapping[loc]] applyMatchers(M3Diff diff, map[str,str] options, str opti
 	if (matchers != []) {
 		for (m <- matchers) {  
 			switch (trim(m)) {
-				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinSnippetMatch);
+				case MATCH_LEVENSHTEIN : currentMatcher = matcher(levenshteinMatch);
 				case MATCH_JACCARD : currentMatcher = matcher(jaccardMatch); 
 				default : currentMatcher = matcher(jaccardMatch);
 			}
