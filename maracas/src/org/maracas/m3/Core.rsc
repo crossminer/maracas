@@ -30,6 +30,15 @@ data Modifier =
 @memo map[loc, set[loc]] memoizedMethodInvocation(M3 m) = toMap(m.methodInvocation);
 @memo map[loc, set[loc]] memoizedFieldAccess(M3 m) = toMap(m.fieldAccess);
 
+set[value] getUniqueDomain(rel[value, value] from, rel[value, value] to) {
+	fromDomain = domain(from);
+	toDomain = domain(to);
+	return fromDomain - (fromDomain & toDomain);
+}
+
+set[value] getM3Set(loc elem, map[loc, set[value]] m) 
+	= (elem in m) ? m[elem] : {};
+	
 list[value] getM3SortValue(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? sort(m[elem]) : [];
 
