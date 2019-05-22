@@ -13,8 +13,8 @@ public class A {
 	public int fPublicToDefault;
 	
 	public int fDeprecated;
-	public String fFinalModifierAdded;
-	public final String fFinalModifierRemoved = "";
+	public String fFinalModifierAdded = "";
+	public final String fFinalModifierRemoved;
 	float fStaticModifierAdded;
 	static float fStaticModifierRemoved;
 	public String fStringToInt;
