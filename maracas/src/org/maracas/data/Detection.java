@@ -18,7 +18,7 @@ public class Detection {
 	private final Type type;
 	private final double score;
 
-	public Detection(String client, String oldLibrary, String newLibrary, Type type, double score) {
+	protected Detection(String client, String oldLibrary, String newLibrary, Type type, double score) {
 		this.clientLocation = client;
 		this.oldLibraryLocation = oldLibrary;
 		this.newLibraryLocation = newLibrary;
