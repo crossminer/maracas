@@ -113,14 +113,14 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 	additions = diff.additions;
 	result = {};
 	
-	for (<cont, elem> <- removals.containment, removals.declarations[elem] != {}, isTargetMember(elem)) {
+	for (<cont, elem> <- removals.containment, elem in diff.removedDecls, isTargetMember(elem)) {
 		// In type cases we need the owner package instead of its compilation unit.
 		if (isCompilationUnit(cont)) {
 			cont = getOneFrom(invert(removals.containment)[cont]);
 		}
 		
 		elemsSameCont = {};
-		for (a <- additions.containment[cont], additions.declarations[a] != {}) {
+		for (a <- additions.containment[cont], a in diff.addedDecls) {
 			if (isCompilationUnit(a)) {
 				a = getOneFrom(additions.containment[a]);
 			}
