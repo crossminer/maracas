@@ -104,7 +104,6 @@ set[loc] uses(M3 m, loc decl)
 	+ m.implements[decl]
 	+ m.extends[decl]; 
 
-
 loc replacement(detection(_, elem, _, _, accessModifiers())) = elem; // If it's now private, maps to nothing, if protected, depends on IoC
 loc replacement(detection(_, elem, _, _, finalModifiers())) = elem; // Depends on IoC (?)
 loc replacement(detection(_, elem, _, _, staticModifiers())) = elem; // same

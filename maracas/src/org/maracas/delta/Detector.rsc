@@ -57,8 +57,12 @@ private set[Detection] detectionsCore(M3 client, Delta delta)
 	+ detections(client, delta, deprecated())
 	+ detections(client, delta, renamed())
 	+ detections(client, delta, moved())
+<<<<<<< HEAD
 	+ detections(client, delta, removed())
 	+ detections(client, delta, added())
+=======
+	//+ detections(client, delta, removed())
+>>>>>>> tmp
 	;
 
 // Accessing anything that is now access-restricted is problematic, so
