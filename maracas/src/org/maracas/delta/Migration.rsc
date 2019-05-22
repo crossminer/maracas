@@ -97,7 +97,7 @@ loc findJar(loc directory, str name) {
 	return |unknown:///|;
 }
 
-set[loc] uses(M3 m, loc decl)n
+set[loc] uses(M3 m, loc decl)
 	= m.typeDependency[decl]
 	+ m.methodInvocation[decl]
 	+ m.fieldAccess[decl]
