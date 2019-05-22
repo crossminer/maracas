@@ -58,6 +58,11 @@ private set[Detection] detectionsCore(M3 client, Delta delta)
 private set[Detection] detections(M3 client, Delta delta, accessModifiers()) 
 	= detections(client, delta.accessModifiers, accessModifiers());
 
+// Note: Final fields must be initialized locally or in a constructor.
+//       The compiler may inline the initial value where the field is
+//       accessed, rather than explictly accessing the field. It seems
+//       to depend on whether the field is initialized locally (inlined)
+//       or in a construtor (non-inlined). Also, probably compiler-dependent.
 private set[Detection] detections(M3 client, Delta delta, finalModifiers()) 
 	= detections(client, delta.finalModifiers, finalModifiers());
 
