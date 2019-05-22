@@ -97,17 +97,17 @@ loc findJar(loc directory, str name) {
 	return |unknown:///|;
 }
 
-set[loc] uses(M3 m, loc decl)
+set[loc] uses(M3 m, loc decl)n
 	= m.typeDependency[decl]
 	+ m.methodInvocation[decl]
 	+ m.fieldAccess[decl]
 	+ m.implements[decl]
 	+ m.extends[decl]; 
 
-loc replacement(detection(_, elem, _, _, accessModifiers())) = elem;
-loc replacement(detection(_, elem, _, _, finalModifiers())) = elem;
-loc replacement(detection(_, elem, _, _, staticModifiers())) = elem;
-loc replacement(detection(_, elem, _, _, abstractModifiers())) = elem;
+loc replacement(detection(_, elem, _, _, accessModifiers())) = elem; // If it's now private, maps to nothing, if protected, depends on IoC
+loc replacement(detection(_, elem, _, _, finalModifiers())) = elem; // Depends on IoC (?)
+loc replacement(detection(_, elem, _, _, staticModifiers())) = elem; // same
+loc replacement(detection(_, elem, _, _, abstractModifiers())) = elem; // Depends on IoC; clients might have their own new implementation; or, most likely, the API now has a new Class that implements the now-abstract method, or...
 loc replacement(detection(_, elem, _, _, paramLists())) = elem; // NOPE, FIXME
 loc replacement(detection(_, elem, _, _, types())) = elem;
 loc replacement(detection(_, elem, _, _, extends())) = elem;
