@@ -23,13 +23,11 @@ set[Mapping[loc]] loadMatches(loc csv) {
 }
 
 set[Mapping[loc]] match(M3Diff diff, Data dat, real (&T, &T) fun) {
-	remDeclarations = getUniqueDomain(diff.removals.declarations, diff.additions.declarations);
-	addDeclarations = getUniqueDomain(diff.additions.declarations, diff.removals.declarations);
 	threshold = dat.threshold;
 	result = {};
 	
-	for (loc r <- remDeclarations, isTargetMember(r)) {
-		for (loc a <- addDeclarations, r.scheme == a.scheme) {	
+	for (loc r <- diff.removedDecls, isTargetMember(r)) {
+		for (loc a <- diff.addedDecls, r.scheme == a.scheme) {	
 			real similarity = fun(dat.from[r], dat.to[a]);
 								
 			if (similarity > threshold) { 

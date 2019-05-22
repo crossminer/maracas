@@ -11,7 +11,8 @@ import org::maracas::io::properties::IO;
 import org::maracas::m3::Core;
 import org::maracas::m3::M3Diff;
 import org::maracas::match::matcher::Matcher;
-import org::maracas::match::matcher::Matchers;
+import org::maracas::match::matcher::JaccardMatcher;
+import org::maracas::match::matcher::LevenshteinMatcher;
 import Relation;
 import Set;
 import String;
@@ -36,8 +37,7 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |project://maracas/config/co
 	delta.moved             = moved(diff, delta);
 	delta.removed           = removed(diff, delta);
 	delta.added             = added(diff, delta);
-	
-	//return postproc(delta);
+
 	return delta;
 }
 
@@ -131,8 +131,10 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 		
 		if (elemsSameCont != {}) {
 			diffTemp = diff;
-			diffTemp.removals = filterM3(removals, {elem});
-			diffTemp.additions = filterM3(additions, elemsSameCont);
+			//diffTemp.removals = filterM3(removals, {elem});
+			//diffTemp.additions = filterM3(additions, elemsSameCont);
+			diffTemp.removedDecls = { elem };
+			diffTemp.addedDecls = elemsSameCont;
 			result += applyMatchers(diffTemp, delta.options, MATCHERS);
 		}
 	}
@@ -140,9 +142,12 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 }
 
 private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
-	elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
-	excepRemovals = domain(diff.removals.declarations);
-	diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
+	//elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
+	//excepRemovals = diff.removedDecls;
+	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
+	diff.removedDecls 
+		= diff.removedDecls 
+		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
 	return diff;
 }
 
@@ -153,15 +158,22 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 }
 
 private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
-	elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
-					+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
-	elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
-	excepRemovals = domain(diff.removals.declarations);
-	excepAdditions = domain(diff.additions.declarations);
+	//elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
+	//				+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
+	//elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
+	//excepRemovals = diff.removedDecls;
+	//excepAdditions = diff.addedDecls;
+	//
+	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
+	//diff.additions = filterXM3WithExcpetions(diff.additions, elemsAdditions, excepAdditions);
+	diff.removedDecls 
+		= diff.removedDecls 
+		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {})
+		- ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {});
+	diff.addedDecls 
+		= diff.addedDecls
+		- ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {});
 	
-	diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
-	diff.additions = filterXM3WithExcpetions(diff.additions, elemsAdditions, excepAdditions);
-
 	return diff;
 }
 
@@ -171,12 +183,12 @@ private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
 // FIXME: match signature?
 private rel[loc, Mapping[loc]] removed(M3Diff diff, Delta delta)
 	= { buildDeltaMapping(e, e, |unknown:///|, 1.0, MATCH_SIGNATURE) 
-	  | <e, _> <- diff.removals.declarations, isTargetMember(e) };
+	  | e <- diff.removedDecls, isTargetMember(e) };
 
 
 private rel[loc, Mapping[loc]] added(M3Diff diff, Delta delta)
 	= { buildDeltaMapping(e, |unknown:///|, e, 1.0, MATCH_SIGNATURE) 
-	  | <e, _> <- diff.additions.declarations, isTargetMember(e) };
+	  | e <- diff.addedDecls, isTargetMember(e) };
 	  
 
 // Default matcher: Jaccard
@@ -281,48 +293,4 @@ rel[loc, Mapping[set[loc]]] implements(M3Diff diff) {
 				1.0,
 				MATCH_SIGNATURE)
 			| typ <- domain(removals.implements) + domain(additions.implements) };
-}
-	
-
-//----------------------------------------------
-// Postprocessing
-//----------------------------------------------
-
-private Delta postproc(Delta delta) {
-	delta = postprocRenamed(delta);
-
-	delta.accessModifiers = { <e, m> | <e, m> <- delta.accessModifiers, include(e) };
-	delta.finalModifiers  = { <e, m> | <e, m> <- delta.finalModifiers,  include(e) };
-	delta.staticModifiers = { <e, m> | <e, m> <- delta.staticModifiers, include(e) };
-	delta.abstractModifiers = { <e, m> | <e, m> <- delta.abstractModifiers, include(e) };
-	delta.moved   = { <e, m> | <e, m> <- delta.moved,   include(e), include(m[0]), include(m[1]) };
-	delta.removed = { <e, m> | <e, m> <- delta.removed, include(e), include(m[0]), include(m[1]) };
-	delta.renamed = { <e, m> | <e, m> <- delta.renamed, include(e), include(m[0]), include(m[1]) };
-	//delta.paramLists  = {<e, m> | <e, m> <- delta.paramLists,  include(e)};
-	//delta.changedReturnType = {<e, m> | <e, m> <- delta.changedReturnType, include(e)};
-	//delta.types       = {<e, m> | <e, m> <- delta.types,       include(e)};
-
-	switch (delta) {
-		case \method(_) : return postprocMethodBC(delta);
-		default : return delta; 
-	}
-}
-
-private bool include(loc l) {
-	return /org\/sonar\/api\/internal\// !:= l.uri;
-}
- 
-private Delta postprocMethodBC(Delta delta) { 
-	delta = postprocChangedParamList(delta);
-	return delta;
-}
-
-private Delta postprocRenamed(Delta delta) {
-	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.renamed.elem));
-	return delta;
-}
-
-private Delta postprocChangedParamList(Delta delta) {
-	delta.removed = domainX(delta.removed, (delta.removed.elem & delta.paramLists.elem));
-	return delta;
 }

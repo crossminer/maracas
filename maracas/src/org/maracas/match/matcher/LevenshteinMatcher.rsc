@@ -20,8 +20,8 @@ set[Mapping[loc]] levenshteinMatch(M3Diff diff, real threshold)
 private Data createData(M3Diff diff, real threshold)
 	= string (
 		threshold = threshold,
-		from = createSnippets(domain(diff.removals.declarations), diff.from),
-		to = createSnippets(domain(diff.additions.declarations), diff.to)
+		from = createSnippets(diff.removedDecls, diff.from),
+		to = createSnippets(diff.addedDecls, diff.to)
 	);
 
 private map[loc, str] createSnippets(set[loc] declarations, M3 m)

@@ -20,8 +20,8 @@ set[Mapping[loc]] jaccardMatch(M3Diff diff, real threshold)
 private Data createData(M3Diff diff, real threshold)
 	= \set (
 		threshold = threshold,
-		from = createSets(domain(diff.removals.declarations), diff.from),
-		to = createSets(domain(diff.additions.declarations), diff.to)
+		from = createSets(diff.removedDecls, diff.from),
+		to = createSets(diff.addedDecls, diff.to)
 	);
 	
 private map[loc, set[loc]] createSets(set[loc] declarations, M3 m) {
