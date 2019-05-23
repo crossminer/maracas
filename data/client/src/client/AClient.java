@@ -2,7 +2,6 @@ package client;
 
 import api.A;
 
-// TODO: IoC
 public class AClient {
 	A a;
 

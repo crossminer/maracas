@@ -1,6 +1,5 @@
 module org::maracas::\test::delta::TestApiOldApiNew
 
-import IO;
 import Set;
 import org::maracas::m3::Core;
 import lang::java::m3::AST;
@@ -22,7 +21,7 @@ Delta fdelta = fieldDelta(delta);
 Delta mdelta = methodDelta(delta);
 Delta cdelta = classDelta(delta);
 
-set[Detection] ds = detections(m3(client), delta);
+set[Detection] ds = detections(m3(client), breakingChanges(delta));
 
 //------------------------
 //        DELTA
@@ -330,14 +329,6 @@ test bool dFieldDeprecated() =
 	    deprecated()
 	) in ds;
 
-test bool dFieldFinalModifierAdded() =
-	detection(
-	    |java+method:///client/AClient/fields()|,
-	    |java+field:///api/A/fFinalModifierAdded|,
-	    <\default(), \final(), 1.0, "signature">,
-	    finalModifiers()
-	) in ds;
-
 // Because of final field inlining, there is no fieldAccess detected for it
 //test bool dFieldFinalModifierRemoved() = 
 //	detection(
@@ -395,22 +386,6 @@ test bool dMethodDeprecated() =
 		deprecated()
 	) in ds;
 
-test bool dMethodFinalModifierAdded() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mFinalModifierAdded()|,
-		<\default(), \final(), 1.0, "signature">,
-		finalModifiers()
-	) in ds;
-
-test bool dMethodFinalModifierRemoved() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mFinalModifierRemoved()|,
-		<\final(), \default(), 1.0, "signature">,
-		finalModifiers()
-	) in ds;
-
 test bool dMethodMoved() = // Just checking the best candidate, but there might be others
 	detection(
 		|java+method:///client/AClient/methods()|,
@@ -441,4 +416,36 @@ test bool dMethodParameterRemoved() =
 		|java+method:///api/A/mParameterRemoved(int,int)|,
 		<[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">,
 		paramLists()
+	) in ds;
+
+test bool dHollywoodClass() =
+	detection(
+		|java+class:///client/HollywoodClassClient|,
+		|java+class:///api/HollywoodClass|,
+		<|unknown:///|, |java+method:///api/HollywoodClass/bar()|, 1.0, "signature">,
+		added()
+	) in ds;
+
+test bool dHolywoodInterface() =
+	detection(
+		|java+class:///client/HollywoodInterfaceClient|,
+		|java+interface:///api/HollywoodInterface|,
+		<|unknown:///|, |java+method:///api/HollywoodInterface/bar()|, 1.0, "signature">,
+		added()
+	) in ds;
+
+test bool dClassFinalModifierAdded() =
+	detection(
+		|java+class:///client/ClientFinalModifierAdded|,
+		|java+class:///api/FinalModifierAdded|,
+		<\default(), \final(), 1.0, "signature">,
+		finalModifiers()
+	) in ds;
+
+test bool dMethodFinalModifierAdded() =
+	detection(
+		|java+method:///client/MethodFinalModifierAdded/mFinalModifierAdded()|,
+		|java+method:///api/A/mFinalModifierAdded()|,
+		<\default(), \final(), 1.0, "signature">,
+		finalModifiers()
 	) in ds;

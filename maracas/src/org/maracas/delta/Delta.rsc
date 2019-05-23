@@ -3,7 +3,8 @@ module org::maracas::delta::Delta
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::m3::Core;
-
+import Relation;
+import Set;
 
 data Delta (
 	rel[loc elem, Mapping[Modifier] mapping] accessModifiers = {},
@@ -29,7 +30,6 @@ alias Mapping[&T]
 		real conf,
 		str method
 	];
-
 
 Delta getClassDelta(Delta delta)
 	= getFilteredDelta(delta, isType);	
@@ -58,7 +58,6 @@ private Delta getFilteredDelta(Delta delta, bool (loc) fun) {
 	return delta;
 }
 
-
 tuple[loc, Mapping[&T]] buildDeltaMapping(loc elem, &T from, &T to, real score, str meth)
 	= <elem, buildMapping(from, to, score, meth)>;
 
@@ -67,3 +66,46 @@ tuple[loc, Mapping[&T]] buildDeltaMapping(loc elem, Mapping[&T] mapping)
 	
 Mapping[&T] buildMapping(&T from, &T to, real score, str meth)
 	= <from, to, score, meth>;
+
+Delta breakingChanges(Delta delta) {
+	M3 m3from = m3(delta.id.from);
+	M3 m3to   = m3(delta.id.to);
+
+	delta.accessModifiers   = { <e, m> | <e, m> <- delta.accessModifiers,   isAPI(m3from, e), !isAPI(m3to, e) };
+	delta.finalModifiers    = { <e, m> | <e, m> <- delta.finalModifiers,    isAPI(m3from, e), m[1] == \final() };
+	delta.staticModifiers   = { <e, m> | <e, m> <- delta.staticModifiers,   isAPI(m3from, e) }; // Just a warning if miscalling a static method in a non-static way
+	delta.abstractModifiers = { <e, m> | <e, m> <- delta.abstractModifiers, isAPI(m3from, e), m[1] == \abstract() };
+	delta.paramLists        = { <e, m> | <e, m> <- delta.paramLists,        isAPI(m3from, e) }; // May not be BC do to subtyping, autoboxing, etc.
+	delta.types             = { <e, m> | <e, m> <- delta.types,             isAPI(m3from, e) }; // May not be BC do to subtyping, autoboxing, etc.
+	delta.extends           = { <e, m> | <e, m> <- delta.extends,           isAPI(m3from, e) };
+	delta.implements        = { <e, m> | <e, m> <- delta.implements,        isAPI(m3from, e) };
+	delta.deprecated        = { <e, m> | <e, m> <- delta.deprecated,        isAPI(m3from, e) }; // Included as BC for now, though not really
+	delta.renamed           = { <e, m> | <e, m> <- delta.renamed,           isAPI(m3from, e) };
+	delta.moved             = { <e, m> | <e, m> <- delta.moved,             isAPI(m3from, e) };
+	delta.removed           = { <e, m> | <e, m> <- delta.removed,           isAPI(m3from, e) };
+	delta.added             = { <e, m> | <e, m> <- delta.added,             mayBeHookMethod(m3to, e) };
+
+	return delta;
+}
+
+bool isAPI(M3 m, loc elem) { // FIXME: check the whole visibility path for nested elements
+	if (isType(elem) || isEnum(elem))    // public or default, ie. package-private
+		return \public() in m.modifiers[elem];
+	if (isMethod(elem) || isField(elem)) // private, protected, public, or default
+		return {\public(), \protected()} & m.modifiers[elem] != {}
+			&& isAPI(m, getOneFrom(invert(m.containment)[elem]));
+	return false;
+}
+
+bool mayBeHookMethod(M3 m, loc elem) {
+	if (!isMethod(elem))
+		return false;
+
+	loc typ = getOneFrom(invert(m.containment)[elem]);
+	
+	return isAPI(m, typ)                     // The method belongs to a public type
+		&& \abstract() in m.modifiers[elem]; // and the method is abstract
+		                                     // (don't need other checks, since if the method
+		                                     // is abstract, the type is too, hence it cannot
+		                                     // be final)
+}

@@ -21,6 +21,9 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 	println("Computing Delta model...");
 	Delta d = delta(libv1, libv2);
 
+	println("Pruning breaking changes...");
+	d = breakingChanges(d);
+
 	if (serializeDelta)
 		writeBinaryValueFile(report + "Delta.delta", d);
 

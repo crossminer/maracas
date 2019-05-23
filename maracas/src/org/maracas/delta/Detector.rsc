@@ -1,10 +1,12 @@
 module org::maracas::delta::Detector
 
-import IO;
+import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::Delta;
+import org::maracas::m3::Core;
 import Relation;
-
+import Set;
+import IO;
 
 //----------------------------------------------
 // ADT
@@ -30,6 +32,7 @@ data DeltaType
 	| renamed()
 	| moved()
 	| removed()
+	| added()
 	;
 	
 
@@ -53,18 +56,45 @@ private set[Detection] detectionsCore(M3 client, Delta delta)
 	+ detections(client, delta, renamed())
 	+ detections(client, delta, moved())
 	+ detections(client, delta, removed())
+	+ detections(client, delta, added())
 	;
 
+// Accessing anything that is now access-restricted is problematic, so
+// defer to the generic detections() function
 private set[Detection] detections(M3 client, Delta delta, accessModifiers()) 
 	= detections(client, delta.accessModifiers, accessModifiers());
 
+// The only problematic cases are if the client overrides a now-final method
+// or extends a now-final class
+//
 // Note: Final fields must be initialized locally or in a constructor.
 //       The compiler may inline the initial value where the field is
 //       accessed, rather than explictly accessing the field. It seems
 //       to depend on whether the field is initialized locally (inlined)
 //       or in a construtor (non-inlined). Also, probably compiler-dependent.
-private set[Detection] detections(M3 client, Delta delta, finalModifiers()) 
-	= detections(client, delta.finalModifiers, finalModifiers());
+private set[Detection] detections(M3 client, Delta delta, finalModifiers()) {
+	M3 m3to = m3(delta.id.to);
+	set[Detection] result = {};
+
+	for (<loc f, Mapping[&T] mapping> <- delta.finalModifiers) {
+		if (isClass(f))
+			// Look for extending classes
+			// TODO: Transitive closure?
+			result += { detection(elem, f, mapping, finalModifiers()) | <loc elem, f> <- client.extends };
+		
+		if (isMethod(f)) {
+			// client.methodOverrides is scoped by the client, so we don't know which API methods it's overriding
+			// stupid workaround: look for methods of the same name in classes that extend the parent API class
+			// TODO: transitive closure
+			loc cont = getOneFrom(invert(m3to.containment)[f]);
+			result += { detection(elem, f, mapping, finalModifiers()) | <loc cls, elem> <- client.containment,
+																		<cls, cont> <- client.extends,
+																		invert(client.names)[elem] == invert(m3to.names)[f] };
+		}
+	}
+
+	return result;
+}
 
 private set[Detection] detections(M3 client, Delta delta, staticModifiers()) 
 	= detections(client, delta.staticModifiers, staticModifiers());
@@ -95,14 +125,32 @@ private set[Detection] detections(M3 client, Delta delta, paramLists())
 
 private set[Detection] detections(M3 client, Delta delta, types()) 
 	= detections(client, delta.types, types());
+
+// Creates a Detection for every non-abstract class in the client that
+// extends/implements a class/interface that exposes a new abstract method
+private set[Detection] detections(M3 client, Delta delta, added()) {
+	M3 m3to = m3(delta.id.to);
+	set[Detection] result = {};
+	
+	for (<loc m, Mapping[&T] mapping> <- delta.added, mayBeHookMethod(m3to, m)) {
+		loc cont = getOneFrom(invert(m3to.containment)[m]);
 		
+		// Should be a transitive closure, taking into account
+		// potential intermediate implementers along the path
+		result += { detection(elem, cont, mapping, added()) | <loc elem, loc cont> <- (client.extends + client.implements),
+															  isClass(elem), \abstract() notin client.modifiers[elem] } ;
+	}
+	
+	return result;
+}
+
 private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, DeltaType typ) {	
 	set[loc] domain = domain(deltaRel);
 	uses = rangeR(client.typeDependency, domain)
 		+ rangeR(client.methodInvocation, domain)
 		+ rangeR(client.fieldAccess, domain)
-		+ rangeR(client.implements, domain)
-		+ rangeR(client.extends, domain);
+		+ rangeR(client.implements, domain) // Transitive closure?
+		+ rangeR(client.extends, domain);   // Transitive closure?
 		
 	return { detection(elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
 }
