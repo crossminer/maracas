@@ -155,6 +155,19 @@ test bool methodStaticModifierAdded() =
 test bool methodNoMoreFinalModifier() =
 	size(mdelta.staticModifiers) == 2;
 
+// api.AbstractModifierAdded.foo() -> abstract api.AbstractModifierAdded.foo()
+test bool methodAbstractModifierAdded() =
+	<|java+method:///api/AbstractModifierAdded/mAbstractModifier()|, <\default(), \abstract(), 1.0, MATCH_SIGNATURE>>
+	in mdelta.abstractModifiers;
+
+// abstract api.AbstractModifierRemoved.foo() -> api.AbstractModifierRemoved.foo()
+test bool methodAbstractModifierRemoved() =
+	<|java+method:///api/AbstractModifierRemoved/foo()|, <\abstract(), \default(), 1.0, MATCH_SIGNATURE>>
+	in mdelta.abstractModifiers;
+
+test bool methodNoMoreAbstractModifier() =
+	size(mdelta.abstractModifiers) == 2;
+
 // api.A.mParameterRemoved(int a, int b) -> api.A.mParameterRemoved(int a)
 test bool methodParameterRemoved() =
 	<|java+method:///api/A/mParameterRemoved(int,int)|, <[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">>
@@ -321,22 +334,109 @@ test bool dFieldPublicToDefault() =
 	    accessModifiers()
 	) in ds;
 
-test bool dFieldDeprecated() =
+test bool dMethodPublicToDefault() =
 	detection(
-	    |java+method:///client/AClient/fields()|,
-	    |java+field:///api/A/fDeprecated|,
-	    <|java+field:///api/A/fDeprecated|, |java+field:///api/A/fDeprecated|, 1.0, "signature">,
-	    deprecated()
+		|java+method:///client/AClient/methods()|,
+		|java+method:///api/A/mAccessModifierPublicToDefault()|,
+		<\public(), \defaultAccess(), 1.0, "signature">,
+		accessModifiers()
 	) in ds;
 
-// Because of final field inlining, there is no fieldAccess detected for it
-//test bool dFieldFinalModifierRemoved() = 
-//	detection(
-//	    |java+method:///client/AClient/fields()|,
-//	    |java+field:///api/A/fFinalModifierRemoved|,
-//	    <\final(), \default(), 1.0, "signature">,
-//	    finalModifiers()
-//	) in ds;
+test bool dMethodPublicToPrivate() =
+	detection(
+		|java+method:///client/AClient/methods()|,
+		|java+method:///api/A/mAccessModifierPublicToPrivate()|,
+		<\public(), \private(), 1.0, "signature">,
+		accessModifiers()
+	) in ds;
+
+test bool dClassPublicToDefault() =
+	detection(
+		|java+field:///client/AClient/amr|,
+		|java+class:///api/AccessModifierRemoved|,
+		<\public(), \defaultAccess(), 1.0, MATCH_SIGNATURE>,
+		accessModifiers()
+	) in ds;
+
+test bool dNoMoreAccessModifiers() =
+	size(filterD(ds, accessModifiers())) == 5;
+
+test bool dClassFinalModifierAdded() =
+	detection(
+		|java+class:///client/ClientFinalModifierAdded|,
+		|java+class:///api/FinalModifierAdded|,
+		<\default(), \final(), 1.0, "signature">,
+		finalModifiers()
+	) in ds;
+
+test bool dMethodFinalModifierAdded() =
+	detection(
+		|java+method:///client/MethodFinalModifierAdded/mFinalModifierAdded()|,
+		|java+method:///api/A/mFinalModifierAdded()|,
+		<\default(), \final(), 1.0, "signature">,
+		finalModifiers()
+	) in ds;
+
+test bool dNoMoreFinalModifiers() =
+	size(filterD(ds, finalModifiers())) == 2;
+
+test bool dFieldStaticModifierRemoved() =
+	detection(
+		|java+method:///client/AClient/fields()|,
+		|java+field:///api/A/fStaticModifierRemoved|,
+		<\static(), \default(), 1.0, MATCH_SIGNATURE>,
+		staticModifiers()
+	) in ds;
+
+test bool dMethodStaticModifierRemoved() =
+	detection(
+		|java+method:///client/AClient/methods()|,
+		|java+method:///api/A/mStaticModifierRemoved()|,
+		<\static(), \default(), 1.0, MATCH_SIGNATURE>,
+		staticModifiers()
+	) in ds;
+
+test bool dNoMoreStaticModifiers() =
+	size(filterD(ds, staticModifiers())) == 2;
+
+test bool dMethodAbstractModifierAdded() =
+	detection(
+		|java+method:///client/AClient/abstractCall()|,
+		|java+method:///api/AbstractModifierAdded/mAbstractModifier()|,
+		<\default(), \abstract(), 1.0, MATCH_SIGNATURE>,
+		abstractModifiers()
+	) in ds;
+
+test bool dClassAbstractModifierAdded() =
+	detection(
+		|java+method:///client/AClient/abstractCall()|,
+		|java+class:///api/AbstractModifierAdded|,
+		<\default(), \abstract(), 1.0, MATCH_SIGNATURE>,
+		abstractModifiers()
+	) in ds;
+
+test bool dNoMoreAbstractModifiers() =
+	size(filterD(ds, abstractModifiers())) == 2;
+
+
+test bool dMethodParameterAdded() =
+	detection(
+		|java+method:///client/AClient/methods()|,
+		|java+method:///api/A/mParameterAdded(int)|,
+		<[TypeSymbol::\int()], [TypeSymbol::\int(), TypeSymbol::\int()], 1.0, "signature">,
+		paramLists()
+	) in ds;
+
+test bool dMethodParameterRemoved() =
+	detection(
+		|java+method:///client/AClient/methods()|,
+		|java+method:///api/A/mParameterRemoved(int,int)|,
+		<[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">,
+		paramLists()
+	) in ds;
+
+test bool dNoMoreParamLists() =
+	size(filterD(ds, paramLists())) == 2;
 
 test bool dFieldStringToInt() =
 	detection(
@@ -354,28 +454,23 @@ test bool dFieldStringToList() =
 	    types()
 	) in ds;
 
-test bool dMethodPublicToDefault() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mAccessModifierPublicToDefault()|,
-		<\public(), \defaultAccess(), 1.0, "signature">,
-		accessModifiers()
-	) in ds;
-
-test bool dMethodPublicToPrivate() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mAccessModifierPublicToPrivate()|,
-		<\public(), \private(), 1.0, "signature">,
-		accessModifiers()
-	) in ds;
-
 test bool dMethodChangedType() =
 	detection(
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mChangedType(int)|,
 		<class(|java+class:///java/lang/String|, []), TypeSymbol::\int(), 1.0, "signature">,
 		types()
+	) in ds;
+
+test bool dNoMoreTypes() =
+	size(filterD(ds, types())) == 3;
+
+test bool dFieldDeprecated() =
+	detection(
+	    |java+method:///client/AClient/fields()|,
+	    |java+field:///api/A/fDeprecated|,
+	    <|java+field:///api/A/fDeprecated|, |java+field:///api/A/fDeprecated|, 1.0, "signature">,
+	    deprecated()
 	) in ds;
 
 test bool dMethodDeprecated() =
@@ -385,6 +480,23 @@ test bool dMethodDeprecated() =
 		<|java+method:///api/A/mDeprecated()|, |java+method:///api/A/mDeprecated()|, 1.0, "signature">,
 		deprecated()
 	) in ds;
+
+test bool dClassDeprecated() =
+	detection(
+		|java+field:///client/AClient/da|,
+		|java+class:///api/DeprecatedAdded|,
+		<|java+class:///api/DeprecatedAdded|, |java+class:///api/DeprecatedAdded|, 1.0, MATCH_SIGNATURE>,
+		deprecated()
+	) in ds;
+
+// Because of final field inlining, there is no fieldAccess detected for it
+//test bool dFieldFinalModifierRemoved() = 
+//	detection(
+//	    |java+method:///client/AClient/fields()|,
+//	    |java+field:///api/A/fFinalModifierRemoved|,
+//	    <\final(), \default(), 1.0, "signature">,
+//	    finalModifiers()
+//	) in ds;
 
 test bool dMethodMoved() = // Just checking the best candidate, but there might be others
 	detection(
@@ -400,22 +512,6 @@ test bool dMethodRenamed() = // Just checking the best candidate, but there migh
 		|java+method:///api/A/mRenamed()|,
 		<|java+method:///api/A/mRenamed()|, |java+method:///api/A/mRenamed2()|, 0.9971509971509972, "levenshtein">,
 		renamed()
-	) in ds;
-
-test bool dMethodParameterAdded() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mParameterAdded(int)|,
-		<[TypeSymbol::\int()], [TypeSymbol::\int(), TypeSymbol::\int()], 1.0, "signature">,
-		paramLists()
-	) in ds;
-
-test bool dMethodParameterRemoved() =
-	detection(
-		|java+method:///client/AClient/methods()|,
-		|java+method:///api/A/mParameterRemoved(int,int)|,
-		<[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">,
-		paramLists()
 	) in ds;
 
 test bool dHollywoodClass() =
@@ -434,18 +530,10 @@ test bool dHolywoodInterface() =
 		added()
 	) in ds;
 
-test bool dClassFinalModifierAdded() =
-	detection(
-		|java+class:///client/ClientFinalModifierAdded|,
-		|java+class:///api/FinalModifierAdded|,
-		<\default(), \final(), 1.0, "signature">,
-		finalModifiers()
-	) in ds;
+private set[Detection] filterD(set[Detection] ds, DeltaType typ) =
+	{d | d <- ds, d.typ == typ};
 
-test bool dMethodFinalModifierAdded() =
-	detection(
-		|java+method:///client/MethodFinalModifierAdded/mFinalModifierAdded()|,
-		|java+method:///api/A/mFinalModifierAdded()|,
-		<\default(), \final(), 1.0, "signature">,
-		finalModifiers()
-	) in ds;
+test bool print() {
+	text(ds);
+	return true;
+}

@@ -7,6 +7,7 @@ import org::maracas::m3::Core;
 import Relation;
 import Set;
 import IO;
+import util::ValueUI;
 
 //----------------------------------------------
 // ADT
@@ -60,7 +61,8 @@ private set[Detection] detectionsCore(M3 client, Delta delta)
 	;
 
 // Accessing anything that is now access-restricted is problematic, so
-// defer to the generic detections() function
+// defer to the generic detections() function (though I'm not sure about
+// what's precisely inside typeDependency, so there could be false positives
 private set[Detection] detections(M3 client, Delta delta, accessModifiers()) 
 	= detections(client, delta.accessModifiers, accessModifiers());
 
@@ -84,7 +86,7 @@ private set[Detection] detections(M3 client, Delta delta, finalModifiers()) {
 		
 		if (isMethod(f)) {
 			// client.methodOverrides is scoped by the client, so we don't know which API methods it's overriding
-			// stupid workaround: look for methods of the same name in classes that extend the parent API class
+			// buggy workaround: look for methods of the same name in classes that extend the parent API class
 			// TODO: transitive closure
 			loc cont = getOneFrom(invert(m3to.containment)[f]);
 			result += { detection(elem, f, mapping, finalModifiers()) | <loc cls, elem> <- client.containment,
@@ -99,6 +101,10 @@ private set[Detection] detections(M3 client, Delta delta, finalModifiers()) {
 private set[Detection] detections(M3 client, Delta delta, staticModifiers()) 
 	= detections(client, delta.staticModifiers, staticModifiers());
 
+// Problematic cases: the client invokes the constructor of a now-abstract class;
+// the client directly invokes a now-abstract method (which is fine if the call
+// is dynamically dispatched to a class with an actual implementation of the abstract method)
+// TODO
 private set[Detection] detections(M3 client, Delta delta, abstractModifiers()) 
 	= detections(client, delta.abstractModifiers, abstractModifiers());
 

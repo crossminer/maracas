@@ -72,14 +72,21 @@ Delta breakingChanges(Delta delta) {
 	M3 m3to   = m3(delta.id.to);
 
 	delta.accessModifiers   = { <e, m> | <e, m> <- delta.accessModifiers,   isAPI(m3from, e), !isAPI(m3to, e) };
+	// Only problematic when going from static to non-static
 	delta.finalModifiers    = { <e, m> | <e, m> <- delta.finalModifiers,    isAPI(m3from, e), m[1] == \final() };
-	delta.staticModifiers   = { <e, m> | <e, m> <- delta.staticModifiers,   isAPI(m3from, e) }; // Just a warning if miscalling a static method in a non-static way
+	// Just a warning if miscalling a static method in a non-static way
+	delta.staticModifiers   = { <e, m> | <e, m> <- delta.staticModifiers,   isAPI(m3from, e), m[0] == \static() };
 	delta.abstractModifiers = { <e, m> | <e, m> <- delta.abstractModifiers, isAPI(m3from, e), m[1] == \abstract() };
-	delta.paramLists        = { <e, m> | <e, m> <- delta.paramLists,        isAPI(m3from, e) }; // May not be BC do to subtyping, autoboxing, etc.
-	delta.types             = { <e, m> | <e, m> <- delta.types,             isAPI(m3from, e) }; // May not be BC do to subtyping, autoboxing, etc.
+	// May not be BC do to subtyping, autoboxing, etc.
+	delta.paramLists        = { <e, m> | <e, m> <- delta.paramLists,        isAPI(m3from, e) };
+	// May not be BC do to subtyping, autoboxing, etc.
+	delta.types             = { <e, m> | <e, m> <- delta.types,             isAPI(m3from, e) };
+	// May not be BC if replaced by a subtype / other cases
 	delta.extends           = { <e, m> | <e, m> <- delta.extends,           isAPI(m3from, e) };
+	// May not be BC if replaced by a subtype / other cases
 	delta.implements        = { <e, m> | <e, m> <- delta.implements,        isAPI(m3from, e) };
-	delta.deprecated        = { <e, m> | <e, m> <- delta.deprecated,        isAPI(m3from, e) }; // Included as BC for now, though not really
+	// Included as BC for now, though not really
+	delta.deprecated        = { <e, m> | <e, m> <- delta.deprecated,        isAPI(m3from, e) };
 	delta.renamed           = { <e, m> | <e, m> <- delta.renamed,           isAPI(m3from, e) };
 	delta.moved             = { <e, m> | <e, m> <- delta.moved,             isAPI(m3from, e) };
 	delta.removed           = { <e, m> | <e, m> <- delta.removed,           isAPI(m3from, e) };
