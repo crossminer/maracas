@@ -1,10 +1,14 @@
 package client;
 
 import api.A;
+import api.AbstractModifierAdded;
+import api.AccessModifierRemoved;
+import api.DeprecatedAdded;
 
-// TODO: IoC
 public class AClient {
 	A a;
+	AccessModifierRemoved amr;
+	DeprecatedAdded da;
 
 	public void fields() {
 		hole(a.fPublicToPrivate);
@@ -14,6 +18,9 @@ public class AClient {
 		hole(a.fFinalModifierRemoved);
 		hole(a.fStringToInt);
 		hole(a.fStringToList);
+		hole(a.fStaticModifierAdded);
+		hole(a.fStaticModifierRemoved);
+		hole(A.fStaticModifierRemoved);
 	}
 
 	public void methods() {
@@ -27,6 +34,14 @@ public class AClient {
 		a.mParameterAdded(0);
 		a.mParameterRemoved(0, 0);
 		a.mRenamed();
+		a.mStaticModifierAdded();
+		a.mStaticModifierRemoved();
+		A.mStaticModifierRemoved();
+	}
+	
+	public void abstractCall() {
+		AbstractModifierAdded ama = new AbstractModifierAdded();
+		ama.mAbstractModifier();
 	}
 
 	void hole(Object o) { }

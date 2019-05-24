@@ -16,8 +16,8 @@ public class A {
 	@Deprecated public int fDeprecated;
 	public final String fFinalModifierAdded = "";
 	public String fFinalModifierRemoved;
-	static float fStaticModifierAdded;
-	float fStaticModifierRemoved;
+	public static float fStaticModifierAdded;
+	public float fStaticModifierRemoved;
 	public int fStringToInt;
 	public List<String> fStringToList;
 	private Guard fLimiterToGuard;
@@ -31,8 +31,8 @@ public class A {
 	
 	public void mFinalModifierRemoved() {}
 	public final void mFinalModifierAdded() {}
-	private static void mStaticModifierAdded() {}
-	private void mStaticModifierRemoved() {}
+	public static void mStaticModifierAdded() {}
+	public void mStaticModifierRemoved() {}
 	@Deprecated public void mDeprecated() {}
 
 	public void mRenamed2() {

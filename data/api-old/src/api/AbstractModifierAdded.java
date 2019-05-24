@@ -1,5 +1,5 @@
 package api;
 
-class AbstractModifierAdded {
+public class AbstractModifierAdded {
 	public void mAbstractModifier() {}
 }

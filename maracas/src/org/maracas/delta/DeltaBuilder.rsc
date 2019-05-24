@@ -82,9 +82,9 @@ private rel[loc, Mapping[Modifier]] abstractModifiers(M3Diff diff)
 // The confidence of the mapping is 1 if the signature is the same
 private rel[loc, Mapping[Modifier]] changedModifier(M3Diff diff, Modifier modifier) 
 	= { buildDeltaMapping(elem, \default(), modif, 1.0, MATCH_SIGNATURE)
-	| <elem, modif> <- diff.additions.modifiers, isTargetMemberExclInterface(elem), modif := modifier }
+	| <elem, modif> <- diff.additions.modifiers, elem notin diff.addedDecls, isTargetMemberExclInterface(elem), modif := modifier }
 	+ { buildDeltaMapping(elem, modif, \default(), 1.0, MATCH_SIGNATURE)
-	| <elem, modif> <- diff.removals.modifiers, isTargetMemberExclInterface(elem), modif := modifier };
+	| <elem, modif> <- diff.removals.modifiers, elem notin diff.removedDecls, isTargetMemberExclInterface(elem), modif := modifier };
 
 
 private rel[loc, Mapping[loc]] deprecated(M3Diff diff, Delta delta) {

@@ -30,9 +30,7 @@ str renderHtml(Delta delta) {
 		if (rel[loc, Mapping[&T]] relation := v) {
 			blocks += h4(friendlyNames[relName]);
 			
-			if (relName == "removed" || relName == "added")
-				blocks += p("Not shown for the sake of conciseness");
-			else if (size(relation) > 0)
+			if (size(relation) > 0)
 				blocks +=
 					table(class("striped"), HTML5Attr::style("width:auto;"),
 						thead(tr(th("Old"), th("From"), th("To"), th("Score"))),

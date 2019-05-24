@@ -1,5 +1,5 @@
 package api;
 
-abstract class AbstractModifierRemoved {
-
+public abstract class AbstractModifierRemoved {
+	abstract public void foo();
 }
