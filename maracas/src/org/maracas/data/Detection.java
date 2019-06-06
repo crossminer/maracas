@@ -116,6 +116,10 @@ public class Detection {
 	@Override
 	public String toString() {
 		return String.format("[%s] %s uses %s, replaced with %s [%.2f]", type, clientLocation, oldLibraryLocation,
-				newLibraryLocation, score);
+				newLibraryLocation, getScore());
+	}
+
+	public double getScore() {
+		return score;
 	}
 }
