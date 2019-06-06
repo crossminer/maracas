@@ -9,7 +9,7 @@ import io.usethesource.vallang.IValue;
 public class Detection {
 	public enum Type {
 		ACCESS_MODIFIER, FINAL_MODIFIER, STATIC_MODIFIER, ABSTRACT_MODIFIER, DEPRECATED, RENAMED, MOVED, REMOVED,
-		PARAMS_LIST, RETURN_TYPE, TYPE, EXTENDS, IMPLEMENTS
+		PARAMS_LIST, RETURN_TYPE, TYPE, EXTENDS, IMPLEMENTS, ADDED
 	}
 
 	private final String clientLocation;
@@ -85,6 +85,10 @@ public class Detection {
 			case "implements":
 				type = Type.IMPLEMENTS;
 				newLibrary = oldLibrary;
+				break;
+			case "added":
+				type = Type.ADDED;
+				newLibrary = newLibrary;
 				break;
 			default:
 				throw new RuntimeException("Unexpected BCType");
