@@ -5,12 +5,13 @@ import Relation;
 
 
 data M3Diff(
-		M3 removals = {},
-		M3 additions = {},
+		M3 removals = m3(|file:///|),
+		M3 additions = m3(|file:///|),
 		set[loc] removedDecls = {},
 		set[loc] addedDecls = {}
 	) 
 	= m3Diff(M3 from, M3 to);
+
 
 M3Diff createM3Diff(M3 from, M3 to)
 	= m3Diff (
@@ -22,11 +23,12 @@ M3Diff createM3Diff(M3 from, M3 to)
 		addedDecls = m3AddedDecls(from, to)
 	);
 
+
 private M3 m3Removals(M3 from, M3 to) 
 	= diffJavaM3(from.id, [from, to]);
 	 
 private M3 m3Additions(M3 from, M3 to) 
-	= diffJavaM3(from.id, [to, from]);
+	= diffJavaM3(to.id, [to, from]);
 
 
 private set[loc] m3RemovedDecls(M3 from, M3 to) 

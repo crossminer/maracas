@@ -60,19 +60,20 @@ void methodBreakingChangesExporter(loc delta, loc report=|file:///Users/juri/Des
 	}
 }
 
-void myRunAll(loc libs=|file:///Users/juri/development/git/api-migration-dataset/sonarqube/libraries/|, loc clients=|file:///Users/juri/development/git/api-migration-dataset/sonarqube/clients/|,loc output=|file:///users/juri/Desktop/results.txt|){
+void myRunAll(loc libs=|file:///Users/ochoa/Documents/cwi/crossminer/data/api-migration-dataset/sonarqube/erase/|, loc clients=|file:///Users/ochoa/Documents/cwi/crossminer/data/api-migration-dataset/sonarqube/clients/|,loc output=|file:///Users/ochoa/Desktop/results.txt|){
 	
 	set[loc] libraries = walkJARs(libs);
 	for (lib1 <- libraries){
 		for (lib2 <- libraries)
-			if(lib1 != lib2){
-				try{
+			if (lib1 != lib2){
+				try {
 					str v1 = lib1.path[findLast(lib1.path,"/")+1..-4];
 					v1 = replaceLast(v1, "sonar-plugin-api-","sonar-plugin-api__");
 					loc clients_loc = clients + v1;
 					if(exists(clients_loc)){
 						println("Computing Delta model <lib1.path> <lib2.path>");
-	
+						
+						Delta d;
 						if(!exists(libs + "Delta" + lib1.file + "-" + lib2.file + ".delta"))
 							d = delta(lib1, lib2);
 						else 
@@ -85,7 +86,7 @@ void myRunAll(loc libs=|file:///Users/juri/development/git/api-migration-dataset
 						int count = size(clients);
 						
 						for (client <- clients) {
-							try{
+							try {
 								i = i + 1;
 								println("[<i>/<count>] Computing detection model for <client>... ");
 						
@@ -132,6 +133,7 @@ void methodBreakingChangesExporter(loc libV1, loc libV2, loc report=|file:///Use
 		writeHtml(report + ("Delta" + libV1.file + "-" + libV2.file + ".html"), d);
 	}
 }
+
 Delta parseDeltaFile(loc report) {
      loc entry = report;
      Delta deltas = readBinaryValueFile(#Delta, entry);

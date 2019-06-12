@@ -39,6 +39,29 @@ list[value] getM3SortValue(loc elem, map[loc, set[value]] m)
 str getM3SortString(loc elem, map[loc, set[value]] m) 
 	= toString(getM3SortValue(elem, m));
 
+loc getNonCUContainer(loc elem, M3 m) {
+	invCont = invert(m.containment);
+	cont = getOneFrom(invCont[elem]);
+	
+	if (isCompilationUnit(cont)) {
+		pkg = invCont[cont];
+		cont = (pkg != {}) ? getOneFrom(pkg) : cont;
+	}
+	else {
+		cont = getOneFrom(invCont[elem]);
+	}
+	
+	return cont;
+}
+
+loc getNonCUChild(loc elem, M3 m) {
+	if (isCompilationUnit(elem)) {
+		child = m.containment[elem];
+		elem = (child != {}) ? getOneFrom(child) : elem;
+	}
+	return elem;
+}
+
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
 
@@ -50,7 +73,7 @@ bool isTargetMemberExclInterface(loc elem)
 bool isTargetMember(loc elem)
 	= isTargetMemberExclInterface(elem)
 	|| isInterface(elem);
-	
+
 @memo
 M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);

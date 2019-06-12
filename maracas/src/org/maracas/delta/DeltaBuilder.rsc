@@ -16,29 +16,56 @@ import org::maracas::match::matcher::LevenshteinMatcher;
 import Relation;
 import Set;
 import String;
-import Type;
 
 
 Delta createDelta(M3 from, M3 to, loc optionsFile = |project://maracas/config/config.properties|) {
 	M3Diff diff = createM3Diff(from, to);
-	Delta delta = delta(<from.id, to.id>);
+	Delta d = delta(<from.id, to.id>);
 	
-	delta.options           = readProperties(optionsFile);
-	delta.accessModifiers   = accessModifiers(diff); 
-	delta.finalModifiers    = finalModifiers(diff);
-	delta.staticModifiers   = staticModifiers(diff);
-	delta.abstractModifiers = abstractModifiers(diff);
-	delta.paramLists        = paramLists(diff);
-	delta.types             = returnTypes(diff) + types(diff);
-	delta.extends           = extends(diff);
-	delta.implements        = implements(diff);
-	delta.deprecated        = deprecated(diff, delta);
-	delta.renamed           = renamed(diff, delta);
-	delta.moved             = moved(diff, delta);
-	delta.removed           = removed(diff, delta);
-	delta.added             = added(diff, delta);
+	println("--------------------------");
+	println("Computing options");
+	d.options           = readProperties(optionsFile);
+	println("--------------------------");
+	println("Computing accessModifiers");
+	d.accessModifiers   = accessModifiers(diff); 
+	println("--------------------------");
+	println("Computing finalModifiers");
+	d.finalModifiers    = finalModifiers(diff);
+	println("--------------------------");
+	println("Computing staticModifiers");
+	d.staticModifiers   = staticModifiers(diff);
+	println("--------------------------");
+	println("Computing abstractModifiers");
+	d.abstractModifiers = abstractModifiers(diff);
+	println("--------------------------");
+	println("Computing paramLists");
+	d.paramLists        = paramLists(diff);
+	println("--------------------------");
+	println("Computing types");
+	d.types             = returnTypes(diff) + types(diff);
+	println("--------------------------");
+	println("Computing extends");
+	d.extends           = extends(diff);
+	println("--------------------------");
+	println("Computing implements");
+	d.implements        = implements(diff);
+	println("--------------------------");
+	println("Computing deprecated");
+	d.deprecated        = deprecated(diff, d);
+	println("--------------------------");
+	println("Computing renamed");
+	d.renamed           = renamed(diff, d);
+	println("--------------------------");
+	println("Computing moved");
+	d.moved             = moved(diff, d);
+	println("--------------------------");
+	println("Computing removed");
+	d.removed           = removed(diff, d);
+	println("--------------------------");
+	println("Computing added");
+	d.added             = added(diff, d);
 
-	return delta;
+	return d;
 }
 
 
@@ -109,42 +136,67 @@ private rel[loc, Mapping[loc]] deprecated(M3Diff diff, Delta delta) {
  */ 
 private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 	diff = filterDiffRenamed(diff, delta);
-	removals = diff.removals;
-	additions = diff.additions;
 	result = {};
 	
-	for (<cont, elem> <- removals.containment, elem in diff.removedDecls, isTargetMember(elem)) {
-		// In type cases we need the owner package instead of its compilation unit.
-		if (isCompilationUnit(cont)) {
-			cont = getOneFrom(invert(removals.containment)[cont]);
+	for (elem <- diff.removedDecls, isTargetMember(elem)) {
+		invCont = invert(diff.from.containment);
+		
+		if (invCont[elem] != {}) {
+			// In type cases we need the owner package instead of its compilation unit.
+			cont = getNonCUContainer(elem, diff.from); 
+			elemsSameCont = {};
+			
+			for (a <- diff.to.containment[cont], a in diff.addedDecls) {
+				a = getNonCUChild(a, diff.to);
+				if (a.scheme == elem.scheme) {
+					elemsSameCont += a;
+				}
+			}
+			
+			if (elemsSameCont != {}) {
+				diffTemp = diff;
+				diffTemp.removedDecls = { elem };
+				diffTemp.addedDecls = elemsSameCont;
+				result += applyMatchers(diffTemp, delta.options, MATCHERS);
+			}
 		}
 		
-		elemsSameCont = {};
-		for (a <- additions.containment[cont], a in diff.addedDecls) {
-			if (isCompilationUnit(a)) {
-				a = getOneFrom(additions.containment[a]);
-			}
-			if (a.scheme == elem.scheme) {
-				elemsSameCont += a;
-			}
+		else {
+			c = diff.from.containment;
+			p = c[elem];
+			println(elem);
 		}
 		
-		if (elemsSameCont != {}) {
-			diffTemp = diff;
-			//diffTemp.removals = filterM3(removals, {elem});
-			//diffTemp.additions = filterM3(additions, elemsSameCont);
-			diffTemp.removedDecls = { elem };
-			diffTemp.addedDecls = elemsSameCont;
-			result += applyMatchers(diffTemp, delta.options, MATCHERS);
-		}
 	}
+	
+	
+	//for (<cont, elem> <- removals.containment, elem in diff.removedDecls, isTargetMember(elem)) {
+	//	// In type cases we need the owner package instead of its compilation unit.
+	//	if (isCompilationUnit(cont)) {
+	//		cont = getOneFrom(invert(removals.containment)[cont]);
+	//	}
+	//	
+	//	elemsSameCont = {};
+	//	for (a <- additions.containment[cont], a in diff.addedDecls) {
+	//		if (isCompilationUnit(a)) {
+	//			a = getOneFrom(additions.containment[a]);
+	//		}
+	//		if (a.scheme == elem.scheme) {
+	//			elemsSameCont += a;
+	//		}
+	//	}
+	//	
+	//	if (elemsSameCont != {}) {
+	//		diffTemp = diff;
+	//		diffTemp.removedDecls = { elem };
+	//		diffTemp.addedDecls = elemsSameCont;
+	//		result += applyMatchers(diffTemp, delta.options, MATCHERS);
+	//	}
+	//}
 	return result;
 }
 
 private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
-	//elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
-	//excepRemovals = diff.removedDecls;
-	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
 	diff.removedDecls 
 		= diff.removedDecls 
 		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
@@ -158,14 +210,6 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 }
 
 private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
-	//elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
-	//				+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
-	//elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
-	//excepRemovals = diff.removedDecls;
-	//excepAdditions = diff.addedDecls;
-	//
-	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
-	//diff.additions = filterXM3WithExcpetions(diff.additions, elemsAdditions, excepAdditions);
 	diff.removedDecls 
 		= diff.removedDecls 
 		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {})
