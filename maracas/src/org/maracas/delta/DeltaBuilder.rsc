@@ -142,9 +142,6 @@ private rel[loc, Mapping[loc]] renamed(M3Diff diff,  Delta delta) {
 }
 
 private M3Diff filterDiffRenamed(M3Diff diff, Delta delta) {
-	//elemsRemovals = (!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {};
-	//excepRemovals = diff.removedDecls;
-	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
 	diff.removedDecls 
 		= diff.removedDecls 
 		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
@@ -158,14 +155,6 @@ private rel[loc, Mapping[loc]] moved(M3Diff diff, Delta delta) {
 }
 
 private M3Diff filterDiffMoved(M3Diff diff, Delta delta) {
-	//elemsRemovals 	= ((!isEmpty(delta.renamed)) ? delta.renamed.mapping<0> : {})
-	//				+ ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {});
-	//elemsAdditions 	= (!isEmpty(delta.renamed)) ? delta.renamed.mapping<1> : {};
-	//excepRemovals = diff.removedDecls;
-	//excepAdditions = diff.addedDecls;
-	//
-	//diff.removals = filterXM3WithExcpetions(diff.removals, elemsRemovals, excepRemovals);
-	//diff.additions = filterXM3WithExcpetions(diff.additions, elemsAdditions, excepAdditions);
 	diff.removedDecls 
 		= diff.removedDecls 
 		- ((!isEmpty(delta.paramLists)) ? delta.paramLists.elem : {})
