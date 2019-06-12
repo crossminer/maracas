@@ -5,6 +5,7 @@ import analysis::m3::TypeSymbol;
 
 import org::maracas::Maracas;
 import org::maracas::RunAll;
+import org::maracas::delta::Detector;
 import org::maracas::delta::Delta;
 import org::maracas::delta::vis::Visualizer;
 import ValueIO;
@@ -78,34 +79,31 @@ void myRunAll(loc libs=|file:///Users/juri/development/git/api-migration-dataset
 							d = parseDeltaFile(clients_loc);
 						println("Pruning breaking changes...");
 						d = breakingChanges(d);
-						if (serializeDelta)
-							writeBinaryValueFile(libs + "Delta" + lib1.file + "-" + lib2.file + ".delta", d);
-				
-						if (serializeHtml)
-							writeHtml(libs + "Delta" + lib1.file + "-" + lib2.file + ".html", d);
-					
+
 						set[loc] clients = walkJARs(clients_loc);
 						int i = 0;
+						int count = size(clients);
+						
 						for (client <- clients) {
 							try{
 								i = i + 1;
 								println("[<i>/<count>] Computing detection model for <client>... ");
 						
-								M3 m3 = createM3FromJar(client);	
-								set[Detection] detects = detections(m3, d);
+								M3 m = createM3FromJar(client);	
+								set[Detection] detects = detections(m, d);
 								
 								if (size(detects) > 0)
 									writeBinaryValueFile(clients_loc + "detection" + lib1.file + "-" + lib2.file + (client.file + ".detection"), detects);
 								writeFile(output, "<lib1.path>,<lib2.path>,<client>, <size(detects)>");
 							}
-							catch:
-								writeFile(output, "<lib1.path>,<lib2.path>,<client>,-1");
+							catch e:
+								writeFile(output, "<lib1.path>,<lib2.path>,<client>,-1 \n <e> \n \n");
 					
 						}
 					}
 				}
-				catch:
-						writeFile(output, "<lib1>,<lib2>,-1,-1");
+				catch e:
+						writeFile(output, "<lib1>,<lib2>,-1,-1 \n <e> \n \n");
 				}
 			}
 }
