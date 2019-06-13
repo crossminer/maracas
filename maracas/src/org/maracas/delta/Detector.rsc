@@ -151,12 +151,12 @@ private set[Detection] detections(M3 client, Delta delta, added()) {
 }
 
 private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, DeltaType typ) {	
-	set[loc] domain = domain(deltaRel);
-	uses = rangeR(client.typeDependency, domain)
-		+ rangeR(client.methodInvocation, domain)
-		+ rangeR(client.fieldAccess, domain)
-		+ rangeR(client.implements, domain) // Transitive closure?
-		+ rangeR(client.extends, domain);   // Transitive closure?
+	set[loc] dom = domain(deltaRel);
+	uses = rangeR(client.typeDependency, dom)
+		+ rangeR(client.methodInvocation, dom)
+		+ rangeR(client.fieldAccess, dom)
+		+ rangeR(client.implements, dom) // Transitive closure?
+		+ rangeR(client.extends, dom);   // Transitive closure?
 		
 	return { detection(elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
 }

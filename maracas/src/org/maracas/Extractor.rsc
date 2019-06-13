@@ -108,6 +108,8 @@ void myRunAll(loc libs=|file:///Users/ochoa/Documents/cwi/crossminer/data/api-mi
 				}
 			}
 }
+
+
 void allVersionsDeltas(loc libs=|file:///Users/juri/development/git/aethereal/aethereal/dataset/libraries/|, loc report=|file:///Users/juri/Desktop/report_spring_data_mongo/|, loc output=|file:///Users/juri/Desktop/rascal-TEST.txt|){
 	set[loc] libraries = walkJARs(libs);
 	for (lib1 <- libraries){

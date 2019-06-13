@@ -20,3 +20,18 @@ bool existFileWithName(loc directory, str name) {
 	}
 	return false;
 }
+
+set[loc] walkJARs(loc dataset) {
+	set[loc] result = {};
+
+	for (e <- listEntries(dataset)) {
+		loc entry = dataset + e;
+
+		if (isDirectory(entry))
+			result += walkJARs(entry);
+		else if (endsWith(e, ".jar"))
+			result += entry;
+	};
+
+	return result;
+}

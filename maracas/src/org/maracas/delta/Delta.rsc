@@ -24,7 +24,7 @@ data Delta (
 	= delta(tuple[loc from, loc to] id);
 
 alias Mapping[&T] 
-	= tuple[
+	= tuple [
 		&T from, 
 		&T to,
 		real conf,

@@ -259,7 +259,7 @@ M3 filterXM3WithExcpetions(M3 m, set[loc] elems, set[loc] excep)
  * of the M3 model 'm' for which predicate(a, b)
  * does not hold
  */
-private M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
+M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 	m3Filtered = lang::java::m3::Core::m3(m.id);
 
 	map[str, value] kws = getKeywordParameters(m);
