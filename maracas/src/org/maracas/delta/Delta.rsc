@@ -68,8 +68,8 @@ Mapping[&T] buildMapping(&T from, &T to, real score, str meth)
 	= <from, to, score, meth>;
 
 Delta breakingChanges(Delta delta) {
-	M3 m3from = m3(delta.id.from);
-	M3 m3to   = m3(delta.id.to);
+	M3 m3from = createM3(delta.id.from);
+	M3 m3to   = createM3(delta.id.to);
 
 	delta.accessModifiers   = { <e, m> | <e, m> <- delta.accessModifiers,   isAPI(m3from, e), !isAPI(m3to, e) };
 	// Only problematic when going from static to non-static

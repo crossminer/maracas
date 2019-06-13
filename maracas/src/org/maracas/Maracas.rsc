@@ -8,7 +8,7 @@ import org::maracas::m3::Core;
 
 
 Delta delta(loc oldAPI, loc newAPI) 
-	= createDelta(m3(oldAPI), m3(newAPI));
+	= createDelta(createM3(oldAPI), createM3(newAPI));
 
 Delta classDelta(Delta delta)
 	= getClassDelta(delta);
@@ -20,4 +20,4 @@ Delta fieldDelta(Delta delta)
 	= getFieldDelta(delta);
 	
 set[Detection] detections(loc client, Delta delta) 
-	= detections(m3(client), delta);
+	= detections(createM3(client), delta);

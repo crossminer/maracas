@@ -75,7 +75,7 @@ bool isTargetMember(loc elem)
 	|| isInterface(elem);
 
 @memo
-M3 m3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
+M3 createM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
 
 	return fillDefaultVisibility(filterAnonymousClasses(m));
