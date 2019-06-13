@@ -5,14 +5,12 @@ import org::maracas::delta::Delta;
 import org::maracas::delta::DeltaBuilder;
 import org::maracas::delta::Detector;
 import org::maracas::m3::Core;
-import org::maracas::RunAll;
 
 import DateTime;
 import IO;
 import lang::csv::IO;
 import Node;
 import Set;
-import String;
 import ValueIO;
 
 
@@ -42,13 +40,12 @@ private bool isNotInternal(value v) = true;
 Delta computeDelta(loc v1, loc v2, loc output=|file:///temp/maracas/delta.bin|, bool store=true, bool rewrite = false) {
 	if (rewrite || !exists(output)) {
 		printMessage("Computing delta between <v1.path> and <v2.path>");
-		delt = deltaSonar(v1, v2);
+		Delta delt = deltaSonar(v1, v2);
 	
 		if (store) {
 			printMessage("Writing delta as binary file");
 			writeBinaryValueFile(output, delt);
 		}
-		
 		return delt;
 	}
 	else {
@@ -66,7 +63,6 @@ Delta computeBreakingChanges(Delta delt, loc output=|file:///temp/maracas/bc.bin
 			printMessage("Writing breaking changes as binary file");
 			writeBinaryValueFile(output, delt);
 		}
-		
 		return bc;
 	}
 	else {
@@ -91,6 +87,41 @@ rel[str, int] computeStatistics(Delta delt, loc output=|file:///temp/maracas/sta
 	writeCSV(stats, output);
 	
 	return stats;
+}
+
+rel[str, int] computeStatistics(Delta delt, loc output=|file:///temp/maracas/stats.csv|) {
+	kws = getKeywordParameters(delt);
+	rel[str change, int number] stats = {};
+	
+	for (str name <- kws) {
+		value v = kws[name];
+
+		if (rel[loc, Mapping[&T]] relation := v) {
+			stats += <name, size(relation)>;
+		}
+	}
+	
+	printMessage("Writing statistics as CSV file");
+	writeCSV(stats, output);
+	
+	return stats;
+}
+
+set[Detection] computeDetections(loc clientv1, Delta delt, loc output=|file:///temp/maracas/detections.bin|, bool store = true, bool rewrite = false) {
+	if (rewrite || !exists(output)) {
+		printMessage("Computing detections for <clientv1>");
+		set[Detection] det = detections(createM3(clientv1), delt);
+		
+		if (store) {
+			printMessage("Writing detections as binary file");
+			writeBinaryValueFile(output, det);
+		}	
+		return det;
+	}
+	else {
+		printMessage("Reading detections for <clientv1>");
+		return readBinaryValueFile(#set[Detection], output);
+	}
 }
 
 void printMessage(str msg, str flag = "INFO") {

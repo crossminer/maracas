@@ -1,5 +1,6 @@
 module org::maracas::io::File
 
+import Exception;
 import IO;
 import String;
 
@@ -19,6 +20,22 @@ bool existFileWithName(loc directory, str name) {
 		}
 	}
 	return false;
+}
+
+str getFileName(loc file) {
+	int begin = findLast(file.path, "/"); 
+	int end = size(file.path);
+	return substring(file.path, begin, end);
+}
+
+public loc unzipFile(loc file, loc targetDir) {
+    zip = file[scheme = "jar+<file.scheme>"][path = file.path + "!/"];
+    
+    if (copyDirectory(zip, targetDir)) {
+        return targetDir;
+    }
+    
+    throw IO("Could not copy content of <file> to <targetDir>");
 }
 
 set[loc] walkJARs(loc dataset) {

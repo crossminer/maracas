@@ -5,6 +5,7 @@ import IO;
 
 import org::maracas::delta::Delta;
 import org::maracas::delta::Detector;
+import org::maracas::io::File;
 import org::maracas::pipeline::sonarqube::Pipeline;
 
 loc dataLoc = |project://maracas/src/org/maracas/pipeline/sonarqube/sourcemeter/data|;
@@ -15,6 +16,8 @@ void runAll() {
 	computeStatisticsSonar(delt, "stats-delta.csv");
 	Delta bc = computeBreakingChangesSonar(delt);
 	computeStatisticsSonar(bc, "stats-bc.csv");
+	set[Detection] det = computeDetectionsSonarJar(delt);
+	println(det);
 }
 
 Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
@@ -27,7 +30,6 @@ Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
 
 Delta computeBreakingChangesSonar(Delta delt, bool store = true, bool rewrite = false) {
 	loc output = dataLoc + "bc.bin";
-	
 	return computeBreakingChanges(delt, output=output, store=store, rewrite=rewrite);
 }
 
@@ -36,19 +38,19 @@ rel[str, int] computeStatisticsSonar(Delta delt, str fileName) {
 	return computeStatistics(delt, output=output);
 }
 
-public loc unzipSourceMeter(loc sourcemeter) {
-    tempLoc = dataLoc + "temp/sourcemeter";
-    zip = sourcemeter[scheme = "jar+<sourcemeter.scheme>"][path = sourcemeter.path + "!/"];
-    
-    if (copyDirectory(zip, tempLoc)) {
-        return tempLoc;
-    }
-    
-    throw IO("Could not copy content of <sourcemeter> to <tempLoc>");
+set[Detection] computeDetectionsSonarJar(Delta delt, bool store = true, bool rewrite = false) {
+	loc sourcemeterv1 = dataLoc + "sonar-sourcemeter-analyzer-java-plugin-8.2.jar";
+	loc output = dataLoc + "detections.bin";
+	
+	return computeDetections(sourcemeterv1, delt, output=output, store=store, rewrite=rewrite);
 }
 
-set[Detection] computeDetections() {
-	loc sourcemeterv1 = dataLoc + "";
+//TODO: errors with Maven
+set[Detection] computeDetectionsSonarSource(Delta delt, bool store = true, bool rewrite = false) {
+	loc sourcemeterv1 = dataLoc + "sourcemeter-plugins-8.2-sources.zip";
 	loc output = dataLoc + "detections.bin";
-	return computeDetections();
+	loc targetDir = dataLoc + "temp/";
+	
+	sourcemeterv1 = unzipFile(sourcemeterv1, targetDir);
+	return computeDetections(sourcemeterv1, delt, output=output, store=store, rewrite=rewrite);
 }

@@ -107,12 +107,15 @@ bool isAPI(M3 m, loc elem) { // FIXME: check the whole visibility path for neste
 bool mayBeHookMethod(M3 m, loc elem) {
 	if (!isMethod(elem))
 		return false;
-
-	loc typ = getOneFrom(invert(m.containment)[elem]);
 	
-	return isAPI(m, typ)                     // The method belongs to a public type
-		&& \abstract() in m.modifiers[elem]; // and the method is abstract
-		                                     // (don't need other checks, since if the method
-		                                     // is abstract, the type is too, hence it cannot
-		                                     // be final)
+	set[loc] types = invert(m.containment)[elem];
+	if (types != {}) {
+		loc typ = getOneFrom(types);	
+		return isAPI(m, typ)                     // The method belongs to a public type
+			&& \abstract() in m.modifiers[elem]; // and the method is abstract
+			                                     // (don't need other checks, since if the method
+			                                     // is abstract, the type is too, hence it cannot
+			                                     // be final)
+	}
+	return false;
 }
