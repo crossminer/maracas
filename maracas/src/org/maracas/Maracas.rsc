@@ -4,6 +4,7 @@ import lang::java::m3::Core;
 import org::maracas::delta::Delta;
 import org::maracas::delta::DeltaBuilder;
 import org::maracas::delta::Detector;
+import org::maracas::delta::Migration;
 import org::maracas::m3::Core;
 
 
@@ -19,5 +20,8 @@ Delta methodDelta(Delta delta)
 Delta fieldDelta(Delta delta)
 	= getFieldDelta(delta);
 	
-set[Detection] detections(loc client, Delta delta) 
-	= detections(m3(client), delta);
+set[Detection] detections(loc oldClient, Delta delta) 
+	= detections(m3(oldClient), delta);
+	
+set[Migration] migrations(loc newClient, set[Detection] detects)
+	= buildMigrations(detects, newClient);
