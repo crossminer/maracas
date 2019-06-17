@@ -10,6 +10,7 @@ import Set;
 import Relation;
 import org::maracas::Maracas;
 import org::maracas::delta::Delta;
+import org::maracas::delta::Migration;
 import org::maracas::delta::vis::Visualizer;
 import lang::java::m3::Core;
 import org::maracas::delta::Detector;
@@ -24,11 +25,15 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 	println("Pruning breaking changes...");
 	d = breakingChanges(d);
 
-	if (serializeDelta)
+	if (serializeDelta) {
+		println("Serializing Delta model...");
 		writeBinaryValueFile(report + "Delta.delta", d);
+	}
 
-	if (serializeHtml)
+	if (serializeHtml) {
+		println("Serializing HTML report...");
 		writeHtml(report + "Delta.html", d);
+	}
 
 	int i = 0;
 	for (client <- clients) {
@@ -41,6 +46,28 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 		if (size(detects) > 0)
 			writeBinaryValueFile(report + "detection" + (client.file + ".detection"), detects);
 	}
+}
+
+void runAllMigrations(loc report, loc clients) {
+	set[Detection] ds = {};
+
+	for (str e <- listEntries(report + "detection")) {
+		//ds += { d | d <- readBinaryValueFile(#set[Detection], report + "detection" + e),
+		//			d.typ != removed() }; // Not interested in those ones, yet
+		ds += readBinaryValueFile(#set[Detection], report + "detection" + e);
+	}
+
+	println("Found <size(ds)> detection models");
+
+	set[Migration] ms = buildMigrations(ds, clients);
+	
+	println("Found <size(ds)> migrations");
+	
+	writeBinaryValueFile(report + "Migrations.migration", ms);
+
+	println("HTML report...");
+	
+	writeHtml(report + "Migrations.html", ms);
 }
 
 rel[str, set[Detection]] parseDetectionFiles(loc report) {
