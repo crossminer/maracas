@@ -9,14 +9,55 @@ import org::maracas::delta::Detector;
 import org::maracas::m3::Core;
 import lang::java::m3::Core;
 
-data Migration(
+data Migration (
 	loc oldDecl = |unknown:///|,
 	loc newDecl = |unknown:///|,
 	loc oldUsed = |unknown:///|,
 	loc newUsed = |unknown:///|,
 	set[loc] oldUses = {},
-	set[loc] newUses = {}
-) = migration(loc oldClient, loc newClient, Detection d);
+	set[loc] newUses = {} ) 
+	= migration(loc oldClient, loc newClient, Detection d);
+
+
+set[Migration] migrations(loc newClient, set[Detection] detects) {
+	set[Migration] migs = {};
+	
+	if (detects != {}) {
+		loc oldClient = getOneFrom(detects).jar;
+		M3 oldM3 = createM3(oldClient);
+		M3 newM3 = createM3(newClient);
+			
+		for (detect <- detects) {
+			loc oldDecl = detect.elem;
+			loc newDecl = detect.elem; // 1-to-1 for now
+			loc oldUsed = detect.used;
+			loc newUsed = replacement(detect);
+			
+			Migration m = migration(oldClient, newClient, detect);
+			
+			if (oldDecl in domain(oldM3.declarations)) {
+				m.oldDecl = oldDecl;
+				m.oldUses = uses(oldM3, oldDecl);
+		
+				if (oldUsed in m.oldUses)
+					m.oldUsed = oldUsed;
+			}
+		
+			if (newDecl in domain(newM3.declarations)) {
+				m.newDecl = newDecl;
+				m.newUses = uses(newM3, newDecl);
+				
+				if (newUsed in m.newUses)
+					m.newUsed = newUsed;
+			}
+			
+			migs += m;
+		}
+		
+	}
+	
+	return migs;
+}
 
 Migration buildMigration(Detection detect, loc newClient) {
 	loc oldClient = detect.jar;
@@ -24,8 +65,8 @@ Migration buildMigration(Detection detect, loc newClient) {
 	loc newDecl = detect.elem; // 1-to-1 for now
 	loc oldUsed = detect.used;
 	loc newUsed = replacement(detect);
-	M3 oldM3 = m3(oldClient);
-	M3 newM3 = m3(newClient);
+	M3 oldM3 = createM3(oldClient);
+	M3 newM3 = createM3(newClient);
 	
 	Migration m = migration(oldClient, newClient, detect);
 	
@@ -115,3 +156,5 @@ loc replacement(detection(_, elem, _, _, implements())) = elem;
 loc replacement(detection(_, elem, _, _, deprecated())) = elem;
 loc replacement(detection(_, elem, _, <old, new, _, _>, renamed())) = new;
 loc replacement(detection(_, elem, _, <old, new, _, _>, moved())) = new;
+loc replacement(detection(_, elem, _, _, removed())) = elem;
+loc replacement(detection(_, elem, _, _, added())) = elem;

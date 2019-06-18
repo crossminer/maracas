@@ -4,6 +4,7 @@ import lang::java::m3::Core;
 import org::maracas::delta::Delta;
 import org::maracas::delta::DeltaBuilder;
 import org::maracas::delta::Detector;
+import org::maracas::delta::Migration;
 import org::maracas::delta::stats::Statistics;
 import org::maracas::m3::Core;
 
@@ -99,6 +100,23 @@ rel[str, int] computeDetectionsStatistics(set[Detection] detects, loc output=|fi
 	rel[str change, int number] stats = computeStatistics(detects);
 	writeCSV(stats, output);
 	return stats;
+}
+
+set[Migration] computeMigrations(loc clientv2, set[Detection] detects, loc output=|file:///temp/maracas/detections.bin|, bool store = true, bool rewrite = false) {
+	if (rewrite || !exists(output)) {
+		printMessage("Computing migrations for <clientv2>");
+		set[Migration] migs = migrations(clientv2, detects);
+		
+		if (store) {
+			printMessage("Writing migrations as binary file");
+			writeBinaryValueFile(output, migs);
+		}	
+		return migs;
+	}
+	else {
+		printMessage("Reading migrations for <clientv2>");
+		return readBinaryValueFile(#set[Migration], output);
+	}
 }
 
 void printMessage(str msg, str flag = "INFO") {

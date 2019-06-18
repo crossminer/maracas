@@ -6,7 +6,7 @@ import org::maracas::delta::Delta;
 import org::maracas::m3::Core;
 import Relation;
 import Set;
-import IO;
+
 
 //----------------------------------------------
 // ADT

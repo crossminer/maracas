@@ -20,8 +20,8 @@ Delta methodDelta(Delta delta)
 Delta fieldDelta(Delta delta)
 	= getFieldDelta(delta);
 	
-set[Detection] detections(loc client, Delta delta) 
-	= detections(createM3(client), delta);
+set[Detection] detections(loc oldClient, Delta delta) 
+	= detections(createM3(oldClient), delta);
 	
 set[Migration] migrations(loc newClient, set[Detection] detects)
-	= buildMigrations(detects, newClient);
+	= migrations(newClient, detects);

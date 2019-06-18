@@ -2,6 +2,7 @@ module org::maracas::pipeline::sonarqube::sourcemeter::SourceMeter
 
 import org::maracas::delta::Delta;
 import org::maracas::delta::Detector;
+import org::maracas::delta::Migration;
 import org::maracas::io::File;
 import org::maracas::pipeline::sonarqube::Pipeline;
 
@@ -15,6 +16,7 @@ void runAll() {
 	computeStatisticsSonar(bc, "stats-bc.csv");
 	set[Detection] detects = computeDetectionsSonarJar(bc);
 	computeStatisticsSonar(detects, "stats-detections.csv");
+	set[Migration] migs = computeMigrationsSonar(detects);
 }
 
 Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
@@ -45,6 +47,13 @@ set[Detection] computeDetectionsSonarJar(Delta delt, bool store = true, bool rew
 rel[str, int] computeStatisticsSonar(set[Detection] detects, str fileName) {
 	loc output = dataLoc + fileName;
 	return computeDetectionsStatistics(detects, output=output);
+}
+
+set[Migration] computeMigrationsSonar(set[Detection] detects, bool store = true, bool rewrite = false) {
+	loc sourcemeterv2 = dataLoc + "sonar-sourcemeter-analyzer-java-plugin-8.2-v6.7.1.jar";
+	loc output = dataLoc + "migrations.bin";
+	
+	return computeMigrations(sourcemeterv2, detects, output=output, store=store, rewrite=rewrite);
 }
 
 //TODO: errors with Maven
