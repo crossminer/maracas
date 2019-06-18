@@ -4,13 +4,12 @@ import lang::java::m3::Core;
 import org::maracas::delta::Delta;
 import org::maracas::delta::DeltaBuilder;
 import org::maracas::delta::Detector;
+import org::maracas::delta::stats::Statistics;
 import org::maracas::m3::Core;
 
 import DateTime;
 import IO;
 import lang::csv::IO;
-import Node;
-import Set;
 import ValueIO;
 
 
@@ -71,39 +70,10 @@ Delta computeBreakingChanges(Delta delt, loc output=|file:///temp/maracas/bc.bin
 	}
 }
 
-rel[str, int] computeStatistics(Delta delt, loc output=|file:///temp/maracas/stats.csv|) {
-	kws = getKeywordParameters(delt);
-	rel[str change, int number] stats = {};
-	
-	for (str name <- kws) {
-		value v = kws[name];
-
-		if (rel[loc, Mapping[&T]] relation := v) {
-			stats += <name, size(relation)>;
-		}
-	}
-	
-	printMessage("Writing statistics as CSV file");
+rel[str, int] computeDeltaStatistics(Delta delt, loc output=|file:///temp/maracas/delta-stats.csv|) {
+	printMessage("Writing delta statistics as CSV file");
+	rel[str change, int number] stats = computeStatistics(delt);
 	writeCSV(stats, output);
-	
-	return stats;
-}
-
-rel[str, int] computeStatistics(Delta delt, loc output=|file:///temp/maracas/stats.csv|) {
-	kws = getKeywordParameters(delt);
-	rel[str change, int number] stats = {};
-	
-	for (str name <- kws) {
-		value v = kws[name];
-
-		if (rel[loc, Mapping[&T]] relation := v) {
-			stats += <name, size(relation)>;
-		}
-	}
-	
-	printMessage("Writing statistics as CSV file");
-	writeCSV(stats, output);
-	
 	return stats;
 }
 
@@ -122,6 +92,13 @@ set[Detection] computeDetections(loc clientv1, Delta delt, loc output=|file:///t
 		printMessage("Reading detections for <clientv1>");
 		return readBinaryValueFile(#set[Detection], output);
 	}
+}
+
+rel[str, int] computeDetectionsStatistics(set[Detection] detects, loc output=|file:///temp/maracas/detections-stats.csv|) {
+	printMessage("Writing detections statistics as CSV file");
+	rel[str change, int number] stats = computeStatistics(detects);
+	writeCSV(stats, output);
+	return stats;
 }
 
 void printMessage(str msg, str flag = "INFO") {

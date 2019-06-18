@@ -5,7 +5,6 @@ import org::maracas::m3::Core;
 import lang::java::m3::AST;
 import lang::java::m3::TypeSymbol;
 import org::maracas::delta::Delta;
-import org::maracas::delta::DeltaBuilder;
 import org::maracas::Maracas;
 import org::maracas::config::Options;
 import org::maracas::delta::Detector;
@@ -21,7 +20,7 @@ Delta fdelta = fieldDelta(delta);
 Delta mdelta = methodDelta(delta);
 Delta cdelta = classDelta(delta);
 
-set[Detection] ds = detections(m3(client), breakingChanges(delta));
+set[Detection] ds = detections(createM3(client), breakingChanges(delta));
 
 //------------------------
 //        DELTA
@@ -320,6 +319,7 @@ test bool noMoreImplements() =
 
 test bool dFieldPublicToPrivate() =
 	detection(
+		client,
 	    |java+method:///client/AClient/fields()|,
 	    |java+field:///api/A/fPublicToPrivate|,
 	    <\public(), \private(), 1.0, "signature">,
@@ -328,6 +328,7 @@ test bool dFieldPublicToPrivate() =
 
 test bool dFieldPublicToDefault() =
 	detection(
+		client,
 	    |java+method:///client/AClient/fields()|,
 	    |java+field:///api/A/fPublicToDefault|,
 	    <\public(), \defaultAccess(), 1.0, "signature">,
@@ -336,6 +337,7 @@ test bool dFieldPublicToDefault() =
 
 test bool dMethodPublicToDefault() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mAccessModifierPublicToDefault()|,
 		<\public(), \defaultAccess(), 1.0, "signature">,
@@ -344,6 +346,7 @@ test bool dMethodPublicToDefault() =
 
 test bool dMethodPublicToPrivate() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mAccessModifierPublicToPrivate()|,
 		<\public(), \private(), 1.0, "signature">,
@@ -352,6 +355,7 @@ test bool dMethodPublicToPrivate() =
 
 test bool dClassPublicToDefault() =
 	detection(
+		client,
 		|java+field:///client/AClient/amr|,
 		|java+class:///api/AccessModifierRemoved|,
 		<\public(), \defaultAccess(), 1.0, MATCH_SIGNATURE>,
@@ -363,6 +367,7 @@ test bool dNoMoreAccessModifiers() =
 
 test bool dClassFinalModifierAdded() =
 	detection(
+		client,
 		|java+class:///client/ClientFinalModifierAdded|,
 		|java+class:///api/FinalModifierAdded|,
 		<\default(), \final(), 1.0, "signature">,
@@ -371,6 +376,7 @@ test bool dClassFinalModifierAdded() =
 
 test bool dMethodFinalModifierAdded() =
 	detection(
+		client,
 		|java+method:///client/MethodFinalModifierAdded/mFinalModifierAdded()|,
 		|java+method:///api/A/mFinalModifierAdded()|,
 		<\default(), \final(), 1.0, "signature">,
@@ -382,6 +388,7 @@ test bool dNoMoreFinalModifiers() =
 
 test bool dFieldStaticModifierRemoved() =
 	detection(
+		client,
 		|java+method:///client/AClient/fields()|,
 		|java+field:///api/A/fStaticModifierRemoved|,
 		<\static(), \default(), 1.0, MATCH_SIGNATURE>,
@@ -390,6 +397,7 @@ test bool dFieldStaticModifierRemoved() =
 
 test bool dMethodStaticModifierRemoved() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mStaticModifierRemoved()|,
 		<\static(), \default(), 1.0, MATCH_SIGNATURE>,
@@ -401,6 +409,7 @@ test bool dNoMoreStaticModifiers() =
 
 test bool dMethodAbstractModifierAdded() =
 	detection(
+		client,
 		|java+method:///client/AClient/abstractCall()|,
 		|java+method:///api/AbstractModifierAdded/mAbstractModifier()|,
 		<\default(), \abstract(), 1.0, MATCH_SIGNATURE>,
@@ -409,6 +418,7 @@ test bool dMethodAbstractModifierAdded() =
 
 test bool dClassAbstractModifierAdded() =
 	detection(
+		client,
 		|java+method:///client/AClient/abstractCall()|,
 		|java+class:///api/AbstractModifierAdded|,
 		<\default(), \abstract(), 1.0, MATCH_SIGNATURE>,
@@ -421,6 +431,7 @@ test bool dNoMoreAbstractModifiers() =
 
 test bool dMethodParameterAdded() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mParameterAdded(int)|,
 		<[TypeSymbol::\int()], [TypeSymbol::\int(), TypeSymbol::\int()], 1.0, "signature">,
@@ -429,6 +440,7 @@ test bool dMethodParameterAdded() =
 
 test bool dMethodParameterRemoved() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mParameterRemoved(int,int)|,
 		<[TypeSymbol::\int(), TypeSymbol::\int()], [TypeSymbol::\int()], 1.0, "signature">,
@@ -440,6 +452,7 @@ test bool dNoMoreParamLists() =
 
 test bool dFieldStringToInt() =
 	detection(
+		client,
 	    |java+method:///client/AClient/fields()|,
 	    |java+field:///api/A/fStringToInt|,
 	    <class(|java+class:///java/lang/String|, []), TypeSymbol::\int(), 1.0, "signature">,
@@ -448,6 +461,7 @@ test bool dFieldStringToInt() =
 
 test bool dFieldStringToList() =
 	detection(
+		client,
 	    |java+method:///client/AClient/fields()|,
 	    |java+field:///api/A/fStringToList|,
 	    <class(|java+class:///java/lang/String|, []), class(|java+class:///java/util/List|, []), 1.0, "signature">,
@@ -456,6 +470,7 @@ test bool dFieldStringToList() =
 
 test bool dMethodChangedType() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mChangedType(int)|,
 		<class(|java+class:///java/lang/String|, []), TypeSymbol::\int(), 1.0, "signature">,
@@ -467,6 +482,7 @@ test bool dNoMoreTypes() =
 
 test bool dFieldDeprecated() =
 	detection(
+		client,
 	    |java+method:///client/AClient/fields()|,
 	    |java+field:///api/A/fDeprecated|,
 	    <|java+field:///api/A/fDeprecated|, |java+field:///api/A/fDeprecated|, 1.0, "signature">,
@@ -475,6 +491,7 @@ test bool dFieldDeprecated() =
 
 test bool dMethodDeprecated() =
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mDeprecated()|,
 		<|java+method:///api/A/mDeprecated()|, |java+method:///api/A/mDeprecated()|, 1.0, "signature">,
@@ -483,6 +500,7 @@ test bool dMethodDeprecated() =
 
 test bool dClassDeprecated() =
 	detection(
+		client,
 		|java+field:///client/AClient/da|,
 		|java+class:///api/DeprecatedAdded|,
 		<|java+class:///api/DeprecatedAdded|, |java+class:///api/DeprecatedAdded|, 1.0, MATCH_SIGNATURE>,
@@ -500,6 +518,7 @@ test bool dClassDeprecated() =
 
 test bool dMethodMoved() = // Just checking the best candidate, but there might be others
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mMoved()|,
 		<|java+method:///api/A/mMoved()|, |java+method:///api/C/mMoved()|, 1.0, "levenshtein">,
@@ -508,6 +527,7 @@ test bool dMethodMoved() = // Just checking the best candidate, but there might 
 
 test bool dMethodRenamed() = // Just checking the best candidate, but there might be others
 	detection(
+		client,
 		|java+method:///client/AClient/methods()|,
 		|java+method:///api/A/mRenamed()|,
 		<|java+method:///api/A/mRenamed()|, |java+method:///api/A/mRenamed2()|, 0.9971509971509972, "levenshtein">,
@@ -516,6 +536,7 @@ test bool dMethodRenamed() = // Just checking the best candidate, but there migh
 
 test bool dHollywoodClass() =
 	detection(
+		client,
 		|java+class:///client/HollywoodClassClient|,
 		|java+class:///api/HollywoodClass|,
 		<|unknown:///|, |java+method:///api/HollywoodClass/bar()|, 1.0, "signature">,
@@ -524,6 +545,7 @@ test bool dHollywoodClass() =
 
 test bool dHolywoodInterface() =
 	detection(
+		client,
 		|java+class:///client/HollywoodInterfaceClient|,
 		|java+interface:///api/HollywoodInterface|,
 		<|unknown:///|, |java+method:///api/HollywoodInterface/bar()|, 1.0, "signature">,

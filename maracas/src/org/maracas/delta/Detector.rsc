@@ -7,7 +7,6 @@ import org::maracas::m3::Core;
 import Relation;
 import Set;
 import IO;
-import util::ValueUI;
 
 //----------------------------------------------
 // ADT
@@ -42,10 +41,7 @@ data DeltaType
 // Builder
 //----------------------------------------------
 
-set[Detection] detections(M3 client, Delta delta)
-	= detectionsCore(client, delta);
-	
-private set[Detection] detectionsCore(M3 client, Delta delta)
+set[Detection] detections(M3 client, Delta delta) 
 	= detections(client, delta, accessModifiers())
 	+ detections(client, delta, finalModifiers())
 	+ detections(client, delta, staticModifiers())
@@ -76,21 +72,21 @@ private set[Detection] detections(M3 client, Delta delta, accessModifiers())
 //       to depend on whether the field is initialized locally (inlined)
 //       or in a construtor (non-inlined). Also, probably compiler-dependent.
 private set[Detection] detections(M3 client, Delta delta, finalModifiers()) {
-	M3 m3to = m3(delta.id.to);
+	M3 m3to = createM3(delta.id.to);
 	set[Detection] result = {};
 
 	for (<loc f, Mapping[&T] mapping> <- delta.finalModifiers) {
 		if (isClass(f))
 			// Look for extending classes
 			// TODO: Transitive closure?
-			result += { detection(elem, f, mapping, finalModifiers()) | <loc elem, f> <- client.extends };
+			result += { detection(client.id, elem, f, mapping, finalModifiers()) | <loc elem, f> <- client.extends };
 		
 		if (isMethod(f)) {
 			// client.methodOverrides is scoped by the client, so we don't know which API methods it's overriding
 			// buggy workaround: look for methods of the same name in classes that extend the parent API class
 			// TODO: transitive closure
 			loc cont = getOneFrom(invert(m3to.containment)[f]);
-			result += { detection(elem, f, mapping, finalModifiers()) | <loc cls, elem> <- client.containment,
+			result += { detection(client.id, elem, f, mapping, finalModifiers()) | <loc cls, elem> <- client.containment,
 																		<cls, cont> <- client.extends,
 																		invert(client.names)[elem] == invert(m3to.names)[f] };
 		}
@@ -136,7 +132,7 @@ private set[Detection] detections(M3 client, Delta delta, types())
 // Creates a Detection for every non-abstract class in the client that
 // extends/implements a class/interface that exposes a new abstract method
 private set[Detection] detections(M3 client, Delta delta, added()) {
-	M3 m3to = m3(delta.id.to);
+	M3 m3to = createM3(delta.id.to);
 	set[Detection] result = {};
 	
 	for (<loc m, Mapping[&T] mapping> <- delta.added, mayBeHookMethod(m3to, m)) {
@@ -144,7 +140,7 @@ private set[Detection] detections(M3 client, Delta delta, added()) {
 		
 		// Should be a transitive closure, taking into account
 		// potential intermediate implementers along the path
-		result += { detection(elem, cont, mapping, added()) | <loc elem, cont> <- (client.extends + client.implements),
+		result += { detection(client.id, elem, cont, mapping, added()) | <loc elem, cont> <- (client.extends + client.implements),
 															  isClass(elem), \abstract() notin client.modifiers[elem] } ;
 	}
 	
@@ -157,7 +153,8 @@ private set[Detection] detections(M3 client, rel[loc, Mapping[&T]] deltaRel, Del
 		+ rangeR(client.methodInvocation, dom)
 		+ rangeR(client.fieldAccess, dom)
 		+ rangeR(client.implements, dom) // Transitive closure?
-		+ rangeR(client.extends, dom);   // Transitive closure?
+		+ rangeR(client.extends, dom)   // Transitive closure?
+		+ rangeR(client.annotations, dom);
 		
 	return { detection(client.id, elem, used, mapping, typ) | <loc elem, loc used> <- uses, mapping <- deltaRel[used] };
 }

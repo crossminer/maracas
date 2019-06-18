@@ -1,8 +1,5 @@
 module org::maracas::pipeline::sonarqube::sourcemeter::SourceMeter
 
-import Exception;
-import IO;
-
 import org::maracas::delta::Delta;
 import org::maracas::delta::Detector;
 import org::maracas::io::File;
@@ -16,8 +13,8 @@ void runAll() {
 	computeStatisticsSonar(delt, "stats-delta.csv");
 	Delta bc = computeBreakingChangesSonar(delt);
 	computeStatisticsSonar(bc, "stats-bc.csv");
-	set[Detection] det = computeDetectionsSonarJar(delt);
-	println(det);
+	set[Detection] detects = computeDetectionsSonarJar(bc);
+	computeStatisticsSonar(detects, "stats-detections.csv");
 }
 
 Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
@@ -35,7 +32,7 @@ Delta computeBreakingChangesSonar(Delta delt, bool store = true, bool rewrite = 
 
 rel[str, int] computeStatisticsSonar(Delta delt, str fileName) {
 	loc output = dataLoc + fileName;
-	return computeStatistics(delt, output=output);
+	return computeDeltaStatistics(delt, output=output);
 }
 
 set[Detection] computeDetectionsSonarJar(Delta delt, bool store = true, bool rewrite = false) {
@@ -43,6 +40,11 @@ set[Detection] computeDetectionsSonarJar(Delta delt, bool store = true, bool rew
 	loc output = dataLoc + "detections.bin";
 	
 	return computeDetections(sourcemeterv1, delt, output=output, store=store, rewrite=rewrite);
+}
+
+rel[str, int] computeStatisticsSonar(set[Detection] detects, str fileName) {
+	loc output = dataLoc + fileName;
+	return computeDetectionsStatistics(detects, output=output);
 }
 
 //TODO: errors with Maven
