@@ -125,6 +125,9 @@ set[Migration] computeMigrations(loc clientv2, set[Detection] detects, loc outpu
 rel[str, value] computeMigrationsStatistics(set[Migration] migs, loc output=|file:///temp/maracas/migrations-stats.csv|) {
 	printMessage("Writing migrations statistics as CSV file");
 	rel[str change, value number] stats = casesPerChangeType(migs);
+	//rel[str change, value number] stats = truePositivesPerChangeType(migs);
+	//rel[str change, value number] stats = falsePositivesPerChangeType(migs);
+	//rel[str change, value number] stats = falseNegativesPerChangeType(migs);
 	writeCSV(stats, output);
 	return stats;
 }
