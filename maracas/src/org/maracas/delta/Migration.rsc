@@ -29,7 +29,7 @@ set[Migration] migrations(loc newClient, set[Detection] detects) {
 			
 		for (detect <- detects) {
 			loc oldDecl = detect.elem;
-			loc newDecl = detect.elem; // 1-to-1 for now
+			loc newDecl = detect.elem; // 1-to-1 for now. Let's assume it's the same decl
 			loc oldUsed = detect.used;
 			loc newUsed = replacement(detect);
 			
@@ -143,18 +143,21 @@ set[loc] uses(M3 m, loc decl)
 	+ m.methodInvocation[decl]
 	+ m.fieldAccess[decl]
 	+ m.implements[decl]
-	+ m.extends[decl]; 
+	+ m.extends[decl]
+	+ m.annotations[decl]
+	; 
 
-loc replacement(detection(_, elem, _, _, accessModifiers())) = elem; // If it's now private, maps to nothing, if protected, depends on IoC
-loc replacement(detection(_, elem, _, _, finalModifiers())) = elem; // Depends on IoC (?)
-loc replacement(detection(_, elem, _, _, staticModifiers())) = elem; // same
-loc replacement(detection(_, elem, _, _, abstractModifiers())) = elem; // Depends on IoC; clients might have their own new implementation; or, most likely, the API now has a new Class that implements the now-abstract method, or...
-loc replacement(detection(_, elem, _, _, paramLists())) = elem; // NOPE, FIXME
-loc replacement(detection(_, elem, _, _, types())) = elem;
-loc replacement(detection(_, elem, _, _, extends())) = elem;
-loc replacement(detection(_, elem, _, _, implements())) = elem;
-loc replacement(detection(_, elem, _, _, deprecated())) = elem;
-loc replacement(detection(_, elem, _, <old, new, _, _>, renamed())) = new;
-loc replacement(detection(_, elem, _, <old, new, _, _>, moved())) = new;
-loc replacement(detection(_, elem, _, _, removed())) = elem;
-loc replacement(detection(_, elem, _, _, added())) = elem;
+// TODO: change elem by used
+loc replacement(detection(_, _, used, _, accessModifiers())) = used; // If it's now private, maps to nothing, if protected, depends on IoC
+loc replacement(detection(_, _, used, _, finalModifiers())) = used; // Depends on IoC (?)
+loc replacement(detection(_, _, used, _, staticModifiers())) = used; // same
+loc replacement(detection(_, _, used, _, abstractModifiers())) = used; // Depends on IoC; clients might have their own new implementation; or, most likely, the API now has a new Class that implements the now-abstract method, or...
+loc replacement(detection(_, _, used, _, paramLists())) = used; // NOPE, FIXME
+loc replacement(detection(_, _, used, _, types())) = used;
+loc replacement(detection(_, _, used, _, extends())) = used;
+loc replacement(detection(_, _, used, _, implements())) = used;
+loc replacement(detection(_, _, used, _, deprecated())) = used;
+loc replacement(detection(_, _, used, <old, new, _, _>, renamed())) = new;
+loc replacement(detection(_, _, used, <old, new, _, _>, moved())) = new;
+loc replacement(detection(_, _, used, <old, new, _, _>, removed())) = new;
+loc replacement(detection(_, _, used, <old, new, _, _>, added())) = new;

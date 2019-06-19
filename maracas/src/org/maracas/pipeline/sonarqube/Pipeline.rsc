@@ -119,6 +119,16 @@ set[Migration] computeMigrations(loc clientv2, set[Detection] detects, loc outpu
 	}
 }
 
+rel[str, value] computeMigrationsStatistics(set[Migration] migs, loc output=|file:///temp/maracas/migrations-stats.csv|) {
+	printMessage("Writing migrations statistics as CSV file");
+	rel[str change, value number] stats = computeStatistics(migs);
+	stats += <"precision", precision(migs)>;
+	stats += <"truePositives", truePositives(migs)>;
+	stats += <"falsePositives", falsePositives(migs)>;
+	writeCSV(stats, output);
+	return stats;
+}
+
 void printMessage(str msg, str flag = "INFO") {
 	datetime time = now();
 	println("<time>: [<flag>] <msg>");

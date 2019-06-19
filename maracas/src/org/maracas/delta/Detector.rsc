@@ -140,8 +140,9 @@ private set[Detection] detections(M3 client, Delta delta, added()) {
 		
 		// Should be a transitive closure, taking into account
 		// potential intermediate implementers along the path
-		result += { detection(client.id, elem, cont, mapping, added()) | <loc elem, cont> <- (client.extends + client.implements),
-															  isClass(elem), \abstract() notin client.modifiers[elem] } ;
+		result += { detection(client.id, elem, cont, mapping, added()) 
+			| <loc elem, cont> <- (client.extends + client.implements),
+			isClass(elem), \abstract() notin client.modifiers[elem] } ;
 	}
 	
 	return result;
