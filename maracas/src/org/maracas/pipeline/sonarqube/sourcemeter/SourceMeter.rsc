@@ -5,7 +5,6 @@ import org::maracas::delta::Detector;
 import org::maracas::delta::Migration;
 import org::maracas::io::File;
 import org::maracas::pipeline::sonarqube::Pipeline;
-import util::ValueUI;
 
 loc dataLoc = |project://maracas/src/org/maracas/pipeline/sonarqube/sourcemeter/data|;
 
@@ -19,7 +18,6 @@ void runAll() {
 	computeStatisticsSonar(detects, "stats-detections.csv");
 	set[Migration] migs = computeMigrationsSonar(detects);
 	computeStatisticsSonar(migs, "stats-migrations.csv");
-	text(migs);
 }
 
 Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
