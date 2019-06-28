@@ -138,6 +138,12 @@ loc findJar(loc directory, str name) {
 	return |unknown:///|;
 }
 
+set[Migration] getCasesPerType(DeltaType typ, set[Migration] migs)
+	= { m | m <- migs, migration(_, _, detection(_, _, _, _, typ)) := m };
+	
+set[Migration] removeCasesPerType(DeltaType typ, set[Migration] migs)
+	= { m | m <- migs, migration(_, _, detection(_, _, _, _, t)) := m, t != typ };
+
 set[loc] uses(M3 m, loc decl)
 	= m.typeDependency[decl]
 	+ m.methodInvocation[decl]

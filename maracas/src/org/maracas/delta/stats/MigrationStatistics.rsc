@@ -4,12 +4,13 @@ import org::maracas::delta::Detector;
 import org::maracas::delta::Migration;
 import org::maracas::delta::stats::Core;
 
+import IO;
 import Map;
 import Node;
 import Set;
 
 
-rel[str, int] casesPerChangeType(set[Migration] migs) {
+rel[str, int] getCasesPerChangeType(set[Migration] migs) {
 	map[str, int] types = getDeltaTypesMap();
 	
 	for (migration(_, _, detection(_, _, _, _, typ)) <- migs) {
@@ -20,38 +21,48 @@ rel[str, int] casesPerChangeType(set[Migration] migs) {
 	return toRel(types);
 }
 
-rel[str, int] truePositivesPerChangeType(set[Migration] migs)
-	= casesPerChangeType(truePositives(migs));
+rel[str, int] getTruePositivesPerChangeType(set[Migration] migs)
+	= getCasesPerChangeType(getTruePositives(migs));
 	
-rel[str, int] falsePositivesPerChangeType(set[Migration] migs)
-	= casesPerChangeType(falsePositives(migs));
+rel[str, int] getFalsePositivesPerChangeType(set[Migration] migs)
+	= getCasesPerChangeType(getFalsePositives(migs));
 	
-rel[str, int] falseNegativesPerChangeType(set[Migration] migs)
-	= casesPerChangeType(falseNegatives(migs));
+rel[str, int] getFalseNegativesPerChangeType(set[Migration] migs)
+	= getCasesPerChangeType(getFalseNegatives(migs));
 
 
-set[Migration] truePositives(set[Migration] migs) 
+set[Migration] getTruePositives(set[Migration] migs) 
 	= { m | m <- migs, m.newUsed in m.newUses };
 
-set[Migration] falsePositives(set[Migration] migs) 
-	= { m | m <- migs, m.newUsed != |unknown:///|, m.newUsed notin m.newUses };
+set[Migration] getFalsePositives(set[Migration] migs) 
+	= { m | m <- migs, m.newDecl != |unknown:///|, m.newUsed == |unknown:///| };
 
-set[Migration] falseNegatives(set[Migration] migs)
-	= { m | m <- migs, m.newDecl != |unknown:///|, m.newUsed notin m.newUses };
+set[Migration] getFalseNegatives(set[Migration] migs)
+	= { m | m <- migs, m.newDecl == |unknown:///|, m.newUsed == |unknown:///| };
 		
 
-int truePositivesSize(set[Migration] migs) 
-	= size(truePositives(migs));
+int truePositives(set[Migration] migs) 
+	= size(getTruePositives(migs));
 	
-int falsePositivesSize(set[Migration] migs) 
-	= size(falsePositives(migs));
+int falsePositives(set[Migration] migs) 
+	= size(getFalsePositives(migs));
 	
-int falseNegativesSize(set[Migration] migs)
-	= size(falseNegatives(migs));
+int falseNegatives(set[Migration] migs)
+	= size(getFalseNegatives(migs));
 	
 
 real precision(set[Migration] migs) 
-	= (0.0 + truePositivesSize(migs)) / (truePositivesSize(migs) + falsePositivesSize(migs));
+	= (0.0 + truePositives(migs)) / (truePositives(migs) + falsePositives(migs));
 
 real recall(set[Migration] migs)
-	= (0.0 + truePositivesSize(migs)) / (truePositivesSize(migs) + falseNegativesSize(migs));
+	= (0.0 + truePositives(migs)) / (truePositives(migs) + falseNegatives(migs));
+	
+set[Migration] getUnmodifiedDeprecatedMembers(set[Migration] migs) {
+	depr = getCasesPerType(deprecated(), migs);
+	return { d | d <- depr, d.newDecl != |unknown:///|, d.oldUsed in d.newUses };
+}
+
+set[Migration] getModifiedDeprecatedMembers(set[Migration] migs) {
+	depr = getCasesPerType(deprecated(), migs);
+	return { d | d <- depr, d.newDecl != |unknown:///|, d.oldUsed notin d.newUses };
+}

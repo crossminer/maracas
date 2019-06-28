@@ -168,3 +168,6 @@ bool isInDetections(loc elem, loc used, DeltaType typ, set[Detection] detections
 	}
 	return false;
 }
+
+set[Detection] getDetectionsPerType(DeltaType typ, set[Detection] detections)
+	= { d | d <- detections, detection(_, _, _, _, typ) := d};
