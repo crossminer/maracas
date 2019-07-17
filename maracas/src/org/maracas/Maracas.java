@@ -1,8 +1,11 @@
 package org.maracas;
 
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.maracas.data.Detection;
 import org.rascalmpl.debug.IRascalMonitor;
@@ -16,12 +19,15 @@ import org.rascalmpl.values.ValueFactoryFactory;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.ISet;
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.ITuple;
 import io.usethesource.vallang.IValueFactory;
+
+import static org.rascalmpl.library.lang.java.m3.internal.M3Constants.*;
 
 public class Maracas {
 	private IValueFactory vf = ValueFactoryFactory.getValueFactory();
@@ -76,7 +82,86 @@ public class Maracas {
 
 		return result;
 	}
+	
+	/**
+	 * The method computes a M3 model from a JAR file and stores the model in a given 
+	 * path.
+	 * 
+	 * @param pathJar: absolute path to the JAR file of the project
+	 * @param pathM3: absolute path to the file where the M3 model should be stored 
+	 *        (including the name of the file and its extension --.m3--)
+	 * @return true if the M3 model was correctly computed and stored in the given 
+	 *         location; false otherwise
+	 */
+	public boolean storeM3(String pathJar, String pathM3) {
+		try {
+			ISourceLocation locJar = vf.sourceLocation(FILE_SCHEME, "", pathJar);
+			ISourceLocation locM3 = vf.sourceLocation(FILE_SCHEME, "", pathM3);
+			
+			IBool store = (IBool) evaluator.call("storeM3", locJar, locM3);
+			return store.getValue();
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 
+	/**
+	 * The method computes a Delta model between the old and new M3 models of a 
+	 * library. Then, it stores the model in a given path.
+	 * 
+	 * @param pathM3OldAPI: absolute path to the M3 model of the library old version
+	 * @param pathM3NewAPI: absolute path to the M3 model of the library new version
+	 * @param pathDelta: absolute path to the file where the Delta model should be 
+	 *        stored (including the name of the file and its extension --.delta--)
+	 * @return true if the Delta model was correctly computed and stored in the 
+	 *         given location; false otherwise
+	 */
+	public boolean storeDelta(String pathM3OldAPI, String pathM3NewAPI, String pathDelta) {
+		try {
+			ISourceLocation locM3OldAPI = vf.sourceLocation(FILE_SCHEME, "", pathM3OldAPI);
+			ISourceLocation locM3NewAPI = vf.sourceLocation(FILE_SCHEME, "", pathM3NewAPI);
+			ISourceLocation locDelta = vf.sourceLocation(FILE_SCHEME, "", pathDelta);
+			
+			IBool store = (IBool) evaluator.call("storeDelta", locM3OldAPI, locM3NewAPI, locDelta);
+			return store.getValue();
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * The method returns a list of Detections from a client M3 model and a library 
+	 * Delta model.
+	 * 
+	 * @param pathM3Client: absolute path to the M3 model of a client project
+	 * @param pathDelta: absolute path to the file where of the library Delta model
+	 * @return list of Detections
+	 */
+	public List<Detection> getDetections(String pathM3Client, String pathDelta) {
+		List<Detection> detections = new ArrayList<Detection>();
+		
+		try {
+			ISourceLocation locM3Client = vf.sourceLocation(FILE_SCHEME, "", pathM3Client);
+			ISourceLocation locDelta = vf.sourceLocation(FILE_SCHEME, "", pathDelta);
+			
+			ISet allDetections = (ISet) evaluator.call("detections", locM3Client, locDelta);
+			allDetections.forEach(d -> {
+				detections.add((Detection) d);
+			});
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		return detections;
+	}
+	
 	public static void main(String[] args) {
 		if (args.length != 4) {
 			System.err.println("Usage: maracas <lib1Jar> <lib2Jar> <clientsPath> <reportPath>");
@@ -117,6 +202,8 @@ public class Maracas {
 		eval.addRascalSearchPathContributor(StandardLibraryContributor.getInstance());
 		eval.addRascalSearchPath(vf.sourceLocation(Paths.get("src").toAbsolutePath().toString()));
 		eval.doImport(mon, "org::maracas::RunAll");
+		eval.doImport(mon, "org::maracas::Maracas");
+		eval.doImport(mon, "org::maracas::m3::Core");
 
 		return eval;
 	}
