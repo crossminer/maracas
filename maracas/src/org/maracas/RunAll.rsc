@@ -7,7 +7,6 @@ import IO;
 import ValueIO;
 import String;
 import Set;
-import Relation;
 import org::maracas::Maracas;
 import org::maracas::delta::Delta;
 import org::maracas::delta::Migration;
@@ -106,4 +105,34 @@ set[loc] walkJARs(loc dataset) {
 	};
 
 	return result;
+}
+
+set[Detection] getDetections(loc oldClient, loc delt) {
+	M3 clientM3 = readBinaryValueFile(#M3, oldClient);
+	Delta delta = readBinaryValueFile(#Delta, delt);
+	return detections(clientM3, delta);
+}
+
+bool storeDelta(loc m3OldAPI, loc m3NewAPI, loc delt) {
+	try {
+		M3 oldM3 = readBinaryValueFile(#M3, m3OldAPI);
+		M3 newM3 = readBinaryValueFile(#M3, m3NewAPI);
+		
+		Delta d = delta(oldM3, newM3);
+		writeBinaryValueFile(delt, d);
+		return true;
+	}
+	catch :
+		return false;
+}
+
+bool storeM3(loc projectJar, loc projectM3) {
+	try {
+		M3 m = createM3FromJar(projectJar);
+		writeBinaryValueFile(projectM3, m);
+		return true;
+	}
+	catch e :
+		println(e);
+		return false;
 }

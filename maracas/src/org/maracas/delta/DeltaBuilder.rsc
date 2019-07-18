@@ -24,7 +24,7 @@ Delta createDelta(M3 from, M3 to, loc optionsFile = |project://maracas/config/co
 	
 	println("--------------------------");
 	println("Computing options");
-	d.options           = readProperties(optionsFile);
+	//d.options           = readProperties(optionsFile);
 	println("--------------------------");
 	println("Computing accessModifiers");
 	d.accessModifiers   = accessModifiers(diff); 

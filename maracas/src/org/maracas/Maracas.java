@@ -1,7 +1,6 @@
 package org.maracas;
 
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,8 +25,6 @@ import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.ITuple;
 import io.usethesource.vallang.IValueFactory;
-
-import static org.rascalmpl.library.lang.java.m3.internal.M3Constants.*;
 
 public class Maracas {
 	private IValueFactory vf = ValueFactoryFactory.getValueFactory();
@@ -60,7 +57,7 @@ public class Maracas {
 	 * detection models
 	 * 
 	 * @param Absolute path to the output directory where analysis results of
-	 *                 {@code runAll} were serialized.
+	 *        {@code runAll} were serialized.
 	 * @return A Multimap associating to each client JAR the detections that were
 	 *         found
 	 */
@@ -94,18 +91,11 @@ public class Maracas {
 	 *         location; false otherwise
 	 */
 	public boolean storeM3(String pathJar, String pathM3) {
-		try {
-			ISourceLocation locJar = vf.sourceLocation(FILE_SCHEME, "", pathJar);
-			ISourceLocation locM3 = vf.sourceLocation(FILE_SCHEME, "", pathM3);
-			
-			IBool store = (IBool) evaluator.call("storeM3", locJar, locM3);
-			return store.getValue();
-		} 
-		catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		ISourceLocation locJar = vf.sourceLocation(pathJar);
+		ISourceLocation locM3 = vf.sourceLocation(pathM3);
 		
-		return false;
+		IBool store = (IBool) evaluator.call("storeM3", locJar, locM3);
+		return store.getValue();
 	}
 
 	/**
@@ -120,19 +110,12 @@ public class Maracas {
 	 *         given location; false otherwise
 	 */
 	public boolean storeDelta(String pathM3OldAPI, String pathM3NewAPI, String pathDelta) {
-		try {
-			ISourceLocation locM3OldAPI = vf.sourceLocation(FILE_SCHEME, "", pathM3OldAPI);
-			ISourceLocation locM3NewAPI = vf.sourceLocation(FILE_SCHEME, "", pathM3NewAPI);
-			ISourceLocation locDelta = vf.sourceLocation(FILE_SCHEME, "", pathDelta);
-			
-			IBool store = (IBool) evaluator.call("storeDelta", locM3OldAPI, locM3NewAPI, locDelta);
-			return store.getValue();
-		} 
-		catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		ISourceLocation locM3OldAPI = vf.sourceLocation(pathM3OldAPI);
+		ISourceLocation locM3NewAPI = vf.sourceLocation(pathM3NewAPI);
+		ISourceLocation locDelta = vf.sourceLocation(pathDelta);
 		
-		return false;
+		IBool store = (IBool) evaluator.call("storeDelta", locM3OldAPI, locM3NewAPI, locDelta);
+		return store.getValue();
 	}
 	
 	/**
@@ -144,21 +127,14 @@ public class Maracas {
 	 * @return list of Detections
 	 */
 	public List<Detection> getDetections(String pathM3Client, String pathDelta) {
+		ISourceLocation locM3Client = vf.sourceLocation(pathM3Client);
+		ISourceLocation locDelta = vf.sourceLocation(pathDelta);
 		List<Detection> detections = new ArrayList<Detection>();
 		
-		try {
-			ISourceLocation locM3Client = vf.sourceLocation(FILE_SCHEME, "", pathM3Client);
-			ISourceLocation locDelta = vf.sourceLocation(FILE_SCHEME, "", pathDelta);
-			
-			ISet allDetections = (ISet) evaluator.call("detections", locM3Client, locDelta);
-			allDetections.forEach(d -> {
-				detections.add((Detection) d);
-			});
-		} 
-		catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		
+		ISet allDetections = (ISet) evaluator.call("getDetections", locM3Client, locDelta);
+		allDetections.forEach(d -> {
+			detections.add(Detection.fromRascalDetection((IConstructor) d));
+		});
 		return detections;
 	}
 	
@@ -191,7 +167,7 @@ public class Maracas {
 			});
 		}
 	}
-
+	
 	private Evaluator createRascalEvaluator(IValueFactory vf) {
 		GlobalEnvironment heap = new GlobalEnvironment();
 		ModuleEnvironment module = new ModuleEnvironment("$maracas$", heap);
@@ -202,9 +178,7 @@ public class Maracas {
 		eval.addRascalSearchPathContributor(StandardLibraryContributor.getInstance());
 		eval.addRascalSearchPath(vf.sourceLocation(Paths.get("src").toAbsolutePath().toString()));
 		eval.doImport(mon, "org::maracas::RunAll");
-		eval.doImport(mon, "org::maracas::Maracas");
-		eval.doImport(mon, "org::maracas::m3::Core");
-
+		
 		return eval;
 	}
 }

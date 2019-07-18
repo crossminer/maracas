@@ -29,13 +29,13 @@ public class Detection {
 	public static Detection fromRascalDetection(IConstructor detection) {
 		// detection(loc elem, loc used, tuple[&T from, &T to, real conf, str m], BCTyp
 		// typ)
-		String client = ((ISourceLocation) detection.get(0)).toString();
-		String oldLibrary = ((ISourceLocation) detection.get(1)).toString();
+		String client = ((ISourceLocation) detection.get(1)).toString();
+		String oldLibrary = ((ISourceLocation) detection.get(2)).toString();
 		String newLibrary = "";
-		ITuple mapping = (ITuple) detection.get(2);
+		ITuple mapping = (ITuple) detection.get(3);
 		IValue to = mapping.get(1);
 		double score = ((IReal) mapping.get(2)).doubleValue();
-		IConstructor bcType = (IConstructor) detection.get(3);
+		IConstructor bcType = (IConstructor) detection.get(4);
 
 		Type type;
 		switch (bcType.getName()) {
