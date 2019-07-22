@@ -108,15 +108,15 @@ set[loc] walkJARs(loc dataset) {
 }
 
 set[Detection] getDetections(loc oldClient, loc delt) {
-	M3 clientM3 = readBinaryValueFile(#M3, oldClient);
+	M3 clientM3 = readM3(oldClient);
 	Delta delta = readBinaryValueFile(#Delta, delt);
 	return detections(clientM3, delta);
 }
 
 bool storeDelta(loc m3OldAPI, loc m3NewAPI, loc delt) {
 	try {
-		M3 oldM3 = readBinaryValueFile(#M3, m3OldAPI);
-		M3 newM3 = readBinaryValueFile(#M3, m3NewAPI);
+		M3 oldM3 = readM3(m3OldAPI);
+		M3 newM3 = readM3(m3NewAPI);
 		
 		Delta d = delta(oldM3, newM3);
 		writeBinaryValueFile(delt, d);
@@ -136,3 +136,25 @@ bool storeM3(loc projectJar, loc projectM3) {
 		println(e);
 		return false;
 }
+
+str getCodeFromM3(loc m3FromDir, loc decl) {
+	M3 m = readM3(m3FromDir);
+	return getDeclLoc(m, decl);
+}
+
+str getCodeFromSourceDir(loc sourceDir, loc decl) {
+	M3 m = createM3FromDirectory(sourceDir);
+	return getDeclLoc(m, decl);
+}
+
+private str getDeclLoc(M3 m, loc decl) {
+	set[loc] physical = m.declarations[decl];
+	
+	if (physical != {}) {
+		return readFile(getOneFrom(physical));
+	}
+	return "";
+}
+
+private M3 readM3(loc m3Path) 
+	= readBinaryValueFile(#M3, m3Path);

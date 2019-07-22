@@ -1,10 +1,18 @@
 package org.maracas;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.maracas.data.Detection;
 import org.rascalmpl.debug.IRascalMonitor;
@@ -136,6 +144,139 @@ public class Maracas {
 			detections.add(Detection.fromRascalDetection((IConstructor) d));
 		});
 		return detections;
+	}
+	
+	/**
+	 * The method returns a string with the code of the declaration from the
+	 * path of a previously stored M3 model and a string representing the 
+	 * Rascal logical location of the declaration. The M3 model must be created 
+	 * from a source directory, not from a JAR file. 
+	 * 
+	 * @param pathM3FromDir: absolute path to the M3 model of a project
+	 * @param decl: Rascal logical location of the declaration (e.g. 
+	 * 	      “|java+method:///com/google/common/primitives/UnsignedLongs/toString(long)|”)
+	 * @return string with the source code of the declaration
+	 */
+	public String getCodeFromM3(String pathM3FromDir, String decl) {		
+		try {
+			ISourceLocation locDecl = getDeclSourceLocation(decl);
+			ISourceLocation locM3FromDir = vf.sourceLocation(pathM3FromDir);
+			
+			IString source = (IString) evaluator.call("getCodeFromM3", locM3FromDir, locDecl);
+			return source.getValue();
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	/**
+	 * The method returns a string with the code of the declaration from 
+	 * the absolute path of a source directory and a string representing 
+	 * the Rascal logical location of the declaration. 
+	 * 
+	 * @param pathSourceDir: absolute path to the source directory of a project
+	 * @param decl: Rascal logical location of the declaration (e.g. 
+	 * 	      “|java+method:///com/google/common/primitives/UnsignedLongs/toString(long)|”)
+	 * @return string with the source code of the declaration
+	 */
+	public String getCodeFromSourceDir(String pathSourceDir, String decl) {
+		try {
+			ISourceLocation locDecl = getDeclSourceLocation(decl);
+			ISourceLocation locSourceDir = vf.sourceLocation(pathSourceDir);
+			
+			IString source = (IString) evaluator.call("getCodeFromSourceDir", locSourceDir, locDecl);
+			return source.getValue();
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	/**
+	 * The method returns a string with the code of the declaration from the 
+	 * absolute path of a JAR sources file, a destination path where unzipped 
+	 * files must be copied, and a string representing the Rascal logical 
+	 * location of the declaration. 
+	 * 
+	 * @param pathSourceJar: absolute path to the JAR sources file
+	 * @param sourceDir: absolute path to the directory where the source files 
+	 *        must be copied
+	 * @param decl: Rascal logical location of the declaration (e.g. 
+	 * 	      “|java+method:///com/google/common/primitives/UnsignedLongs/toString(long)|”)
+	 * @return string with the source code of the declaration
+	 */
+	public String getCodeFromSourceJar(String pathSourceJar, String sourceDir, String decl) {
+		try {
+			ISourceLocation locDecl = getDeclSourceLocation(decl);
+			ISourceLocation locSourceDir = vf.sourceLocation(sourceDir);
+			
+			boolean unzipped = unzipJar(pathSourceJar, sourceDir);
+			if (unzipped) {
+				IString source = (IString) evaluator.call("getCodeFromSourceDir", locSourceDir, locDecl);
+				return source.getValue();
+			}
+		} 
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	private boolean unzipJar(String pathJar, String pathDir) {
+		try {
+			File file = new File(File.separator + pathJar);
+			JarFile fileJar = new JarFile(file);
+			Enumeration<JarEntry> entries = fileJar.entries();
+			
+			while (entries.hasMoreElements()) {
+				JarEntry entry = entries.nextElement();
+				File fileEntry = new File(File.separator + pathDir + File.separator + entry.getName());
+				
+				if (entry.isDirectory()) {
+					fileEntry.mkdirs();
+				}
+				else {
+					InputStream is = fileJar.getInputStream(entry);
+					FileOutputStream os = new FileOutputStream(fileEntry);
+					
+					while (is.available() > 0) {
+						os.write(is.read());
+					}
+					
+					os.close();
+					is.close();
+				}
+			}
+			
+			fileJar.close();
+			return true;
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	private ISourceLocation getDeclSourceLocation(String decl) throws URISyntaxException {
+		String scheme = getScheme(decl);
+		String path = getPath(decl);
+		ISourceLocation locDecl = vf.sourceLocation(scheme, "", path);
+		return locDecl;
+	}
+	
+	private String getScheme(String rascalLoc) {
+		int endIndex = rascalLoc.indexOf(":");
+		return rascalLoc.substring(1, endIndex);
+	}
+	
+	private String getPath(String rascalLoc) {
+		int beginIndex = rascalLoc.indexOf("///") + 3;
+		int endIndex = rascalLoc.length() - 1;
+		return rascalLoc.substring(beginIndex, endIndex);
 	}
 	
 	public static void main(String[] args) {
