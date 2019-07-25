@@ -1,0 +1,4 @@
+numpy # Scientific computing
+pandas # Data analysis tools and structures
+matplotlib # 2D plotting
+seaborn # Visualization based on matplotlib

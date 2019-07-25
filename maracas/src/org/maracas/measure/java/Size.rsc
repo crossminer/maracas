@@ -5,6 +5,13 @@ import List;
 import String;
 
 @doc{
+	Returns the size of the file or directory in bytes.
+}
+@javaClass{org.maracas.measure.java.Size}
+@reflect{for debugging}
+java int countBytes(loc source);
+
+@doc{
 	Counts the number of lines of code per file. Comment lines 
 	are included. Blank lines are excluded.
 	
@@ -49,7 +56,7 @@ private list[str] getCommentLines(list[str] lines) {
 	return cLines;
 }
 
-int countLines(loc source, list[str] (list[str]) predicate) {
+private int countLines(loc source, list[str] (list[str]) predicate) {
 	int cont = 0;
 	
 	if (isDirectory(source)) {
