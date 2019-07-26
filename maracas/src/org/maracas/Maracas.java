@@ -1,6 +1,7 @@
 package org.maracas;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 import org.maracas.data.Detection;
 import org.rascalmpl.debug.IRascalMonitor;
@@ -252,6 +254,40 @@ public class Maracas {
 			}
 			
 			fileJar.close();
+			return true;
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	private boolean unzipJarAlt(String pathJar, String pathDir) {
+		try {
+			FileInputStream fileStream = new FileInputStream(File.separator + pathJar);
+			JarInputStream jarStream = new JarInputStream(fileStream);
+			JarEntry entry = jarStream.getNextJarEntry();
+			
+			while (entry != null) {
+				File fileEntry = new File(File.separator + pathDir + File.separator + entry.getName());
+				
+				if (entry.isDirectory()) {
+					fileEntry.mkdirs();
+				}
+				else {
+					FileOutputStream os = new FileOutputStream(fileEntry);
+					
+					while (jarStream.available() > 0) {
+						os.write(jarStream.read());
+					}
+					
+					os.close();
+				}
+				entry = jarStream.getNextJarEntry();
+			}
+			
+			jarStream.close();
 			return true;
 		} 
 		catch (IOException e) {
