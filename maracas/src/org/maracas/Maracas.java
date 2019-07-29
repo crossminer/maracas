@@ -109,6 +109,24 @@ public class Maracas {
 	}
 
 	/**
+	 * The method computes a M3 model from a JAR file and stores the model in a given 
+	 * path.
+	 * 
+	 * @param locDir: absolute path to the project source code
+	 * @param pathM3: absolute path to the file where the M3 model should be stored 
+	 *        (including the name of the file and its extension --.m3--)
+	 * @return true if the M3 model was correctly computed and stored in the given 
+	 *         location; false otherwise
+	 */
+	public boolean storeM3FromDir(String pathDir, String pathM3) {
+		ISourceLocation locDir = vf.sourceLocation(pathDir);
+		ISourceLocation locM3 = vf.sourceLocation(pathM3);
+		
+		IBool store = (IBool) evaluator.call("storeM3FromDir", locDir, locM3);
+		return store.getValue();
+	}
+	
+	/**
 	 * The method computes a Delta model between the old and new M3 models of a 
 	 * library. Then, it stores the model in a given path.
 	 * 
@@ -227,7 +245,16 @@ public class Maracas {
 		return "";
 	}
 	
-	private boolean unzipJar(String pathJar, String pathDir) {
+	/**
+	 * Unzips a JAR file given the absolute path to the JAR and the directory
+	 * where content should be stracted.
+	 * 
+	 * @param pathJar: absolute path to JAR file
+	 * @param pathDir: absolute path to directory where JAR content should be 
+	 *        extracted
+	 * @return true if the JAR file was successfully unzziped; false otherwise.
+	 */
+	public boolean unzipJar(String pathJar, String pathDir) {
 		try {
 			File file = new File(File.separator + pathJar);
 			JarFile fileJar = new JarFile(file);

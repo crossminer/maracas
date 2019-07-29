@@ -137,6 +137,17 @@ bool storeM3(loc projectJar, loc projectM3) {
 		return false;
 }
 
+bool storeM3FromDir(loc projectDir, loc projectM3) {
+	try {
+		M3 m = createM3FromDirectory(projectDir);
+		writeBinaryValueFile(projectM3, m);
+		return true;
+	}
+	catch e :
+		println(e);
+		return false;
+}
+
 str getCodeFromM3(loc m3FromDir, loc decl) {
 	M3 m = readM3(m3FromDir);
 	return getDeclLoc(m, decl);
