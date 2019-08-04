@@ -57,6 +57,7 @@ real precision(set[Migration] migs)
 real recall(set[Migration] migs)
 	= (0.0 + truePositives(migs)) / (truePositives(migs) + falseNegatives(migs));
 	
+	
 set[Migration] getUnmodifiedDeprecatedMembers(set[Migration] migs) {
 	depr = getCasesPerType(deprecated(), migs);
 	return { d | d <- depr, d.newDecl != |unknown:///|, d.oldUsed in d.newUses };
@@ -65,4 +66,9 @@ set[Migration] getUnmodifiedDeprecatedMembers(set[Migration] migs) {
 set[Migration] getModifiedDeprecatedMembers(set[Migration] migs) {
 	depr = getCasesPerType(deprecated(), migs);
 	return { d | d <- depr, d.newDecl != |unknown:///|, d.oldUsed notin d.newUses };
+}
+
+set[Migration] getRemovedDeprecatedMembers(set[Migration] migs) {
+	depr = getCasesPerType(deprecated(), migs);
+	return { d | d <- depr, d.newDecl == |unknown:///| };
 }

@@ -1,7 +1,7 @@
 module org::maracas::m3::Core
 
 import IO;
-import lang::java::m3::ClassPaths;
+//import lang::java::m3::ClassPaths;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
@@ -74,21 +74,10 @@ bool isTargetMember(loc elem)
 	= isTargetMemberExclInterface(elem)
 	|| isInterface(elem);
 
-
-bool storeM3(loc projectJar, loc projectM3) {
-	try {
-		M3 m = createM3(projectJar);
-		writeBinaryValueFile(projectM3, m);
-		return true;
-	}
-	catch :
-		return false;
-}
-
 @memo
 M3 createM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
-	M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
-
+	//M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
+	M3 m = createM3FromJar(project);
 	return fillDefaultVisibility(filterAnonymousClasses(m));
 }
 
@@ -110,8 +99,9 @@ M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apac
 }
 
 private list[loc] projectClassPath(loc project, loc mvnExec) {
-	classPaths = getClassPath(project, mavenExecutable=mvnExec);
-	return [ *classPaths[cp] | cp <- classPaths ];
+	//classPaths = getClassPath(project, mavenExecutable=mvnExec);
+	//return [ *classPaths[cp] | cp <- classPaths ];
+	return [];
 }
 
 private set[loc] fetchFilesByExtension(loc directory, str extension) {

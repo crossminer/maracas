@@ -9,7 +9,7 @@ import org::maracas::pipeline::sonarqube::Pipeline;
 loc dataLoc = |project://maracas/src/org/maracas/pipeline/sonarqube/sourcemeter/data|;
 
 
-void runAll(bool runJavaClient=true, bool runCoreClient=true) {
+void runAll(bool runJavaClient = true, bool runCoreClient = true) {
 	Delta delt = computeDeltaSonar();
 	computeStatisticsSonar(delt, "stats-delta.csv");
 	Delta bc = computeBreakingChangesSonar(delt);
@@ -31,10 +31,23 @@ void runAll(bool runJavaClient=true, bool runCoreClient=true) {
 }
 
 void runClientPhases(Delta delt, str fileNameV1, str fileNameV2, str folder) {
-	set[Detection] detectsJava = computeDetectionsSonarJar(delt, fileNameV1, folder);
-	computeStatisticsSonar(detectsJava, "<folder>/stats-detections.csv");
-	set[Migration] migsJava = computeMigrationsSonar(detectsJava, fileNameV2, folder);
-	computeStatisticsSonar(migsJava, "<folder>/stats-migrations.csv");
+	set[Detection] detects = computeDetectionsSonarJar(delt, fileNameV1, folder);
+	computeStatisticsSonar(detects, "<folder>/stats-detections.csv");
+	
+	Delta deltType = getClassDelta(delt);
+	set[Detection] detectsTypes = computeDetectionsSonarJar(deltType, fileNameV1, folder, store=false, rewrite=true);
+	computeStatisticsSonar(detectsTypes, "<folder>/stats-detections-types.csv");
+	
+	Delta deltMethod = getMethodDelta(delt);
+	set[Detection] detectsMeths = computeDetectionsSonarJar(deltMethod, fileNameV1, folder, store=false, rewrite=true);
+	computeStatisticsSonar(detectsMeths, "<folder>/stats-detections-method.csv");
+	
+	Delta deltField = getFieldDelta(delt);
+	set[Detection] detectsFields = computeDetectionsSonarJar(deltField, fileNameV1, folder, store=false, rewrite=true);
+	computeStatisticsSonar(detectsFields, "<folder>/stats-detections-field.csv");
+	
+	set[Migration] migs = computeMigrationsSonar(detects, fileNameV2, folder);
+	computeStatisticsSonar(migs, "<folder>/stats-migrations.csv");
 }
 
 Delta computeDeltaSonar(bool store = true, bool rewrite = false) {
@@ -74,7 +87,7 @@ set[Migration] computeMigrationsSonar(set[Detection] detects, str fileName, str 
 	return computeMigrations(sourcemeterv2, detects, output=output, store=store, rewrite=rewrite);
 }
 
-rel[str, value] computeStatisticsSonar(set[Migration] migs, str fileName) {
+rel[str, int, int, int] computeStatisticsSonar(set[Migration] migs, str fileName) {
 	loc output = dataLoc + fileName;
 	return computeMigrationsStatistics(migs, output=output);
 }

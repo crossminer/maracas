@@ -13,9 +13,9 @@ import org::maracas::m3::Core;
 import DateTime;
 import IO;
 import lang::csv::IO;
+import Set;
 import ValueIO;
 import util::ValueUI;
-
 
 Delta deltaSonar(loc oldAPI, loc newAPI) {
 	M3 m3from = filterSonarInternals(createM3(oldAPI));
@@ -84,7 +84,7 @@ rel[str, int] computeDeltaStatistics(Delta delt, loc output=|file:///temp/maraca
 set[Detection] computeDetections(loc clientv1, Delta delt, loc output=|file:///temp/maracas/detections.bin|, bool store = true, bool rewrite = false) {
 	if (rewrite || !exists(output)) {
 		printMessage("Computing detections for <clientv1>");
-		set[Detection] det = detections(createM3(clientv1), delt);
+		set[Detection] det = detections(createM3(clientv1), delt);	
 		
 		if (store) {
 			printMessage("Writing detections as binary file");
@@ -122,9 +122,15 @@ set[Migration] computeMigrations(loc clientv2, set[Detection] detects, loc outpu
 	}
 }
 
-rel[str, value] computeMigrationsStatistics(set[Migration] migs, loc output=|file:///temp/maracas/migrations-stats.csv|) {
+rel[str, int, int, int] computeMigrationsStatistics(set[Migration] migs, loc output=|file:///temp/maracas/migrations-stats.csv|) {
 	printMessage("Writing migrations statistics as CSV file");
-	rel[str change, value number] stats = getCasesPerChangeType(migs);
+	
+	rel[str name, int unmodf, int modf, int rem] stats = {};
+	unmodf = getUnmodifiedDeprecatedMembers(migs);
+	modf = getModifiedDeprecatedMembers(migs);
+	rem = getRemovedDeprecatedMembers(migs);
+	stats += <"name", size(unmodf), size(modf), size(rem)>;
+	
 	writeCSV(stats, output);
 	return stats;
 }
