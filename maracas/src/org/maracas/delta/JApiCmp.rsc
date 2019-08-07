@@ -1,58 +1,62 @@
 module org::maracas::delta::JApiCmp
 
+import lang::java::m3::AST;
 
-data JApiEntity
+data APIEntity
 	= class(str fullyQualifiedName, 
-	    JApiType classType, 
-	    list[JApiEntity] entities,
-	    list[JApiCompatibilityChange] compatibilityChanges,
+	    EntityType classType, 
+	    list[APIEntity] entities,
+	    list[CompatibilityChange] compatibilityChanges,
 	    APIChange[str] apiChange)
-	| interface(str fullyQualifiedName, APIChange[value] apiChange)
+	| interface(str fullyQualifiedName, APIChangeStatus apiChange)
 	| field(int name,
 		str cachedName,
-		list[JApiEntity] entities, 
-		list[JApiCompatibilityChange] compatibilityChanges,
-		APIChange[value] apiChange)
+		list[APIEntity] entities, 
+		list[CompatibilityChange] compatibilityChanges,
+		APIChangeStatus apiChange)
 	| method(str name, 
-		JApiType returnType,
-		list[JApiEntity] entities,
-		list[JApiCompatibilityChange] compatibilityChanges,
+		EntityType returnType,
+		list[APIEntity] entities,
+		list[CompatibilityChange] compatibilityChanges,
 		APIChange[MethodInfo] apiChange)
 	| constructor(str name, 
-		list[JApiEntity] entities,
-		list[JApiCompatibilityChange] compatibilityChanges,
+		list[APIEntity] entities,
+		list[CompatibilityChange] compatibilityChanges,
 		APIChange[MethodInfo] apiChange)
 	| annotation(str fullyQualifiedName, 
-		list[JApiEntity] entities,
+		list[APIEntity] entities,
 		APIChange[int] apiChange)
 	| annotationElement(str name, APIChange[str] valueAPIChange)
-	| exception(str name, bool checkedException, APIChange[value] apiChange)
+	| exception(str name, bool checkedException, APIChangeStatus apiChange)
 	| parameter(str \type)
-	| modifier(ModifierType modifierType, APIChange[Modifier] apiChange)
+	| modifier(APIChange[Modifier] apiChange)
 	| superclass(APIChange[str] apiChange) // Qualified names are considered
 	;   
 
 data APIChange[&T]
-	= new(&T oldElem, &T newElem)
-	| removed(&T oldElem, &T newElem)
-	| unchanged(&T oldElem, &T newElem)
+	= new(&T elem)
+	| removed(&T elem)
+	| unchanged()
 	| modified(&T oldElem, &T newElem)
-	| new()
+	;
+	
+data APIChangeStatus 
+	= new()
 	| removed()
 	| unchanged()
 	| modified()
 	;
 	
-data JApiType 
-	= classType(APIChange[ClassType] classTypeAPIChange)
+data EntityType 
+	= classType(APIChange[ClassType] apiChange)
 	| returnType(APIChange[str] apiChange)
 	;
 
-data MethodInfo = methodInfo(int name, str cachedName);
+data MethodInfo = methodInfo(int name, str cachedName); // This might go away!
 
-data JApiCompatibilityChange = compatibilityChange(CompatibilityChange compatibilityChange, bool binaryCompatible, bool sourceCompatible);
+data CompatibilityChange = compatibilityChange(CompatibilityChangeType compatibilityChange, bool binaryCompatible, bool sourceCompatible);
 	
-data CompatibilityChange
+data CompatibilityChangeType
 	= annotationDeprecatedAdded()
 	| classRemoved()
 	| classNowAbstract()
@@ -102,26 +106,11 @@ data ClassType
 	| class()
 	| enum()
 	;
-
-data ModifierType
-	= access()
-	| final()
-	| static()
-	| abstract()
-	| synthetic()
-	| bridge()
-	;
 	
 data Modifier
-	= \public()
-	| protected()
-	| packageProtected()
-	| \private()
-	| final()
+	= packageProtected()
 	| nonFinal()
-	| static()
 	| nonStatic()
-	| abstract()
 	| nonAbstract()
 	| synthetic()
 	| nonSynthetic()
