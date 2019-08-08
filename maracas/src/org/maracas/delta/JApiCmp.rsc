@@ -3,34 +3,34 @@ module org::maracas::delta::JApiCmp
 import lang::java::m3::AST;
 
 data APIEntity
-	= class(str fullyQualifiedName, 
+	= class(str className, //fullyQualifiedName
 	    EntityType classType, 
-	    list[APIEntity] entities,
-	    list[CompatibilityChange] compatibilityChanges,
-	    APIChange[str] apiChange)
-	| interface(str fullyQualifiedName, APIChangeStatus apiChange)
-	| field(int name,
-		str cachedName,
-		list[APIEntity] entities, 
-		list[CompatibilityChange] compatibilityChanges,
-		APIChangeStatus apiChange)
-	| method(str name, 
+	    list[APIEntity] classEntities,
+	    list[CompatibilityChange] classChanges,
+	    APIChange[str] classChange)
+	| interface(str interName, APISimpleChange interChange) //fullyQualifiedName
+	| field(int fieldName,
+		str fieldCachedName,
+		list[APIEntity] fieldEntities, 
+		list[CompatibilityChange] fieldChanges,
+		APISimpleChange fieldChange)
+	| method(str methName, 
 		EntityType returnType,
-		list[APIEntity] entities,
-		list[CompatibilityChange] compatibilityChanges,
-		APIChange[MethodInfo] apiChange)
-	| constructor(str name, 
-		list[APIEntity] entities,
-		list[CompatibilityChange] compatibilityChanges,
-		APIChange[MethodInfo] apiChange)
-	| annotation(str fullyQualifiedName, 
-		list[APIEntity] entities,
-		APIChange[int] apiChange)
-	| annotationElement(str name, APIChange[str] valueAPIChange)
-	| exception(str name, bool checkedException, APIChangeStatus apiChange)
+		list[APIEntity] methEntities,
+		list[CompatibilityChange] methChanges,
+		APIChange[MethodInfo] methChange)
+	| constructor(str consName, 
+		list[APIEntity] consEntities,
+		list[CompatibilityChange] consChanges,
+		APIChange[MethodInfo] consChange)
+	| annotation(str annName, //fullyQualifiedName
+		list[APIEntity] annEntities,
+		APIChange[int] annChange)
+	| annotationElement(str annElemName, APIChange[str] annElemChange)
+	| exception(str excepName, bool checkedException, APISimpleChange excepChange)
 	| parameter(str \type)
-	| modifier(APIChange[Modifier] apiChange)
-	| superclass(APIChange[str] apiChange) // Qualified names are considered
+	| modifier(APIChange[Modifier] modifChange)
+	| superclass(APIChange[str] superChange) // Qualified names are considered
 	;   
 
 data APIChange[&T]
@@ -40,7 +40,7 @@ data APIChange[&T]
 	| modified(&T oldElem, &T newElem)
 	;
 	
-data APIChangeStatus 
+data APISimpleChange 
 	= new()
 	| removed()
 	| unchanged()
@@ -48,15 +48,13 @@ data APIChangeStatus
 	;
 	
 data EntityType 
-	= classType(APIChange[ClassType] apiChange)
-	| returnType(APIChange[str] apiChange)
+	= classType(APIChange[ClassType] ctChange)
+	| returnType(APIChange[str] rtChange)
 	;
 
 data MethodInfo = methodInfo(int name, str cachedName); // This might go away!
-
-data CompatibilityChange = compatibilityChange(CompatibilityChangeType compatibilityChange, bool binaryCompatible, bool sourceCompatible);
 	
-data CompatibilityChangeType
+data CompatibilityChange(bool binaryCompatible=false, bool sourceCompatible=false)
 	= annotationDeprecatedAdded()
 	| classRemoved()
 	| classNowAbstract()
@@ -117,3 +115,16 @@ data Modifier
 	| bridge()
 	| nonBridge()
 	;
+
+@javaClass{org.maracas.delta.internal.JApiCmp}
+@reflect{for debugging}
+java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
+
+void myMain() {
+	loc oldJar = |file:///Users/ochoa/Desktop/bacata/guava-18.0.jar|;
+	str oldVersion = "18.0";
+	loc newJar = |file:///Users/ochoa/Desktop/bacata/guava-19.0.jar|;
+	str newVersion = "19.0";
+	
+	compareJars(oldJar, newJar, oldVersion, newVersion);
+}

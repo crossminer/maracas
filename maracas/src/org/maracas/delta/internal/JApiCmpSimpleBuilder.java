@@ -1,11 +1,20 @@
 package org.maracas.delta.internal;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.usethesource.vallang.IBool;
+import io.usethesource.vallang.IConstructor;
+import io.usethesource.vallang.IInteger;
+import io.usethesource.vallang.IList;
+import io.usethesource.vallang.IString;
+import io.usethesource.vallang.IValue;
 import io.usethesource.vallang.IValueFactory;
 import io.usethesource.vallang.type.Type;
 import io.usethesource.vallang.type.TypeFactory;
 import io.usethesource.vallang.type.TypeStore;
 
-public class JApiCmpSimpleBuilder {
+public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 
 	private static final TypeFactory typeFactory = TypeFactory.getInstance();
 	private final TypeStore typeStore;
@@ -14,7 +23,7 @@ public class JApiCmpSimpleBuilder {
 	// ADTs
 	private final Type apiEntityADT;
 	private final Type apiChangeADT;
-	private final Type apiChangeStatusADT;
+	private final Type apiSimpleChangeADT;
 	private final Type entityTypeADT;
 	private final Type methodInfoADT;
 	private final Type compatibilityChangeADT;
@@ -38,55 +47,54 @@ public class JApiCmpSimpleBuilder {
 	private final Type apiChangeRemoved;
 	private final Type apiChangeUnchanged;
 	private final Type apiChangeModified;
-	private final Type apiChangeStatusNew;
-	private final Type apiChangeStatusRemoved;
-	private final Type apiChangeStatusUnchanged;
-	private final Type apiChangeStatusModified;
+	private final Type apiSimpleChangeNew;
+	private final Type apiSimpleChangeRemoved;
+	private final Type apiSimpleChangeUnchanged;
+	private final Type apiSimpleChangeModified;
 	private final Type entityTypeClass;
 	private final Type entityTypeReturn;
 	private final Type methodInfo;
-	private final Type compatibilityChange;
-	private final Type cctAnnotationDeprecatedAdded;
-	private final Type cctClassRemoved;
-	private final Type cctClassNowAbstract;
-	private final Type cctClassNowFinal;
-	private final Type cctClassNoLongerPublic;
-	private final Type cctClassTypeChanged;
-	private final Type cctClassNowCheckedException;
-	private final Type cctClassLessAccessible;
-	private final Type cctSuperclassRemoved;
-	private final Type cctSuperclassAdded;
-	private final Type cctSuperclassModifiedIncompatible;
-	private final Type cctInterfaceAdded;
-	private final Type cctInterfaceRemoved;
-	private final Type cctMethodRemoved;
-	private final Type cctMethodRemovedInSuperclass;
-	private final Type cctMethodLessAccessible;
-	private final Type cctMethodLessAccessibleThanInSuperclass;
-	private final Type cctMethodIsStaticAndOverridesNotStatic;
-	private final Type cctMethodReturnTypeChanged;
-	private final Type cctMethodNowAbstract;
-	private final Type cctMethodNowFinal;
-	private final Type cctMethodNowStatic;
-	private final Type cctMethodNoLongerStatic;
-	private final Type cctMethodAddedToInterface;
-	private final Type cctMethodNowThrowsCheckedException;
-	private final Type cctMethodAbstractAddedToClass;
-	private final Type cctMethodAbstractAddedInSuperclass;
-	private final Type cctMethodAbstractAddedInImplementedInterface;
-	private final Type cctMethodNewDefault;
-	private final Type cctMethodAbstractNowDefault;
-	private final Type cctFieldStaticAndOverridesStatic;
-	private final Type cctFieldLessAccessibleThanInSuperclass;
-	private final Type cctFieldNowFinal;
-	private final Type cctFieldNowStatic;
-	private final Type cctFieldNoLongerStatic;
-	private final Type cctFieldTypeChanged;
-	private final Type cctFieldRemoved;
-	private final Type cctFieldRemovedInSuperclass;
-	private final Type cctFieldLessAccessible;
-	private final Type cctConstructorRemoved;
-	private final Type cctConstructorLessAccessible;
+	private final Type ccAnnotationDeprecatedAdded;
+	private final Type ccClassRemoved;
+	private final Type ccClassNowAbstract;
+	private final Type ccClassNowFinal;
+	private final Type ccClassNoLongerPublic;
+	private final Type ccClassTypeChanged;
+	private final Type ccClassNowCheckedException;
+	private final Type ccClassLessAccessible;
+	private final Type ccSuperclassRemoved;
+	private final Type ccSuperclassAdded;
+	private final Type ccSuperclassModifiedIncompatible;
+	private final Type ccInterfaceAdded;
+	private final Type ccInterfaceRemoved;
+	private final Type ccMethodRemoved;
+	private final Type ccMethodRemovedInSuperclass;
+	private final Type ccMethodLessAccessible;
+	private final Type ccMethodLessAccessibleThanInSuperclass;
+	private final Type ccMethodIsStaticAndOverridesNotStatic;
+	private final Type ccMethodReturnTypeChanged;
+	private final Type ccMethodNowAbstract;
+	private final Type ccMethodNowFinal;
+	private final Type ccMethodNowStatic;
+	private final Type ccMethodNoLongerStatic;
+	private final Type ccMethodAddedToInterface;
+	private final Type ccMethodNowThrowsCheckedException;
+	private final Type ccMethodAbstractAddedToClass;
+	private final Type ccMethodAbstractAddedInSuperclass;
+	private final Type ccMethodAbstractAddedInImplementedInterface;
+	private final Type ccMethodNewDefault;
+	private final Type ccMethodAbstractNowDefault;
+	private final Type ccFieldStaticAndOverridesStatic;
+	private final Type ccFieldLessAccessibleThanInSuperclass;
+	private final Type ccFieldNowFinal;
+	private final Type ccFieldNowStatic;
+	private final Type ccFieldNoLongerStatic;
+	private final Type ccFieldTypeChanged;
+	private final Type ccFieldRemoved;
+	private final Type ccFieldRemovedInSuperclass;
+	private final Type ccFieldLessAccessible;
+	private final Type ccConstructorRemoved;
+	private final Type ccConstructorLessAccessible;
 	private final Type classTypeAnnotation;
 	private final Type classTypeInterface;
 	private final Type classTypeClass;
@@ -113,7 +121,7 @@ public class JApiCmpSimpleBuilder {
 		// ADTs
 		this.apiEntityADT = typeFactory.abstractDataType(typeStore, "APIEntity");
 		this.apiChangeADT = typeFactory.abstractDataType(typeStore, "APIChange", typeFactory.parameterType("T"));
-		this.apiChangeStatusADT = typeFactory.abstractDataType(typeStore, "APIChangeStatus");
+		this.apiSimpleChangeADT = typeFactory.abstractDataType(typeStore, "APIChangeStatus");
 		this.entityTypeADT = typeFactory.abstractDataType(typeStore, "EntityType");
 		this.methodInfoADT = typeFactory.abstractDataType(typeStore, "MethodInfo");
 		this.compatibilityChangeADT = typeFactory.abstractDataType(typeStore, "CompatibilityChange");
@@ -123,13 +131,13 @@ public class JApiCmpSimpleBuilder {
 		
 		// Constructors
 		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
-		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.stringType(), apiChangeStatusADT);
-		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.integerType(), typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeStatusADT);
+		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.stringType(), apiSimpleChangeADT);
+		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.integerType(), typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
 		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
 		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
 		this.apiEntityAnnotation = typeFactory.constructor(typeStore, apiEntityADT, "annotation", typeFactory.stringType(), typeFactory.listType(apiEntityADT), apiChangeADT);
 		this.apiEntityAnnotationElement = typeFactory.constructor(typeStore, apiEntityADT, "annotationElement", typeFactory.stringType(), apiChangeADT);
-		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.stringType(), typeFactory.boolType(), apiChangeStatusADT);
+		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.stringType(), typeFactory.boolType(), apiSimpleChangeADT);
 		this.apiEntityParameter = typeFactory.constructor(typeStore, apiEntityADT, "parameter", typeFactory.stringType());
 		this.apiEntityModifier = typeFactory.constructor(typeStore, apiEntityADT, "modifier", apiChangeADT);
 		this.apiEntitySuperclass = typeFactory.constructor(typeStore, apiEntityADT, "superclass", apiChangeADT);
@@ -137,55 +145,54 @@ public class JApiCmpSimpleBuilder {
 		this.apiChangeRemoved = typeFactory.constructor(typeStore, apiChangeADT, "removed", typeFactory.parameterType("T"));
 		this.apiChangeUnchanged = typeFactory.constructor(typeStore, apiChangeADT, "unchanged");
 		this.apiChangeModified = typeFactory.constructor(typeStore, apiChangeADT, "modified", typeFactory.parameterType("T"), typeFactory.parameterType("T"));
-		this.apiChangeStatusNew = typeFactory.constructor(typeStore, apiChangeADT, "new");
-		this.apiChangeStatusRemoved = typeFactory.constructor(typeStore, apiChangeADT, "removed");
-		this.apiChangeStatusUnchanged = typeFactory.constructor(typeStore, apiChangeADT, "unchanged");
-		this.apiChangeStatusModified = typeFactory.constructor(typeStore, apiChangeADT, "modified");
+		this.apiSimpleChangeNew = typeFactory.constructor(typeStore, apiChangeADT, "new");
+		this.apiSimpleChangeRemoved = typeFactory.constructor(typeStore, apiChangeADT, "removed");
+		this.apiSimpleChangeUnchanged = typeFactory.constructor(typeStore, apiChangeADT, "unchanged");
+		this.apiSimpleChangeModified = typeFactory.constructor(typeStore, apiChangeADT, "modified");
 		this.entityTypeClass = typeFactory.constructor(typeStore, entityTypeADT, "classType", apiChangeADT);
 		this.entityTypeReturn = typeFactory.constructor(typeStore, entityTypeADT, "returnType", apiChangeADT);
 		this.methodInfo = typeFactory.constructor(typeStore, methodInfoADT, "methodInfo", typeFactory.integerType(), typeFactory.stringType());
-		this.compatibilityChange = typeFactory.constructor(typeStore, compatibilityChangeADT, "compatibilityChange", compatibilityChangeTypeADT, typeFactory.boolType(), typeFactory.boolType());
-		this.cctAnnotationDeprecatedAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "annotationDeprecatedAdded");
-		this.cctClassRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classRemoved");
-		this.cctClassNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowAbstract");
-		this.cctClassNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowFinal");
-		this.cctClassNoLongerPublic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNoLongerPublic");
-		this.cctClassTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classTypeChanged");
-		this.cctClassNowCheckedException = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowCheckedException");
-		this.cctClassLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classLessAccessible");
-		this.cctSuperclassRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassRemoved");
-		this.cctSuperclassAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassAdded");
-		this.cctSuperclassModifiedIncompatible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassModifiedIncompatible");
-		this.cctInterfaceAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "interfaceAdded");
-		this.cctInterfaceRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "interfaceRemoved");
-		this.cctMethodRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodRemoved");
-		this.cctMethodRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodRemovedInSuperclass");
-		this.cctMethodLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodLessAccessible");
-		this.cctMethodLessAccessibleThanInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodLessAccessibleThanInSuperclass");
-		this.cctMethodIsStaticAndOverridesNotStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodIsStaticAndOverridesNotStatic");
-		this.cctMethodReturnTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodReturnTypeChanged");
-		this.cctMethodNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowAbstract");
-		this.cctMethodNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowFinal");
-		this.cctMethodNowStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowStatic");
-		this.cctMethodNoLongerStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNoLongerStatic");
-		this.cctMethodAddedToInterface = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAddedToInterface");
-		this.cctMethodNowThrowsCheckedException = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowThrowsCheckedException");
-		this.cctMethodAbstractAddedToClass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedToClass");
-		this.cctMethodAbstractAddedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedInSuperclass");
-		this.cctMethodAbstractAddedInImplementedInterface = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedInImplementedInterface");
-		this.cctMethodNewDefault = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNewDefault");
-		this.cctMethodAbstractNowDefault = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractNowDefault");
-		this.cctFieldStaticAndOverridesStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldStaticAndOverridesStatic");
-		this.cctFieldLessAccessibleThanInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldLessAccessibleThanInSuperclass");
-		this.cctFieldNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNowFinal");
-		this.cctFieldNowStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNowStatic");
-		this.cctFieldNoLongerStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNoLongerStatic");
-		this.cctFieldTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldTypeChanged");
-		this.cctFieldRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldRemoved");
-		this.cctFieldRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldRemovedInSuperclass");
-		this.cctFieldLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldLessAccessible");
-		this.cctConstructorRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "constructorRemoved");
-		this.cctConstructorLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "constructorLessAccessible");
+		this.ccAnnotationDeprecatedAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "annotationDeprecatedAdded");
+		this.ccClassRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classRemoved");
+		this.ccClassNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowAbstract");
+		this.ccClassNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowFinal");
+		this.ccClassNoLongerPublic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNoLongerPublic");
+		this.ccClassTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classTypeChanged");
+		this.ccClassNowCheckedException = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowCheckedException");
+		this.ccClassLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classLessAccessible");
+		this.ccSuperclassRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassRemoved");
+		this.ccSuperclassAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassAdded");
+		this.ccSuperclassModifiedIncompatible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "superclassModifiedIncompatible");
+		this.ccInterfaceAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "interfaceAdded");
+		this.ccInterfaceRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "interfaceRemoved");
+		this.ccMethodRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodRemoved");
+		this.ccMethodRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodRemovedInSuperclass");
+		this.ccMethodLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodLessAccessible");
+		this.ccMethodLessAccessibleThanInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodLessAccessibleThanInSuperclass");
+		this.ccMethodIsStaticAndOverridesNotStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodIsStaticAndOverridesNotStatic");
+		this.ccMethodReturnTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodReturnTypeChanged");
+		this.ccMethodNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowAbstract");
+		this.ccMethodNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowFinal");
+		this.ccMethodNowStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowStatic");
+		this.ccMethodNoLongerStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNoLongerStatic");
+		this.ccMethodAddedToInterface = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAddedToInterface");
+		this.ccMethodNowThrowsCheckedException = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNowThrowsCheckedException");
+		this.ccMethodAbstractAddedToClass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedToClass");
+		this.ccMethodAbstractAddedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedInSuperclass");
+		this.ccMethodAbstractAddedInImplementedInterface = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractAddedInImplementedInterface");
+		this.ccMethodNewDefault = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodNewDefault");
+		this.ccMethodAbstractNowDefault = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "methodAbstractNowDefault");
+		this.ccFieldStaticAndOverridesStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldStaticAndOverridesStatic");
+		this.ccFieldLessAccessibleThanInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldLessAccessibleThanInSuperclass");
+		this.ccFieldNowFinal = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNowFinal");
+		this.ccFieldNowStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNowStatic");
+		this.ccFieldNoLongerStatic = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldNoLongerStatic");
+		this.ccFieldTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldTypeChanged");
+		this.ccFieldRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldRemoved");
+		this.ccFieldRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldRemovedInSuperclass");
+		this.ccFieldLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "fieldLessAccessible");
+		this.ccConstructorRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "constructorRemoved");
+		this.ccConstructorLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "constructorLessAccessible");
 		this.classTypeAnnotation = typeFactory.constructor(typeStore, classTypeADT, "annotation");
 		this.classTypeInterface = typeFactory.constructor(typeStore, classTypeADT, "interface");
 		this.classTypeClass = typeFactory.constructor(typeStore, classTypeADT, "class");
@@ -205,4 +212,475 @@ public class JApiCmpSimpleBuilder {
 		this.modifierBridge = typeFactory.constructor(typeStore, modifierADT, "bridge");
 		this.modifierNonBridge = typeFactory.constructor(typeStore, modifierADT, "nonBridge");
 	}
+
+	@Override
+	public IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor classType, IList entities,
+			IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityClass, fullyQualifiedName, classType, entities, changes, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityInterface, fullyQualifiedName, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityFieldCons(IInteger name, IString cachedName, IList entities,
+			IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityField, name, cachedName, entities, changes, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityMethodCons(IString name, IConstructor returnType, IList entities,
+			IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityMethod, name, returnType, entities, changes, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityConstructorCons(IString name, IList entities, IList changes,
+			IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityConstructor, name, entities, changes, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityAnnotation, fullyQualifiedName, entities, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityAnnotationElementCons(IString name, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityAnnotationElement, name, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityExceptionCons(IString name, IBool checkedException, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityException, name, checkedException, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntityParameterCons(IString type) {
+		return valueFactory.constructor(apiEntityParameter, type);
+	}
+
+	@Override
+	public IConstructor buildApiEntityModifierCons(IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityModifier, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiEntitySuperclassCons(IConstructor apiChange) {
+		return valueFactory.constructor(apiEntitySuperclass, apiChange);
+	}
+
+	@Override
+	public IConstructor buildApiChangeNewCons(Type concrete, IValue elem) {
+		Map<Type, Type> binding = new HashMap<Type, Type>();
+		binding.put(typeFactory.parameterType("T"), concrete);
+		Type apiChangeNewBound = apiChangeNew.instantiate(binding);
+		return valueFactory.constructor(apiChangeNewBound, elem);
+	}
+
+	@Override
+	public IConstructor buildApiChangeRemovedCons(Type concrete, IValue elem) {
+		Map<Type, Type> binding = new HashMap<Type, Type>();
+		binding.put(typeFactory.parameterType("T"), concrete);
+		Type apiChangeRemovedBound = apiChangeRemoved.instantiate(binding);
+		return valueFactory.constructor(apiChangeRemovedBound, elem);
+	}
+
+	@Override
+	public IConstructor buildApiChangeUnchangedCons() {
+		return valueFactory.constructor(apiChangeUnchanged);
+	}
+
+	@Override
+	public IConstructor buildApiChangeModifiedCons(Type concrete, IValue oldElem, IValue newElem) {
+		Map<Type, Type> binding = new HashMap<Type, Type>();
+		binding.put(typeFactory.parameterType("T"), concrete);
+		Type apiChangeModifiedBound = apiChangeModified.instantiate(binding);
+		return valueFactory.constructor(apiChangeModifiedBound, oldElem, newElem);
+	}
+
+	@Override
+	public IConstructor buildApiSimpleChangeNewCons() {
+		return valueFactory.constructor(apiSimpleChangeNew);
+	}
+
+	@Override
+	public IConstructor buildApiSimpleChangeRemovedCons() {
+		return valueFactory.constructor(apiSimpleChangeRemoved);
+	}
+
+	@Override
+	public IConstructor buildApiSimpleChangeUnchangedCons() {
+		return valueFactory.constructor(apiSimpleChangeUnchanged);
+	}
+
+	@Override
+	public IConstructor buildApiSimpleChangeModifiedCons() {
+		return valueFactory.constructor(apiSimpleChangeModified);
+	}
+
+	@Override
+	public IConstructor buildEntityClassTypeCons(IConstructor apiChange) {
+		return valueFactory.constructor(entityTypeClass, apiChange);
+	}
+
+	@Override
+	public IConstructor buildEntityReturnTypeCons(IConstructor apiChange) {
+		return valueFactory.constructor(entityTypeReturn, apiChange);
+	}
+
+	@Override
+	public IConstructor buildMethodInfoCons(IInteger name, IString cachedName) {
+		return valueFactory.constructor(methodInfo, name, cachedName);
+	}
+
+	@Override
+	public IConstructor buildCCAnnotationDeprecatedAddedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccAnnotationDeprecatedAdded);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassNowAbstractCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassNowAbstract);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassNowFinalCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassNowFinal);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassNoLongerPublicCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassNoLongerPublic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassTypeChangedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassTypeChanged);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassNowCheckedExceptionCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassNowCheckedException);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCClassLessAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccClassLessAccessible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCSuperclassRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccSuperclassRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCSuperclassAddedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccSuperclassAdded);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCSuperclassModifiedIncompatibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccSuperclassModifiedIncompatible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCInterfaceAddedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccInterfaceAdded);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCInterfaceRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccInterfaceRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodRemovedInSuperclassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodRemovedInSuperclass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodLessAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodLessAccessible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodLessAccessibleThanInSuperclassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodLessAccessibleThanInSuperclass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodIsStaticAndOverridesNotStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodIsStaticAndOverridesNotStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodReturnTypeChangedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodReturnTypeChanged);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNowAbstractCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNowAbstract);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNowFinalCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNowFinal);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNowStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNowStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNoLongerStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNoLongerStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodAddedToInterfaceCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAddedToInterface);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNowThrowsCheckedExceptionCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNowThrowsCheckedException);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodAbstractAddedToClassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAbstractAddedToClass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodAbstractAddedInSuperclassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAbstractAddedInSuperclass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodAbstractAddedInImplementedInterfaceCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAbstractAddedInImplementedInterface);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNewDefaultCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNewDefault);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodAbstractNowDefaultCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAbstractNowDefault);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldStaticAndOverridesStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldStaticAndOverridesStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldLessAccessibleThanInSuperclassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldLessAccessibleThanInSuperclass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldNowFinalCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldNowFinal);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldNowStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldNowStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldNoLongerStaticCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldNoLongerStatic);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldTypeChangedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldTypeChanged);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldRemovedInSuperclassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldRemovedInSuperclass);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCFieldLessAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldLessAccessible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCConstructorRemovedCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccConstructorRemoved);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCConstructorLessAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccConstructorLessAccessible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildClassTypeAnnotationCons() {
+		return valueFactory.constructor(classTypeAnnotation);
+	}
+
+	@Override
+	public IConstructor buildClassTypeInterfaceCons() {
+		return valueFactory.constructor(classTypeInterface);
+	}
+
+	@Override
+	public IConstructor buildClassTypeClassCons() {
+		return valueFactory.constructor(classTypeClass);
+	}
+
+	@Override
+	public IConstructor buildClassTypeEnumCons() {
+		return valueFactory.constructor(classTypeEnum);
+	}
+
+	@Override
+	public IConstructor buildModifierPublicCons() {
+		return valueFactory.constructor(modifierPublic);
+	}
+
+	@Override
+	public IConstructor buildModifierPrivateCons() {
+		return valueFactory.constructor(modifierPrivate);
+	}
+
+	@Override
+	public IConstructor buildModifierProtectedCons() {
+		return valueFactory.constructor(modifierProtected);
+	}
+
+	@Override
+	public IConstructor buildModifierPackageProtectedCons() {
+		return valueFactory.constructor(modifierPackageProtected);
+	}
+
+	@Override
+	public IConstructor buildModifierFinalCons() {
+		return valueFactory.constructor(modifierFinal);
+	}
+
+	@Override
+	public IConstructor buildModifierNonFinalCons() {
+		return valueFactory.constructor(modifierNonFinal);
+	}
+
+	@Override
+	public IConstructor buildModifierStaticCons() {
+		return valueFactory.constructor(modifierStatic);
+	}
+
+	@Override
+	public IConstructor buildModifierNonStaticCons() {
+		return valueFactory.constructor(modifierNonStatic);
+	}
+
+	@Override
+	public IConstructor buildModifierAbstractCons() {
+		return valueFactory.constructor(modifierAbstract);
+	}
+
+	@Override
+	public IConstructor buildModifierNonAbstractCons() {
+		return valueFactory.constructor(modifierNonAbstract);
+	}
+
+	@Override
+	public IConstructor buildModifierSyntheticCons() {
+		return valueFactory.constructor(modifierSynthetic);
+	}
+
+	@Override
+	public IConstructor buildModifierNonSyntheticCons() {
+		return valueFactory.constructor(modifierNonSynthetic);
+	}
+
+	@Override
+	public IConstructor buildModifierBridgeCons() {
+		return valueFactory.constructor(modifierBridge);
+	}
+
+	@Override
+	public IConstructor buildModifierNonBridgeCons() {
+		return valueFactory.constructor(modifierNonBridge);
+	}
+
+	@Override
+	public Type getModifierType() {
+		return modifierADT;
+	}
+	
+	private IConstructor apply(CompatibilityChange common, IConstructor change) {
+		change = change.asWithKeywordParameters().setParameter("binaryCompatibility", common.getBinaryCompatibility());
+		change = change.asWithKeywordParameters().setParameter("sourceCompatibility", common.getSourceCompatibility());
+		return change;
+	}
+
 }
