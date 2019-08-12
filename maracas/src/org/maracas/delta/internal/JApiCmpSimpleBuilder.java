@@ -52,6 +52,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type apiSimpleChangeUnchanged;
 	private final Type apiSimpleChangeModified;
 	private final Type entityTypeClass;
+	private final Type entityTypeField;
 	private final Type entityTypeReturn;
 	private final Type methodInfo;
 	private final Type ccAnnotationDeprecatedAdded;
@@ -150,6 +151,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.apiSimpleChangeUnchanged = typeFactory.constructor(typeStore, apiChangeADT, "unchanged");
 		this.apiSimpleChangeModified = typeFactory.constructor(typeStore, apiChangeADT, "modified");
 		this.entityTypeClass = typeFactory.constructor(typeStore, entityTypeADT, "classType", apiChangeADT);
+		this.entityTypeField = typeFactory.constructor(typeStore, entityTypeADT, "fieldType", apiChangeADT);
 		this.entityTypeReturn = typeFactory.constructor(typeStore, entityTypeADT, "returnType", apiChangeADT);
 		this.methodInfo = typeFactory.constructor(typeStore, methodInfoADT, "methodInfo", typeFactory.integerType(), typeFactory.stringType());
 		this.ccAnnotationDeprecatedAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "annotationDeprecatedAdded");
@@ -214,9 +216,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor classType, IList entities,
+	public IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityClass, fullyQualifiedName, classType, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityClass, fullyQualifiedName, type, entities, changes, apiChange);
 	}
 
 	@Override
@@ -225,9 +227,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityFieldCons(IInteger name, IString cachedName, IList entities,
+	public IConstructor buildApiEntityFieldCons(IString name, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityField, name, cachedName, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityField, name, type, entities, changes, apiChange);
 	}
 
 	@Override
@@ -243,8 +245,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityAnnotation, fullyQualifiedName, entities, apiChange);
+	public IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IList changes, 
+			IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityAnnotation, fullyQualifiedName, entities, changes, apiChange);
 	}
 
 	@Override
@@ -324,6 +327,11 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	@Override
 	public IConstructor buildEntityClassTypeCons(IConstructor apiChange) {
 		return valueFactory.constructor(entityTypeClass, apiChange);
+	}
+	
+	@Override
+	public IConstructor buildEntityFieldTypeCons(IConstructor apiChange) {
+		return valueFactory.constructor(entityTypeField, apiChange);
 	}
 
 	@Override

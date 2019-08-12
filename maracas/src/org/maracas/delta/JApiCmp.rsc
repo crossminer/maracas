@@ -9,8 +9,8 @@ data APIEntity
 	    list[CompatibilityChange] classChanges,
 	    APIChange[str] classChange)
 	| interface(str interName, APISimpleChange interChange) //fullyQualifiedName
-	| field(int fieldName,
-		str fieldCachedName,
+	| field(str fieldName,
+		EntityType fieldType,
 		list[APIEntity] fieldEntities, 
 		list[CompatibilityChange] fieldChanges,
 		APISimpleChange fieldChange)
@@ -25,8 +25,9 @@ data APIEntity
 		APIChange[MethodInfo] consChange)
 	| annotation(str annName, //fullyQualifiedName
 		list[APIEntity] annEntities,
+		list[CompatibilityChange] annChanges,
 		APIChange[int] annChange)
-	| annotationElement(str annElemName, APIChange[str] annElemChange)
+	| annotationElement(str annElemName, APIChange[list[str]] annElemChange)
 	| exception(str excepName, bool checkedException, APISimpleChange excepChange)
 	| parameter(str \type)
 	| modifier(APIChange[Modifier] modifChange)
@@ -49,6 +50,7 @@ data APISimpleChange
 	
 data EntityType 
 	= classType(APIChange[ClassType] ctChange)
+	| fieldType(APIChange[str] ftChange)
 	| returnType(APIChange[str] rtChange)
 	;
 

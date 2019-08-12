@@ -13,10 +13,10 @@ public interface JApiCmpBuilder {
 
 	IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IConstructor apiChange);
-	IConstructor buildApiEntityFieldCons(IInteger name, IString cachedName, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityFieldCons(IString name, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityMethodCons(IString name, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityConstructorCons(IString name, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IConstructor apiChange);
+	IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationElementCons(IString name, IConstructor apiChange);
 	IConstructor buildApiEntityExceptionCons(IString name, IBool checkedException, IConstructor apiChange);
 	IConstructor buildApiEntityParameterCons(IString type);
@@ -31,6 +31,7 @@ public interface JApiCmpBuilder {
 	IConstructor buildApiSimpleChangeUnchangedCons();
 	IConstructor buildApiSimpleChangeModifiedCons();
 	IConstructor buildEntityClassTypeCons(IConstructor apiChange);
+	IConstructor buildEntityFieldTypeCons(IConstructor apiChange);
 	IConstructor buildEntityReturnTypeCons(IConstructor apiChange);
 	IConstructor buildMethodInfoCons(IInteger name, IString cachedName);
 	IConstructor buildCCAnnotationDeprecatedAddedCons(CompatibilityChange common);
