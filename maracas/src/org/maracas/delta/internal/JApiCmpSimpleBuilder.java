@@ -683,4 +683,45 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		return change;
 	}
 
+	@Override
+	public CompatibilityChange createCompatibilityChange() {
+		return new SimpleCompatibilityChange();
+	}
+	
+	public class SimpleCompatibilityChange implements CompatibilityChange {
+		
+		private IBool binaryCompatibility;
+		private IBool sourceCompatibility;
+		
+		public SimpleCompatibilityChange(IBool binaryCompatibility, IBool sourceCompatibility) {
+			this.binaryCompatibility = binaryCompatibility;
+			this.sourceCompatibility = sourceCompatibility;
+		}
+		
+		public SimpleCompatibilityChange() {
+			this.binaryCompatibility = valueFactory.bool(false);
+			this.sourceCompatibility = valueFactory.bool(false);
+		}
+				
+		@Override
+		public void setBinaryCompatibility(IBool compatible) {
+			this.binaryCompatibility = compatible;
+		}
+
+		@Override
+		public void setSourceCompatibility(IBool compatible) {
+			this.sourceCompatibility = compatible;
+		}
+
+		@Override
+		public IBool getBinaryCompatibility() {
+			return this.binaryCompatibility;
+		}
+
+		@Override
+		public IBool getSourceCompatibility() {
+			return this.sourceCompatibility;
+		}
+		
+	}
 }

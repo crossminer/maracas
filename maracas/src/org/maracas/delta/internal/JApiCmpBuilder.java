@@ -94,6 +94,7 @@ public interface JApiCmpBuilder {
 	IConstructor buildModifierNonBridgeCons();
 	
 	Type getModifierType();
+	CompatibilityChange createCompatibilityChange();
 	
 	interface CompatibilityChange {
 		void setBinaryCompatibility(IBool compatible);

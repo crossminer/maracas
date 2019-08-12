@@ -13,6 +13,8 @@ public class Delta {
 	protected ISetWriter staticModifiers;
 	protected ISetWriter syntheticModifiers;
 	
+	protected ISetWriter types;
+	
 	private final IValueFactory valueFactory = ValueFactoryFactory.getValueFactory();
 	
 	public Delta() {
@@ -21,5 +23,6 @@ public class Delta {
 		this.finalModifiers = valueFactory.setWriter();
 		this.staticModifiers = valueFactory.setWriter();
 		this.syntheticModifiers = valueFactory.setWriter();
+		this.types = valueFactory.setWriter();
 	}
 }

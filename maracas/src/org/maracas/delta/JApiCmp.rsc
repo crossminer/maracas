@@ -120,11 +120,11 @@ data Modifier
 @reflect{for debugging}
 java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
 
-void myMain() {
+list[APIEntity] myMain() {
 	loc oldJar = |file:///Users/ochoa/Desktop/bacata/guava-18.0.jar|;
 	str oldVersion = "18.0";
 	loc newJar = |file:///Users/ochoa/Desktop/bacata/guava-19.0.jar|;
 	str newVersion = "19.0";
 	
-	compareJars(oldJar, newJar, oldVersion, newVersion);
+	return compareJars(oldJar, newJar, oldVersion, newVersion);
 }

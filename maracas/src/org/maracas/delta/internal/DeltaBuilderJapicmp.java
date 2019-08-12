@@ -17,6 +17,7 @@ import japicmp.model.AccessModifier;
 import japicmp.model.FinalModifier;
 import japicmp.model.JApiChangeStatus;
 import japicmp.model.JApiClass;
+import japicmp.model.JApiClassType;
 import japicmp.model.JApiModifier;
 import japicmp.model.JApiModifierBase;
 import japicmp.model.StaticModifier;
@@ -82,13 +83,17 @@ public class DeltaBuilderJapicmp extends Delta {
 			JApiModifier<StaticModifier> staticModifier = elem.getStaticModifier();
 			JApiModifier<SyntheticModifier> syntheticModifier = elem.getSyntheticModifier();
 			
-			String scheme = M3Constants.CLASS_SCHEME;
-			ISourceLocation location = converter.createLocation(scheme, elem.getFullyQualifiedName());
+			//JApiClassType scheme = elem.getClassType().getOldType();
+			ISourceLocation location = converter.createLocation(M3Constants.CLASS_SCHEME, elem.getFullyQualifiedName());
 			addAbstractModifier(location, abstractModifier);
 			addAccessModifier(location, accessModifier);
 			addFinalModifier(location, finalModifier);
 			addStaticModifier(location, staticModifier);
 			addSyntheticModifier(location, syntheticModifier);
+		}
+		
+		private void addType(ISourceLocation oldLocation, ISourceLocation newLocation) {
+			
 		}
 		
 		private void addAbstractModifier(ISourceLocation location, JApiModifier<AbstractModifier> modifier) {
@@ -136,5 +141,6 @@ public class DeltaBuilderJapicmp extends Delta {
 			IString to = converter.resolve(modifier.getNewModifier().get());
 			return converter.createMapping(location, from, to);
 		}
+		
 	}
 }
