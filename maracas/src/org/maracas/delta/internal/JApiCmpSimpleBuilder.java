@@ -16,7 +16,7 @@ import io.usethesource.vallang.type.TypeStore;
 
 public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 
-	private static final TypeFactory typeFactory = TypeFactory.getInstance();
+	private final TypeFactory typeFactory;
 	private final TypeStore typeStore;
 	private final IValueFactory valueFactory;
 	
@@ -25,7 +25,6 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type apiChangeADT;
 	private final Type apiSimpleChangeADT;
 	private final Type entityTypeADT;
-	private final Type methodInfoADT;
 	private final Type compatibilityChangeADT;
 	private final Type compatibilityChangeTypeADT;
 	private final Type classTypeADT;
@@ -54,7 +53,6 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type entityTypeClass;
 	private final Type entityTypeField;
 	private final Type entityTypeReturn;
-	private final Type methodInfo;
 	private final Type ccAnnotationDeprecatedAdded;
 	private final Type ccClassRemoved;
 	private final Type ccClassNowAbstract;
@@ -115,8 +113,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type modifierBridge;
 	private final Type modifierNonBridge;
 	
-	public JApiCmpSimpleBuilder(TypeStore typeStore, IValueFactory valueFactory) {
+	public JApiCmpSimpleBuilder(TypeStore typeStore, TypeFactory typeFactory, IValueFactory valueFactory) {
 		this.typeStore = typeStore;
+		this.typeFactory = typeFactory;
 		this.valueFactory = valueFactory;
 		
 		// ADTs
@@ -124,7 +123,6 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.apiChangeADT = typeFactory.abstractDataType(typeStore, "APIChange", typeFactory.parameterType("T"));
 		this.apiSimpleChangeADT = typeFactory.abstractDataType(typeStore, "APIChangeStatus");
 		this.entityTypeADT = typeFactory.abstractDataType(typeStore, "EntityType");
-		this.methodInfoADT = typeFactory.abstractDataType(typeStore, "MethodInfo");
 		this.compatibilityChangeADT = typeFactory.abstractDataType(typeStore, "CompatibilityChange");
 		this.compatibilityChangeTypeADT = typeFactory.abstractDataType(typeStore, "CompatibilityChangeType");
 		this.classTypeADT = typeFactory.abstractDataType(typeStore, "ClassType");
@@ -153,7 +151,6 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.entityTypeClass = typeFactory.constructor(typeStore, entityTypeADT, "classType", apiChangeADT);
 		this.entityTypeField = typeFactory.constructor(typeStore, entityTypeADT, "fieldType", apiChangeADT);
 		this.entityTypeReturn = typeFactory.constructor(typeStore, entityTypeADT, "returnType", apiChangeADT);
-		this.methodInfo = typeFactory.constructor(typeStore, methodInfoADT, "methodInfo", typeFactory.integerType(), typeFactory.stringType());
 		this.ccAnnotationDeprecatedAdded = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "annotationDeprecatedAdded");
 		this.ccClassRemoved = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classRemoved");
 		this.ccClassNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeTypeADT, "classNowAbstract");
@@ -222,8 +219,8 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityInterface, fullyQualifiedName, apiChange);
+	public IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityInterface, fullyQualifiedName, changes, apiChange);
 	}
 
 	@Override
@@ -337,11 +334,6 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	@Override
 	public IConstructor buildEntityReturnTypeCons(IConstructor apiChange) {
 		return valueFactory.constructor(entityTypeReturn, apiChange);
-	}
-
-	@Override
-	public IConstructor buildMethodInfoCons(IInteger name, IString cachedName) {
-		return valueFactory.constructor(methodInfo, name, cachedName);
 	}
 
 	@Override
@@ -683,6 +675,11 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	@Override
 	public Type getModifierType() {
 		return modifierADT;
+	}
+	
+	@Override
+	public Type getClassTypeType() {
+		return classTypeADT;
 	}
 	
 	private IConstructor apply(CompatibilityChange common, IConstructor change) {

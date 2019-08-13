@@ -12,7 +12,7 @@ import io.usethesource.vallang.type.Type;
 public interface JApiCmpBuilder {
 
 	IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IConstructor apiChange);
+	IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityFieldCons(IString name, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityMethodCons(IString name, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityConstructorCons(IString name, IList entities, IList changes, IConstructor apiChange);
@@ -33,7 +33,6 @@ public interface JApiCmpBuilder {
 	IConstructor buildEntityClassTypeCons(IConstructor apiChange);
 	IConstructor buildEntityFieldTypeCons(IConstructor apiChange);
 	IConstructor buildEntityReturnTypeCons(IConstructor apiChange);
-	IConstructor buildMethodInfoCons(IInteger name, IString cachedName);
 	IConstructor buildCCAnnotationDeprecatedAddedCons(CompatibilityChange common);
 	IConstructor buildCCClassRemovedCons(CompatibilityChange common);
 	IConstructor buildCCClassNowAbstractCons(CompatibilityChange common);
@@ -95,6 +94,7 @@ public interface JApiCmpBuilder {
 	IConstructor buildModifierNonBridgeCons();
 	
 	Type getModifierType();
+	Type getClassTypeType();
 	CompatibilityChange createCompatibilityChange();
 	
 	interface CompatibilityChange {

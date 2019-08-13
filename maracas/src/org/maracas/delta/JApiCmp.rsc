@@ -8,7 +8,9 @@ data APIEntity
 	    list[APIEntity] classEntities,
 	    list[CompatibilityChange] classChanges,
 	    APIChange[str] classChange)
-	| interface(str interName, APISimpleChange interChange) //fullyQualifiedName
+	| interface(str interName, 
+		list[CompatibilityChange] interChanges,
+		APISimpleChange interChange) //fullyQualifiedName
 	| field(str fieldName,
 		EntityType fieldType,
 		list[APIEntity] fieldEntities, 
@@ -18,11 +20,11 @@ data APIEntity
 		EntityType returnType,
 		list[APIEntity] methEntities,
 		list[CompatibilityChange] methChanges,
-		APIChange[MethodInfo] methChange)
-	| constructor(str consName, 
+		APIChange[str] methChange)
+	| constructor(str consName, // TODO: I am not using this cons ???
 		list[APIEntity] consEntities,
 		list[CompatibilityChange] consChanges,
-		APIChange[MethodInfo] consChange)
+		APIChange[str] consChange)
 	| annotation(str annName, //fullyQualifiedName
 		list[APIEntity] annEntities,
 		list[CompatibilityChange] annChanges,
@@ -53,8 +55,6 @@ data EntityType
 	| fieldType(APIChange[str] ftChange)
 	| returnType(APIChange[str] rtChange)
 	;
-
-data MethodInfo = methodInfo(int name, str cachedName); // This might go away!
 	
 data CompatibilityChange(bool binaryCompatible=false, bool sourceCompatible=false)
 	= annotationDeprecatedAdded()
