@@ -131,7 +131,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
 		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.stringType(), apiSimpleChangeADT);
 		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.integerType(), typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
+		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
 		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
 		this.apiEntityAnnotation = typeFactory.constructor(typeStore, apiEntityADT, "annotation", typeFactory.stringType(), typeFactory.listType(apiEntityADT), apiChangeADT);
 		this.apiEntityAnnotationElement = typeFactory.constructor(typeStore, apiEntityADT, "annotationElement", typeFactory.stringType(), apiChangeADT);
