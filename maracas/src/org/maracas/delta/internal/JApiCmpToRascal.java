@@ -55,6 +55,10 @@ import javassist.bytecode.annotation.Annotation;
 
 public class JApiCmpToRascal {
 
+	//-----------------------------------------------
+    // Fields
+    //-----------------------------------------------
+	
 	private static final TypeFactory typeFactory = TypeFactory.getInstance();
 	private final IValueFactory valueFactory;
 	private IEvaluatorContext eval;
@@ -63,6 +67,18 @@ public class JApiCmpToRascal {
 	private final Map<String, IConstructor> classTypes;
 	private final Map<String, IConstructor> simpleChanges;
 	
+	
+	//-----------------------------------------------
+    // Methods
+    //-----------------------------------------------
+	
+	/**
+	 * Builds a JApiCmpToRascal object.
+	 * 
+	 * @param typeStore: Rascal type store
+	 * @param valueFactory: Rascal value factory
+	 * @param eval: Rascal evaluator
+	 */
 	public JApiCmpToRascal(TypeStore typeStore, IValueFactory valueFactory, IEvaluatorContext eval) {
 		this.valueFactory = valueFactory;
 		this.eval = eval;
@@ -71,16 +87,13 @@ public class JApiCmpToRascal {
 		this.classTypes = initializeClassTypes();
 		this.simpleChanges = initializeSimpleChanges();
 	}
-	
-	private final Map<String, IConstructor> initializeSimpleChanges() {
-		HashMap<String, IConstructor> simpleChanges = new HashMap<String, IConstructor>();
-		simpleChanges.put(JApiChangeStatus.MODIFIED.name(), builder.buildApiSimpleChangeModifiedCons());
-		simpleChanges.put(JApiChangeStatus.NEW.name(), builder.buildApiSimpleChangeNewCons());
-		simpleChanges.put(JApiChangeStatus.REMOVED.name(), builder.buildApiSimpleChangeRemovedCons());
-		simpleChanges.put(JApiChangeStatus.UNCHANGED.name(), builder.buildApiSimpleChangeUnchangedCons());
-		return simpleChanges;
-	}
 
+	/**
+	 * Initializes a map relating modifier names to Rascal modifier
+	 * constructors. @see JApiCmpBuilder.
+	 * 
+	 * @return map with keys as strings and values as Rascal constructors.
+	 */
 	private final Map<String, IConstructor> initializeModifiers() {
 		HashMap<String, IConstructor> modifiers = new HashMap<String, IConstructor>();
 		modifiers.put(AbstractModifier.ABSTRACT.name(), builder.buildModifierAbstractCons());
@@ -100,6 +113,12 @@ public class JApiCmpToRascal {
 		return modifiers;
 	}
 	
+	/**
+	 * Initializes a map relating class type names to Rascal class type
+	 * constructors. @see JApiCmpBuilder.
+	 * 
+	 * @return map with keys as strings and values as Rascal constructors.
+	 */
 	private final Map<String, IConstructor> initializeClassTypes() {
 		HashMap<String, IConstructor> classTypes = new HashMap<String, IConstructor>();
 		classTypes.put(ClassType.ANNOTATION.name(), builder.buildClassTypeAnnotationCons());
@@ -109,25 +128,34 @@ public class JApiCmpToRascal {
 		return classTypes;
 	}
 	
-	public static void main(String[] args) {
-		JarArchiveComparatorOptions options = new JarArchiveComparatorOptions();
-		JarArchiveComparator comparator = new JarArchiveComparator(options);
-		
-		JApiCmpArchive oldAPI = new JApiCmpArchive(new File("/Users/ochoa/Desktop/bacata/guava-18.0.jar"), "18.0");
-		JApiCmpArchive newAPI = new JApiCmpArchive(new File("/Users/ochoa/Desktop/bacata/guava-19.0.jar"), "19.0");
-
-		List<JApiClass> classes = comparator.compare(oldAPI, newAPI);
-		classes.forEach(c -> {
-			List<JApiField> fields = c.getFields();
-			List<JApiAnnotation> annotations = c.getAnnotations();
-			
-			annotations.forEach(f -> {
-				String name = f.getFullyQualifiedName();
-				String n = "";
-			});
-		});
+	/**
+	 * Initializes a map relating change status names to simple change 
+	 * constructors. @see JApiCmpBuilder.
+	 * 
+	 * @return map with keys as strings and values as Rascal constructors.
+	 */
+	private final Map<String, IConstructor> initializeSimpleChanges() {
+		HashMap<String, IConstructor> simpleChanges = new HashMap<String, IConstructor>();
+		simpleChanges.put(JApiChangeStatus.MODIFIED.name(), builder.buildApiSimpleChangeModifiedCons());
+		simpleChanges.put(JApiChangeStatus.NEW.name(), builder.buildApiSimpleChangeNewCons());
+		simpleChanges.put(JApiChangeStatus.REMOVED.name(), builder.buildApiSimpleChangeRemovedCons());
+		simpleChanges.put(JApiChangeStatus.UNCHANGED.name(), builder.buildApiSimpleChangeUnchangedCons());
+		return simpleChanges;
 	}
 	
+	/**
+	 * Compares two versions of an API. The source location must point
+	 * to two JAR files.
+	 * 
+	 * @param oldJar: absolute location of the JAR file of the API old 
+	 *        version.
+	 * @param newJar: absolute location of the JAR file of the API new 
+	 *        version.
+	 * @param oldVersion: string with the API old version.
+	 * @param newVersion: string with the API new version.
+	 * @return list of API entities compared between the two API versions 
+	 *         (see module org::maracas::delta::JApiCmp). 
+	 */
 	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion) {
 		JarArchiveComparatorOptions options = new JarArchiveComparatorOptions();
 		JarArchiveComparator comparator = new JarArchiveComparator(options);
@@ -144,23 +172,59 @@ public class JApiCmpToRascal {
 		return result.done();
 	}
 	
+	/**
+	 * Creates a File object from a Rascal source location.
+	 * 
+	 * @param loc: Rascal source location
+	 * @return Java file
+	 */
 	private File sourceLocationToFile(ISourceLocation loc) {
 		String path = loc.getPath();
 		return new File(path);
 	}
 	
+	/**
+	 * Translates a {@link japicmp.model.JApiClass} to an APIEntity 
+	 * class constructor (see module org::maracas::delta::JApiCmp).
+	 * 
+	 * @param clas: JApiClass to be translated
+	 * @return Rascal constructor of an APIEntity class
+	 */
 	private IConstructor translate(JApiClass clas) {
 		JApiChange<CtClass> japiChange = new JApiChange<CtClass>(clas.getOldClass().get(), clas.getNewClass().get(), clas.getChangeStatus());
 		
-		IString fullyQualifiedName = valueFactory.string(clas.getFullyQualifiedName());
+		IString name = valueFactory.string(clas.getFullyQualifiedName());
 		IConstructor classType = translate(clas.getClassType());
 		IList entities = translateEntities(clas);
 		IList changes = translateCompatibilityChanges(clas.getCompatibilityChanges()); 
 		IConstructor apiChange = translate(japiChange);
 		
-		return builder.buildApiEntityClassCons(fullyQualifiedName, classType, entities, changes, apiChange);
+		return builder.buildApiEntityClassCons(name, classType, entities, changes, apiChange);
 	}
 	
+	/**
+	 * Translates a {@link japicmp.model.JApiClassType} to an APIChange 
+	 * constructor (see module org::maracas::delta::JApiCmp).
+	 * 
+	 * @param classType: JApiClassType to be translated
+	 * @return Rascal constructor of an APIChange 
+	 */
+	private IConstructor translate(JApiClassType classType) {
+		JApiChangeStatus changeStatus = classType.getChangeStatus();
+		IConstructor oldClassType = classTypes.get(classType.getOldType());
+		IConstructor newClassType = classTypes.get(classType.getNewType());
+		return buildApiChangeConstructor(builder.getClassTypeType(), oldClassType, newClassType, changeStatus);
+	}
+	
+	/**
+	 * Translates a subset of {@link japicmp.model.JApiClass} attributes
+	 * to a list of APIEntities (see module org::maracas::delta::JApiCmp).
+	 * Modifiers, fields, methods, interfaces, and annotations 
+	 * are considered.
+	 * 
+	 * @param clas: JApiClass to be translated
+	 * @return Rascal list with APIEntity constructors
+	 */
 	private IList translateEntities(JApiClass clas) {		
 		IListWriter entitiesWriter = valueFactory.listWriter();
 		entitiesWriter.append(translate(clas.getAbstractModifier()));
@@ -192,15 +256,39 @@ public class JApiCmpToRascal {
 		
 		return entitiesWriter.done();
 	}
+	
+	/**
+	 * Translates a {@link japicmp.model.JApiSuperclass} to an APIChange 
+	 * constructor (see module org::maracas::delta::JApiCmp).
+	 * 
+	 * @param superclass: JApiSuperclass to be translated
+	 * @return Rascal constructor of an APIChange
+	 */
+	private IConstructor translate(JApiSuperclass superclass) {
+		JApiChange<CtClass> superclassChange = new JApiChange<CtClass>(superclass.getOldSuperclass().get(), superclass.getNewSuperclass().get(), superclass.getChangeStatus());
+		return translate(superclassChange);
+	}
 
-	private IValue translate(JApiImplementedInterface inter) {
+	/**
+	 * Translates a {@link japicmp.model.JApiImplementedInterface} to an 
+	 * APIEntity interface constructor (see module org::maracas::delta::JApiCmp).
+	 * 
+	 * @param inter: JApiImplementedInterface to be translated
+	 * @returnRascal constructor of an APIEntity interface
+	 */
+	private IConstructor translate(JApiImplementedInterface inter) {
 		IString name = valueFactory.string(inter.getFullyQualifiedName());
 		IList changes = translateCompatibilityChanges(inter.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(inter.getChangeStatus().name());
 		return builder.buildApiEntityInterfaceCons(name, changes, apiChange);
 	}
 
-	private IValue translate(JApiMethod method) {
+	/**
+	 * 
+	 * @param method
+	 * @return
+	 */
+	private IConstructor translate(JApiMethod method) {
 		JApiChange<CtMethod> japiChange = new JApiChange<CtMethod>(method.getOldMethod().get(), method.getNewMethod().get(), method.getChangeStatus());
 		
 		IString name = valueFactory.string(method.getName());
@@ -212,6 +300,13 @@ public class JApiCmpToRascal {
 		return builder.buildApiEntityMethodCons(name, returnType, entities, changes, apiChange);
 	}
 
+	private IConstructor translate(JApiReturnType returnType) {
+		JApiChangeStatus changeStatus = returnType.getChangeStatus();
+		IString oldReturnType = valueFactory.string(returnType.getOldReturnType());
+		IString newReturnType = valueFactory.string(returnType.getNewReturnType());
+		return buildApiChangeConstructor(typeFactory.stringType(), oldReturnType, newReturnType, changeStatus);
+	}
+	
 	private IList translateEntities(JApiMethod method) {
 		IListWriter entitiesWriter = valueFactory.listWriter();
 		entitiesWriter.append(translate(method.getAbstractModifier()));
@@ -239,25 +334,104 @@ public class JApiCmpToRascal {
 		return entitiesWriter.done();
 	}
 
-	private IValue translate(JApiException excep) {
+	private IConstructor translate(JApiParameter param) {
+		IString type = valueFactory.string(param.getType());
+		return builder.buildApiEntityParameterCons(type);
+	}
+	
+	private IConstructor translate(JApiException excep) {
 		IString name = valueFactory.string(excep.getName());
 		IBool checkedException = valueFactory.bool(excep.isCheckedException());
 		IConstructor apiChange = simpleChanges.get(excep.getChangeStatus().name());
 		return builder.buildApiEntityExceptionCons(name, checkedException, apiChange);
 	}
 
-	private IValue translate(JApiParameter param) {
-		IString type = valueFactory.string(param.getType());
-		return builder.buildApiEntityParameterCons(type);
+	private IConstructor translate(JApiField field) {
+		JApiChange<CtField> japiChange = new JApiChange<CtField>(field.getOldFieldOptional().get(), field.getNewFieldOptional().get(), field.getChangeStatus());
+
+		IString name = valueFactory.string(field.getName());
+		IConstructor fieldType = translate(field.getType());
+		IList entities = translateEntities(field);
+		IList changes = translateCompatibilityChanges(field.getCompatibilityChanges()); 
+		IConstructor apiChange = translate(japiChange);
+		
+		return builder.buildApiEntityFieldCons(name, fieldType, entities, changes, apiChange);
 	}
 
-	private IConstructor translate(JApiReturnType returnType) {
-		JApiChangeStatus changeStatus = returnType.getChangeStatus();
-		IString oldReturnType = valueFactory.string(returnType.getOldReturnType());
-		IString newReturnType = valueFactory.string(returnType.getNewReturnType());
-		return getApiChangeConstructor(typeFactory.stringType(), oldReturnType, newReturnType, changeStatus);
+	private IConstructor translate(JApiType type) {
+		JApiChangeStatus changeStatus = type.getChangeStatus();
+		IString oldType = valueFactory.string(type.getOldValue());
+		IString newType = valueFactory.string(type.getNewValue());;
+		return buildApiChangeConstructor(typeFactory.stringType(), oldType, newType, changeStatus);
+	}
+	
+	private IList translateEntities(JApiField field) {
+		IListWriter entitiesWriter = valueFactory.listWriter();
+		
+		entitiesWriter.append(translate(field.getAccessModifier()));
+		entitiesWriter.append(translate(field.getFinalModifier()));
+		entitiesWriter.append(translate(field.getStaticModifier()));
+		entitiesWriter.append(translate(field.getSyntheticModifier()));
+		entitiesWriter.append(translate(field.getTransientModifier()));
+		
+		List<JApiAnnotation> annotations = field.getAnnotations();
+		annotations.forEach(a -> {
+			entitiesWriter.append(translate(a));
+		});
+		
+		return entitiesWriter.done();
 	}
 
+	private <T extends JApiModifierBase> IConstructor translate(JApiModifier<T> modifier) {
+		JApiChangeStatus changeStatus = modifier.getChangeStatus();
+		IConstructor oldModifier = modifiers.get(modifier.getValueOld());
+		IConstructor newModifier = modifiers.get(modifier.getValueNew());
+		return buildApiChangeConstructor(builder.getModifierType(), oldModifier, newModifier, changeStatus);
+	}
+	
+	private IConstructor translate(JApiAnnotation anno) {
+		JApiChange<Annotation> japiChange = new JApiChange<Annotation>(anno.getOldAnnotation().get(), anno.getNewAnnotation().get(), anno.getChangeStatus());
+		
+		IString name = valueFactory.string(anno.getFullyQualifiedName());
+		IConstructor apiChange = translate(japiChange);
+		IList entities = translateEntities(anno);
+		IList changes = translateCompatibilityChanges(anno.getCompatibilityChanges());
+		
+		return builder.buildApiEntityAnnotationCons(name, entities, changes, apiChange);
+	}
+
+	private IList translateEntities(JApiAnnotation anno) {
+		List<JApiAnnotationElement> elements = anno.getElements();
+		
+		IListWriter entitiesWriter = valueFactory.listWriter();
+		elements.forEach(e -> {
+			entitiesWriter.append(translate(e));
+		});
+		
+		return entitiesWriter.done();
+	}
+	
+	private IConstructor translate(JApiAnnotationElement annoElem) {		
+		IString name = valueFactory.string(annoElem.getName());
+		
+		IListWriter oldElemsWriter = valueFactory.listWriter();
+		List<JApiAnnotationElementValue> oldAnnoElements = annoElem.getOldElementValues();
+		oldAnnoElements.forEach(e -> {
+			oldElemsWriter.append(valueFactory.string(e.getNameString()));
+		});
+		
+		IListWriter newElemsWriter = valueFactory.listWriter();
+		List<JApiAnnotationElementValue> newAnnoElements = annoElem.getNewElementValues();
+		newAnnoElements.forEach(e -> {
+			newElemsWriter.append(valueFactory.string(e.getNameString()));
+		});
+		
+		JApiChange<IList> japiChange = new JApiChange<IList>(oldElemsWriter.done(), newElemsWriter.done(), annoElem.getChangeStatus());
+		IConstructor apiChange = translate(japiChange);
+		
+		return builder.buildApiEntityAnnotationElementCons(name, apiChange);
+	}
+	
 	private IList translateCompatibilityChanges(List<JApiCompatibilityChange> changes) {		
 		IListWriter changesWriter = valueFactory.listWriter();
 		changes.forEach(c -> {
@@ -359,104 +533,6 @@ public class JApiCmpToRascal {
 			throw new RuntimeException("The following compatibility change is not supported: " + change.name());
 		}
 	}
-
-	private IValue translate(JApiField field) {
-		JApiChange<CtField> japiChange = new JApiChange<CtField>(field.getOldFieldOptional().get(), field.getNewFieldOptional().get(), field.getChangeStatus());
-
-		IString name = valueFactory.string(field.getName());
-		IConstructor fieldType = translate(field.getType());
-		IList entities = translateEntities(field);
-		IList changes = translateCompatibilityChanges(field.getCompatibilityChanges()); 
-		IConstructor apiChange = translate(japiChange);
-		
-		return builder.buildApiEntityFieldCons(name, fieldType, entities, changes, apiChange);
-	}
-
-	private IList translateEntities(JApiField field) {
-		IListWriter entitiesWriter = valueFactory.listWriter();
-		
-		entitiesWriter.append(translate(field.getAccessModifier()));
-		entitiesWriter.append(translate(field.getFinalModifier()));
-		entitiesWriter.append(translate(field.getStaticModifier()));
-		entitiesWriter.append(translate(field.getSyntheticModifier()));
-		entitiesWriter.append(translate(field.getTransientModifier()));
-		
-		List<JApiAnnotation> annotations = field.getAnnotations();
-		annotations.forEach(a -> {
-			entitiesWriter.append(translate(a));
-		});
-		
-		return entitiesWriter.done();
-	}
-
-	private IValue translate(JApiAnnotation anno) {
-		JApiChange<Annotation> japiChange = new JApiChange<Annotation>(anno.getOldAnnotation().get(), anno.getNewAnnotation().get(), anno.getChangeStatus());
-		
-		IString name = valueFactory.string(anno.getFullyQualifiedName());
-		IConstructor apiChange = translate(japiChange);
-		IList entities = translateEntities(anno);
-		IList changes = translateCompatibilityChanges(anno.getCompatibilityChanges());
-		
-		return builder.buildApiEntityAnnotationCons(name, entities, changes, apiChange);
-	}
-
-	private IList translateEntities(JApiAnnotation anno) {
-		List<JApiAnnotationElement> elements = anno.getElements();
-		
-		IListWriter entitiesWriter = valueFactory.listWriter();
-		elements.forEach(e -> {
-			entitiesWriter.append(translate(e));
-		});
-		
-		return entitiesWriter.done();
-	}
-	
-	private IValue translate(JApiAnnotationElement annoElem) {		
-		IString name = valueFactory.string(annoElem.getName());
-		
-		IListWriter oldElemsWriter = valueFactory.listWriter();
-		List<JApiAnnotationElementValue> oldAnnoElements = annoElem.getOldElementValues();
-		oldAnnoElements.forEach(e -> {
-			oldElemsWriter.append(valueFactory.string(e.getNameString()));
-		});
-		
-		IListWriter newElemsWriter = valueFactory.listWriter();
-		List<JApiAnnotationElementValue> newAnnoElements = annoElem.getNewElementValues();
-		newAnnoElements.forEach(e -> {
-			newElemsWriter.append(valueFactory.string(e.getNameString()));
-		});
-		
-		JApiChange<IList> japiChange = new JApiChange<IList>(oldElemsWriter.done(), newElemsWriter.done(), annoElem.getChangeStatus());
-		IConstructor apiChange = translate(japiChange);
-		
-		return builder.buildApiEntityAnnotationElementCons(name, apiChange);
-	}
-
-	private IConstructor translate(JApiType type) {
-		JApiChangeStatus changeStatus = type.getChangeStatus();
-		IString oldType = valueFactory.string(type.getOldValue());
-		IString newType = valueFactory.string(type.getNewValue());;
-		return getApiChangeConstructor(typeFactory.stringType(), oldType, newType, changeStatus);
-	}
-
-	private IValue translate(JApiSuperclass superclass) {
-		JApiChange<CtClass> superclassChange = new JApiChange<CtClass>(superclass.getOldSuperclass().get(), superclass.getNewSuperclass().get(), superclass.getChangeStatus());
-		return translate(superclassChange);
-	}
-
-	private <T extends JApiModifierBase> IConstructor translate(JApiModifier<T> modifier) {
-		JApiChangeStatus changeStatus = modifier.getChangeStatus();
-		IConstructor oldModifier = modifiers.get(modifier.getValueOld());
-		IConstructor newModifier = modifiers.get(modifier.getValueNew());
-		return getApiChangeConstructor(builder.getModifierType(), oldModifier, newModifier, changeStatus);
-	}
-
-	private IConstructor translate(JApiClassType classType) {
-		JApiChangeStatus changeStatus = classType.getChangeStatus();
-		IConstructor oldClassType = classTypes.get(classType.getOldType());
-		IConstructor newClassType = classTypes.get(classType.getNewType());
-		return getApiChangeConstructor(builder.getClassTypeType(), oldClassType, newClassType, changeStatus);
-	}
 	
 	private <T> IConstructor translate(JApiChange<T> apiChange) {
 		T elem = apiChange.getOldElem();
@@ -465,7 +541,7 @@ public class JApiCmpToRascal {
 		if (elem instanceof IList) {
 			IList oldElems = ((IList) apiChange.getOldElem());
 			IList newElems = ((IList) apiChange.getNewElem());
-			return getApiChangeConstructor(typeFactory.listType(typeFactory.stringType()), oldElems, newElems, changeStatus);
+			return buildApiChangeConstructor(typeFactory.listType(typeFactory.stringType()), oldElems, newElems, changeStatus);
 		}
 		
 		String oldName;
@@ -489,10 +565,22 @@ public class JApiCmpToRascal {
 		
 		IString oldClass = valueFactory.string(oldName);
 		IString newClass = valueFactory.string(newName);
-		return getApiChangeConstructor(typeFactory.stringType(), oldClass, newClass, changeStatus);
+		return buildApiChangeConstructor(typeFactory.stringType(), oldClass, newClass, changeStatus);
 	}
 	
-	private IConstructor getApiChangeConstructor(Type type, IValue oldElem, IValue newElem, JApiChangeStatus changeStatus) {
+	/**
+	 * Builds an APIChange constructor given a type, two elements of 
+	 * the corresponding type, and a {@link japicmp.model.JApiChangeStatus}  
+	 * (see module org::maracas::delta::JApiCmp).
+	 *  
+	 * @param type: type of the possibly modified elements
+	 * @param oldElem: old element of type {@code type}
+	 * @param newElem: new element of type {@code type}
+	 * @param changeStatus: change status of the two elements
+	 * @return Rascal constructor of an APIChange (i.e. {@code new},
+	 *         {@code removed}, {@code unchanged}, and {@code modified})
+	 */
+	private IConstructor buildApiChangeConstructor(Type type, IValue oldElem, IValue newElem, JApiChangeStatus changeStatus) {
 		switch (changeStatus) {
 		case MODIFIED: 
 			return builder.buildApiChangeModifiedCons(type, oldElem, newElem);
