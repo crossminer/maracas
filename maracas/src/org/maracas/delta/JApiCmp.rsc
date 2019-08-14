@@ -8,7 +8,7 @@ data APIEntity
 	    EntityType classType, 
 	    list[APIEntity] classEntities,
 	    list[CompatibilityChange] classChanges,
-	    APIChange[str] classChange)
+	    APISimpleChange classChange)
 	| interface(str interName, //fullyQualifiedName TODO: loc
 		list[CompatibilityChange] interChanges,
 		APISimpleChange interChange) 
@@ -22,14 +22,14 @@ data APIEntity
 		list[APIEntity] methEntities,
 		list[CompatibilityChange] methChanges,
 		APISimpleChange methChange)
-	| constructor(str consName, // TODO: I am not using this cons ???
+	| constructor(str consName,
 		list[APIEntity] consEntities,
 		list[CompatibilityChange] consChanges,
-		APIChange[str] consChange)
+		APISimpleChange consChange)
 	| annotation(str annName, //fullyQualifiedName TODO: loc
 		list[APIEntity] annEntities,
 		list[CompatibilityChange] annChanges,
-		APIChange[str] annChange)
+		APISimpleChange annChange)
 	| annotationElement(str annElemName, APIChange[list[str]] annElemChange) // simplaName
 	| exception(str excepName, //fullyQualifiedName TODO: loc
 		bool checkedException, 
@@ -125,17 +125,11 @@ data Modifier
 @reflect{for debugging}
 java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
 
-APIEntity myMain() {
+list[APIEntity] myMain() {
 	loc oldJar = |file:///Users/ochoa/Desktop/bacata/guava-18.0.jar|;
 	str oldVersion = "18.0";
 	loc newJar = |file:///Users/ochoa/Desktop/bacata/guava-19.0.jar|;
 	str newVersion = "19.0";
 	
-	list[APIEntity] entities = compareJars(oldJar, newJar, oldVersion, newVersion);
-	
-	for (e <- entities) {
-		if (/class("com.google.common.base.CharMatcher",_,_,_,_) := e) {
-			return e;
-		}
-	}
+	return entities = compareJars(oldJar, newJar, oldVersion, newVersion);
 }
