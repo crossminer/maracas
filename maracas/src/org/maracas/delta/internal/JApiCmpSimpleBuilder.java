@@ -6,6 +6,7 @@ import java.util.Map;
 import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.IList;
+import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValue;
 import io.usethesource.vallang.IValueFactory;
@@ -15,8 +16,11 @@ import io.usethesource.vallang.type.TypeStore;
 
 public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 
+	//-----------------------------------------------
+	// Fields
+	//-----------------------------------------------
+	
 	private final TypeFactory typeFactory;
-	private final TypeStore typeStore;
 	private final IValueFactory valueFactory;
 	
 	// ADTs
@@ -112,8 +116,19 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type modifierBridge;
 	private final Type modifierNonBridge;
 	
+	
+	//-----------------------------------------------
+	// Methods
+	//-----------------------------------------------
+	
+	/**
+	 * Creates a JApiCmpSimpleBuilder object.
+	 * 
+	 * @param typeStore: Rascal type store
+	 * @param typeFactory: Rascal type factory
+	 * @param valueFactory: Rascal value factory
+	 */
 	public JApiCmpSimpleBuilder(TypeStore typeStore, TypeFactory typeFactory, IValueFactory valueFactory) {
-		this.typeStore = typeStore;
 		this.typeFactory = typeFactory;
 		this.valueFactory = valueFactory;
 		
@@ -128,15 +143,15 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.modifierADT = typeFactory.abstractDataType(typeStore, "Modifier");
 		
 		// Constructors
-		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.stringType(), apiSimpleChangeADT);
-		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.integerType(), typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.stringType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.stringType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
-		this.apiEntityAnnotation = typeFactory.constructor(typeStore, apiEntityADT, "annotation", typeFactory.stringType(), typeFactory.listType(apiEntityADT), apiSimpleChangeADT);
+		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.sourceLocationType(), apiSimpleChangeADT);
+		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.sourceLocationType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiChangeADT);
+		this.apiEntityAnnotation = typeFactory.constructor(typeStore, apiEntityADT, "annotation", typeFactory.sourceLocationType(), typeFactory.listType(apiEntityADT), apiSimpleChangeADT);
 		this.apiEntityAnnotationElement = typeFactory.constructor(typeStore, apiEntityADT, "annotationElement", typeFactory.stringType(), apiChangeADT);
-		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.stringType(), typeFactory.boolType(), apiSimpleChangeADT);
-		this.apiEntityParameter = typeFactory.constructor(typeStore, apiEntityADT, "parameter", typeFactory.stringType());
+		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.sourceLocationType(), typeFactory.boolType(), apiSimpleChangeADT);
+		this.apiEntityParameter = typeFactory.constructor(typeStore, apiEntityADT, "parameter", typeFactory.sourceLocationType());
 		this.apiEntityModifier = typeFactory.constructor(typeStore, apiEntityADT, "modifier", apiChangeADT);
 		this.apiEntitySuperclass = typeFactory.constructor(typeStore, apiEntityADT, "superclass", apiChangeADT);
 		this.apiChangeNew = typeFactory.constructor(typeStore, apiChangeADT, "new", typeFactory.parameterType("T"));
@@ -212,38 +227,38 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor type, IList entities,
+	public IConstructor buildApiEntityClassCons(ISourceLocation id, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityClass, fullyQualifiedName, type, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityClass, id, type, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityInterface, fullyQualifiedName, changes, apiChange);
+	public IConstructor buildApiEntityInterfaceCons(ISourceLocation id, IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityInterface, id, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityFieldCons(IString name, IConstructor type, IList entities,
+	public IConstructor buildApiEntityFieldCons(ISourceLocation id, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityField, name, type, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityField, id, type, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityMethodCons(IString name, IConstructor returnType, IList entities,
+	public IConstructor buildApiEntityMethodCons(ISourceLocation id, IConstructor returnType, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityMethod, name, returnType, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityMethod, id, returnType, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityConstructorCons(IString name, IList entities, IList changes,
+	public IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList entities, IList changes,
 			IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityConstructor, name, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityConstructor, id, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IList changes, 
+	public IConstructor buildApiEntityAnnotationCons(ISourceLocation id, IList entities, IList changes, 
 			IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityAnnotation, fullyQualifiedName, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityAnnotation, id, entities, changes, apiChange);
 	}
 
 	@Override
@@ -252,12 +267,12 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityExceptionCons(IString name, IBool checkedException, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityException, name, checkedException, apiChange);
+	public IConstructor buildApiEntityExceptionCons(ISourceLocation id, IBool checkedException, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntityException, id, checkedException, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityParameterCons(IString type) {
+	public IConstructor buildApiEntityParameterCons(ISourceLocation type) {
 		return valueFactory.constructor(apiEntityParameter, type);
 	}
 
@@ -680,18 +695,36 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	public Type getClassTypeType() {
 		return classTypeADT;
 	}
-	
-	private IConstructor apply(CompatibilityChange common, IConstructor change) {
-		change = change.asWithKeywordParameters().setParameter("binaryCompatibility", common.getBinaryCompatibility());
-		change = change.asWithKeywordParameters().setParameter("sourceCompatibility", common.getSourceCompatibility());
-		return change;
-	}
 
 	@Override
 	public CompatibilityChange createCompatibilityChange() {
 		return new SimpleCompatibilityChange();
 	}
 	
+	/**
+	 * Adds binary and source compatibility information stored in the 
+	 * {@link org.maracas.delta.internal.JApiCmpResolver.CompatibilityChange}
+	 * object. This is done given the existence of common values of all 
+	 * CompatibilityChange constructors (see org::maracas::delta::JApiCmp).
+	 * 
+	 * @param common: attributes common to all CompatibilityChange constructors
+	 * @param change: CompatibilityChange object to be modified
+	 * @return modified CompatibilityChange object as a Vallang constructor
+	 */
+	private IConstructor apply(CompatibilityChange common, IConstructor change) {
+		change = change.asWithKeywordParameters().setParameter("binaryCompatibility", common.getBinaryCompatibility());
+		change = change.asWithKeywordParameters().setParameter("sourceCompatibility", common.getSourceCompatibility());
+		return change;
+	}
+	
+	/**
+	 * Implementation of the interface declared at 
+	 * {@link org.maracas.delta.internal.JApiCmpResolver.CompatibilityChange}.
+	 * Contains attributes common to all CompatibilityChange constructors
+	 * (see org::maracas::delta::JApiCmp).
+	 * 
+	 * @author Lina Ochoa
+	 */
 	public class SimpleCompatibilityChange implements CompatibilityChange {
 		
 		private IBool binaryCompatibility;

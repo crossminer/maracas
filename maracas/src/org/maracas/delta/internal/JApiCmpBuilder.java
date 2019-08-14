@@ -4,6 +4,7 @@ import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
+import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValue;
 import io.usethesource.vallang.type.Type;
@@ -11,15 +12,15 @@ import io.usethesource.vallang.type.Type;
 
 public interface JApiCmpBuilder {
 
-	IConstructor buildApiEntityClassCons(IString fullyQualifiedName, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityInterfaceCons(IString fullyQualifiedName, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityFieldCons(IString name, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityMethodCons(IString name, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityConstructorCons(IString name, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityAnnotationCons(IString fullyQualifiedName, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityClassCons(ISourceLocation id, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityInterfaceCons(ISourceLocation id, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityFieldCons(ISourceLocation id, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityMethodCons(ISourceLocation id, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityAnnotationCons(ISourceLocation id, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationElementCons(IString name, IConstructor apiChange);
-	IConstructor buildApiEntityExceptionCons(IString name, IBool checkedException, IConstructor apiChange);
-	IConstructor buildApiEntityParameterCons(IString type);
+	IConstructor buildApiEntityExceptionCons(ISourceLocation id, IBool checkedException, IConstructor apiChange);
+	IConstructor buildApiEntityParameterCons(ISourceLocation type);
 	IConstructor buildApiEntityModifierCons(IConstructor apiChange);
 	IConstructor buildApiEntitySuperclassCons(IConstructor apiChange);
 	IConstructor buildApiChangeNewCons(Type concrete, IValue elem);

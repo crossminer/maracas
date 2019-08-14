@@ -60,6 +60,7 @@ public class JApiCmpToRascal {
 	private final IValueFactory valueFactory;
 	private IEvaluatorContext eval;
 	private JApiCmpBuilder builder;
+	private JApiCmpResolver resolver;
 	private final Map<String, IConstructor> modifiers;
 	private final Map<String, IConstructor> classTypes;
 	private final Map<String, IConstructor> simpleChanges;
@@ -80,6 +81,7 @@ public class JApiCmpToRascal {
 		this.valueFactory = valueFactory;
 		this.eval = eval;
 		this.builder = new JApiCmpSimpleBuilder(typeStore, typeFactory, valueFactory);
+		this.resolver = new JApiCmpSimpleResolver(valueFactory);
 		this.modifiers = initializeModifiers();
 		this.classTypes = initializeClassTypes();
 		this.simpleChanges = initializeSimpleChanges();
@@ -89,7 +91,7 @@ public class JApiCmpToRascal {
 	 * Initializes a map relating modifier names to Rascal modifier
 	 * constructors. @see JApiCmpBuilder.
 	 * 
-	 * @return map with keys as strings and values as Rascal constructors.
+	 * @return map with keys as strings and values as Rascal constructors
 	 */
 	private final Map<String, IConstructor> initializeModifiers() {
 		HashMap<String, IConstructor> modifiers = new HashMap<String, IConstructor>();
@@ -188,13 +190,13 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code class}
 	 */
 	private IConstructor translate(JApiClass clas) {		
-		IString name = valueFactory.string(clas.getFullyQualifiedName());
+		ISourceLocation id = resolver.resolve(clas);
 		IConstructor classType = translate(clas.getClassType());
 		IList entities = translateEntities(clas);
 		IList changes = translateCompatibilityChanges(clas.getCompatibilityChanges()); 
 		IConstructor apiChange = simpleChanges.get(clas.getChangeStatus().name());
 		
-		return builder.buildApiEntityClassCons(name, classType, entities, changes, apiChange);
+		return builder.buildApiEntityClassCons(id, classType, entities, changes, apiChange);
 	}
 	
 	/**
@@ -287,7 +289,9 @@ public class JApiCmpToRascal {
 	private IConstructor translate(JApiSuperclass superclass) {
 		String oldSuperclass = (superclass.getOldSuperclass().isPresent()) ? superclass.getOldSuperclass().get().getName() : "";
 		String newSuperclass = (superclass.getNewSuperclass().isPresent()) ? superclass.getNewSuperclass().get().getName()  : "";
-		IConstructor apiChange = buildApiChangeConstructor(typeFactory.stringType(), valueFactory.string(oldSuperclass), valueFactory.string(newSuperclass), superclass.getChangeStatus());
+		ISourceLocation oldSuperclassId = resolver.resolveSuperclass(oldSuperclass);
+		ISourceLocation newSuperclassId = resolver.resolveSuperclass(newSuperclass);
+		IConstructor apiChange = buildApiChangeConstructor(typeFactory.sourceLocationType(), oldSuperclassId, newSuperclassId, superclass.getChangeStatus());
 		
 		return builder.buildApiEntitySuperclassCons(apiChange);
 	}
@@ -300,12 +304,12 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code constructor}
 	 */
 	private IValue translate(JApiConstructor cons) {
-		IString name = valueFactory.string(cons.getName());
+		ISourceLocation id = resolver.resolve(cons);
 		IList entities = translateEntities(cons);
 		IList changes = translateCompatibilityChanges(cons.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(cons.getChangeStatus().name());
 		
-		return builder.buildApiEntityConstructorCons(name, entities, changes, apiChange);
+		return builder.buildApiEntityConstructorCons(id, entities, changes, apiChange);
 	}
 
 	/**
@@ -316,11 +320,11 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code interface}
 	 */
 	private IConstructor translate(JApiImplementedInterface inter) {
-		IString name = valueFactory.string(inter.getFullyQualifiedName());
+		ISourceLocation id = resolver.resolve(inter);
 		IList changes = translateCompatibilityChanges(inter.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(inter.getChangeStatus().name());
 		
-		return builder.buildApiEntityInterfaceCons(name, changes, apiChange);
+		return builder.buildApiEntityInterfaceCons(id, changes, apiChange);
 	}
 
 	/**
@@ -331,13 +335,13 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code method}
 	 */
 	private IConstructor translate(JApiMethod method) {		
-		IString name = valueFactory.string(method.getName());
+		ISourceLocation id = resolver.resolve(method);
 		IConstructor returnType = translate(method.getReturnType());
 		IList entities = translateEntities(method);
 		IList changes = translateCompatibilityChanges(method.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(method.getChangeStatus().name());
 		
-		return builder.buildApiEntityMethodCons(name, returnType, entities, changes, apiChange);
+		return builder.buildApiEntityMethodCons(id, returnType, entities, changes, apiChange);
 	}
 
 	/**
@@ -348,10 +352,11 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an EntityType {@code returnType}
 	 */
 	private IConstructor translate(JApiReturnType returnType) {
-		JApiChangeStatus changeStatus = returnType.getChangeStatus();
-		IString oldReturnType = valueFactory.string(returnType.getOldReturnType());
-		IString newReturnType = valueFactory.string(returnType.getNewReturnType());
-		IConstructor apiChange = buildApiChangeConstructor(typeFactory.stringType(), oldReturnType, newReturnType, changeStatus);
+		String oldReturnType = (!returnType.getOldReturnType().isEmpty()) ? returnType.getOldReturnType() : "";
+		String newReturnType = (!returnType.getNewReturnType().isEmpty()) ? returnType.getNewReturnType()  : "";
+		ISourceLocation oldReturnTypeLoc = resolver.resolveType(oldReturnType);
+		ISourceLocation newReturnTypeLoc = resolver.resolveType(newReturnType);
+		IConstructor apiChange = buildApiChangeConstructor(typeFactory.sourceLocationType(), oldReturnTypeLoc, newReturnTypeLoc, returnType.getChangeStatus());
 		
 		return builder.buildEntityReturnTypeCons(apiChange);
 	}
@@ -401,7 +406,7 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code parameter}
 	 */
 	private IConstructor translate(JApiParameter param) {
-		IString type = valueFactory.string(param.getType());
+		ISourceLocation type = resolver.resolveType(param);
 		return builder.buildApiEntityParameterCons(type);
 	}
 	
@@ -413,10 +418,10 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code exception}
 	 */
 	private IConstructor translate(JApiException excep) {
-		IString name = valueFactory.string(excep.getName());
+		ISourceLocation id = resolver.resolve(excep);
 		IBool checkedException = valueFactory.bool(excep.isCheckedException());
 		IConstructor apiChange = simpleChanges.get(excep.getChangeStatus().name());
-		return builder.buildApiEntityExceptionCons(name, checkedException, apiChange);
+		return builder.buildApiEntityExceptionCons(id, checkedException, apiChange);
 	}
 
 	/**
@@ -427,13 +432,13 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an APIEntity {@code field}
 	 */
 	private IConstructor translate(JApiField field) {
-		IString name = valueFactory.string(field.getName());
+		ISourceLocation id = resolver.resolve(field);
 		IConstructor fieldType = translate(field.getType());
 		IList entities = translateEntities(field);
 		IList changes = translateCompatibilityChanges(field.getCompatibilityChanges()); 
 		IConstructor apiChange = simpleChanges.get(field.getChangeStatus().name());;
 		
-		return builder.buildApiEntityFieldCons(name, fieldType, entities, changes, apiChange);
+		return builder.buildApiEntityFieldCons(id, fieldType, entities, changes, apiChange);
 	}
 
 	/**
@@ -444,10 +449,11 @@ public class JApiCmpToRascal {
 	 * @return Rascal constructor of an EntityType {@code fieldType}
 	 */
 	private IConstructor translate(JApiType type) {
-		JApiChangeStatus changeStatus = type.getChangeStatus();
-		IString oldType = valueFactory.string(type.getOldValue());
-		IString newType = valueFactory.string(type.getNewValue());
-		IConstructor apiChange = buildApiChangeConstructor(typeFactory.stringType(), oldType, newType, changeStatus);
+		String oldType = (type.getOldTypeOptional().isPresent()) ? type.getOldTypeOptional().get() : "";
+		String newType = (type.getNewTypeOptional().isPresent()) ? type.getNewTypeOptional().get()  : "";
+		ISourceLocation oldTypeLoc = resolver.resolveType(oldType);
+		ISourceLocation newTypeLoc = resolver.resolveType(newType);
+		IConstructor apiChange = buildApiChangeConstructor(typeFactory.sourceLocationType(), oldTypeLoc, newTypeLoc, type.getChangeStatus());
 		
 		return builder.buildEntityFieldTypeCons(apiChange);
 	}
@@ -498,16 +504,16 @@ public class JApiCmpToRascal {
 	 * Translates a {@link japicmp.model.JApiAnnotation} to an APIEntity
 	 * {@code annotation} constructor (see module org::maracas::delta::JApiCmp).
 	 * 
-	 * @param anno: JApiAnnotation to be translated
+	 * @param ann: JApiAnnotation to be translated
 	 * @return Rascal constructor of an APIEntity {@code annotation}
 	 */
-	private IConstructor translate(JApiAnnotation anno) {		
-		IString name = valueFactory.string(anno.getFullyQualifiedName());
-		IList entities = translateEntities(anno);
-		IList changes = translateCompatibilityChanges(anno.getCompatibilityChanges());
-		IConstructor apiChange = simpleChanges.get(anno.getChangeStatus().name());
+	private IConstructor translate(JApiAnnotation ann) {		
+		ISourceLocation id = resolver.resolve(ann);
+		IList entities = translateEntities(ann);
+		IList changes = translateCompatibilityChanges(ann.getCompatibilityChanges());
+		IConstructor apiChange = simpleChanges.get(ann.getChangeStatus().name());
 				
-		return builder.buildApiEntityAnnotationCons(name, entities, changes, apiChange);
+		return builder.buildApiEntityAnnotationCons(id, entities, changes, apiChange);
 	}
 
 	/**
@@ -515,11 +521,11 @@ public class JApiCmpToRascal {
 	 * to a list of APIEntities (see module org::maracas::delta::JApiCmp).
 	 * Annotation elements are considered.
 	 * 
-	 * @param anno: target JApiAnnotation
+	 * @param ann: target JApiAnnotation
 	 * @return Rascal list with APIEntity constructors
 	 */
-	private IList translateEntities(JApiAnnotation anno) {
-		List<JApiAnnotationElement> elements = anno.getElements();
+	private IList translateEntities(JApiAnnotation ann) {
+		List<JApiAnnotationElement> elements = ann.getElements();
 		
 		IListWriter entitiesWriter = valueFactory.listWriter();
 		elements.forEach(e -> {

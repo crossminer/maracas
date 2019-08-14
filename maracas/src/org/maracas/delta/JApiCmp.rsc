@@ -4,39 +4,39 @@ import IO;
 import lang::java::m3::AST;
 
 data APIEntity
-	= class(str className, //fullyQualifiedName TODO: loc
+	= class(loc classId, 
 	    EntityType classType, 
 	    list[APIEntity] classEntities,
 	    list[CompatibilityChange] classChanges,
 	    APISimpleChange classChange)
-	| interface(str interName, //fullyQualifiedName TODO: loc
+	| interface(loc interId, 
 		list[CompatibilityChange] interChanges,
 		APISimpleChange interChange) 
-	| field(str fieldName, // simpleName TODO: is it align with m3 names?
+	| field(loc fieldName, // TODO: is it align with m3 names?
 		EntityType fieldType,
 		list[APIEntity] fieldEntities, 
 		list[CompatibilityChange] fieldChanges,
 		APISimpleChange fieldChange)
-	| method(str methName, // simplaName TODO: loc (more complex but doable)
+	| method(loc methId,
 		EntityType returnType,
 		list[APIEntity] methEntities,
 		list[CompatibilityChange] methChanges,
 		APISimpleChange methChange)
-	| constructor(str consName,
+	| constructor(loc consId,
 		list[APIEntity] consEntities,
 		list[CompatibilityChange] consChanges,
 		APISimpleChange consChange)
-	| annotation(str annName, //fullyQualifiedName TODO: loc
+	| annotation(loc annId,
 		list[APIEntity] annEntities,
 		list[CompatibilityChange] annChanges,
 		APISimpleChange annChange)
-	| annotationElement(str annElemName, APIChange[list[str]] annElemChange) // simplaName
-	| exception(str excepName, //fullyQualifiedName TODO: loc
+	| annotationElement(str annElemName, APIChange[list[str]] annElemChange)
+	| exception(loc excepId, 
 		bool checkedException, 
 		APISimpleChange excepChange)
-	| parameter(str \type) //fullyQualifiedName TODO: loc
+	| parameter(loc \type)
 	| modifier(APIChange[Modifier] modifChange)
-	| superclass(APIChange[str] superChange) // fullyQualifiedName TODO: loc
+	| superclass(APIChange[loc] superChange)
 	;   
 
 data APIChange[&T]
@@ -55,8 +55,8 @@ data APISimpleChange
 	
 data EntityType 
 	= classType(APIChange[ClassType] ctChange)
-	| fieldType(APIChange[str] ftChange)
-	| returnType(APIChange[str] rtChange)
+	| fieldType(APIChange[loc] ftChange)
+	| returnType(APIChange[loc] rtChange)
 	;
 	
 data CompatibilityChange(bool binaryCompatible=false, bool sourceCompatible=false)
