@@ -2,6 +2,7 @@ module org::maracas::delta::JApiCmp
 
 import IO;
 import lang::java::m3::AST;
+import Node;
 
 data APIEntity
 	= class(loc classId, 
@@ -124,6 +125,36 @@ data Modifier
 @javaClass{org.maracas.delta.internal.JApiCmp}
 @reflect{for debugging}
 java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
+
+private list[APIEntity] removeUnchangedEntities(list[APIEntity] apiEntities) {
+	list[APIEntity] result = [];
+	for (a <- apiEntities) {
+		children = getChildren(a);
+		
+		if (c <- children, APIEntity::unchanged() := c) {
+			continue;
+		}
+		
+		result += a;
+	}
+	return result;
+}
+
+list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
+	list[APIEntity] result = [];
+	apiEntities = removeUnchangedEntities(apiEntities);
+	
+	for (e <- apiEntities) {
+		result += visit(e) {
+			case class(i, t, ent, c, s) => class(i, t, removeUnchangedEntities(ent), c, s)
+			case field(i, t, ent, c, s) => field(i, t, removeUnchangedEntities(ent), c, s)
+			case method(i, t, ent, c, s) => method(i, t, removeUnchangedEntities(ent), c, s)
+			case constructor(i, ent, c, s) => constructor(i, removeUnchangedEntities(ent), c, s)
+			case annotation(i, ent, c, s) => annotation(i, removeUnchangedEntities(ent), c, s)
+		}
+	}
+	return result;
+}
 
 list[APIEntity] myMain() {
 	loc oldJar = |file:///Users/ochoa/Desktop/bacata/guava-18.0.jar|;
