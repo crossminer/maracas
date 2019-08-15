@@ -1,8 +1,6 @@
 package org.maracas.delta.internal;
 
 import org.rascalmpl.interpreter.IEvaluatorContext;
-import org.rascalmpl.interpreter.env.ModuleEnvironment;
-import org.rascalmpl.values.ValueFactoryFactory;
 
 import io.usethesource.vallang.IList;
 import io.usethesource.vallang.ISourceLocation;

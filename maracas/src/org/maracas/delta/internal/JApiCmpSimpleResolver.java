@@ -116,7 +116,7 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 	
 	@Override
 	public ISourceLocation resolveSuperclass(String superclass) {
-		String scheme = M3Constants.CLASS_SCHEME;
+		String scheme = M3Constants.CLASS_SCHEME; // TODO: check interface cases
 		String path = (superclass.isEmpty()) ? M3Constants.UNKNOWN_SCHEME : qualifiedNameToPath(superclass);
 		return buildSourceLocation(scheme, path);
 	}
