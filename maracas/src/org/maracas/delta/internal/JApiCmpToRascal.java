@@ -23,6 +23,7 @@ import io.usethesource.vallang.type.TypeStore;
 import japicmp.cmp.JApiCmpArchive;
 import japicmp.cmp.JarArchiveComparator;
 import japicmp.cmp.JarArchiveComparatorOptions;
+import japicmp.config.Options;
 import japicmp.model.AbstractModifier;
 import japicmp.model.AccessModifier;
 import japicmp.model.BridgeModifier;
@@ -38,6 +39,7 @@ import japicmp.model.JApiField;
 import japicmp.model.JApiImplementedInterface;
 import japicmp.model.JApiMethod;
 import japicmp.model.JApiClassType.ClassType;
+import japicmp.output.OutputFilter;
 import japicmp.model.JApiCompatibilityChange;
 import japicmp.model.JApiConstructor;
 import japicmp.model.JApiException;
@@ -156,7 +158,11 @@ public class JApiCmpToRascal {
 	 *         (see module org::maracas::delta::JApiCmp). 
 	 */
 	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion) {
-		JarArchiveComparatorOptions options = new JarArchiveComparatorOptions();
+		Options defaultOptions = Options.newDefault();
+		//defaultOptions.setAccessModifier(AccessModifier.PRIVATE);
+		defaultOptions.setOutputOnlyModifications(true);
+
+		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
 		JarArchiveComparator comparator = new JarArchiveComparator(options);
 		
 		JApiCmpArchive oldAPI = new JApiCmpArchive(sourceLocationToFile(oldJar), oldVersion.getValue());
@@ -164,6 +170,10 @@ public class JApiCmpToRascal {
 		
 		IListWriter result = valueFactory.listWriter();
 		List<JApiClass> classes = comparator.compare(oldAPI, newAPI);
+
+		OutputFilter filter = new OutputFilter(defaultOptions);
+		filter.filter(classes);
+
 		classes.forEach(c -> {
 			result.append(translate(c));
 		});
