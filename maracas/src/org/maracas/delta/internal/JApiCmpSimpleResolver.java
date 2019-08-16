@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.rascalmpl.library.lang.java.m3.internal.M3Constants;
+
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IValueFactory;
 import japicmp.model.JApiAnnotation;
@@ -16,9 +18,7 @@ import japicmp.model.JApiException;
 import japicmp.model.JApiField;
 import japicmp.model.JApiImplementedInterface;
 import japicmp.model.JApiParameter;
-
-import org.rascalmpl.interpreter.IEvaluatorContext;
-import org.rascalmpl.library.lang.java.m3.internal.M3Constants;
+import japicmp.util.OptionalHelper;
 
 public class JApiCmpSimpleResolver implements JApiCmpResolver {
 
@@ -56,6 +56,7 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 		schemes.put(ClassType.CLASS.name(), M3Constants.CLASS_SCHEME);
 		schemes.put(ClassType.ENUM.name(), M3Constants.ENUM_SCHEME);
 		schemes.put(ClassType.INTERFACE.name(), M3Constants.INTERFACE_SCHEME);
+		schemes.put(OptionalHelper.N_A, M3Constants.UNKNOWN_SCHEME);
 		return schemes;
 	}
 
