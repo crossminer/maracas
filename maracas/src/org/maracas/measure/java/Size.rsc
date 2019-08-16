@@ -2,7 +2,13 @@ module org::maracas::measure::java::Size
 
 import IO;
 import List;
+import Set;
 import String;
+
+import lang::java::m3::AST;
+import lang::java::m3::Core;
+
+import org::maracas::m3::Core;
 
 @doc{
 	Returns the size of the file or directory in bytes.
@@ -33,6 +39,13 @@ private list[str] getCodeLines(list[str] lines)
 }
 int countCLOCs(loc source) 
 	= countLines(source, getCommentLines);
+
+int countAllDecls(M3 m)      = size(m.declarations);
+int countAllTypes(M3 m)      = size({t | <t, _> <- m.declarations, isType(t)});
+int countAllMembers(M3 m)    = size({d | <d, _> <- m.declarations, isMethod(d) || isField(d)});
+int countPublicDecls(M3 m)   = size({d | <d, _> <- m.declarations, \public() in m.modifiers[d]});
+int countPublicTypes(M3 m)   = size({t | <t, _> <- m.declarations, isType(t), \public() in m.modifiers[t]});
+int countPublicMembers(M3 m) = size({d | <d, _> <- m.declarations, isMethod(d) || isField(d), \public() in m.modifiers[d]});
 
 private list[str] getCommentLines(list[str] lines) {
 	list[str] cLines = [];
