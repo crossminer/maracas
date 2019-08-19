@@ -126,6 +126,12 @@ data Modifier
 @reflect{for debugging}
 java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
 
+set[CompatibilityChange] compatibilityChanges(APIEntity entity) 
+	= { ch | /CompatibilityChange ch := entity };
+	
+set[CompatibilityChange] compatibilityChanges(list[APIEntity] delta)
+	= { *compatibilityChanges(entity) | entity <- delta };
+	
 private list[APIEntity] removeUnchangedEntities(list[APIEntity] apiEntities) {
 	list[APIEntity] result = [];
 	for (a <- apiEntities) {
@@ -154,13 +160,4 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 		}
 	}
 	return result;
-}
-
-list[APIEntity] myMain() {
-	loc oldJar = |file:///Users/ochoa/Desktop/bacata/guava-18.0.jar|;
-	str oldVersion = "18.0";
-	loc newJar = |file:///Users/ochoa/Desktop/bacata/guava-19.0.jar|;
-	str newVersion = "19.0";
-	
-	return entities = compareJars(oldJar, newJar, oldVersion, newVersion);
 }
