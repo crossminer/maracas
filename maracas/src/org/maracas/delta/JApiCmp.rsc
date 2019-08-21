@@ -60,7 +60,7 @@ data EntityType
 	| returnType(APIChange[loc] rtChange)
 	;
 	
-data CompatibilityChange(bool binaryCompatible=false, bool sourceCompatible=false)
+data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibility=false)
 	= annotationDeprecatedAdded()
 	| classRemoved()
 	| classNowAbstract()

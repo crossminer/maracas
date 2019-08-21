@@ -19,6 +19,7 @@ data Detection = detection (
 
 data APIUse
 	= methodInvocation()
+	| methodOverrides()
 	| fieldAcces() 
 	| extends()
 	| implements()
@@ -46,18 +47,18 @@ rel[loc, loc] invMethodInvocation(M3 m) = invert(m.methodInvocation);
 	@return set of Detections (API usages affected by API evolution)
 }
 set[Detection] simpleDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
- 	set[Detection] detects = {};
  	rel[loc, CompatibilityChange] modified = modifiedEntities(delta);
- 	
- 	detects = simpleDetections(client, modified, methodInvocation())
- 		+ simpleDetections(client, modified, fieldAcces())
- 		+ simpleDetections(client, modified, extends())
- 		+ simpleDetections(client, modified, implements())
- 		+ simpleDetections(client, modified, annotation())
- 		+ simpleDetections(client, modified, typeDependency());
- 	
- 	return detects;
+ 	return detectionsAllUses(client, modified);
  }
+ 
+ private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange] modified)
+	= detections(client, modified, methodInvocation())
+	+ detections(client, modified, fieldAcces())
+	+ detections(client, modified, extends())
+	+ detections(client, modified, implements())
+	+ detections(client, modified, annotation())
+	+ detections(client, modified, typeDependency())
+	+ detections(client, modified, methodOverrides());
  
  @doc {
 	Identifies the API uses that affect client code given an APIUse. 
@@ -71,17 +72,26 @@ set[Detection] simpleDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
 	@param apiUse: type of API use (e.g. methodInvocation())
 	@return set of Detections (API usages affected by API evolution)
 }
-private set[Detection] simpleDetections(M3 client, rel[loc, CompatibilityChange] modified, APIUse apiUse) {
-	switch (apiUse) {
-	case APIUse::methodInvocation() : return simpleDetections(client.methodInvocation, modified, methodInvocation());
-	case APIUse::fieldAcces() : return simpleDetections(client.fieldAccess, modified, fieldAcces());
-	case APIUse::extends() : return simpleDetections(client.extends, modified, extends());
-	case APIUse::implements() : return simpleDetections(client.implements, modified, implements());
-	case APIUse::annotation() : return simpleDetections(client.annotations, modified, annotation());
-	case APIUse::typeDependency() : return simpleDetections(client.typeDependency, modified, typeDependency());
-	default : throw "Unkown APIUse <apiUse>";
-	}
-}
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, mi:methodInvocation())
+	= detections(client.methodInvocation, modified, mi); 
+	
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, fa:APIUse::fieldAcces())
+	= detections(client.fieldAccess, modified, fa);
+
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, e:APIUse::extends())
+	= detections(client.extends, modified, e);
+
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, i:APIUse::implements())
+	= detections(client.implements, modified, i);
+		
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, a:APIUse::annotation())
+	= detections(client.annotations, modified, a);
+	
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, td:APIUse::typeDependency())
+	= detections(client.typeDependency, modified, td);
+
+private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, mo:APIUse::methodOverrides())
+	= detections(client.methodOverrides, modified, mo);
 
  @doc {
 	Identifies the API uses that affect client code given an APIUse. 
@@ -96,7 +106,7 @@ private set[Detection] simpleDetections(M3 client, rel[loc, CompatibilityChange]
 	@param apiUse: type of API use (e.g. methodInvocation())
 	@return set of Detections (API usages affected by API evolution)
 }
-private set[Detection] simpleDetections(rel[loc, loc] m3Relation, rel[loc, CompatibilityChange] modified, APIUse apiUse) {
+private set[Detection] detections(rel[loc, loc] m3Relation, rel[loc, CompatibilityChange] modified, APIUse apiUse) {
 	set[loc] modifiedLocs = domain(modified);
 	rel[loc, loc] affected = rangeR(m3Relation, modifiedLocs);
 	rel[loc, loc] invAffected = invert(affected);
@@ -134,19 +144,75 @@ rel[loc, CompatibilityChange] modifiedEntities(list[APIEntity] delta)
 rel[loc, CompatibilityChange] modifiedEntities(APIEntity entity) {
 	rel[loc, CompatibilityChange] modified = {};
 	visit (entity) {
-		case /c:class(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, chs);
-		case /i:interface(id,chs,_):
-			modified = addModifiedElement(id, modified, chs);
-		case /f:field(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, chs);
-		case /m:method(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, chs);
-		case /c:constructor(id,_,chs,_): 
-			modified = addModifiedElement(id, modified, chs);
+	case /c:class(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /i:interface(id,chs,_):
+		modified = addModifiedElement(id, modified, chs);
+	case /f:field(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /m:method(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /c:constructor(id,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
 	}
 	return modified;
 }
+
+set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
+ 	= transitiveDetections(client, oldAPI, delta, annotationDeprecatedAdded())
+ 	+ simpleDetections(client, delta, classRemoved())
+ 	+ simpleDetections(client, delta, classNowAbstract())
+ 	+ trnasitiveDetections(client, oldAPI, delta, classNowFinal())
+}
+
+private set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:annotationDeprecatedAdded()) {
+	set[loc] transModified = transModifiedEntitiesPerChange(oldAPI, delta, ch);
+	return detectionsAllUses(client, transModified);
+}
+
+private set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:classNowFinal()) {
+	set[loc] modified = modifiedEntitiesPerChange(delta, ch);
+	set[loc] transModified = transModifiedEntitiesPerChange(oldAPI, delta, ch);
+	return detectionsAllUses(client, modified) 
+		+ detections(client, transModified, methodOverrides());
+}
+
+private set[Detection] simpleDetections(M3 client, list[APIEntity] delta, CompatibilityChange change) {
+	set[loc] modified = modifiedEntitiesPerChange(delta, change);
+	return detectionsAllUses(client, modified);
+}
+
+rel[loc, CompatibilityChange] transitiveModifiedEntitiesPerChange(M3 oldAPI, list[APIEntity] delta, CompatibilityChange change)
+	= transModifiedEntitiesPerChange(oldAPI, delta, change) * {change};
+
+set[loc] transModifiedEntitiesPerChange(M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+	set[loc] modified = modifiedEntitiesPerChange(delta, ch);
+	rel[loc, loc] transContain = oldAPI.containment+;
+	return { e | m <- modified, e <- transContain[m], isType(e) || isMethod(e) || isField(e) };
+}
+
+set[loc] modifiedEntitiesPerChange(list[APIEntity] delta, CompatibilityChange change) 
+	= { *modifiedEntitiesPerChange(entity, change) | entity <- delta };
+	
+set[loc] modifiedEntitiesPerChange(APIEntity entity, CompatibilityChange change) {
+	set[loc] modified = {};
+	visit (entity) {
+		case /c:class(id,_,_,chs,_): 
+			modified = addModifiedElement(id, modified, change, chs);
+		case /i:interface(id,chs,_):
+			modified = addModifiedElement(id, modified, change, chs);
+		case /f:field(id,_,_,chs,_): 
+			modified = addModifiedElement(id, modified, change, chs);
+		case /m:method(id,_,_,chs,_): 
+			modified = addModifiedElement(id, modified, change, chs);
+		case /c:constructor(id,_,chs,_): 
+			modified = addModifiedElement(id, modified, change, chs);
+	}
+	return modified;
+}
+
+private set[loc] addModifiedElement(loc element, set[loc] modElements, CompatibilityChange change, list[CompatibilityChange] changes)
+	= (hasChange(changes, change)) ? modElements + element : modElements;
 
 @doc {
 	Adds new tuples to a relation mapping API modified entities
