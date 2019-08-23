@@ -19,7 +19,7 @@ data Detection = detection (
 
 data APIUse
 	= methodInvocation()
-	| methodOverrides()
+	| methodOverride()
 	| fieldAcces() 
 	| extends()
 	| implements()
@@ -27,40 +27,99 @@ data APIUse
 	| typeDependency()
 	;
 
+alias ModifiedEntity 
+	= tuple[loc elem, CompatibilityChange change];
 
 //----------------------------------------------
 // Functions
 //----------------------------------------------
 
-@memo
-rel[loc, loc] invMethodInvocation(M3 m) = invert(m.methodInvocation);
-
 @doc {
-	Identifies the API uses that affect client code. It relates 
-	modified API entities owning compatibility changes to the client
-	declaration that uses it.
+	Returns a relation mapping API entities that have been
+	modified to the type of compatibility change they experienced.
+	It consdiers a list of API entities as input (a.k.a. API delta).
 	
-	@param client: M3 model of the client project
-	@param oldAPI: M3 model of the old API
 	@param delta: list of modified APIEntities between two versions 
 	       of the target API.
-	@return set of Detections (API usages affected by API evolution)
+	@return relation mapping modified API entities to compatibility
+	        change types (e.g. renamedMethod())
 }
-set[Detection] simpleDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
- 	rel[loc, CompatibilityChange] modified = modifiedEntities(delta);
- 	return detectionsAllUses(client, modified);
- }
- 
- private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange] modified)
-	= detections(client, modified, methodInvocation())
-	+ detections(client, modified, fieldAcces())
-	+ detections(client, modified, extends())
-	+ detections(client, modified, implements())
-	+ detections(client, modified, annotation())
-	+ detections(client, modified, typeDependency())
-	+ detections(client, modified, methodOverrides());
- 
- @doc {
+@memo
+set[ModifiedEntity] modifiedEntities(list[APIEntity] delta) 
+	= { *modifiedEntities(entity) | entity <- delta };
+
+@doc {
+	Returns a relation mapping API entities that have been
+	modified to the type of compatibility change they experienced.
+	It only considers one API entity as input.
+	
+	@param entity: modified API entity between two versions of the 
+	       target API.
+	@return relation mapping modified API entities to compatibility
+	        change types (e.g. renamedMethod())
+}
+set[ModifiedEntity] modifiedEntities(APIEntity entity) {
+	set[ModifiedEntity] modified = {};
+	visit (entity) {
+	case /c:class(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /i:interface(id,chs,_):
+		modified = addModifiedElement(id, modified, chs);
+	case /f:field(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /m:method(id,_,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	case /c:constructor(id,_,chs,_): 
+		modified = addModifiedElement(id, modified, chs);
+	}
+	return modified;
+}
+
+@memo
+set[ModifiedEntity] fieldRemovedEntities(set[ModifiedEntity] entities) 
+	= { <e, ch> | <e, ch> <- entities, cd := CompatibilityChange::fieldRemoved() }; 
+
+@memo
+set[ModifiedEntity] methodRemovedEntities(set[ModifiedEntity] entities) 
+	= { <e, ch> | <e, ch> <- entities, cd := CompatibilityChange::methodRemoved() }; 
+	
+@doc {
+	Adds new tuples to a relation mapping API modified entities
+	to compatibility change types. These tuples map the element
+	location given as parameter to the list of given compatibility 
+	changes.
+	
+	@param element: location to be included in the modElements 
+	       relation
+	@param modElements: relation mapping modified API entities  
+	       to the type of experienced change
+	@param changes: list of API change types that should be related
+	       to the element location
+	@return relation mapping an element location to compatibility
+	        change types (e.g. renamedMethod())
+}
+private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[ModifiedEntity] modElements, list[CompatibilityChange] changes) {
+	rel[loc, CompatibilityChange] newElements = { <element, c> | c <- changes };
+	return modElements + newElements;
+}
+
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta) 
+ 	= detections(client, oldAPI, delta, fieldRemoved())
+ 	+ detections(client, oldAPI, delta, methodRemoved())
+ 	;
+
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange::fieldRemoved()) {
+	set[ModifiedEntity] modified = fieldRemovedEntities(modifiedEntities(delta));
+	return detections(client, modified, APIUse::fieldAcces());
+}
+
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange::methodRemoved()) {
+	set[ModifiedEntity] modified = methodRemovedEntities(modifiedEntities(delta));
+	return detections(client, modified, APIUse::methodOverride())
+		+ detections(client, modified, APIUse::methodInvocation());
+}
+
+@doc {
 	Identifies the API uses that affect client code given an APIUse. 
 	It relates modified API entities owning compatibility changes to 
 	the client declaration that uses it according to the selected 
@@ -72,28 +131,28 @@ set[Detection] simpleDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
 	@param apiUse: type of API use (e.g. methodInvocation())
 	@return set of Detections (API usages affected by API evolution)
 }
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, mi:methodInvocation())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, mi:APIUse::methodInvocation())
 	= detections(client.methodInvocation, modified, mi); 
 	
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, fa:APIUse::fieldAcces())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, fa:APIUse::fieldAcces())
 	= detections(client.fieldAccess, modified, fa);
 
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, e:APIUse::extends())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, e:APIUse::extends())
 	= detections(client.extends, modified, e);
 
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, i:APIUse::implements())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, i:APIUse::implements())
 	= detections(client.implements, modified, i);
 		
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, a:APIUse::annotation())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, a:APIUse::annotation())
 	= detections(client.annotations, modified, a);
 	
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, td:APIUse::typeDependency())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, td:APIUse::typeDependency())
 	= detections(client.typeDependency, modified, td);
 
-private set[Detection] detections(M3 client, rel[loc, CompatibilityChange] modified, mo:APIUse::methodOverrides())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, mo:APIUse::methodOverride())
 	= detections(client.methodOverrides, modified, mo);
-
- @doc {
+	
+@doc {
 	Identifies the API uses that affect client code given an APIUse. 
 	It relates modified API entities owning compatibility changes to 
 	the client declaration that uses it according to the selected 
@@ -117,122 +176,3 @@ private set[Detection] detections(rel[loc, loc] m3Relation, rel[loc, Compatibili
 	}
 	return detects;
 }
-
-@doc {
-	Returns a relation mapping API entities that have been
-	modified to the type of compatibility change they experienced.
-	It consdiers a list of API entities as input (a.k.a. API delta).
-	
-	@param delta: list of modified APIEntities between two versions 
-	       of the target API.
-	@return relation mapping modified API entities to compatibility
-	        change types (e.g. renamedMethod())
-}
-rel[loc, CompatibilityChange] modifiedEntities(list[APIEntity] delta) 
-	= { *modifiedEntities(entity) | entity <- delta };
-
-@doc {
-	Returns a relation mapping API entities that have been
-	modified to the type of compatibility change they experienced.
-	It only considers one API entity as input.
-	
-	@param entity: modified API entity between two versions of the 
-	       target API.
-	@return relation mapping modified API entities to compatibility
-	        change types (e.g. renamedMethod())
-}
-rel[loc, CompatibilityChange] modifiedEntities(APIEntity entity) {
-	rel[loc, CompatibilityChange] modified = {};
-	visit (entity) {
-	case /c:class(id,_,_,chs,_): 
-		modified = addModifiedElement(id, modified, chs);
-	case /i:interface(id,chs,_):
-		modified = addModifiedElement(id, modified, chs);
-	case /f:field(id,_,_,chs,_): 
-		modified = addModifiedElement(id, modified, chs);
-	case /m:method(id,_,_,chs,_): 
-		modified = addModifiedElement(id, modified, chs);
-	case /c:constructor(id,_,chs,_): 
-		modified = addModifiedElement(id, modified, chs);
-	}
-	return modified;
-}
-
-set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta) {
- 	= transitiveDetections(client, oldAPI, delta, annotationDeprecatedAdded())
- 	+ simpleDetections(client, delta, classRemoved())
- 	+ simpleDetections(client, delta, classNowAbstract())
- 	+ trnasitiveDetections(client, oldAPI, delta, classNowFinal())
-}
-
-private set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:annotationDeprecatedAdded()) {
-	set[loc] transModified = transModifiedEntitiesPerChange(oldAPI, delta, ch);
-	return detectionsAllUses(client, transModified);
-}
-
-private set[Detection] transitiveDetections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:classNowFinal()) {
-	set[loc] modified = modifiedEntitiesPerChange(delta, ch);
-	set[loc] transModified = transModifiedEntitiesPerChange(oldAPI, delta, ch);
-	return detectionsAllUses(client, modified) 
-		+ detections(client, transModified, methodOverrides());
-}
-
-private set[Detection] simpleDetections(M3 client, list[APIEntity] delta, CompatibilityChange change) {
-	set[loc] modified = modifiedEntitiesPerChange(delta, change);
-	return detectionsAllUses(client, modified);
-}
-
-rel[loc, CompatibilityChange] transitiveModifiedEntitiesPerChange(M3 oldAPI, list[APIEntity] delta, CompatibilityChange change)
-	= transModifiedEntitiesPerChange(oldAPI, delta, change) * {change};
-
-set[loc] transModifiedEntitiesPerChange(M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
-	set[loc] modified = modifiedEntitiesPerChange(delta, ch);
-	rel[loc, loc] transContain = oldAPI.containment+;
-	return { e | m <- modified, e <- transContain[m], isType(e) || isMethod(e) || isField(e) };
-}
-
-set[loc] modifiedEntitiesPerChange(list[APIEntity] delta, CompatibilityChange change) 
-	= { *modifiedEntitiesPerChange(entity, change) | entity <- delta };
-	
-set[loc] modifiedEntitiesPerChange(APIEntity entity, CompatibilityChange change) {
-	set[loc] modified = {};
-	visit (entity) {
-		case /c:class(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, change, chs);
-		case /i:interface(id,chs,_):
-			modified = addModifiedElement(id, modified, change, chs);
-		case /f:field(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, change, chs);
-		case /m:method(id,_,_,chs,_): 
-			modified = addModifiedElement(id, modified, change, chs);
-		case /c:constructor(id,_,chs,_): 
-			modified = addModifiedElement(id, modified, change, chs);
-	}
-	return modified;
-}
-
-private set[loc] addModifiedElement(loc element, set[loc] modElements, CompatibilityChange change, list[CompatibilityChange] changes)
-	= (hasChange(changes, change)) ? modElements + element : modElements;
-
-@doc {
-	Adds new tuples to a relation mapping API modified entities
-	to compatibility change types. These tuples map the element
-	location given as parameter to the list of given compatibility 
-	changes.
-	
-	@param element: location to be included in the modElements 
-	       relation
-	@param modElements: relation mapping modified API entities  
-	       to the type of experienced change
-	@param changes: list of API change types that should be related
-	       to the element location
-	@return relation mapping an element location to compatibility
-	        change types (e.g. renamedMethod())
-}
-private rel[loc, CompatibilityChange] addModifiedElement(loc element, rel[loc, CompatibilityChange] modElements, list[CompatibilityChange] changes) {
-	rel[loc, CompatibilityChange] newElements = { <element, c> | c <- changes };
-	return modElements + newElements;
-}
-
-private bool hasChange(list[CompatibilityChange] changes, CompatibilityChange change)
-	= change in changes;
