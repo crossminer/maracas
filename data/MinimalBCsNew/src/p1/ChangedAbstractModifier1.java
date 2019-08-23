@@ -1,6 +1,6 @@
 package p1;
 
-public abstract class ChangedAbstractModifier1 {
+public class ChangedAbstractModifier1 {
 
 	public abstract class Inner1 {
 		

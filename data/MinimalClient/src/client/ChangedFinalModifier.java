@@ -3,8 +3,9 @@ package client;
 import p1.ChangedFinalModifier1;
 import p1.ChangedFinalModifier2;
 import p1.ChangedFinalModifier3;
+import p1.ChangedFinalModifier4;
 
-public class ChangedFinalModifier {
+public class ChangedFinalModifier extends ChangedFinalModifier4 {
 	
 	private ChangedFinalModifier1 classField;
 	private ChangedFinalModifier2 methodField;
@@ -25,5 +26,10 @@ public class ChangedFinalModifier {
 	
 	public void classChangedFinalModifier() {
 		classField = new ChangedFinalModifier1();
+	}
+	
+	@Override
+	public int m1() {
+		return 2;
 	}
 }
