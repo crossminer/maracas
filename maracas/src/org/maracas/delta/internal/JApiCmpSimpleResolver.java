@@ -13,10 +13,12 @@ import io.usethesource.vallang.IValueFactory;
 import japicmp.model.JApiAnnotation;
 import japicmp.model.JApiBehavior;
 import japicmp.model.JApiClass;
+import japicmp.model.JApiConstructor;
 import japicmp.model.JApiClassType.ClassType;
 import japicmp.model.JApiException;
 import japicmp.model.JApiField;
 import japicmp.model.JApiImplementedInterface;
+import japicmp.model.JApiMethod;
 import japicmp.model.JApiParameter;
 import japicmp.util.OptionalHelper;
 
@@ -97,8 +99,18 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 	}
 	
 	@Override
-	public <T extends JApiBehavior> ISourceLocation resolve(T method) {
+	public ISourceLocation resolve(JApiMethod method) {
 		String scheme = M3Constants.METHOD_SCHEME;
+		return resolve(method, scheme);
+	}
+	
+	@Override
+	public ISourceLocation resolve(JApiConstructor cons) {
+		String scheme = M3Constants.CONSTRUCTOR_SCHEME;
+		return resolve(cons, scheme);
+	}
+	
+	private <T extends JApiBehavior> ISourceLocation resolve(T method, String scheme) {
 		String path = composeMethodPath(method.getjApiClass().getFullyQualifiedName(), method.getName(), method.getParameters());
 		return buildSourceLocation(scheme, path);
 	}

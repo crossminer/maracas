@@ -9,7 +9,7 @@ loc apiNew = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/
 loc client = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/comp-changes-client.jar|;
 
 M3 m3ApiOld = createM3FromJar(apiOld);
-M3 m3Client = createM3FromJar(client);
+public M3 m3Client = createM3FromJar(client);
 
 list[APIEntity] delta = compareJars(apiOld, apiNew, "0.0", "1.0");
 set[Detection] detects = detections(m3Client, m3ApiOld, delta);
@@ -110,3 +110,65 @@ public test bool removedFieldMethodOverrides()
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
+    
+    
+//----------------------------------------------
+// Constructor removed tests
+//----------------------------------------------
+
+public test bool removedConstructorSimpleAccess()
+	= detection(
+		|java+method:///main/ConstructorRemovedMI/constructorRemovedClientClass()|,
+		|java+constructor:///main/ConstructorRemovedClass/ConstructorRemovedClass()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool removedConstructorSimpleAccessParams()
+	= detection(
+		|java+method:///main/ConstructorRemovedMI/constructorRemovedClientParams()|,
+		|java+constructor:///main/ConstructorRemovedParams/ConstructorRemovedParams(int)|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool removedConstructorSimpleAccessNoParams()
+	= detection(
+		|java+method:///main/ConstructorRemovedMI/constructorRemovedClientNoParams()|,
+		|java+constructor:///main/ConstructorRemovedNoParams/ConstructorRemovedNoParams()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool removedConstructorSuperConsParams()
+	= detection(
+		|java+constructor:///main/ConstructorRemovedExtParams/ConstructorRemovedExtParams()|,
+		|java+constructor:///main/ConstructorRemovedParams/ConstructorRemovedParams(int)|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+
+public test bool removedConstructorNoSuperConsParams()
+	= detection(
+		|java+method:///main/ConstructorRemovedExtParams/constructorRemovedExtParamsNoSuper()|,
+		|java+constructor:///main/ConstructorRemovedParams/ConstructorRemovedParams(int)|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+    
+public test bool removedConstructorSuperConsNoParams()
+	= detection(
+		|java+constructor:///main/ConstructorRemovedExtNoParams/ConstructorRemovedExtNoParams()|,
+		|java+constructor:///main/ConstructorRemovedNoParams/ConstructorRemovedNoParams()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool removedConstructorNoSuperConsNoParams()
+	= detection(
+		|java+method:///main/ConstructorRemovedExtNoParams/constructorRemovedExtNoParamsNoSuper()|,
+		|java+constructor:///main/ConstructorRemovedNoParams/ConstructorRemovedNoParams()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+    

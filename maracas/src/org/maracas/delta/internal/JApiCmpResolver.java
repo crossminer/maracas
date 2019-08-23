@@ -4,9 +4,11 @@ import io.usethesource.vallang.ISourceLocation;
 import japicmp.model.JApiAnnotation;
 import japicmp.model.JApiBehavior;
 import japicmp.model.JApiClass;
+import japicmp.model.JApiConstructor;
 import japicmp.model.JApiException;
 import japicmp.model.JApiField;
 import japicmp.model.JApiImplementedInterface;
+import japicmp.model.JApiMethod;
 import japicmp.model.JApiParameter;
 
 public interface JApiCmpResolver {
@@ -16,7 +18,8 @@ public interface JApiCmpResolver {
 	ISourceLocation resolve(JApiAnnotation ann);
 	ISourceLocation resolve(JApiException excep);
 	ISourceLocation resolve(JApiField field);
-	<T extends JApiBehavior> ISourceLocation resolve(T method);
+	ISourceLocation resolve(JApiMethod method);
+	ISourceLocation resolve(JApiConstructor cons);
 	ISourceLocation resolveType(JApiParameter param);
 	ISourceLocation resolveType(String type);
 	ISourceLocation resolveSuperclass(String superclass);
