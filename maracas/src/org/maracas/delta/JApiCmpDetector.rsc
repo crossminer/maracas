@@ -98,32 +98,63 @@ private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[Modifi
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta) 
- 	= detections(client, oldAPI, delta, fieldNowStatic())
+ 	= detections(client, oldAPI, delta, fieldNowFinal())
+ 	+ detections(client, oldAPI, delta, fieldNowStatic())
  	+ detections(client, oldAPI, delta, fieldRemoved())
+ 	+ detections(client, oldAPI, delta, fieldTypeChanged())
+ 	+ detections(client, oldAPI, delta, methodNowFinal())
+ 	+ detections(client, oldAPI, delta, methodNowStatic())
  	+ detections(client, oldAPI, delta, methodRemoved())
+ 	+ detections(client, oldAPI, delta, methodReturnTypeChanged())
  	+ detections(client, oldAPI, delta, constructorRemoved())
  	;
 
-private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved())
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowFinal()) 
 	= fieldDetections(client, oldAPI, delta, ch);
-
+	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowStatic()) 
 	= fieldDetections(client, oldAPI, delta, ch);
 
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved())
+	= fieldDetections(client, oldAPI, delta, ch);
+	
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldTypeChanged())
+	= fieldDetections(client, oldAPI, delta, ch);
+	
 private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
 	return detections(client, modified, APIUse::fieldAcces());
 }
 
-private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodRemoved()) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal())
+	= methodOverrDetections(client, oldAPI, delta, ch);
+	
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowStatic())
+	= methodAllDetections(client, oldAPI, delta, ch);
+	
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodRemoved())
+	= methodAllDetections(client, oldAPI, delta, ch);
+
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged())
+	= methodAllDetections(client, oldAPI, delta, ch);
+	
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::constructorRemoved()) 
+	= methodInvDetections(client, oldAPI, delta, ch);
+
+private set[Detection] methodAllDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
 	return detections(client, modified, APIUse::methodOverride())
 		+ detections(client, modified, APIUse::methodInvocation());
 }
 
-private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::constructorRemoved()) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+private set[Detection] methodInvDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
 	return detections(client, modified, APIUse::methodInvocation());
+}
+
+private set[Detection] methodOverrDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	return detections(client, modified, APIUse::methodOverride());
 }
 
 @doc {
