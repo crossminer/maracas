@@ -20,7 +20,7 @@ data Detection = detection (
 data APIUse
 	= methodInvocation()
 	| methodOverride()
-	| fieldAcces() 
+	| fieldAccess() 
 	| extends()
 	| implements()
 	| annotation()
@@ -98,18 +98,56 @@ private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[Modifi
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta) 
- 	= detections(client, oldAPI, delta, fieldNowFinal())
+ 	= detections(client, oldAPI, delta, fieldLessAccessible())
+ 	+ detections(client, oldAPI, delta, fieldNoLongerStatic())
+ 	+ detections(client, oldAPI, delta, fieldNowFinal())
  	+ detections(client, oldAPI, delta, fieldNowStatic())
  	+ detections(client, oldAPI, delta, fieldRemoved())
  	+ detections(client, oldAPI, delta, fieldTypeChanged())
+ 	+ detections(client, oldAPI, delta, methodLessAccessible())
+ 	+ detections(client, oldAPI, delta, methodNoLongerStatic())
  	+ detections(client, oldAPI, delta, methodNowAbstract())
  	+ detections(client, oldAPI, delta, methodNowFinal())
  	+ detections(client, oldAPI, delta, methodNowStatic())
  	+ detections(client, oldAPI, delta, methodRemoved())
  	+ detections(client, oldAPI, delta, methodReturnTypeChanged())
+ 	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
  	;
 
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+	
+		// Let's get the old and new modifiers
+		if (/apiField:field(modif,_,_,_,_) := delta, /modifier(modified(old, new)) := apiField) {
+			set[loc] affected = domain(rangeR(client.fieldAccess, {modif}));
+			
+			// Include client affected elements that are subtypes of the 
+			// modified field parent class, and where modifiers went from
+			// public to protected
+			detects += { detection(elem, modif, fieldAccess(), change) | elem <- affected,
+				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif))};
+		}
+	}
+	return detects;
+}
+
+private bool fromPublicToProtected(Modifier old, Modifier new) 
+	= old == org::maracas::delta::JApiCmp::\public() 
+		&& new == org::maracas::delta::JApiCmp::\protected();
+	
+private bool hasProtectedAccess(M3 client, M3 oldAPI, loc elemClient, loc elemAPI) {
+	loc apiParent = parentType(oldAPI, elemAPI);
+	loc clientParent = parentType(client, elemClient);
+	return (isKnown(clientParent) && isKnown(apiParent) && <clientParent, apiParent> in client.extends);
+}
+	
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNoLongerStatic()) 
+	= fieldDetections(client, oldAPI, delta, ch);
+	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowFinal()) 
 	= fieldDetections(client, oldAPI, delta, ch);
 	
@@ -124,9 +162,15 @@ private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, c
 	
 private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
-	return detections(client, modified, APIUse::fieldAcces());
+	return detections(client, modified, APIUse::fieldAccess());
 }
 
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodLessAccessible())
+	= methodLessAccDetections(client, oldAPI, delta, ch);
+
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNoLongerStatic())
+	= methodInvDetections(client, oldAPI, delta, ch);
+	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowAbstract()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
@@ -135,7 +179,7 @@ private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, c
 		// Identify API class
 		loc parent = parentType(oldAPI, modif);
 		
-		if (parent != |unknown:///|) {
+		if (isKnown(parent)) {
 			// Check client extends
 			set[loc] affectedClasses = domain(rangeR(client.extends, {parent}))
 				+ domain(rangeR(client.implements, {parent}));
@@ -155,14 +199,17 @@ private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, c
 	return detects + detections(client, modified, APIUse::methodInvocation());
 }
 
-private loc parentType(M3 m, loc method) {
-	rel[loc, loc] containers = rangeR(m.containment, {method});
+private loc parentType(M3 m, loc elem) {
+	rel[loc, loc] containers = rangeR(m.containment, {elem});
 	if (<p,_> <- containers, isType(p)) {
 		return p;
 	}
 	return |unknwon:///|;
 }
-	
+
+private bool isKnown(loc elem) 
+ 	= elem != |unknwon:///|;
+ 	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal())
 	= methodOverrDetections(client, oldAPI, delta, ch);
 	
@@ -174,6 +221,9 @@ private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, c
 
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged())
 	= methodAllDetections(client, oldAPI, delta, ch);
+
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::constructorLessAccessible())
+	= methodLessAccDetections(client, oldAPI, delta, ch);
 	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::constructorRemoved()) 
 	= methodInvDetections(client, oldAPI, delta, ch);
@@ -194,6 +244,28 @@ private set[Detection] methodOverrDetections(M3 client, M3 oldAPI, list[APIEntit
 	return detections(client, modified, APIUse::methodOverride());
 }
 
+private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange ch) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+	
+		// Let's get the old and new modifiers
+		if (/apiMeth:method(modif,_,_,_,_) := delta || /apiMeth:constructor(modif,_,_,_) := delta,
+			/modifier(modified(old, new)) := apiMeth) {
+			rel[loc, APIUse] affected = domain(rangeR(client.methodInvocation, {modif})) * { methodInvocation() }
+				+ domain(rangeR(client.methodOverrides, {modif})) * { methodOverride() };
+			
+			// Include client affected elements that are subtypes of the 
+			// modified field parent class, and where modifiers went from
+			// public to protected
+			detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
+				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif)) };
+		}
+	}
+	return detects;
+}
+
 @doc {
 	Identifies the API uses that affect client code given an APIUse. 
 	It relates modified API entities owning compatibility changes to 
@@ -209,7 +281,7 @@ private set[Detection] methodOverrDetections(M3 client, M3 oldAPI, list[APIEntit
 private set[Detection] detections(M3 client, set[ModifiedEntity] modified, mi:APIUse::methodInvocation())
 	= detections(client.methodInvocation, modified, mi); 
 	
-private set[Detection] detections(M3 client, set[ModifiedEntity] modified, fa:APIUse::fieldAcces())
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, fa:APIUse::fieldAccess())
 	= detections(client.fieldAccess, modified, fa);
 
 private set[Detection] detections(M3 client, set[ModifiedEntity] modified, e:APIUse::extends())
