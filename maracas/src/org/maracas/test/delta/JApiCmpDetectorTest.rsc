@@ -226,6 +226,69 @@ public test bool filedTypeChangedListNoSuperKeyAccess()
 	
 
 //----------------------------------------------
+// Method now abstract tests
+//----------------------------------------------
+
+public test bool methodNowAbstractNoOverrideExt()
+	= detection(
+		|java+class:///main/MethodNowAbstractExt|,
+		|java+method:///main/MethodNowAbstract/methodNowAbstract()|,
+		methodOverride(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: Solve problem with the M3 method overriden relation. 
+public test bool methodNowAbstractNoOverrideExtWithImpl()
+	= detection(
+		|java+class:///main/MethodNowAbstractExtWithImpl|,
+		|java+method:///main/MethodNowAbstract/methodNowAbstract()|,
+		methodOverride(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+public test bool methodNowAbstractNoOverrideImpl()
+	= detection(
+		|java+class:///main/MethodNowAbstractImp|,
+		|java+method:///main/IMethodNowAbastract/methodNowAbstract()|,
+		methodOverride(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool methodNowAbstractSuperInvExt()
+	= detection(
+		|java+method:///main/MethodNowAbstractExt/methodNowAbstractClientSuperKey()|,
+		|java+method:///main/MethodNowAbstract/methodNowAbstract()|,
+		methodInvocation(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool methodNowAbstractNoSuperInvExt()
+	= detection(
+		|java+method:///main/MethodNowAbstractExt/methodNowAbstractClientNoSuperKey()|,
+		|java+method:///main/MethodNowAbstract/methodNowAbstract()|,
+		methodInvocation(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+public test bool methodNowAbstractSuperInvImpl()
+	= detection(
+		|java+method:///main/MethodNowAbstractImp/methodNowAbstractClient()|,
+		|java+method:///main/IMethodNowAbastract/methodNowAbstract()|,
+		methodInvocation(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+	
+public test bool methodNowAbstractNoOverrideAbstractSubtype()
+	= detection(
+		|java+class:///main/MethodNowAbstractAbstractSubtype|,
+		|java+method:///main/IMethodNowAbastract/methodNowAbstract()|,
+		methodOverride(),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+	
+    
+//----------------------------------------------
 // Method now final tests
 //----------------------------------------------
 

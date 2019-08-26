@@ -102,6 +102,7 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta)
  	+ detections(client, oldAPI, delta, fieldNowStatic())
  	+ detections(client, oldAPI, delta, fieldRemoved())
  	+ detections(client, oldAPI, delta, fieldTypeChanged())
+ 	+ detections(client, oldAPI, delta, methodNowAbstract())
  	+ detections(client, oldAPI, delta, methodNowFinal())
  	+ detections(client, oldAPI, delta, methodNowStatic())
  	+ detections(client, oldAPI, delta, methodRemoved())
@@ -126,6 +127,42 @@ private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] del
 	return detections(client, modified, APIUse::fieldAcces());
 }
 
+private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowAbstract()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		// Identify API class
+		loc parent = parentType(oldAPI, modif);
+		
+		if (parent != |unknown:///|) {
+			// Check client extends
+			set[loc] affectedClasses = domain(rangeR(client.extends, {parent}))
+				+ domain(rangeR(client.implements, {parent}));
+			
+			// Check method override relation
+			set[loc] overriden = domain(rangeR(client.methodOverrides, {modif}));
+			set[loc] nonAffectedClasses = { parentType(client, mo) | mo <- overriden };
+			affectedClasses = affectedClasses - nonAffectedClasses;
+			
+			// TODO: change apiUse?
+			// Check that affected classes are not abstract
+			detects += { detection(elem, modif, methodOverride(), change) | elem <- affectedClasses, isClass(elem), 
+				org::maracas::delta::JApiCmp::abstract() notin client.modifiers };
+		}
+	}
+	
+	return detects + detections(client, modified, APIUse::methodInvocation());
+}
+
+private loc parentType(M3 m, loc method) {
+	rel[loc, loc] containers = rangeR(m.containment, {method});
+	if (<p,_> <- containers, isType(p)) {
+		return p;
+	}
+	return |unknwon:///|;
+}
+	
 private set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal())
 	= methodOverrDetections(client, oldAPI, delta, ch);
 	
