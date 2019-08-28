@@ -20,16 +20,6 @@ import ValueIO;
 data Modifier =
 	\defaultAccess();
 
-
-@memo map[loc, set[loc]] memoizedDeclarations(M3 m) = toMap(m.declarations);
-@memo map[loc, set[TypeSymbol]] memoizedTypes(M3 m) = toMap(m.types);
-@memo map[loc, set[loc]] memoizedContainment(M3 m) = toMap(m.containment);
-@memo map[loc, set[Modifier]] memoizedModifiers(M3 m) = toMap(m.modifiers);
-@memo map[loc, set[loc]] memoizedExtends(M3 m) = toMap(m.extends);
-@memo map[loc, set[loc]] memoizedImplements(M3 m) = toMap(m.implements);
-@memo map[loc, set[loc]] memoizedMethodInvocation(M3 m) = toMap(m.methodInvocation);
-@memo map[loc, set[loc]] memoizedFieldAccess(M3 m) = toMap(m.fieldAccess);
-
 set[value] getM3Set(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? m[elem] : {};
 	
@@ -62,9 +52,18 @@ loc getNonCUChild(loc elem, M3 m) {
 	return elem;
 }
 
+loc parentType(M3 m, loc elem) {
+	rel[loc, loc] containers = rangeR(m.containment, {elem});
+	if (<p,_> <- containers, isType(p)) {
+		return p;
+	}
+	return |unknwon:///|;
+}
+
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
-
+bool isKnown(loc elem) = elem != |unknwon:///|;
+ 	
 bool isTargetMemberExclInterface(loc elem)
 	= isClass(elem)
 	|| isMethod(elem)
@@ -274,6 +273,14 @@ M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 	return setKeywordParameters(m3Filtered, kws);
 } 
 
+set[loc] methodDeclarations(M3 m, loc class) 
+	= { m | m <- m.containment[class], isMethod(m) };
+
+set[loc] methodsWhithoutDefinition(M3 m, loc class) {
+	set[loc] children = m.containment[class];
+	return { c | c <- children, isMethod(c), m.declarations[c] != {} };
+}
+
 str methodQualName(loc m) {
 	if (isMethod(m)) {
 		return (/<mPath: [a-zA-Z0-9.$\/]+>(<mParams: [a-zA-Z0-9.$\/]*>)/ := m.path) ? mPath : "";
@@ -309,6 +316,18 @@ str methodSignature(loc m) {
 	}
 	else {
 		throw "Cannot get a method signature from <m>.";
+	}
+}
+
+// TODO: refactor sameMethodQualName
+bool sameMethodSignature(loc m1, loc m2) {
+	if (isMethod(m1) && isMethod(m2)) {
+		m1Name = methodSignature(m1);
+		m2Name = methodSignature(m2);
+		return m1Name == m2Name;
+	}
+	else {
+		throw "Cannot compare <m1> and <m2>. Wrong scheme(s).";
 	}
 }
 
