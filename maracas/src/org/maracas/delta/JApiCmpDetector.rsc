@@ -4,6 +4,7 @@ import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
 import Relation;
+import Set;
 
 
 //----------------------------------------------
@@ -98,7 +99,8 @@ private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[Modifi
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta) 
- 	= detections(client, oldAPI, delta, fieldLessAccessible())
+ 	= detections(client, oldAPI, delta, annotationDeprecatedAdded())
+ 	+ detections(client, oldAPI, delta, fieldLessAccessible())
  	+ detections(client, oldAPI, delta, fieldNoLongerStatic())
  	+ detections(client, oldAPI, delta, fieldNowFinal())
  	+ detections(client, oldAPI, delta, fieldNowStatic())
@@ -116,9 +118,28 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, newAPI, delta, methodAbstractNowDefault())
  	+ detections(client, oldAPI, newAPI, delta, methodNewDefault())
  	;
- 	
- 	
 
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::annotationDeprecatedAdded()) {
+	rel[loc, CompatibilityChange] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	modified += transitiveEntities(oldAPI, modified);
+	return detectionsAllUses(client, modified);
+}
+
+private rel[loc, CompatibilityChange] transitiveEntities(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+	rel[loc, loc] transContain = oldAPI.containment+;
+	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isAPIEntity(e) };
+}
+
+private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange] modified)
+	= detections(client, modified, methodInvocation())
+	+ detections(client, modified, fieldAccess())
+	+ detections(client, modified, extends())
+	+ detections(client, modified, implements())
+	+ detections(client, modified, annotation())
+	+ detections(client, modified, typeDependency())
+	+ detections(client, modified, methodOverride())
+	;
+	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
@@ -197,11 +218,11 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 			// Consider the affected class if it has other implemented interfaces
 			for (elem <- affectedClasses, size(client.implements[elem]) > 1 ) {
 				//Get method declarations
-				set[loc] methods = methodDeclarations(client, a);
+				set[loc] methods = methodDeclarations(client, elem);
 				
 				// There is a potential issue if one of the invoked methods has 
 				// the same signature
-				if (m <- methods, mi <- client.methodInvocations[m], sameMethodSignature(modif, mi)) {
+				if (m <- methods, mi <- client.methodInvocation[m], sameMethodSignature(modif, mi)) {
 					// TODO: change apiUse?
 					detects += detection(elem, modif, methodInvocation(), change);
 					continue;

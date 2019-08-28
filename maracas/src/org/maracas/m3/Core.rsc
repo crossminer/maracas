@@ -62,6 +62,7 @@ loc parentType(M3 m, loc elem) {
 
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
+bool isAPIEntity(loc entity) = isType(entity) || isMethod(entity) || isField(entity);
 bool isKnown(loc elem) = elem != |unknwon:///|;
  	
 bool isTargetMemberExclInterface(loc elem)
@@ -274,7 +275,7 @@ M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 } 
 
 set[loc] methodDeclarations(M3 m, loc class) 
-	= { m | m <- m.containment[class], isMethod(m) };
+	= { c | c <- m.containment[class], isMethod(c) };
 
 set[loc] methodsWhithoutDefinition(M3 m, loc class) {
 	set[loc] children = m.containment[class];
