@@ -60,11 +60,12 @@ loc parentType(M3 m, loc elem) {
 	return |unknwon:///|;
 }
 
-set[loc] fields(set[loc] locs)     = { e | e <- locs, isField(e) };
-set[loc] methods(set[loc] locs)    = { e | e <- locs, isMethod(e) };
-set[loc] classes(set[loc] locs)    = { e | e <- locs, isClass(e) };
-set[loc] interfaces(set[loc] locs) = { e | e <- locs, isInterface(e) };
-set[loc] types(set[loc] locs)      = { e | e <- locs, isType(e) };
+set[loc] fields(set[loc] locs)       = { e | e <- locs, isField(e) };
+set[loc] methods(set[loc] locs)      = { e | e <- locs, isMethod(e) };
+set[loc] constructors(set[loc] locs) = { e | e <- locs, isConstructor(e) };
+set[loc] classes(set[loc] locs)      = { e | e <- locs, isClass(e) };
+set[loc] interfaces(set[loc] locs)   = { e | e <- locs, isInterface(e) };
+set[loc] types(set[loc] locs)        = { e | e <- locs, isType(e) };
 
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
