@@ -60,6 +60,12 @@ loc parentType(M3 m, loc elem) {
 	return |unknwon:///|;
 }
 
+set[loc] fields(set[loc] locs)     = { e | e <- locs, isField(e) };
+set[loc] methods(set[loc] locs)    = { e | e <- locs, isMethod(e) };
+set[loc] classes(set[loc] locs)    = { e | e <- locs, isClass(e) };
+set[loc] interfaces(set[loc] locs) = { e | e <- locs, isInterface(e) };
+set[loc] types(set[loc] locs)      = { e | e <- locs, isType(e) };
+
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
 bool isAPIEntity(loc entity) = isType(entity) || isMethod(entity) || isField(entity);
@@ -291,17 +297,6 @@ str methodQualName(loc m) {
 	}
 }
 
-bool sameMethodQualName(loc m1, loc m2) {
-	if (isMethod(m1) && isMethod(m2)) {
-		m1Name = methodQualName(m1);
-		m2Name = methodQualName(m2);
-		return m1Name == m2Name;
-	}
-	else {
-		throw "Cannot compare <m1> and <m2>. Wrong scheme(s).";
-	}
-}
-
 str methodName(loc m) {
 	if (isMethod(m)) {
 		return substring(methodQualName(m), (findLast(methodQualName(m), "/") + 1));
@@ -320,18 +315,6 @@ str methodSignature(loc m) {
 	}
 }
 
-// TODO: refactor sameMethodQualName
-bool sameMethodSignature(loc m1, loc m2) {
-	if (isMethod(m1) && isMethod(m2)) {
-		m1Name = methodSignature(m1);
-		m2Name = methodSignature(m2);
-		return m1Name == m2Name;
-	}
-	else {
-		throw "Cannot compare <m1> and <m2>. Wrong scheme(s).";
-	}
-}
-
 str memberName(loc m) {
 	if(isMethod(m)) {
 		return memberName(methodQualName(m));
@@ -346,6 +329,11 @@ str memberName(loc m) {
 
 private str memberName(str path) 
 	= substring(path, (findLast(path, "/") + 1));
+	
+bool sameNames(loc n1, loc n2, str (loc) fun) = fun(n1) == fun(n2);
+bool sameMethodQualName(loc m1, loc m2) = sameNames(m1, m2, methodQualName);
+bool sameMethodSignature(loc m1, loc m2) = sameNames(m1, m2, methodSignature);
+bool sameFieldName(loc f1, loc f2) = sameNames(f1, f2, memberName);
 
  
 list[TypeSymbol] methodParams(TypeSymbol typ) 

@@ -9,7 +9,7 @@ loc apiNew = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/
 loc client = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/comp-changes-client.jar|;
 
 public M3 m3ApiOld = createM3FromJar(apiOld);
-public M3 m3ApiNew = createM3FromJar(apiOld);
+public M3 m3ApiNew = createM3FromJar(apiNew);
 public M3 m3Client = createM3FromJar(client);
 
 public list[APIEntity] delta = compareJars(apiOld, apiNew, "0.0", "1.0");
