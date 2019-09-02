@@ -161,3 +161,29 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 	}
 	return result;
 }
+
+APIEntity entityFromLoc(loc elem, list[APIEntity] delta) {
+	switch (delta) {
+	case /c:class(elem,_,_,_,_): 
+		return c;
+	case /i:interface(elem,chs,_):
+		return i;
+	case /f:field(elem,_,_,_,_): 
+		return f;
+	case /m:method(elem,_,_,_,_): 
+		return m;
+	case /c:constructor(elem,_,_,_): 
+		return c;
+	default:
+		throw "No entity in the delta has <elem> as ID.";
+	}
+}
+
+tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_,t,_,_,_)) {
+	if (/modified(old,new) := t) {
+		return <old, new>;
+	}
+	else {
+		throw "The type of the class has not changed.";
+	}
+}

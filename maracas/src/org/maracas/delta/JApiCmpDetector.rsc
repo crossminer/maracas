@@ -93,10 +93,8 @@ set[ModifiedEntity] filterModifiedEntities(set[ModifiedEntity] entities, Compati
 	@return relation mapping an element location to compatibility
 	        change types (e.g. renamedMethod())
 }
-private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[ModifiedEntity] modElements, list[CompatibilityChange] changes) {
-	rel[loc, CompatibilityChange] newElements = { <element, c> | c <- changes };
-	return modElements + newElements;
-}
+private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[ModifiedEntity] modElements, list[CompatibilityChange] changes)
+	= { <element, c> | c <- changes } + modElements;
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta) 
  	= detections(client, oldAPI, delta, annotationDeprecatedAdded())
@@ -116,9 +114,11 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, methodReturnTypeChanged())
  	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
+ 	+ detections(client, oldAPI, delta, classLessAccessible())
  	+ detections(client, oldAPI, delta, classNowAbstract())
  	+ detections(client, oldAPI, delta, classNowFinal())
  	+ detections(client, oldAPI, delta, classRemoved())
+ 	+ detections(client, oldAPI, delta, classTypeChanged())
  	+ detections(client, oldAPI, newAPI, delta, fieldStaticAndOverridesStatic())
  	+ detections(client, oldAPI, newAPI, delta, methodAbstractNowDefault())
  	+ detections(client, oldAPI, newAPI, delta, methodAbstractAddedToClass())
@@ -394,6 +394,29 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 	return detects;
 }
 
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classLessAccessible()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+	
+		// Let's get the old and new modifiers
+		if (/apiClass:class(modif,_,_,_,_) := delta, /modifier(modified(old, new)) := apiClass) {
+			rel[loc, APIUse] affected = domain(rangeR(client.typeDependency, {modif})) * { typeDependency() }
+				+ domain(rangeR(client.extends, {modif})) * { extends() }
+				+ domain(rangeR(client.implements, {modif})) * { implements() }
+				+ domain(rangeR(client.extends, {modif})) * { annotation() };
+			
+			// Include client affected elements that are subtypes of the 
+			// modified field parent class, and where modifiers went from
+			// public to protected
+			detects += { detection(elem, modif, fieldAccess(), change) | elem <- affected,
+				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif))};
+		}
+	}
+	return detects;
+}
+
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowAbstract()){
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[ModifiedEntity] transModified = transitiveConstructors(oldAPI, modified);
@@ -409,11 +432,43 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classRemoved())
 	= classAllDetections(client, oldAPI, delta, ch);
 
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classTypeChanged()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	rel[loc, loc] invTypeDep = invert(client.typeDependency);
+	rel[loc, loc] invExtends = invert(client.extends);
+	rel[loc, loc] invImplements = invert(client.implements);
+	rel[loc, loc] invAnnotations = invert(client.annotations);
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		APIEntity entity = entityFromLoc(modif, delta);
+		tuple[ClassType, ClassType] types = classModifiedType(entity);
+		rel[loc, APIUse] affected = invTypeDep[modif] * {typeDependency()};
+		
+		switch(types) {
+		case <class(), _> :
+			affected += invExtends[modif] * {extends()};
+		case <interface(), _> : {
+			affected += invExtends[modif] * {extends()};
+			affected += invImplements[modif] * {implements()};
+		}
+		case <annotation(), _> :
+			affected += invAnnotations[modif] * {annotation()};
+		default: ;
+		}
+		
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected };
+	}
+	
+	return detects;
+}
+
 private set[Detection] classAllDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
 	return detections(client, modified, extends())
 		+ detections(client, modified, implements())
-		+ detections(client, modified, typeDependency());
+		+ detections(client, modified, typeDependency())
+		+ detections(client, modified, annotation());
 }
 
 private set[Detection] extendsDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
