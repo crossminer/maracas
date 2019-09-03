@@ -115,6 +115,7 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
  	+ detections(client, oldAPI, delta, classLessAccessible())
+ 	+ detections(client, oldAPI, delta, classNoLongerPublic())
  	+ detections(client, oldAPI, delta, classNowAbstract())
  	+ detections(client, oldAPI, delta, classNowFinal())
  	+ detections(client, oldAPI, delta, classRemoved())
@@ -394,23 +395,30 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 	return detects;
 }
 
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classLessAccessible()) {
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classLessAccessible())
+	= detectionsClassLessAccess(client, oldAPI, delta, ch);
+
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNoLongerPublic())
+	= detectionsClassLessAccess(client, oldAPI, delta, ch);
+
+set[Detection] detectionsClassLessAccess(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange ch) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
 	
 	for (<modif, change> <- modified) {
 	
 		// Let's get the old and new modifiers
+		// TODO: consider only access modifiers
 		if (/apiClass:class(modif,_,_,_,_) := delta, /modifier(modified(old, new)) := apiClass) {
 			rel[loc, APIUse] affected = domain(rangeR(client.typeDependency, {modif})) * { typeDependency() }
 				+ domain(rangeR(client.extends, {modif})) * { extends() }
 				+ domain(rangeR(client.implements, {modif})) * { implements() }
-				+ domain(rangeR(client.extends, {modif})) * { annotation() };
+				+ domain(rangeR(client.annotations, {modif})) * { annotation() };
 			
 			// Include client affected elements that are subtypes of the 
 			// modified field parent class, and where modifiers went from
 			// public to protected
-			detects += { detection(elem, modif, fieldAccess(), change) | elem <- affected,
+			detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
 				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif))};
 		}
 	}
