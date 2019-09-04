@@ -330,6 +330,10 @@ str memberName(loc m) {
 
 private str memberName(str path) 
 	= substring(path, (findLast(path, "/") + 1));
+
+// Works with fields and methods
+loc memberSymbolicRef(loc typeSymbolic, str memberName)
+	= |java+field:///| + "<typeSymbolic.path>/<memberName>";
 	
 bool sameNames(loc n1, loc n2, str (loc) fun) = fun(n1) == fun(n2);
 bool sameMethodQualName(loc m1, loc m2) = sameNames(m1, m2, methodQualName);

@@ -2,6 +2,20 @@
 
 ## Detections
 
+### Field Removed In Superclass
+Subtypes won't be able to access the removed field anymore. To identified affected client members we consider the following:
+
+1. Get all subtypes of the API type labelled with this change. We will consider all direct subtypes that do noit shadow the target field.
+2. Create symbolic references to the field for each subtype (which includes a symbolic reference to each subtype).
+3. Check clients that have a symbolic reference to the target field from any of the abovementioned subtypes or the affected class itself.
+
+---
+
+### Method Abstract Added In Superclass
+An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+
+---
+
 ### Class Less Accessible 
 Types depending on, implementing, or inheriting from the affected type might not be able to access it anymore. This depends on the new visbility of the type and its relation to depending types. 
 
