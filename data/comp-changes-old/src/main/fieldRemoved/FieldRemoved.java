@@ -1,4 +1,4 @@
-package main;
+package main.fieldRemoved;
 
 public class FieldRemoved {
 

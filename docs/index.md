@@ -2,6 +2,32 @@
 
 ## Detections
 
+### Field Removed
+This issue is reported if a field is removed from its parent class. Client projects are not able to access them anymore.
+
+**Detection**
+
+1. Client methods accessing a field that is removed due to its parent type removal.
+2. Client methods accessing a field that is removed from an API type.
+3. Client methods accessing a supertype field through the `super` keyword.
+4. Client methods accessing a supertype field without using the `super` keyword.
+5. Transitive detections affecting all subtypes are reported with the *Field Removed in Superclass* change. 
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is removed from `api.A`, then the following detection is reported:
+
+```
+detection(
+	|java+method:///client/C/m()|,
+	|java+field:///api/A/f|,
+	fieldAccess(),
+	fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+{% include note.html content="`javac` inlines constant values, thus this type of field access is lost." %}
+
+---
+
 ### Field Removed In Superclass
 Subtypes won't be able to access the removed field anymore. To identified affected client members we consider the following:
 
@@ -18,6 +44,7 @@ If the constructor or the parent class is removed, this issue is reported. Clien
 
 1. Client methods invoking a constructor that is removed due to its parent type removal.
 2. Client methods invoking a constructor that is removed from an API type.
+3. Client constructors invoking an supertype constructor through the `super` keyword. 
 
 For instance, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a constructor `A(int)`. Assume `m()` invokes `A(int)` to create an object of type `api.A`. If `A(int)` is removed from `api.A`, then the following detection is reported:
 

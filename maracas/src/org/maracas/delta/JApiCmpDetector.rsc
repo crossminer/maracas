@@ -206,8 +206,18 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	return detections(client, modified, fieldAccess())
-		+ detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		str fieldName = memberName(modif);
+		loc parent = parentType(oldAPI, modif);
+		set[loc] subtypes = domain(rangeR(client.extends, {parent}));
+		set[loc] symbFields = { fieldSymbolicRef(s, fieldName) | s <- subtypes } + modif;
+		rel[loc, loc] affected = rangeR(client.fieldAccess, symbFields);
+		detects += { detection(elem, modif, fieldAccess(), change) | <elem, f> <- affected, client.declarations[f] == {} };
+	}
+	
+	return detects + detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
 } 
 
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, ch:CompatibilityChange::fieldRemovedInSuperclass()) {

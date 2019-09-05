@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldRemoved;
 
-import main.FieldRemoved;
+import main.fieldRemoved.FieldRemoved;
 
 public class FieldRemovedExt extends FieldRemoved {
 

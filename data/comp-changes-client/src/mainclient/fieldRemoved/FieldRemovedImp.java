@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldRemoved;
 
-import main.IFieldRemoved;
+import main.fieldRemoved.IFieldRemoved;
 
 public class FieldRemovedImp implements IFieldRemoved {
 

@@ -268,59 +268,6 @@ public test bool fieldNowStaticNoSuperKeyAccess()
 		fieldAccess(),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;    
-	
-	
-//----------------------------------------------
-// Field removed tests
-//----------------------------------------------
-
-public test bool removedFieldSimpleAccess()
-	= detection(
-		|java+method:///mainclient/FieldRemovedFA/fieldRemovedClient()|,
-		|java+field:///main/FieldRemoved/fieldRemoved|,
-		fieldAccess(),
-		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-
-public test bool removedFieldSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldRemovedExt/fieldRemovedClientSuper()|,
-		|java+field:///main/FieldRemoved/fieldRemoved|,
-		fieldAccess(),
-		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-
-// TODO: If the client class extends an API class and accesses the API  
-// field without the super keyword, javac registers the field as a field  
-// within the client class.
-public test bool removedFieldNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldRemovedExt/fieldRemovedClientExt()|,
-		|java+field:///main/FieldRemoved/fieldRemoved|,
-		fieldAccess(),
-		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-
-// TODO: Removed interface fields (constants) are not identified as a change.
-// This is not a JApiCmp problem but rather a Rascal M3 issue (check fieldAccesss
-// relation).
-public test bool removedFieldInterface1()
-	= detection(
-		|java+method:///mainclient/FieldRemovedImp/fieldRemovedClient()|,
-		|java+field:///main/IFieldRemoved/FIELD_REMOVED|,
-		fieldAccess(),
-		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-
-// TODO: This is not a JApiCmp problem but rather a Rascal M3 issue (check 
-// fieldAccesss relation).
-public test bool removedFieldInterface1()
-	= detection(
-		|java+method:///mainclient/FieldRemovedImp/fieldRemovedClientType()|,
-		|java+field:///main/IFieldRemoved/FIELD_REMOVED|,
-		fieldAccess(),
-		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
 
 
 //----------------------------------------------
