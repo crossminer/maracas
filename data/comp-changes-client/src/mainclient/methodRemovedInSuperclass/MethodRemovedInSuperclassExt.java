@@ -14,4 +14,11 @@ public class MethodRemovedInSuperclassExt extends MethodRemovedInSuperclass {
 		return 0;
 	}
 
+	public int callSuperSMethod() {
+		return methodRemovedS();
+	}
+	
+	public int callSuperSSMethod() {
+		return methodRemovedSS();
+	}
 }

@@ -118,6 +118,7 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, classLessAccessible())
  	+ detections(client, oldAPI, delta, classNoLongerPublic())
  	+ detections(client, oldAPI, delta, classNowAbstract())
+ 	+ detections(client, oldAPI, delta, classNowCheckedException())
  	+ detections(client, oldAPI, delta, classNowFinal())
  	+ detections(client, oldAPI, delta, classRemoved())
  	+ detections(client, oldAPI, delta, classTypeChanged())
@@ -147,6 +148,11 @@ private rel[loc, CompatibilityChange] transitiveMethods(M3 oldAPI, rel[loc, Comp
 private rel[loc, CompatibilityChange] transitiveConstructors(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
 	rel[loc, loc] transContain = oldAPI.containment+;
 	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isConstructor(e) };
+}
+
+private rel[loc, CompatibilityChange] transitiveSubtypes(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+	rel[loc, loc] transExtends = oldAPI.extends+;
+	return { <e, ch> | <m, ch> <- modified, e <- transExtends[m], isType(e) };
 }
 
 private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange] modified)
@@ -206,10 +212,10 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, ch:CompatibilityChange::fieldRemovedInSuperclass()) {
 	CompatibilityChange change = fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false);
-	return detectionsMemberRemovedInSuperclass(client, client.fieldAccess, modified, change, fieldAccess());
+	return detectionsFieldRemovedInSuperclass(oldAPI, client.fieldAccess, modified, change, fieldAccess());
 }
 	
-set[Detection] detectionsMemberRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Relation, set[ModifiedEntity] modified, CompatibilityChange ch, APIUse apiUse) {
+set[Detection] detectionsFieldRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Relation, set[ModifiedEntity] modified, CompatibilityChange ch, APIUse apiUse) {
 	rel[loc, loc] invM3Relation = invert(m3Relation);
 	set[Detection] detects = {};
 	
@@ -218,7 +224,7 @@ set[Detection] detectionsMemberRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Re
 		loc parent = parentType(oldAPI, modif);
 		
 		// Get modif subtypes and symbolic fields/methods
-		set[loc] symbMembers = subtypesFieldMethReference(parent, fieldName, oldAPI);
+		set[loc] symbMembers = subtypesFieldReference(parent, fieldName, oldAPI);
 		// Get affected client members
 		set[loc] affected = { *invM3Relation[f] | f <- symbMembers };
 		detects += { detection(elem, modif, apiUse, ch) | elem <- affected };
@@ -226,11 +232,11 @@ set[Detection] detectionsMemberRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Re
 	return detects;
 }
 
-set[loc] subtypesFieldMethReference(loc typ, str memName, M3 m) {
+set[loc] subtypesFieldReference(loc typ, str memName, M3 m) {
 	rel[loc, loc] invExtends = invert(m.extends);
 	set[loc] subtypes = invExtends[typ];
-	loc field = memberSymbolicRef(typ, memName);
-	return { *(subtypesFieldMethReference(s, memName, m) + memberSymbolicRef(s, memName)) | s <- subtypes, m.declarations[memberSymbolicRef(s, memName)] == {}};
+	loc field = fieldSymbolicRef(typ, memName);
+	return { *(subtypesFieldReference(s, memName, m) + fieldSymbolicRef(s, memName)) | s <- subtypes, m.declarations[fieldSymbolicRef(s, memName)] == {}};
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldStaticAndOverridesStatic()) {
@@ -391,8 +397,32 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, CompatibilityChange::methodRemovedInSuperclass()) {
 	CompatibilityChange change = methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false);
 	// TODO: This is not optimal. Doing the same thing twice! Refactor.
-	return detectionsMemberRemovedInSuperclass(client, client.methodInvocation, modified, change, methodInvocation())
-		+ detectionsMemberRemovedInSuperclass(client, client.methodOverrides, modified, change, methodOverride());
+	return detectionsMethodRemovedInSuperclass(oldAPI, client.methodInvocation, modified, change, methodInvocation())
+		+ detectionsMethodRemovedInSuperclass(oldAPI, client.methodOverrides, modified, change, methodOverride());
+}
+
+set[Detection] detectionsMethodRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Relation, set[ModifiedEntity] modified, CompatibilityChange ch, APIUse apiUse) {
+	rel[loc, loc] invM3Relation = invert(m3Relation);
+	set[Detection] detects = {};
+	
+	for (<modif, _> <- modified) {
+		str methName = methodSignature(modif);
+		loc parent = parentType(oldAPI, modif);
+		
+		// Get modif subtypes and symbolic fields/methods
+		set[loc] symbMembers = subtypesMethodReference(parent, methName, oldAPI);
+		// Get affected client members
+		set[loc] affected = { *invM3Relation[f] | f <- symbMembers };
+		detects += { detection(elem, modif, apiUse, ch) | elem <- affected };
+	}
+	return detects;
+}
+
+set[loc] subtypesMethodReference(loc typ, str memName, M3 m) {
+	rel[loc, loc] invExtends = invert(m.extends);
+	set[loc] subtypes = invExtends[typ];
+	loc meth = methodSymbolicRef(typ, memName);
+	return { *(subtypesMethodReference(s, memName, m) + methodSymbolicRef(s, memName)) | s <- subtypes, m.declarations[methodSymbolicRef(s, memName)] == {}};
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged())
@@ -472,12 +502,19 @@ set[Detection] detectionsClassLessAccess(M3 client, M3 oldAPI, list[APIEntity] d
 	return detects;
 }
 
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowAbstract()){
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowAbstract()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[ModifiedEntity] transModified = transitiveConstructors(oldAPI, modified);
 	return detections(client, transModified, methodInvocation());
 }
-	
+
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowCheckedException()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[ModifiedEntity] transModified = transitiveSubtypes(oldAPI, modified) + modified;
+	return detections(client, transModified, typeDependency())
+		+ detections(client, transModified, extends());
+}
+
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowFinal()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[ModifiedEntity] transModified = transitiveEntities(oldAPI, modified); // We only need methods
