@@ -1,8 +1,8 @@
-package mainclient;
+package mainclient.constructorRemoved;
 
-import main.ConstructorRemovedClass;
-import main.ConstructorRemovedNoParams;
-import main.ConstructorRemovedParams;
+import main.constructorRemoved.ConstructorRemovedClass;
+import main.constructorRemoved.ConstructorRemovedNoParams;
+import main.constructorRemoved.ConstructorRemovedParams;
 
 public class ConstructorRemovedMI {
 

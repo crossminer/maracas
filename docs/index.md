@@ -11,6 +11,27 @@ Subtypes won't be able to access the removed field anymore. To identified affect
 
 ---
 
+### Constructor Removed
+If the constructor or the parent class is removed, this issue is reported. Client projects are not able to create objects with the corresponding method.
+
+**Detection** 
+
+1. Client methods invoking a constructor that is removed due to its parent type removal.
+2. Client methods invoking a constructor that is removed from an API type.
+
+For instance, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a constructor `A(int)`. Assume `m()` invokes `A(int)` to create an object of type `api.A`. If `A(int)` is removed from `api.A`, then the following detection is reported:
+
+```
+detection(
+	|java+method:///client/C/m()|,
+	|java+constructor:///api/A/A(int)|,
+	methodInvocation(),
+	constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method Abstract Added In Superclass
 An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
 

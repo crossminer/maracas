@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.constructorRemoved;
 
-import main.ConstructorRemovedNoParams;
+import main.constructorRemoved.ConstructorRemovedNoParams;
 
 public class ConstructorRemovedExtNoParams extends ConstructorRemovedNoParams {
 
