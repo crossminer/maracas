@@ -3,7 +3,7 @@ module org::maracas::\test::delta::japicmp::detections::FieldRemovedInSuperclass
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-extend org::maracas::\test::delta::japicmp::detections::SetUp;
+import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
 test bool accessSuper()
@@ -29,15 +29,15 @@ test bool extSubSuperKeyAccess()
 		fieldAccess(),
 		fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
+
 test bool extSubNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassExt/accessNoSuperKey()|,
-		|java+field:///main/fieldRemovedInSuperclass/FieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-
+    
 test bool extSupSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/SFieldRemovedInSuperclassExt/accessSuperKey()|,
@@ -49,7 +49,7 @@ test bool extSupSuperKeyAccess()
 test bool extSupNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/SFieldRemovedInSuperclassExt/accessNoSuperKey()|,
-		|java+field:///main/fieldRemovedInSuperclass/SFieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;

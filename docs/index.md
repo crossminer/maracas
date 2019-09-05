@@ -3,7 +3,7 @@
 ## Detections
 
 ### Field Removed
-This issue is reported if a field is removed from its parent class. Client projects are not able to access them anymore.
+A field is removed from its parent class. Client projects are not able to access them anymore.
 
 **Detection**
 
@@ -13,27 +13,43 @@ This issue is reported if a field is removed from its parent class. Client proje
 4. Client methods accessing a supertype field without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Field Removed in Superclass* change. 
 
+{% include note.html content="`javac` inlines constant values, thus this type of field access is lost." %}
+
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is removed from `api.A`, then the following detection is reported:
 
 ```
 detection(
-	|java+method:///client/C/m()|,
-	|java+field:///api/A/f|,
-	fieldAccess(),
-	fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)
+  |java+method:///client/C/m()|,
+  |java+field:///api/A/f|,
+  fieldAccess(),
+  fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
-
-{% include note.html content="`javac` inlines constant values, thus this type of field access is lost." %}
 
 ---
 
 ### Field Removed In Superclass
-Subtypes won't be able to access the removed field anymore. To identified affected client members we consider the following:
+A field is removed from a supertype class. Subtypes are not able to access them anymore.
 
-1. Get all subtypes of the API type labelled with this change. We will consider all direct subtypes that do noit shadow the target field.
-2. Create symbolic references to the field for each subtype (which includes a symbolic reference to each subtype).
-3. Check clients that have a symbolic reference to the target field from any of the abovementioned subtypes or the affected class itself.
+**Detection**
+
+1. Client methods accessing a field that has been inherited from a supertype and whose type has been removed.
+2. Client methods accessing a field that has been inherited from a supertype and that has been removed from the corresponding type.
+3. Client methods accessing a field that has been inherited from a supertype through the `super` keyword.
+4. Client methods accessing a field that has been inherited from a supertype without using the `super` keyword.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field." %}
+
+For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later declares a field `f`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` accesses `f`. If `f` is removed from `api.SuperA`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/SuperA/f|,
+  fieldAccess(),
+  fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 
@@ -50,10 +66,10 @@ For instance, there is a client type `client.C` with a method definition `m()`, 
 
 ```
 detection(
-	|java+method:///client/C/m()|,
-	|java+constructor:///api/A/A(int)|,
-	methodInvocation(),
-	constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+  |java+method:///client/C/m()|,
+  |java+constructor:///api/A/A(int)|,
+  methodInvocation(),
+  constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 
