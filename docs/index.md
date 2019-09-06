@@ -3,7 +3,7 @@
 ## Detections
 
 ### Field Removed
-A field is removed from its parent class. Client projects are not able to access them anymore.
+A field is removed from its parent class. Client projects are not able to access it anymore.
 
 **Detection**
 
@@ -77,6 +77,30 @@ detection(
 
 ### Method Abstract Added In Superclass
 An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+
+---
+
+### Method Removed
+A method is removed from its parent class. Client projects are not able to invoke it anymore.
+
+**Detection**
+
+1. Client methods invoking a method that is removed due to its parent type removal.
+2. Client methods invoking a method that is removed from an API type.
+3. Client methods invoking a supertype method through the `super` keyword.
+4. Client methods invoking a supertype method without using the `super` keyword.
+5. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* change. 
+
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `m(A)` is removed from `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodInvocation(),
+  constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 

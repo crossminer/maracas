@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodRemoved;
 
-import main.MethodRemoved;
+import main.methodRemoved.MethodRemoved;
 
 public class MethodRemovedMI {
 

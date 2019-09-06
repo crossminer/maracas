@@ -689,49 +689,6 @@ public test bool methodNowStaticInterface()
 		methodInvocation(),
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects; 
-
-    
-//----------------------------------------------
-// Method removed tests
-//----------------------------------------------
-
-public test bool removedMethodSimpleAccess()
-	= detection(
-		|java+method:///mainclient/MethodRemovedMI/methodRemovedClient()|,
-    	|java+method:///main/MethodRemoved/methodRemoved()|,
-    	methodInvocation(),
-    	methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-    
-public test bool removedMethodSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodRemovedExt/methodRemovedClientSuper()|,
-		|java+method:///main/MethodRemoved/methodRemoved()|,
-		methodInvocation(),
-		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-    
-// TODO: If the client class extends an API class and invokes the API  
-// method without the super keyword, javac registers the method as a   
-// method within the client class.
-public test bool removedFieldNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodRemovedExt/methodRemovedClientExt()|,
-		|java+method:///main/MethodRemoved/methodRemoved()|,
-		methodInvocation(),
-		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-    
-// TODO: Removed interface methods are not identified as a change.
-// This is not a JApiCmp problem but rather a Rascal M3 issue (check 
-// methodOverrides relation).
-public test bool removedFieldMethodOverrides()
-	= detection(
-		|java+method:///mainclient/MethodRemovedImp/methodRemoved()|,
-		|java+method:///main/IMethodRemoved/methodRemoved()|,
-		methodOverride(),
-		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
     
 
 //----------------------------------------------
