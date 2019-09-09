@@ -29,7 +29,7 @@ detection(
 ---
 
 ### Field Removed In Superclass
-A field is removed from a supertype class. Subtypes are not able to access them anymore.
+A field is removed from a supertype class. Subtypes are not able to access it anymore.
 
 **Detection**
 
@@ -91,7 +91,7 @@ A method is removed from its parent class. Client projects are not able to invok
 4. Client methods invoking a supertype method without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* change. 
 
-For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `m(A)` is removed from `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is removed from `api.A`, then the following detection is reported:
 
 ```
 detection(
@@ -99,6 +99,32 @@ detection(
   |java+method:///api/A/mA()|,
   methodInvocation(),
   constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
+### Method Removed In Superclass
+
+A method is removed from a supertype class. Subtypes are not able to invoke it anymore.
+
+**Detection**
+
+1. Client methods invoking a method that has been inherited from a supertype and whose type has been removed.
+2. Client methods invoking a method that has been inherited from a supertype and that has been removed from the corresponding type.
+3. Client methods invoking a method that has been inherited from a supertype through the `super` keyword.
+4. Client methods invoking a method that has been inherited from a supertype without using the `super` keyword.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the removed method, which do not shadow the target method." %}
+
+For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later defines a method `mSuper()`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` invokes `mSuper()`. If `mSUper()` is removed from `api.SuperA`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/SuperA/mSuper()|,
+  methodInvocation(),
+  methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 

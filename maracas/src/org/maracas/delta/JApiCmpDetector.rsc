@@ -442,24 +442,23 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, CompatibilityChange::methodRemovedInSuperclass()) {
 	CompatibilityChange change = methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false);
-	// TODO: This is not optimal. Doing the same thing twice! Refactor.
-	return detectionsMethodRemovedInSuperclass(oldAPI, client.methodInvocation, modified, change, methodInvocation())
-		+ detectionsMethodRemovedInSuperclass(oldAPI, client.methodOverrides, modified, change, methodOverride());
+	return detectionsMethodRemovedInSuperclass(client, oldAPI, modified, change);
 }
 
-set[Detection] detectionsMethodRemovedInSuperclass(M3 oldAPI, rel[loc, loc] m3Relation, set[ModifiedEntity] modified, CompatibilityChange ch, APIUse apiUse) {
-	rel[loc, loc] invM3Relation = invert(m3Relation);
+set[Detection] detectionsMethodRemovedInSuperclass(M3 client, M3 oldAPI, set[ModifiedEntity] modified, CompatibilityChange ch) {
 	set[Detection] detects = {};
 	
 	for (<modif, _> <- modified) {
 		str methName = methodSignature(modif);
 		loc parent = parentType(oldAPI, modif);
 		
-		// Get modif subtypes and symbolic fields/methods
-		set[loc] symbMembers = subtypesMethodReference(parent, methName, oldAPI);
+		// Get modif subtypes and symbolic methods
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, methName, oldAPI)
+			+ clientSubtypesMethodSymbolic(parent, methName, oldAPI, client);
 		// Get affected client members
-		set[loc] affected = { *invM3Relation[f] | f <- symbMembers };
-		detects += { detection(elem, modif, apiUse, ch) | elem <- affected };
+		rel[loc, APIUse] affected = domain(rangeR(client.methodInvocation, symbMeths)) * { methodInvocation() }
+			+ domain(rangeR(client.methodOverrides, symbMeths)) * { methodOverride() };
+		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
 	return detects;
 }

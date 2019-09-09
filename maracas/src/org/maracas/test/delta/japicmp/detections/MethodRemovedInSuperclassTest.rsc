@@ -40,7 +40,7 @@ test bool accessSuperAbs()
 test bool callSuperSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/callSuperSMethod()|,
-		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedS()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedS()|,
 		methodInvocation(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -48,23 +48,24 @@ test bool callSuperSMethodExtSuper()
 test bool callSuperSSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/callSuperSSMethod()|,
-		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSS()|,
+		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSS()|,
 		methodInvocation(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
+// Method removed is in charge of this case
 test bool callSuperSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/callSuperSMethod()|,
-		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedS()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedS()|,
 		methodInvocation(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
+	notin detects;
 	
 test bool callSuperSSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/callSuperSSMethod()|,
-		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSS()|,
+		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSS()|,
 		methodInvocation(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -73,18 +74,31 @@ test bool overrideSuperSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
-		methodInvocation(),
+		methodOverride(),
+		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// Method removed is in charge of this case
+test bool overrideSuperSMethodExtSSuper()
+	= detection(
+		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
+		methodOverride(),
+		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool overrideSuperSSMethodExtSuper()
+	= detection(
+		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
+		methodOverride(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	
-//test bool overrideSuperSSMethodExtSuper();
-
-test bool overrideSuperSMethodExtSSuper()
+test bool overrideSuperSSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
-		methodInvocation(),
+		methodOverride(),
 		methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
-//test bool overrideSuperSSMethodExtSSuper();
