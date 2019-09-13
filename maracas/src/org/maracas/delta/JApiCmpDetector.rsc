@@ -199,25 +199,16 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	= fieldDetections(client, oldAPI, delta, ch);
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowFinal()) 
-	= fieldDetections(client, oldAPI, delta, ch);
+	= fieldSymbDetections(client, oldAPI, delta, ch); 
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowStatic()) 
 	= fieldDetections(client, oldAPI, delta, ch);
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved()) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	set[Detection] detects = {};
-	
-	for (<modif, change> <- modified) {
-		str fieldName = memberName(modif);
-		loc parent = parentType(oldAPI, modif);
-		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) + modif;
-		set[loc] affected = domain(rangeR(client.fieldAccess, symbFields));
-		detects += { detection(elem, modif, fieldAccess(), change) | elem <- affected};
-	}
-	
-	return detects + detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
-} 
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch); // FIXME: Duplicated refactor!
+	return fieldSymbDetections(client, oldAPI, delta, ch) 
+	+ detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
+}
 
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, ch:CompatibilityChange::fieldRemovedInSuperclass()) {
 	CompatibilityChange change = fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false);
@@ -241,40 +232,7 @@ set[Detection] detectionsFieldRemovedInSuperclass(M3 client, M3 oldAPI, rel[loc,
 	return detects;
 }
 
-private set[loc] subtypesWithoutShadowing(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
-	set[loc] subtypes = domain(rangeR(m.extends, {typ}));
-	return { *(subtypesWithoutShadowing(s, elemName, m, funSymbRef) + s) 
-		| s <- subtypes, m.declarations[funSymbRef(s, elemName)] == {} };
-}
 
-private set[loc] subtypesElemSymbolic(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
-	set[loc] subtypes = subtypesWithoutShadowing(typ, elemName, m, funSymbRef);
-	return { funSymbRef(s, elemName) | s <- subtypes};
-}
-
-private set[loc] clientSubtypesElemSymbolic(loc typ, str elemName, M3 api, M3 client, loc (loc, str) funSymbRef) {
-	set[loc] apiSubtypes = subtypesWithoutShadowing(typ, elemName, api, funSymbRef);
-	set[loc] refs = {};
-	
-	for (s <- apiSubtypes) {
-		set[loc] clientSubtypes = subtypesWithoutShadowing(s, elemName, client, funSymbRef);
-		refs += { funSymbRef(c, elemName) | c <- clientSubtypes };
-	}
-	
-	return refs;
-}
-
-set[loc] subtypesFieldSymbolic(loc typ, str fieldName, M3 m)
-	= subtypesElemSymbolic(typ, fieldName, m, fieldSymbolicRef);
-
-set[loc] subtypesMethodSymbolic(loc typ, str methName, M3 m)
-	= subtypesElemSymbolic(typ, methName, m, methodSymbolicRef);
-
-set[loc] clientSubtypesFieldSymbolic(loc typ, str fieldName, M3 api, M3 client)
-	= clientSubtypesElemSymbolic(typ, fieldName, api, client, fieldSymbolicRef);
-
-set[loc] clientSubtypesMethodSymbolic(loc typ, str methName, M3 api, M3 client)
-	= clientSubtypesElemSymbolic(typ, methName, api, client, methodSymbolicRef);
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldStaticAndOverridesStatic()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
@@ -315,6 +273,56 @@ private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] del
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
 	return detections(client, modified, fieldAccess());
 }
+
+private set[Detection] fieldSymbDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	set[Detection] detects = {};
+	
+	for (<modif, ch> <- modified) {
+		str fieldName = memberName(modif);
+		loc parent = parentType(oldAPI, modif);
+		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) + modif;
+		set[loc] affected = domain(rangeR(client.fieldAccess, symbFields));
+		detects += { detection(elem, modif, fieldAccess(), ch) | elem <- affected};
+	}
+	
+	return detects;
+}
+
+private set[loc] subtypesWithoutShadowing(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
+	set[loc] subtypes = domain(rangeR(m.extends, {typ}));
+	return { *(subtypesWithoutShadowing(s, elemName, m, funSymbRef) + s) 
+		| s <- subtypes, m.declarations[funSymbRef(s, elemName)] == {} };
+}
+
+private set[loc] subtypesElemSymbolic(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
+	set[loc] subtypes = subtypesWithoutShadowing(typ, elemName, m, funSymbRef);
+	return { funSymbRef(s, elemName) | s <- subtypes};
+}
+
+private set[loc] clientSubtypesElemSymbolic(loc typ, str elemName, M3 api, M3 client, loc (loc, str) funSymbRef) {
+	set[loc] apiSubtypes = subtypesWithoutShadowing(typ, elemName, api, funSymbRef);
+	set[loc] refs = {};
+	
+	for (s <- apiSubtypes) {
+		set[loc] clientSubtypes = subtypesWithoutShadowing(s, elemName, client, funSymbRef);
+		refs += { funSymbRef(c, elemName) | c <- clientSubtypes };
+	}
+	
+	return refs;
+}
+
+set[loc] subtypesFieldSymbolic(loc typ, str fieldName, M3 m)
+	= subtypesElemSymbolic(typ, fieldName, m, fieldSymbolicRef);
+
+set[loc] subtypesMethodSymbolic(loc typ, str signature, M3 m)
+	= subtypesElemSymbolic(typ, signature, m, methodSymbolicRef);
+
+set[loc] clientSubtypesFieldSymbolic(loc typ, str fieldName, M3 api, M3 client)
+	= clientSubtypesElemSymbolic(typ, fieldName, api, client, fieldSymbolicRef);
+
+set[loc] clientSubtypesMethodSymbolic(loc typ, str signature, M3 api, M3 client)
+	= clientSubtypesElemSymbolic(typ, signature, api, client, methodSymbolicRef);
 	
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractNowDefault()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
@@ -429,9 +437,9 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	set[Detection] detects = {};
 	
 	for (<modif, change> <- modified) {
-		str methodSign = methodSignature(modif);
+		str signature = methodSignature(modif);
 		loc parent = parentType(oldAPI, modif);
-		set[loc] symbMeths = subtypesMethodSymbolic(parent, methodSign, client) + modif;
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, client) + modif;
 		rel[loc, APIUse] affected = domain(rangeR(client.methodInvocation, symbMeths)) * { methodInvocation() }
 			+ domain(rangeR(client.methodOverrides, symbMeths)) * { methodOverride() };
 		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected};
@@ -449,12 +457,12 @@ set[Detection] detectionsMethodRemovedInSuperclass(M3 client, M3 oldAPI, set[Mod
 	set[Detection] detects = {};
 	
 	for (<modif, _> <- modified) {
-		str methName = methodSignature(modif);
+		str signature = methodSignature(modif);
 		loc parent = parentType(oldAPI, modif);
 		
 		// Get modif subtypes and symbolic methods
-		set[loc] symbMeths = subtypesMethodSymbolic(parent, methName, oldAPI)
-			+ clientSubtypesMethodSymbolic(parent, methName, oldAPI, client);
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, oldAPI)
+			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client);
 		// Get affected client members
 		rel[loc, APIUse] affected = domain(rangeR(client.methodInvocation, symbMeths)) * { methodInvocation() }
 			+ domain(rangeR(client.methodOverrides, symbMeths)) * { methodOverride() };

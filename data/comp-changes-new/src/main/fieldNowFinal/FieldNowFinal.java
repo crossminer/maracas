@@ -1,4 +1,4 @@
-package main;
+package main.fieldNowFinal;
 
 public class FieldNowFinal {
 

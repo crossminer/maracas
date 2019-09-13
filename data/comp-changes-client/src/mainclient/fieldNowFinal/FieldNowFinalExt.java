@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldNowFinal;
 
-import main.FieldNowFinal;
+import main.fieldNowFinal.FieldNowFinal;
 
 public class FieldNowFinalExt extends FieldNowFinal {
 

@@ -3,15 +3,24 @@
 ## Detections
 
 ### Field Now Final
+A field goes from `non-final` to `final`, thus the field value cannot be modified. Client code breaks if ther is an attempt to assign a new value to the field.
 
 **Detection**
+
+1. Client methods accessing and assigning a new value to a field that is now `final`.
+2. Client methods accessing through the `super` keyword a supertype field that is now `final` and assigning it a new value.
+3. Client methods accessing without the `super` keyword a supertype field that is now `final` and assigning it a new value.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field." %}
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f` and assigns a new value to `f`. If `f` is declared as `final` in `api.A`, then the following detection is reported:
 
 ```
 detection(
   |java+method:///client/C/m()|,
   |java+field:///api/A/f|,
   fieldAccess(),
-  fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)
+  fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 
@@ -24,8 +33,8 @@ A field is removed from its parent class. Client projects are not able to access
 
 1. Client methods accessing a field that is removed due to its parent type removal.
 2. Client methods accessing a field that is removed from an API type.
-3. Client methods accessing a supertype field through the `super` keyword.
-4. Client methods accessing a supertype field without using the `super` keyword.
+3. Client methods accessing a removed supertype field through the `super` keyword.
+4. Client methods accessing a removed supertype field without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Field Removed in Superclass* change. 
 
 {% include note.html content="`javac` inlines constant values, thus this type of field access is lost." %}
