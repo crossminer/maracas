@@ -24,7 +24,7 @@ test bool extendsClass()
 test bool typeDepIntField()
 	= detection(
 		|java+field:///mainclient/classRemoved/ClassRemovedTD/i|,
-		|java+class:///main/classRemoved/IClassRemoved|,
+		|java+interface:///main/classRemoved/IClassRemoved|,
 		typeDependency(),
 		classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;

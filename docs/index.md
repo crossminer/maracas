@@ -2,6 +2,21 @@
 
 ## Detections
 
+### Field Now Final
+
+**Detection**
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/A/f|,
+  fieldAccess(),
+  fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Field Removed
 A field is removed from its parent class. Client projects are not able to access it anymore.
 
@@ -85,10 +100,10 @@ A method is removed from its parent class. Client projects are not able to invok
 
 **Detection**
 
-1. Client methods invoking a method that is removed due to its parent type removal.
-2. Client methods invoking a method that is removed from an API type.
-3. Client methods invoking a supertype method through the `super` keyword.
-4. Client methods invoking a supertype method without using the `super` keyword.
+1. Client methods invoking or overriding a method that is removed due to its parent type removal.
+2. Client methods invoking or overriding a method that is removed from an API type.
+3. Client methods invoking or overriding a supertype method through the `super` keyword.
+4. Client methods invoking or overriding a supertype method without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* change. 
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is removed from `api.A`, then the following detection is reported:
@@ -110,10 +125,10 @@ A method is removed from a supertype class. Subtypes are not able to invoke it a
 
 **Detection**
 
-1. Client methods invoking a method that has been inherited from a supertype and whose type has been removed.
-2. Client methods invoking a method that has been inherited from a supertype and that has been removed from the corresponding type.
-3. Client methods invoking a method that has been inherited from a supertype through the `super` keyword.
-4. Client methods invoking a method that has been inherited from a supertype without using the `super` keyword.
+1. Client methods invoking or overriding a method that has been inherited from a supertype and whose type has been removed.
+2. Client methods invoking or overriding a method that has been inherited from a supertype and that has been removed from the corresponding type.
+3. Client methods invoking or overriding a method that has been inherited from a supertype through the `super` keyword.
+4. Client methods invoking or overriding a method that has been inherited from a supertype without using the `super` keyword.
 
 {% include note.html content="We consider all direct subtypes of the type that owns the removed method, which do not shadow the target method." %}
 
@@ -122,7 +137,7 @@ For example, there is an API type `api.A` that extends from the API type `api.Su
 ```
 detection(
   |java+method:///client/C/m()|,
-  |java+field:///api/SuperA/mSuper()|,
+  |java+method:///api/SuperA/mSuper()|,
   methodInvocation(),
   methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)
 )
@@ -144,6 +159,29 @@ Types depending on, implementing, or inheriting from the affected type might not
 
 1. The type can be accessed by other types that inherit from the parent class, or from types defined in the same package.
 2. The type can be accessed by types defined in the same in the same package.
+
+---
+
+### Class Removed
+API members depending on or annotated with the removed type are affected. Types extending or implementing the removed type cannot use it anymore.
+ 
+**Detection**
+
+1. API members depending on or annotated with the removed type.
+2. Types extending or implementing the removed type.
+3. Members contained in the removed type are also unavailable. These cases are reported with the *Method Removed* and the *Field Removed* changes.
+4. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* and the *Field Removed in Superclass* changes. 
+
+For example, there is an API type `api.A` and a client type `client.C`. The latter extends `api.A`. If `api.A` is removed, `client.C` cannot include this inheritance in the class declaration, then the following detection is reported:
+
+```
+detection(
+  |java+class:///client/C|,
+  |java+class:///api/A|,
+  extends(),
+  classRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 
