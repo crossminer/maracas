@@ -105,7 +105,7 @@ An abstract method is added to a superclass and no implementation is provided in
 ---
 
 ### Method Now Final
-A method goes from `non-final` to `final`, thus the method cannot be overriden. Client code breaks if ther is an attempt to assign a new value to the field.
+A method goes from `non-final` to `final`, thus the method cannot be overriden. Client code breaks if there is an attempt to assign a new value to the field.
 
 **Detection**
 
@@ -191,6 +191,29 @@ Types depending on, implementing, or inheriting from the affected type might not
 
 1. The type can be accessed by other types that inherit from the parent class, or from types defined in the same package.
 2. The type can be accessed by types defined in the same in the same package.
+
+---
+
+### Class Now Final
+A class goes from `non-final` to `final`, thus the class cannot be extended by other types anymore. 
+
+**Detection**
+
+1. Client types extending an API class that is now `final`.
+2. Client methods overriding a method contained in an API class that is now `final`.
+
+{% include note.html content="We consider all transitive client subtypes of the client type that extends the `final` API type." %}
+
+For example, there is a client type `client.C` and an API type `api.A`. If `client.C` extends `api.A` and `api.A` is declared as `final`, then the following detection is reported:
+
+```
+detection(
+  |java+class:///client/C|,
+  |java+class:///api/A|,
+  extends(),
+  classNowFinal(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 

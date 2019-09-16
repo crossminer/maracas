@@ -136,22 +136,22 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return detectionsAllUses(client, modified);
 }
 
-private rel[loc, CompatibilityChange] transitiveEntities(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+private rel[loc, CompatibilityChange] transitiveEntities(M3 oldAPI, set[ModifiedEntity] modified) {
 	rel[loc, loc] transContain = oldAPI.containment+;
 	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isAPIEntity(e) };
 }
 
-private rel[loc, CompatibilityChange] transitiveMethods(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+private rel[loc, CompatibilityChange] transitiveMethods(M3 oldAPI, set[ModifiedEntity] modified) {
 	rel[loc, loc] transContain = oldAPI.containment+;
 	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isMethod(e) };
 }
 
-private rel[loc, CompatibilityChange] transitiveConstructors(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+private rel[loc, CompatibilityChange] transitiveConstructors(M3 oldAPI, set[ModifiedEntity] modified) {
 	rel[loc, loc] transContain = oldAPI.containment+;
 	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isConstructor(e) };
 }
 
-private rel[loc, CompatibilityChange] transitiveSubtypes(M3 oldAPI, rel[loc, CompatibilityChange] modified) {
+private rel[loc, CompatibilityChange] transitiveSubtypes(M3 oldAPI, set[ModifiedEntity] modified) {
 	rel[loc, loc] transExtends = oldAPI.extends+;
 	return { <e, ch> | <m, ch> <- modified, e <- transExtends[m], isType(e) };
 }
@@ -424,8 +424,10 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return detects + detections(client, modified, APIUse::methodInvocation());
 }
  	
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal())
-	= symbMethodDetections(client, oldAPI, delta, ch, { methodOverride() });
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	return symbMethodDetections(client, oldAPI, modified, { methodOverride() });
+}
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowStatic())
 	= methodAllDetections(client, oldAPI, delta, ch);
@@ -528,6 +530,15 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 
 private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	return symbMethodDetections(client, oldAPI, modified, apiUses);
+}
+
+private set[Detection] symbMethodDetectionsTrans(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	return symbMethodDetections(client, oldAPI, modified, apiUses);
+}
+
+private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, set[APIUse] apiUses) {
 	set[Detection] detects = {};
 	
 	for (<modif, ch> <- modified) {
@@ -536,7 +547,6 @@ private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity
 		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, oldAPI) 
 			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) + modif;
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbMeths) | apiUse <- apiUses };
-		iprintln(affected);
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
 	
@@ -600,8 +610,9 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowFinal()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	set[ModifiedEntity] transModified = transitiveEntities(oldAPI, modified); // We only need methods
-	return detections(client, modified, extends()) + detections(client, transModified, methodOverride());
+	set[ModifiedEntity] transModified = transitiveMethods(oldAPI, modified);
+	return detections(client, modified, extends()) 
+		+ symbMethodDetections(client, oldAPI, transModified, { methodOverride() });
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classRemoved())

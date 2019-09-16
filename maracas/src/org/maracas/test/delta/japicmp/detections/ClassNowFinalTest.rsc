@@ -3,7 +3,7 @@ module org::maracas::\test::delta::japicmp::detections::ClassNowFinalTest
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-extend org::maracas::\test::delta::japicmp::detections::SetUp;
+import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
 test bool abstractClass() 
@@ -25,7 +25,7 @@ test bool nonAbstractClass()
 test bool abstractMethodOverr() 
 	= detection(
 		|java+method:///mainclient/classNowFinal/ClassNowFinalAbsExt/m()|,
-		|java+class:///main/classNowFinal/ClassNowFinalAbs/m()|,
+		|java+method:///main/classNowFinal/ClassNowFinalAbs/m()|,
 		methodOverride(),
 		classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
