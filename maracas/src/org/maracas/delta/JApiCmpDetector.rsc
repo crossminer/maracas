@@ -200,14 +200,14 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	= fieldDetections(client, oldAPI, delta, ch);
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowFinal()) 
-	= fieldSymbDetections(client, oldAPI, delta, ch); 
+	= symbFieldDetections(client, oldAPI, delta, ch, { fieldAccess() }); 
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNowStatic()) 
-	= fieldDetections(client, oldAPI, delta, ch);
+	= symbFieldDetections(client, oldAPI, delta, ch, { fieldAccess() });
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved()) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch); // FIXME: Duplicated refactor!
-	return fieldSymbDetections(client, oldAPI, delta, ch) 
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch); 
+	return symbFieldDetections(client, oldAPI, modified, { fieldAccess() }) 
 	+ detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
 }
 
@@ -275,16 +275,21 @@ private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] del
 	return detections(client, modified, fieldAccess());
 }
 
-private set[Detection] fieldSymbDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
+private set[Detection] symbFieldDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	return symbFieldDetections(client, oldAPI, modified, apiUses);
+}
+
+private set[Detection] symbFieldDetections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, set[APIUse] apiUses) {
 	set[Detection] detects = {};
 	
 	for (<modif, ch> <- modified) {
 		str fieldName = memberName(modif);
 		loc parent = parentType(oldAPI, modif);
-		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) + modif;
-		set[loc] affected = domain(rangeR(client.fieldAccess, symbFields));
-		detects += { detection(elem, modif, fieldAccess(), ch) | elem <- affected };
+		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) 
+			+ clientSubtypesFieldSymbolic(parent, fieldName, oldAPI, client) + modif;
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbFields) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
 	
 	return detects;

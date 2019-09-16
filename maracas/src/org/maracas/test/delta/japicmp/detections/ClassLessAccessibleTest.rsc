@@ -5,6 +5,7 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 extend org::maracas::\test::delta::japicmp::detections::SetUp;
 
+
 test bool pub2proExt()
 	= detection(
 		|java+class:///mainclient/classLessAccessible/ClassLessAccessiblePub2ProExt$ClassLessAccessiblePub2ProExtInner|,

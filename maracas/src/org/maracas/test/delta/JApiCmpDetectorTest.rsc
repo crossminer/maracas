@@ -173,37 +173,6 @@ public test bool fieldNoLongerStaticNoSuperKeyAccess()
 	notin detects;
     
   
-//----------------------------------------------
-// Field now static tests
-//----------------------------------------------
-
-public test bool fieldNowStaticSimpleAccess()
-	= detection(
-		|java+method:///mainclient/FieldNowStaticFA/fieldNowStaticClientSimpleAccess()|,
-		|java+field:///main/FieldNowStatic/MODIFIED_FIELD|,
-		fieldAccess(),
-		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-
-public test bool fieldNowStaticSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldNowStaticExt/fieldNowStaticClientSuperKeyAccess()|,
-		|java+field:///main/FieldNowStatic/MODIFIED_FIELD|,
-		fieldAccess(),
-		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: If the client class extends an API class and accesses the API  
-// field without the super keyword, javac registers the field as a field  
-// within the client class.
-public test bool fieldNowStaticNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldNowStaticExt/fieldNowStaticClientNoSuperKeyAccess()|,
-		|java+field:///main/FieldNowStatic/MODIFIED_FIELD|,
-		fieldAccess(),
-		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;    
-
 
 //----------------------------------------------
 // Field type changed tests

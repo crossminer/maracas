@@ -26,6 +26,30 @@ detection(
 
 ---
 
+### Field Now Static
+A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` st linking time. Client code must be recompiled to get rid of the issue.
+
+**Detection**
+
+1. Client methods accessing a field that is now `static`.
+2. Client methods accessing a supertype field that is now `static` through the `super` keyword.
+3. Client methods accessing a supertype field that is now `static` without the `super` keyword.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field." %}
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is declared as `static` in `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/A/f|,
+  fieldAccess(),
+  fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Field Removed
 A field is removed from its parent class. Client projects are not able to access it anymore.
 

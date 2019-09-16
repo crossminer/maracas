@@ -1,4 +1,4 @@
-package main;
+package main.fieldNowStatic;
 
 public class FieldNowStatic {
 	

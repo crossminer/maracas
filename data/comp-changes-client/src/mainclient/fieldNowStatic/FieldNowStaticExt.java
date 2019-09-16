@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldNowStatic;
 
-import main.FieldNowStatic;
+import main.fieldNowStatic.FieldNowStatic;
 
 public class FieldNowStaticExt extends FieldNowStatic {
 
