@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNowStatic;
 
-import main.IMethodNowStatic;
+import main.methodNowStatic.IMethodNowStatic;
 
 public class MethodNowStaticImp implements IMethodNowStatic {
 

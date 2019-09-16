@@ -539,60 +539,6 @@ public test bool methodNowFinalSimpleAccess()
 		methodInvocation(),
 		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
     notin detects;
-
-	
-//----------------------------------------------
-// Method now static tests
-//----------------------------------------------
-
-public test bool methodNowStaticSimpleAccess()
-	= detection(
-		|java+method:///mainclient/MethodNowStaticMI/methodNowStaticClient()|,
-		|java+method:///main/MethodNowStatic/methodNowStatic()|,
-		methodInvocation(),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
-	    
-public test bool methodNowStaticSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodNowStaticExt/methodNowStaticClientSuperKeyAccess()|,
-		|java+method:///main/MethodNowStatic/methodNowStatic()|,
-		methodInvocation(),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: If the client class extends an API class and invokes the API  
-// method without the super keyword, javac registers the method as a   
-// method within the client class.
-public test bool methodNowStaticNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodNowStaticExt/methodNowStaticClientNoSuperKeyAccess()|,
-		|java+method:///main/MethodNowStatic/methodNowStatic()|,
-		methodInvocation(),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: Modified interface methods are not identified as a change.
-// This is not a JApiCmp problem but rather a Rascal M3 issue (check 
-// methodOverrides relation).
-public test bool methodNowStaticOverride()
-	= detection(
-		|java+method:///mainclient/MethodNowStaticExtOverriden/methodNowStatic()|,
-		|java+method:///main/MethodNowStatic/methodNowStatic()|,
-		methodOverride(),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-	
-// TODO: If the client class extends an API class and invokes the API  
-// method without the super keyword, javac registers the method as a   
-// method within the client class.
-public test bool methodNowStaticInterface()
-	= detection(
-		|java+method:///mainclient/MethodNowStaticImp/methodNowStaticClient()|,
-		|java+method:///main/IMethodNowStatic/methodNowStatic()|,
-		methodInvocation(),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects; 
     
 
 //----------------------------------------------

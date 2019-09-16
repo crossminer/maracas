@@ -296,7 +296,7 @@ private set[Detection] symbFieldDetections(M3 client, M3 oldAPI, set[ModifiedEnt
 }
 
 private set[loc] subtypesWithoutShadowing(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
-	set[loc] subtypes = domain(rangeR(m.extends, {typ}));
+	set[loc] subtypes = domain(rangeR(m.extends, { typ })) + domain(rangeR(m.implements, { typ }));
 	return { *(subtypesWithoutShadowing(s, elemName, m, funSymbRef) + s) 
 		| s <- subtypes, m.declarations[funSymbRef(s, elemName)] == {} };
 }
@@ -434,8 +434,10 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return symbMethodDetections(client, oldAPI, modified, { methodOverride() });
 }
 	
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowStatic())
-	= methodAllDetections(client, oldAPI, delta, ch);
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowStatic()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation(), methodOverride() });
+}
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowThrowsCheckedException())
 	= methodAllDetections(client, oldAPI, delta, ch);
@@ -538,9 +540,20 @@ private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity
 	return symbMethodDetections(client, oldAPI, modified, apiUses);
 }
 
-private set[Detection] symbMethodDetectionsTrans(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
-	return symbMethodDetections(client, oldAPI, modified, apiUses);
+private set[Detection] symbMethodDetectionsWithParent(M3 client, M3 oldAPI, set[ModifiedEntity] modified, set[APIUse] apiUses) {
+	set[Detection] detects = {};
+	
+	for (<modif, ch> <- modified) {
+		str signature = methodSignature(modif);
+		loc parent = parentType(oldAPI, modif);
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, oldAPI) 
+			+ subtypesMethodSymbolic(parent, signature, client) 
+			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) + modif;
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbMeths) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
+	}
+	
+	return detects;
 }
 
 private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, set[APIUse] apiUses) {

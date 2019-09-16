@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNowStatic;
 
-import main.MethodNowStatic;
+import main.methodNowStatic.MethodNowStatic;
 
 public class MethodNowStaticMI {
 
