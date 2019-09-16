@@ -5,6 +5,7 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
 import Relation;
 import Set;
+import IO;
 
 
 //----------------------------------------------
@@ -283,7 +284,7 @@ private set[Detection] fieldSymbDetections(M3 client, M3 oldAPI, list[APIEntity]
 		loc parent = parentType(oldAPI, modif);
 		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) + modif;
 		set[loc] affected = domain(rangeR(client.fieldAccess, symbFields));
-		detects += { detection(elem, modif, fieldAccess(), ch) | elem <- affected};
+		detects += { detection(elem, modif, fieldAccess(), ch) | elem <- affected };
 	}
 	
 	return detects;
@@ -424,7 +425,7 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 }
  	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal())
-	= methodOverrDetections(client, oldAPI, delta, ch);
+	= symbMethodDetections(client, oldAPI, delta, ch, { methodOverride() });
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowStatic())
 	= methodAllDetections(client, oldAPI, delta, ch);
@@ -523,6 +524,35 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 		}
 	}
 	return detects;
+}
+
+private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);
+	set[Detection] detects = {};
+	
+	for (<modif, ch> <- modified) {
+		str signature = methodSignature(modif);
+		loc parent = parentType(oldAPI, modif);
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, oldAPI) 
+			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) + modif;
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbMeths) | apiUse <- apiUses };
+		iprintln(affected);
+		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
+	}
+	
+	return detects;
+}
+
+private rel[loc, APIUse] affectedEntities(M3 m, APIUse apiUse, set[loc] modified) {
+	set[loc] affected = {};
+	switch (apiUse) {
+	case fieldAccess(): affected = domain(rangeR(m.fieldAccess, modified));
+	case methodInvocation(): affected = domain(rangeR(m.methodInvocation, modified));
+	case methodOverride(): affected = domain(rangeR(m.methodOverrides, modified));
+	default: throw "Wrong APIUse for member type: <apiUse>";
+	}
+	
+	return affected * { apiUse };
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classLessAccessible())
