@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldNoLongerStatic;
 
-import main.FieldNoLongerStatic;
+import main.fieldNoLongerStatic.FieldNoLongerStatic;
 
 public class FieldNoLongerStaticExt extends FieldNoLongerStatic {
 

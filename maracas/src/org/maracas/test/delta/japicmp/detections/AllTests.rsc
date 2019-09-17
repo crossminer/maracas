@@ -1,6 +1,8 @@
 module org::maracas::\test::delta::japicmp::detections::AllTests
 
 extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
+// Failing tests (1): superKeyAccess
+extend org::maracas::\test::delta::japicmp::detections::FieldNoLongerStaticTest;
 // Failing tests (3): simpleAccessNoAssign, superKeyAccessNoAssign, noSuperKeyAccessNoAssign
 extend org::maracas::\test::delta::japicmp::detections::FieldNowFinalTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldNowStaticTest;

@@ -161,7 +161,7 @@ private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange
 	+ detections(client, modified, fieldAccess())
 	+ detections(client, modified, extends())
 	+ detections(client, modified, implements())
-	+ detections(client, modified, annotation())
+	+ detections(client, modified, APIUse::annotation())
 	+ detections(client, modified, typeDependency())
 	+ detections(client, modified, methodOverride())
 	;
@@ -574,9 +574,13 @@ private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, set[ModifiedEn
 private rel[loc, APIUse] affectedEntities(M3 m, APIUse apiUse, set[loc] modified) {
 	set[loc] affected = {};
 	switch (apiUse) {
+	case APIUse::annotation(): affected = domain(rangeR(m.annotations, modified));
+	case extends(): affected = domain(rangeR(m.extends, modified));
 	case fieldAccess(): affected = domain(rangeR(m.fieldAccess, modified));
+	case implements(): affected = domain(rangeR(m.implements, modified));
 	case methodInvocation(): affected = domain(rangeR(m.methodInvocation, modified));
 	case methodOverride(): affected = domain(rangeR(m.methodOverrides, modified));
+	case typeDependency(): affected = domain(rangeR(m.typeDependency, modified));
 	default: throw "Wrong APIUse for member type: <apiUse>";
 	}
 	
@@ -601,7 +605,7 @@ set[Detection] detectionsClassLessAccess(M3 client, M3 oldAPI, list[APIEntity] d
 			rel[loc, APIUse] affected = domain(rangeR(client.typeDependency, {modif})) * { typeDependency() }
 				+ domain(rangeR(client.extends, {modif})) * { extends() }
 				+ domain(rangeR(client.implements, {modif})) * { implements() }
-				+ domain(rangeR(client.annotations, {modif})) * { annotation() };
+				+ domain(rangeR(client.annotations, {modif})) * { APIUse::annotation() };
 			
 			// Include client affected elements that are subtypes of the 
 			// modified field parent class, and where modifiers went from
@@ -672,7 +676,7 @@ private set[Detection] classAllDetections(M3 client, M3 oldAPI, list[APIEntity] 
 	return detections(client, modified, extends())
 		+ detections(client, modified, implements())
 		+ detections(client, modified, typeDependency())
-		+ detections(client, modified, annotation());
+		+ detections(client, modified, APIUse::annotation());
 }
 
 private set[Detection] extendsDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
@@ -690,38 +694,6 @@ private set[Detection] typeDependencyDetections(M3 client, M3 oldAPI, list[APIEn
 	return detections(client, modified, typeDependency());
 }
 
-@doc {
-	Identifies the API uses that affect client code given an APIUse. 
-	It relates modified API entities owning compatibility changes to 
-	the client declaration that uses it according to the selected 
-	APIUse (e.g. method invocation, field access).
-	
-	@param client: M3 model of the client project
-	@param modified: relation mapping modified API entities to the 
-	       type of experienced change
-	@param apiUse: type of API use (e.g. methodInvocation())
-	@return set of Detections (API usages affected by API evolution)
-}
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, mi:APIUse::methodInvocation())
-	= detections(client.methodInvocation, modified, mi); 
-	
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, fa:APIUse::fieldAccess())
-	= detections(client.fieldAccess, modified, fa);
-
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, e:APIUse::extends())
-	= detections(client.extends, modified, e);
-
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, i:APIUse::implements())
-	= detections(client.implements, modified, i);
-		
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, a:APIUse::annotation())
-	= detections(client.annotations, modified, a);
-	
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, td:APIUse::typeDependency())
-	= detections(client.typeDependency, modified, td);
-
-set[Detection] detections(M3 client, set[ModifiedEntity] modified, mo:APIUse::methodOverride())
-	= detections(client.methodOverrides, modified, mo);
 	
 @doc {
 	Identifies the API uses that affect client code given an APIUse. 
@@ -736,14 +708,6 @@ set[Detection] detections(M3 client, set[ModifiedEntity] modified, mo:APIUse::me
 	@param apiUse: type of API use (e.g. methodInvocation())
 	@return set of Detections (API usages affected by API evolution)
 }
-private set[Detection] detections(rel[loc, loc] m3Relation, rel[loc, CompatibilityChange] modified, APIUse apiUse) {
-	set[loc] modifiedLocs = domain(modified);
-	rel[loc, loc] affected = rangeR(m3Relation, modifiedLocs);
-	rel[loc, loc] invAffected = invert(affected);
-	set[Detection] detects = {};
-	
-	for (modif <- modifiedLocs) {
-		detects += { detection(elem, modif, apiUse, ch) | elem <- invAffected[modif], ch <- modified[modif] };
-	}
-	return detects;
-}
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, APIUse apiUse) 
+	= { detection(elem, modif, apiUse, ch) | <modif, ch> <- modified, 
+		<elem, apiUse> <- affectedEntities(client, apiUse, { modif }) };

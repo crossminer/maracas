@@ -2,6 +2,26 @@
 
 ## Detections
 
+### Field No Longer Static
+A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
+
+**Detection**
+
+1. Client methods accessing an instance field that is no longer `static` (e.g. `A.f`).
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a static field `f`. Assume `m()` accesses `f`. If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/A/f|,
+  fieldAccess(),
+  fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Field Now Final
 A field goes from `non-final` to `final`, thus the field value cannot be modified. Client code breaks if ther is an attempt to assign a new value to the field.
 
@@ -27,7 +47,7 @@ detection(
 ---
 
 ### Field Now Static
-A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` at linking time. Client code must be recompiled to get rid of the issue.
+A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` at linking time. The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. The former is used to access objects fields and the later to access instance fields. Client code must be recompiled to get rid of the issue.
 
 **Detection**
 

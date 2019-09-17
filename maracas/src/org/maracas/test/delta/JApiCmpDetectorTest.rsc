@@ -138,40 +138,6 @@ public test bool fieldLessAccessibleNoSuperKeyAccessPro2Priv()
 		fieldAccess(),
 		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
-
-//----------------------------------------------
-// Field no longer static tests
-//----------------------------------------------
-
-public test bool fieldNoLongerStaticSimpleAccess() 
-	= detection(
-		|java+method:///mainclient/FieldNoLongerStaticFA/fieldNoLongerStaticClient()|,
-		|java+field:///main/FieldNoLongerStatic/fieldStatic|,
-		fieldAccess(),
-		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-	
-// TODO: the super keyword refers to the parent class OBJECT.
-// Even though it is a bad practice to access class fields 
-// through objects it is not a problem when the we refer to 
-// an instance field. 
-public test bool fieldNoLongerStaticSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperKey()|,
-		|java+field:///main/FieldNoLongerStatic/fieldStatic|,
-		fieldAccess(),
-		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-public test bool fieldNoLongerStaticNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldNoLongerStaticExt/fieldNoLongerStaticClientNoSuperKey()|,
-		|java+field:///main/FieldNoLongerStatic/fieldStatic|,
-		fieldAccess(),
-		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-    
   
 
 //----------------------------------------------
