@@ -430,7 +430,6 @@ private set[Detection] symbTypeDetectionsWithParent(M3 client, M3 oldAPI, set[Mo
 			+ subtypesWithoutMethShadowing(parent, signature, oldAPI)
 			+ clientSubtypesWithoutMethShadowing(parent, signature, oldAPI, client)
 			+ parent;
-		iprintln(subtypes);
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, subtypes) | apiUse <- apiUses };
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}

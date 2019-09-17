@@ -5,7 +5,7 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
-//t
+
 public test bool noOverrideExt()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractExt|,
@@ -22,7 +22,6 @@ public test bool noOverrideExtWithImpl()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 	
-//t
 public test bool noOverrideImpl()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractImp|,

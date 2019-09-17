@@ -3,11 +3,11 @@ module org::maracas::\test::delta::japicmp::detections::ClassNowAbstractTest
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-extend org::maracas::\test::delta::japicmp::detections::SetUp;
+import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
 test bool createObject() 
-	= detections(
+	= detection(
 		|java+method:///mainclient/classNowAbstract/ClassNowAbstractMI/createObject()|,
 		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
 		methodInvocation(),
@@ -15,25 +15,58 @@ test bool createObject()
 	in detects;
 
 test bool createObjectParams() 
-	= detections(
+	= detection(
 		|java+method:///mainclient/classNowAbstract/ClassNowAbstractMI/createObjectParams()|,
 		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-test bool consOverride()
-	= detections(
-		|java+method:///mainclient/classNowAbstract/ClassNowAbstractExt/ClassNowAbstractExt()|,
-		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
+//test bool consOverride()
+//	= detection(
+//		|java+method:///mainclient/classNowAbstract/ClassNowAbstractExt/ClassNowAbstractExt()|,
+//		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
+//		methodInvocation(),
+//		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+//	notin detects;
+//	
+//test bool consOverrideParams()
+//	= detection(
+//		|java+method:///mainclient/classNowAbstract/ClassNowAbstractExt/ClassNowAbstractExt(int)|,
+//		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract(int)|,
+//		methodInvocation(),
+//		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+//	notin detects;
+
+test bool interCreateObject() 
+	= detection(
+		|java+method:///mainclient/classNowAbstract/IClassNowAbstractMI/createObject()|,
+		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract()|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 	
-test bool consOverrideParams()
-	= detections(
-		|java+method:///mainclient/classNowAbstract/ClassNowAbstractExt/ClassNowAbstractExt(int)|,
-		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract(int)|,
+test bool interCreateObjectParams() 
+	= detection(
+		|java+method:///mainclient/classNowAbstract/IClassNowAbstractMI/createObjectParams()|,
+		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract(int)|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
+	
+// test bool interConsOverride()
+// 	= detection(
+// 		|java+constructor:///mainclient/classNowAbstract/IClassNowAbstractExt/IClassNowAbstractExt()|,
+// 		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract()|,
+// 		methodInvocation(),
+// 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+// 	notin detects;
+//   
+//test bool interConsOverrideParams()
+//	= detection(
+//		|java+constructor:///mainclient/classNowAbstract/IClassNowAbstractExt/IClassNowAbstractExt(int)|,
+//		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract(int)|,
+//		methodInvocation(),
+//		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+//	notin detects;
+    

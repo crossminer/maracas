@@ -7,9 +7,9 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 
 **Detection**
 
-1. Client methods accessing an instance field that is no longer `static`.
+1. Client methods accessing a field that is no longer `static`.
 
-For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with an instance field `f`. Assume `m()` accesses `f` in a static manner (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a class field `f`. Assume `m()` accesses `f` in a static manner (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
 
 ```
 detection(
@@ -47,7 +47,7 @@ detection(
 ---
 
 ### Field Now Static
-A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` at linking time. The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. The former is used to access objects fields and the later to access instance fields. Client code must be recompiled to get rid of the issue.
+A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` at linking time. The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. The former is used to access objects fields and the later to access static fields. Client code must be recompiled to get rid of the issue.
 
 **Detection**
 
@@ -153,7 +153,7 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 
 **Detection**
 
-1. Client methods invoking an instance method that is no longer `static`.
+1. Client methods invoking a method that is no longer `static`.
 
 {% include note.html content="Static methods cannot be overriden, that is why we do not consider overriding relations." %}
 
@@ -171,23 +171,24 @@ detection(
 ---
 
 ### Method Now Abstract
-A method goes from `non-abstract` to `abstract`, thus the method requires an implementation. 
+A method goes from `non-abstract` to `abstract`. Non-abstract client types must provide an implementation. Method invocations pointing to the target method will break.  
 
 **Detection**
 
-1. Client methods overriding a method that is now `final` in the direct parent type.
-2. Client methods overriding a method that is now `final` in a transitive parent type.
+1. Client types that must provide an implementation of the method. These types are non-abstract subtypes of the API type owning the method.
+2. Client methods invoking a method that is now `abstract` in the direct parent type and no implementation is provided.
+2. Client methods overriding a method that is now `abstract ` in a transitive parent type and no implementation is provided.
 
 {% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
 
-For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` overrides `mA()`. If `mA()` is declared as `final` in `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is declared as `abstract` in `api.A`, then the following detection is reported:
 
 ```
 detection(
   |java+method:///client/C/mC()|,
   |java+method:///api/A/mA()|,
-  methodOverride(),
-  methodNowFinal(binaryCompatibility=false,sourceCompatibility=false)
+  methodInvocation(),
+  methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 
@@ -306,6 +307,28 @@ Types depending on, implementing, or inheriting from the affected type might not
 
 1. The type can be accessed by other types that inherit from the parent class, or from types defined in the same package.
 2. The type can be accessed by types defined in the same in the same package.
+
+---
+
+### Class Now Abstract
+A class goes from `non-abstract` to `abstract`. It is not posible to create new objects from the given type.
+
+**Detection**
+
+1. Client methods invoking the constructor of the `abstract` type.
+2. Client methods invoking the constructor of the now `abstract` supertype through the `super` keyword (?).
+3. Client methods invoking the constructor of the now `abstract` supertype without the `super` keyword (?).
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A`. Assume `m()` creates an object of type `api.A` by invoking its constructor `A()`. If `api.A` is declared as `abstract`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+constructor:///api/A/A()|,
+  methodInvocation(),
+  classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 

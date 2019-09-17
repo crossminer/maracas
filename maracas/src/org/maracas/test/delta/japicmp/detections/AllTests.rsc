@@ -7,8 +7,10 @@ extend org::maracas::\test::delta::japicmp::detections::FieldNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedInSuperclassTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNoLongerStaticTest; // Failing tests (2): superKeyAccess, simpleAccessObj
+extend org::maracas::\test::delta::japicmp::detections::MethodNowAbstractTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowFinalTest; // Failing tests (1): overrideTrans
 extend org::maracas::\test::delta::japicmp::detections::MethodNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedTest; 
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclassTest; // Failing tests (3): overrideSuperSSMethodExtSuper, overrideSuperSSMethodExtSSuper, overrideSuperSMethodExtSuper
+extend org::maracas::\test::delta::japicmp::detections::ClassNowAbstractTest; // Failing tests (2): createObjectParams, createObject 
 extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
