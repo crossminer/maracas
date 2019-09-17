@@ -7,9 +7,9 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 
 **Detection**
 
-1. Client methods accessing an instance field that is no longer `static` (e.g. `A.f`).
+1. Client methods accessing an instance field that is no longer `static`.
 
-For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a static field `f`. Assume `m()` accesses `f`. If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with an instance field `f`. Assume `m()` accesses `f` in a static manner (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
 
 ```
 detection(
@@ -145,6 +145,28 @@ detection(
 
 ### Method Abstract Added In Superclass
 An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+
+---
+
+### Method No Longer Static
+A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
+
+**Detection**
+
+1. Client methods invoking an instance method that is no longer `static`.
+
+{% include note.html content="Static methods cannot be overriden, that is why we do not consider overriding relations." %}
+
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a static method `mA()`. Assume `mC()` invokes `mA()` in a static manner (i.e. `A.mA()`). If the `static` modifier is removed from `mA()`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  fieldAccess(),
+  methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 

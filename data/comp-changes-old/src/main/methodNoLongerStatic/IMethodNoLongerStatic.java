@@ -1,4 +1,4 @@
-package main;
+package main.methodNoLongerStatic;
 
 public interface IMethodNoLongerStatic {
 

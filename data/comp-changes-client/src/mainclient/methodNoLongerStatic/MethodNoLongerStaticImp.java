@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNoLongerStatic;
 
-import main.IMethodNoLongerStatic;
+import main.methodNoLongerStatic.IMethodNoLongerStatic;
 
 public class MethodNoLongerStaticImp implements IMethodNoLongerStatic {
 	

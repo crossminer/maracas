@@ -369,56 +369,7 @@ public test bool methodLessAccessibleOverridePro2Priv()
 	in detects;	
 
 
-//----------------------------------------------
-// Method no longer static tests
-//----------------------------------------------
 
-// TODO: the access is done through an object.
-public test bool methodNoLongerStaticSimpleAccessObj()
-	= detection(
-		|java+method:///mainclient/MethodNoLongerStaticMI/methodNoLongerStaticClientObject()|,
-		|java+method:///main/MethodNoLongerStatic/methodNoLongerStatic()|,
-		methodInvocation(),
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-public test bool methodNoLongerStaticSimpleAccessClass()
-	= detection(
-		|java+method:///mainclient/MethodNoLongerStaticMI/methodNoLongerStaticClientClass()|,
-		|java+method:///main/MethodNoLongerStatic/methodNoLongerStatic()|,
-		methodInvocation(),
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: the super keyword refers to the parent class OBJECT.
-// Even though it is a bad practice to access class methods 
-// through objects it is not a problem when we refer to an
-// instance method. 
-public test bool methodNoLongerStaticSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodNoLongerStaticExt/methodNoLongerStaticSuperKeyAccess()|,
-		|java+method:///main/MethodNoLongerStatic/methodNoLongerStatic()|,
-		methodInvocation(),
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-// TODO: we are referring to the parent class object (assuming
-// that the method cannot be overriden).
-public test bool methodNoLongerStaticNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/MethodNoLongerStaticExt/methodNoLongerStaticNoSuperKeyAccess()|,
-		|java+method:///main/MethodNoLongerStatic/methodNoLongerStatic()|,
-		methodInvocation(),
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-public test bool methodNoLongerStaticImpl()
-	= detection(
-		|java+method:///mainclient/MethodNoLongerStaticImp/methodNoLongerStaticClient()|,
-		|java+method:///main/IMethodNoLongerStatic/methodNoLongerStatic()|,
-		methodInvocation(),
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
 	
 
 //----------------------------------------------
@@ -481,8 +432,7 @@ public test bool methodNowAbstractNoOverrideAbstractSubtype()
 		methodOverride(),
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
-	
-	
+
     
 //----------------------------------------------
 // Method now final tests

@@ -398,8 +398,10 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedInSuperclass())
 	= extendsDetections(client, oldAPI, delta, ch);
 	
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNoLongerStatic())
-	= methodInvDetections(client, oldAPI, delta, ch);
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNoLongerStatic()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	return detections(client, modified, methodInvocation());
+}
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowAbstract()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);

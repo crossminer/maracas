@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNoLongerStatic;
 
-import main.MethodNoLongerStatic;
+import main.methodNoLongerStatic.MethodNoLongerStatic;
 
 public class MethodNoLongerStaticExt extends MethodNoLongerStatic {
 
