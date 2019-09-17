@@ -170,8 +170,31 @@ detection(
 
 ---
 
+### Method Now Abstract
+A method goes from `non-abstract` to `abstract`, thus the method requires an implementation. 
+
+**Detection**
+
+1. Client methods overriding a method that is now `final` in the direct parent type.
+2. Client methods overriding a method that is now `final` in a transitive parent type.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` overrides `mA()`. If `mA()` is declared as `final` in `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodOverride(),
+  methodNowFinal(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method Now Final
-A method goes from `non-final` to `final`, thus the method cannot be overriden. Client code breaks if there is an attempt to assign a new value to the field.
+A method goes from `non-final` to `final`, thus the method cannot be overriden. Client code breaks if there is an attempt to override the method.
 
 **Detection**
 

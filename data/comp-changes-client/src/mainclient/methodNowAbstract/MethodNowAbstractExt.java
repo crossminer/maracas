@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNowAbstract;
 
-import main.MethodNowAbstract;
+import main.methodNowAbstract.MethodNowAbstract;
 
 public class MethodNowAbstractExt extends MethodNowAbstract {
 

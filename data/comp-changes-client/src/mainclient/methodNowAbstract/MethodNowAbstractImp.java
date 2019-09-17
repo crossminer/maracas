@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodNowAbstract;
 
-import main.IMethodNowAbastract;
+import main.methodNowAbstract.IMethodNowAbastract;
 
 public class MethodNowAbstractImp implements IMethodNowAbastract {
 
