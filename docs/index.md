@@ -2,6 +2,33 @@
 
 ## Detections
 
+### Annotation Deprecated Added
+A type, method, or field is tagged with the `@Deprecated` annotation. This is neither a binary nor source incompatible change.
+
+**Detection**
+
+1. Client types that extend or implement deprecated API types.
+2. Client methods and fields that depend on deprecated API types.
+3. Client methods that invoke or override deprecated API methods.
+4. Client methods that access deprecated API fields.
+5. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype through the `super` keyword. 
+6. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype without the `super` keyword.
+
+{% include note.html content="We consider all direct subtypes of the type that owns a deprecated method or field, which do not shadow the target entity." %}
+
+For example, there is an API type `api.A` that contains the method `mA()`. There is also a client type `client.C` that contains the method `mC()`, which invokes `mA()`. If `api.A` is annotated with `@Deprecated` then `mC()` is also tagged as deprecated, and the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodInvocation(),
+  annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)
+)
+```
+
+---
+
 ### Field No Longer Static
 A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
 

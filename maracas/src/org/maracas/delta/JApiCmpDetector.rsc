@@ -131,27 +131,32 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	;
  	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::annotationDeprecatedAdded()) {
-	rel[loc, CompatibilityChange] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	modified += transitiveEntities(oldAPI, modified);
-	return detectionsAllUses(client, modified);
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[ModifiedEntity] modifiedMeths = transitiveMethods(oldAPI, modified);
+	set[ModifiedEntity] modifiedFields = transitiveEntities(oldAPI, modified);
+	return symbMethodDetectionsWithParent(client, oldAPI, modifiedMeths, { methodInvocation(), methodOverride() })
+		+ symbFieldDetections(client, oldAPI, modifiedFields, { fieldAccess() })
+		+ detectionsAllUses(client, modified);
 }
 
-private rel[loc, CompatibilityChange] transitiveEntities(M3 oldAPI, set[ModifiedEntity] modified) {
+private set[ModifiedEntity] transitiveEntities(M3 oldAPI, set[ModifiedEntity] modified, bool (loc) fun) {
 	rel[loc, loc] transContain = oldAPI.containment+;
-	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isAPIEntity(e) };
+	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], fun(e) };
 }
 
-private rel[loc, CompatibilityChange] transitiveMethods(M3 oldAPI, set[ModifiedEntity] modified) {
-	rel[loc, loc] transContain = oldAPI.containment+;
-	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isMethod(e) };
-}
+private set[ModifiedEntity] transitiveEntities(M3 oldAPI, set[ModifiedEntity] modified) 
+	= transitiveEntities(oldAPI, modified, isAPIEntity);
 
-private rel[loc, CompatibilityChange] transitiveConstructors(M3 oldAPI, set[ModifiedEntity] modified) {
-	rel[loc, loc] transContain = oldAPI.containment+;
-	return { <e, ch> | <m, ch> <- modified, e <- transContain[m], isConstructor(e) };
-}
+private set[ModifiedEntity] transitiveMethods(M3 oldAPI, set[ModifiedEntity] modified) 
+	= transitiveEntities(oldAPI, modified, isMethod);
 
-private rel[loc, CompatibilityChange] transitiveSubtypes(M3 oldAPI, set[ModifiedEntity] modified) {
+private set[ModifiedEntity] transitiveConstructors(M3 oldAPI, set[ModifiedEntity] modified) 
+	= transitiveEntities(oldAPI, modified, isConstructor);
+
+private set[ModifiedEntity] transitiveFields(M3 oldAPI, set[ModifiedEntity] modified) 
+	= transitiveEntities(oldAPI, modified, isField);
+
+private set[ModifiedEntity] transitiveSubtypes(M3 oldAPI, set[ModifiedEntity] modified) {
 	rel[loc, loc] transExtends = oldAPI.extends+;
 	return { <e, ch> | <m, ch> <- modified, e <- transExtends[m], isType(e) };
 }
