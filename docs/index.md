@@ -148,6 +148,48 @@ detection(
 
 ---
 
+### Field Type Changed
+The type of the field has changed. 
+
+TODO:
+Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
+
+| Conversion type     | Description| Breakage      |
+|---------------------|------------|---------------|
+| Identity | Type `T` to type `T` | Never|
+| Widening primitive  | Smaller primitive type to wider primitive type| Never |
+| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes (1) |
+| Widening reference | Subtype `T` to supertype `ST` | Never |
+| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes (2) |
+| Boxing | Primitive type `P` to wrapper reference type `R` | Never |
+| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) | Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
+
+(1) It will result in a breaking change if no explicit cast is present in the old API version.
+(2)
+(3) Long, Float
+(4) Type erasure 
+
+**Detection** 
+ 
+1. Client methods accessing the field with the modified type.
+2. Client methods accessing a modified supertype field through the `super` keyword.
+4. Client methods accessing a modified supertype field without using the `super` keyword.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field." %}
+ 
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f` of type `T`. Assume `m()` accesses `f`. If the type of `f` is changed to type `R`, then the following detection is reported:
+ 
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/SuperA/f|,
+  fieldAccess(),
+  fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Constructor Removed
 If the constructor or the parent class is removed, this issue is reported. Client projects are not able to create objects with the corresponding method.
 

@@ -1,8 +1,7 @@
-package mainclient;
+package mainclient.fieldTypeChanged;
 
 import java.util.List;
-
-import main.FieldTypeChanged;
+import main.fieldTypeChanged.FieldTypeChanged;
 
 public class FieldTypeChangedFA {
 

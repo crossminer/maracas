@@ -272,8 +272,8 @@ private set[loc] overridenStaticFields(M3 newAPI, loc field) {
 	return { f | f <- fields, sameFieldName(field, f) };
 }
 	
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldTypeChanged())
-	= fieldDetections(client, oldAPI, delta, ch);
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldTypeChanged()) 
+	= symbFieldDetections(client, oldAPI, delta, ch, { fieldAccess() });
 	
 private set[Detection] fieldDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), change);

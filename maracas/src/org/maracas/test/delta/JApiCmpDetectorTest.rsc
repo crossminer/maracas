@@ -138,66 +138,6 @@ public test bool fieldLessAccessibleNoSuperKeyAccessPro2Priv()
 		fieldAccess(),
 		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-  
-
-//----------------------------------------------
-// Field type changed tests
-//----------------------------------------------
-
-public test bool filedTypeChangedNumericSimpleAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedFA/fieldTypeChangedClient()|,
-		|java+field:///main/FieldTypeChanged/fieldNumeric|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-public test bool filedTypeChangedListSimpleAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedFA/fieldTypeChangedClient()|,
-		|java+field:///main/FieldTypeChanged/fieldList|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-public test bool filedTypeChangedNumericSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedExt/fieldTypeChangedClientSuperKeyAccess()|,
-		|java+field:///main/FieldTypeChanged/fieldNumeric|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: If the field type changes to a subtype type of the old type 
-// no source compatibility error appears.
-public test bool filedTypeChangedListSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedExt/fieldTypeChangedClientSuperKeyAccess()|,
-		|java+field:///main/FieldTypeChanged/fieldList|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-
-// TODO: If the client class extends an API class and accesses the API 
-// field without the super keyword, javac registers the field as a 
-// field within the client class 
-public test bool filedTypeChangedNumericNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedExt/fieldTypeChangedClientNoSuperKeyAccess()|,
-		|java+field:///main/FieldTypeChanged/fieldNumeric|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-// TODO: If the field type changes to a subtype type of the old type 
-// no source compatibility error appears.
-public test bool filedTypeChangedListNoSuperKeyAccess()
-	= detection(
-		|java+method:///mainclient/FieldTypeChangedExt/fieldTypeChangedClientNoSuperKeyAccess()|,
-		|java+field:///main/FieldTypeChanged/fieldList|,
-		fieldAccess(),
-		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
 	
 
 //----------------------------------------------
