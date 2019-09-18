@@ -1,17 +1,17 @@
-package mainclient;
+package mainclient.methodReturnTypeChanged;
 
 import java.util.ArrayList;
 
-import main.MethodReturnTypeChanged;
+import main.methodReturnTypeChanged.MethodReturnTypeChanged;
 
 public class MethodReturnTypeChangedMI {
 
-	public long methodReturnTypeChangedNumericClient() {
+	public long numericClient() {
 		MethodReturnTypeChanged m = new MethodReturnTypeChanged();
 		return m.methodReturnTypeChangedNumeric();
 	}
 	
-	public ArrayList methodReturnTypeChangedListClient() {
+	public ArrayList listClient() {
 		MethodReturnTypeChanged m = new MethodReturnTypeChanged();
 		return m.methodReturnTypeChangedList();
 	}

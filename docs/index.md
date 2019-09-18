@@ -151,7 +151,7 @@ detection(
 ### Field Type Changed
 The type of the field has changed. 
 
-TODO:
+TODO: what king of binary error do we get?
 Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
 
 | Conversion type     | Description| Breakage      |
@@ -162,7 +162,8 @@ Check conversion cases in assignment, invocation, String, casting, and numeric c
 | Widening reference | Subtype `T` to supertype `ST` | Never |
 | Narrowing reference | Supertype `ST` to subtype `T` | Sometimes (2) |
 | Boxing | Primitive type `P` to wrapper reference type `R` | Never |
-| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) | Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
+| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) 
+| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
 
 (1) It will result in a breaking change if no explicit cast is present in the old API version.
 (2)
@@ -182,7 +183,7 @@ For example, there is a client type `client.C` with a method definition `m()`, a
 ```
 detection(
   |java+method:///client/C/m()|,
-  |java+field:///api/SuperA/f|,
+  |java+field:///api/A/f|,
   fieldAccess(),
   fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
 )
@@ -319,8 +320,8 @@ A method is removed from its parent class. Client projects are not able to invok
 
 1. Client methods invoking or overriding a method that is removed due to its parent type removal.
 2. Client methods invoking or overriding a method that is removed from an API type.
-3. Client methods invoking or overriding a supertype method through the `super` keyword.
-4. Client methods invoking or overriding a supertype method without using the `super` keyword.
+3. Client methods invoking a supertype method through the `super` keyword.
+4. Client methods invoking a supertype method without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* change. 
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is removed from `api.A`, then the following detection is reported:
@@ -357,6 +358,51 @@ detection(
   |java+method:///api/SuperA/mSuper()|,
   methodInvocation(),
   methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
+### Method Return Type Changed
+The return type of the method has changed. 
+
+TODO: what king of binary error do we get?
+Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
+
+| Conversion type     | Description| Breakage      |
+|---------------------|------------|---------------|
+| Identity | Type `T` to type `T` | Never|
+| Widening primitive  | Smaller primitive type to wider primitive type| Never |
+| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes (1) |
+| Widening reference | Subtype `T` to supertype `ST` | Never |
+| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes (2) |
+| Boxing | Primitive type `P` to wrapper reference type `R` | Never |
+| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) 
+| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
+
+(1) It will result in a breaking change if no explicit cast is present in the old API version.
+(2)
+(3) Long, Float
+(4) Type erasure 
+
+**Detection** 
+ 
+1. Client methods invoking a method with modified return type.
+2. Client methods invoking a modified supertype method through the `super` keyword.
+4. Client methods invoking a modified supertype method without using the `super` keyword.
+5. Client methods overriding a method with modified return type in the direct parent type.
+5. Client methods overriding a method with modified return type in a transitive parent type.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not shadow the target method." %}
+ 
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()` with return type `T`. Assume `mC()` invokes `mA()`. If the return type of `mA()` is changed to type `R`, then the following detection is reported:
+ 
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodInvocation(),
+  methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 

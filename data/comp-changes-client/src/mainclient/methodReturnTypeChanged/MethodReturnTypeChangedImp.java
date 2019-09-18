@@ -1,8 +1,8 @@
-package mainclient;
+package mainclient.methodReturnTypeChanged;
 
 import java.util.ArrayList;
 
-import main.IMethodReturnTypeChanged;
+import main.methodReturnTypeChanged.IMethodReturnTypeChanged;
 
 public class MethodReturnTypeChangedImp implements IMethodReturnTypeChanged{
 

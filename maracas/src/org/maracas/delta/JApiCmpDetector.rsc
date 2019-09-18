@@ -509,8 +509,10 @@ set[loc] subtypesMethodReference(loc typ, str memName, M3 m) {
 	return { *(subtypesMethodReference(s, memName, m) + methodSymbolicRef(s, memName)) | s <- subtypes, m.declarations[methodSymbolicRef(s, memName)] == {}};
 }
 
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged())
-	= methodAllDetections(client, oldAPI, delta, ch);
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation(), methodOverride() });
+}
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::constructorLessAccessible())
 	= methodLessAccDetections(client, oldAPI, delta, ch);

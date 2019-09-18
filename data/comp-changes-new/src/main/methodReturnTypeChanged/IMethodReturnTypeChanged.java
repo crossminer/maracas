@@ -1,4 +1,4 @@
-package main;
+package main.methodReturnTypeChanged;
 
 import java.util.List;
 
