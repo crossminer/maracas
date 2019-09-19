@@ -494,24 +494,55 @@ detection(
 ---
 
 ### Class Type Changed
+The type of the class changes. 
+A class type could be `class`, `interface`, `enum`, or `annotation`.
 
-#### Case #1: `class` changes to other type
-Other classes cannot extend from it anymore. We check all tuples in the `extends` relation where the type appears as supertype.
+The following table provides a set of cases where client code might break when changing the type of a class. 
+Some of these cases are detected by other API change detections.
+We still mention them to have the overall picture of possible situations.
+We also report on our assumptions during the bytecode analysis.
 
-#### Case #2: `interface` changes to other type
-Other interfaces cannot extend from it anymore. We check all tuples in the `extends` relation where the type appears as supertype and the subtype is an `interface`. In addtion, classes cannot implement it. We check cases where a `class` type `implements` the target type. 
+| Source | Target | Detection |
+|--------|--------|----------|
+| `class` | Any | Client classes cannot extend it. |
+| `class` | `interface` | The constructor of the class cannot be invoked (cf. *Method Now Abstract* or *Method Removed*) |
+| `class` | `enum` | The constructor of the class cannot be invoked (cf. *Constructors Less Accessible*) |
+| `class` | `annotation` | Client entities cannot depend on the type.|
+| `interface` | Any | Client interfaces cannot extend it. Client classes cannot implement it. |
+| `interface` | `annotation ` | Client entities cannot depend on the type. |
+| `enum` | Any | Static access of enum fields might be affected (cf. *Field No Longer Static*)|
+| `enum` | `annotation` | Client entities cannot depend on the type. | 
+| `annotation` | Any | Client entities cannot be tagged with the annotation. |
 
-#### Case #3: `enum` changes to other type
-An `enum` type cannot be extended or implemented. As mentioned in the *Assumptions* section, we consider all type dependencies and contained changes are reported by other detections.
+*Assumptions:*
 
-#### Case #4: `annotation` changes to other type
-No entity can have an annotation pointing to the affected type. This is checked in the `annotations` relation.
-
-**Assumptions:**
-- All type dependencies are prone to experience a breakage, thus we report all detections related to the `typeDependency` relation.
 - A `class` type does not appear in the `implements` relation as implemented type.
 - An `interface` type can also be extended by other interfaces.
-- In the case of `enum` types we expect no occurrence in the `extends` and `implements` relation (an `enum` can only extend the java.lang.Enum class).
-- Contained changes related to children elements (i.e. methods and fields) are reported by other detections. For instance, if a `class` type is changed to an `interface`, expect detections related to *class now abstract* and *method now abstract* changes.
+- In the case of `enum` types we expect no occurrence in the `extends` and `implements` relation (an `enum` can only extend the `java.lang.Enum` class).
+- Contained changes related to children elements (i.e. methods and fields) are reported by other detections. 
+For instance, if a `class` type is changed to an `interface`, expect detections related to *Class Now Abstract* and *Method Now Abstract* changes.
 
+**Detection**
+
+1. Client classes extending an API type that goes from `class` to any other class type.
+2. Client entities depending on an API type that goes from `class` to `annotation`.
+3. Client interfaces extending an API type that goes from `interface` to any other class type.
+4. Client classes implementing an API type that goes from `interface` to any other class type.
+5. Client entities depending on an API type that goes from `interface` to `annotation`.
+6. Client entities depending on an API type that goes from `enum` to `annotation`.
+7. Client entities annotated with an API type that goes from `annotation` to any other class type.
+
+For example, there is an API interface `api.IA` and a client type `client.C`. 
+The latter implements `api.IA`. 
+If the type of `api.IA` is changed from `interface` to `class`, `client.C` cannot implement the type anymore. 
+Then, the following detection is reported:
+
+```
+detection(
+  |java+class:///client/C|,
+  |java+interface:///api/IA|,
+  implements(),
+  classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 ---

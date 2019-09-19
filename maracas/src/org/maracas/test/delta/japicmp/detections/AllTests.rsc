@@ -17,3 +17,4 @@ extend org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclas
 extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (4): superKeyNumeric, noSuperKeyNumeric, overrideList, simpleAccessNumeric
 extend org::maracas::\test::delta::japicmp::detections::ClassNowAbstractTest; // Failing tests (2): createObjectParams, createObject 
 extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
+extend org::maracas::\test::delta::japicmp::detections::ClassTypeChangedTest;

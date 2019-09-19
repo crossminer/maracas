@@ -665,33 +665,34 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classTypeChanged()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	rel[loc, loc] invTypeDep = invert(client.typeDependency);
-	rel[loc, loc] invExtends = invert(client.extends);
-	rel[loc, loc] invImplements = invert(client.implements);
-	rel[loc, loc] invAnnotations = invert(client.annotations);
-	set[Detection] detects = {};
+	set[ModifiedEntity] modifExtends = {};
+	set[ModifiedEntity] modifImplements = {};
+	set[ModifiedEntity] modifTypeDep = {};
+	set[ModifiedEntity] modifAnnotation = {};
 	
 	for (<modif, change> <- modified) {
 		APIEntity entity = entityFromLoc(modif, delta);
 		tuple[ClassType, ClassType] types = classModifiedType(entity);
-		rel[loc, APIUse] affected = invTypeDep[modif] * {typeDependency()};
 		
 		switch(types) {
 		case <class(), _> :
-			affected += invExtends[modif] * {extends()};
+			modifExtends += <modif, change>;
 		case <interface(), _> : {
-			affected += invExtends[modif] * {extends()};
-			affected += invImplements[modif] * {implements()};
+			modifExtends += <modif, change>;
+			modifImplements += <modif, change>;
 		}
 		case <annotation(), _> :
-			affected += invAnnotations[modif] * {annotation()};
+			modifAnnotation += <modif, change>;
+		case <_, annotation()> :
+			modifTypeDep += <modif, change>;
 		default: ;
 		}
-		
-		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected };
 	}
 	
-	return detects;
+	return detections(client, modifExtends, extends())
+		+ detections(client, modifImplements, implements())
+		+ detections(client, modifTypeDep, typeDependency())
+		+ detections(client, modifAnnotation, annotation());
 }
 
 private set[Detection] classAllDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change) {
@@ -734,3 +735,6 @@ private set[Detection] typeDependencyDetections(M3 client, M3 oldAPI, list[APIEn
 private set[Detection] detections(M3 client, set[ModifiedEntity] modified, APIUse apiUse) 
 	= { detection(elem, modif, apiUse, ch) | <modif, ch> <- modified, 
 		<elem, apiUse> <- affectedEntities(client, apiUse, { modif }) };
+		
+private set[Detection] detections(M3 client, set[ModifiedEntity] modified, set[APIUse] apiUses) 
+	= { *detections(client, modified, apiUse) | apiUse <- apiUses };
