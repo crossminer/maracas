@@ -74,7 +74,11 @@ detection(
 ---
 
 ### Field Now Static
-A field goes from `non-static` to `static`. This results in an `IncompatibleClassChangeError` at linking time. The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. The former is used to access objects fields and the later to access static fields. Client code must be recompiled to get rid of the issue.
+A field goes from `non-static` to `static`. 
+This results in an `IncompatibleClassChangeError` at linking time. 
+The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. 
+The former is used to access objects fields and the later to access static fields. 
+Client code must be recompiled to get rid of the issue.
 
 **Detection**
 
@@ -148,6 +152,13 @@ detection(
 
 ---
 
+### Field Static And Overrides Static
+A client type overrides a static supertype field with a non-static field. This means that a non-static field with the same name is declared within the subtype class.
+
+"If a new field of type X with the same name as f is added to a subclass of S that is a superclass of T or T itself, then a linkage error may occur."
+
+---
+
 ### Field Type Changed
 The type of the field has changed. 
 
@@ -215,6 +226,30 @@ detection(
 
 ### Method Abstract Added In Superclass
 An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+
+---
+
+### Method Added To Interface
+A new method is added to an interface.
+All client classes implementing the interface will break given that the implementation of the target method is missing.
+This will result in a compilation error (i.e. source incompatible).
+However, at the binary level, no brekage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
+In addition, the JVM does not check if there are missing method implementations at linking time. 
+
+**Detection**
+
+1. Client classes implementing the interface that owns the new method.
+
+For example, there is a client type `client.C` that implements the API interface `api.IA`. Assume `api.IA` declares a new method `m()` in its body, then the following detection is reported:
+
+```
+detection(
+  |java+class:///client/C|,
+  |java+method:///api/IA/m()|,
+  implements(),
+  methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
 
 ---
 

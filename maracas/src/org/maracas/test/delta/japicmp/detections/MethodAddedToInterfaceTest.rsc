@@ -3,7 +3,7 @@ module org::maracas::\test::delta::japicmp::detections::MethodAddedToInterfaceTe
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-extend org::maracas::\test::delta::japicmp::detections::SetUp;
+import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
 test bool implements1() 
@@ -21,3 +21,21 @@ test bool implements2()
 		implements(),
 		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
+
+test bool innerInterfaceImpl() 
+	= detection(
+		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceInnerImp$Inner|,
+		|java+method:///main/methodAddedToInterface/IMethodAddedToInterfaceInner$I/newMethod()|,
+		implements(),
+		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+	in detects;
+	
+test bool innerInterfaceExt() 
+	= detection(
+		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceInnerExt$Inner|,
+		|java+method:///main/methodAddedToInterface/MethodAddedToInterfaceInner$I/newMethod()|,
+		implements(),
+		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+	in detects;
+    
+    
