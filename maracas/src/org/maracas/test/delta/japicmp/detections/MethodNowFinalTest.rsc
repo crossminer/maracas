@@ -22,7 +22,7 @@ public test bool overrideTrans()
 		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool methodNowFinalSimpleAccess()
+public test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/MethodNowFinalExt/methodNowFinalClient()|,
 		|java+method:///main/MethodNowFinal/methodNowFinal()|,

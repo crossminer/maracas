@@ -162,8 +162,8 @@ A client type overrides a static supertype field with a non-static field. This m
 ### Field Type Changed
 The type of the field has changed. 
 
-TODO: what king of binary error do we get?
-Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
+TODO: what kind of binary error do we get?
+Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. *JLS 5.1*). Check the following table:
 
 | Conversion type     | Description| Breakage      |
 |---------------------|------------|---------------|
@@ -202,6 +202,41 @@ detection(
 
 ---
 
+### Constructor Less Accessible
+The constructor or its parent class is less accessible. 
+Client entities cannot create objects with this method.
+The following table provides the less access permited situations of constructors (cf. *JLS 13.4.7*). 
+We report which of them might break client code, and which exceptions must be considered.
+
+| Source | Target | Detection |
+|--------|--------|-----------|
+| `public` | `protected` | All invocations except if the invocation is made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered |
+| `public` | `package-private` | All invocations except if the invocation is made from a type in a package with the same qualified name as the constructor owning type |
+| `public` | `private` | All invocations of the method |
+| `protected` | `package-private` | All invocations except if the invocation is made from a type in a package with the same qualified name as the constructor owning type |
+| `protected` | `private` |  All invocations of the method |
+| `package-private` | `private` |  All invocations of the method |
+
+**Detection**
+
+1. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the constructor of `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the constructor of `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+3. Client methods within type `T` invoking a constructor of type `S`, where the constructor of `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
+
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a `public` constructor `A()`. Assume `m()` invokes `A()` to create an object of type `api.A`. If the access modifier of `A()` is changed to `private`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+constructor:///api/A/A()|,
+  methodInvocation(),
+  constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Constructor Removed
 If the constructor or the parent class is removed, this issue is reported. Client projects are not able to create objects with the corresponding method.
 
@@ -211,7 +246,7 @@ If the constructor or the parent class is removed, this issue is reported. Clien
 2. Client methods invoking a constructor that is removed from an API type.
 3. Client constructors invoking an supertype constructor through the `super` keyword. 
 
-For instance, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a constructor `A(int)`. Assume `m()` invokes `A(int)` to create an object of type `api.A`. If `A(int)` is removed from `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a constructor `A(int)`. Assume `m()` invokes `A(int)` to create an object of type `api.A`. If `A(int)` is removed from `api.A`, then the following detection is reported:
 
 ```
 detection(

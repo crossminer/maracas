@@ -191,6 +191,9 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return detects;
 }
 
+private bool toPackageProtected(Modifier new) 
+	= new == org::maracas::delta::JApiCmp::\packageProtected();
+	
 private bool fromPublicToProtected(Modifier old, Modifier new) 
 	= old == org::maracas::delta::JApiCmp::\public() 
 	&& new == org::maracas::delta::JApiCmp::\protected();
@@ -538,24 +541,33 @@ private set[Detection] methodOverrDetections(M3 client, M3 oldAPI, list[APIEntit
 
 private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange ch) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[APIUse] apiUses = { methodInvocation(), methodOverride() };
 	set[Detection] detects = {};
 	
 	for (<modif, change> <- modified) {
-	
-		// Let's get the old and new modifiers
-		if (/apiMeth:method(modif,_,_,_,_) := delta || /apiMeth:constructor(modif,_,_,_) := delta,
-			/modifier(modified(old, new)) := apiMeth) {
-			rel[loc, APIUse] affected = domain(rangeR(client.methodInvocation, {modif})) * { methodInvocation() }
-				+ domain(rangeR(client.methodOverrides, {modif})) * { methodOverride() };
-			
-			// Include client affected elements that are subtypes of the 
-			// modified field parent class, and where modifiers went from
-			// public to protected
-			detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
-				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif)) };
-		}
+		tuple[Modifier old, Modifier new] access = getMethodAccessModifiers(modif, delta);
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, { modif }) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
+			!(fromPublicToProtected(access.old, access.new) && hasProtectedAccess(client, oldAPI, elem, modif)), // Public to protected
+			!(toPackageProtected(access.new) && samePackage(elem, modif)) }; // To package-private same package
 	}
 	return detects;
+}
+
+private tuple[Modifier, Modifier] getMethodAccessModifiers(loc meth, list[APIEntity] delta) {
+	set[Modifier] accessModifs = { 
+		org::maracas::delta::JApiCmp::\public(), 
+		org::maracas::delta::JApiCmp::\protected(), 
+		org::maracas::delta::JApiCmp::\packageProtected(), 
+		org::maracas::delta::JApiCmp::\private() };
+		
+	if (/method(meth,_,list[APIEntity] elems,_,_) := delta 
+		|| /constructor(meth,list[APIEntity] elems,_,_) := delta) {
+		for (e <- elems, /modifier(modified(old, new)) := e, old in accessModifs) {
+			return <old, new>;
+		}
+	}
+	throw "There is no reference to <meth> in the delta model.";
 }
 
 private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {

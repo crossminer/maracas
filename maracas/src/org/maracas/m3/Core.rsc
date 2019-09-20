@@ -281,6 +281,19 @@ M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 	return setKeywordParameters(m3Filtered, kws);
 } 
 
+str packag(loc elem) {
+	str scheme = elem.scheme;
+	
+	if (scheme == "java+method" || scheme == "java+constructor" || scheme == "java+field") {
+		return (/<pkg: [a-zA-Z0-9.$\/]+><rest:\/[a-zA-Z0-9.$\/]*\/[a-zA-Z0-9.$\/()]*$>/ := elem.path) ? pkg : ""; 
+	}
+	if (scheme == "java+class" || scheme == "java+interface"
+		|| scheme == "java+enum" || scheme == "java+annotation") {
+		return (/<pkg: [a-zA-Z0-9.$\/]+><rest:\/[a-zA-Z0-9.$\/]*$>/ := elem.path) ? pkg : "";
+	}
+	throw "The scheme of <elem> is not supported.";
+}
+
 set[loc] methodDeclarations(M3 m, loc class) 
 	= { c | c <- m.containment[class], isMethod(c) };
 
@@ -341,7 +354,7 @@ bool sameNames(loc n1, loc n2, str (loc) fun) = fun(n1) == fun(n2);
 bool sameMethodQualName(loc m1, loc m2) = sameNames(m1, m2, methodQualName);
 bool sameMethodSignature(loc m1, loc m2) = sameNames(m1, m2, methodSignature);
 bool sameFieldName(loc f1, loc f2) = sameNames(f1, f2, memberName);
-
+bool samePackage(loc e1, loc e2) = sameNames(e1, e2, packag);
  
 list[TypeSymbol] methodParams(TypeSymbol typ) 
 	= (\method(_,_,_,params) := typ) ? params : [];
