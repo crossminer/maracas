@@ -94,7 +94,7 @@ set[ModifiedEntity] filterModifiedEntities(set[ModifiedEntity] entities, Compati
 	@return relation mapping an element location to compatibility
 	        change types (e.g. renamedMethod())
 }
-private rel[loc, CompatibilityChange] addModifiedElement(loc element, set[ModifiedEntity] modElements, list[CompatibilityChange] changes)
+private set[ModifiedEntity] addModifiedElement(loc element, set[ModifiedEntity] modElements, list[CompatibilityChange] changes)
 	= { <element, c> | c <- changes } + modElements;
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta) 
@@ -161,7 +161,7 @@ private set[ModifiedEntity] transitiveSubtypes(M3 oldAPI, set[ModifiedEntity] mo
 	return { <e, ch> | <m, ch> <- modified, e <- transExtends[m], isType(e) };
 }
 
-private set[Detection] detectionsAllUses(M3 client, rel[loc, CompatibilityChange] modified)
+private set[Detection] detectionsAllUses(M3 client, set[ModifiedEntity] modified)
 	= detections(client, modified, methodInvocation())
 	+ detections(client, modified, fieldAccess())
 	+ detections(client, modified, extends())
@@ -201,7 +201,7 @@ private bool fromPublicToProtected(Modifier old, Modifier new)
 private bool hasProtectedAccess(M3 client, M3 oldAPI, loc elemClient, loc elemAPI) {
 	loc apiParent = parentType(oldAPI, elemAPI);
 	loc clientParent = parentType(client, elemClient);
-	return (isKnown(clientParent) && isKnown(apiParent) && <clientParent, apiParent> in client.extends);
+	return (isKnown(clientParent) && isKnown(apiParent) && <clientParent, apiParent> in client.extends+);
 }
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldNoLongerStatic()) 
@@ -240,8 +240,6 @@ set[Detection] detectionsFieldRemovedInSuperclass(M3 client, M3 oldAPI, rel[loc,
 	}
 	return detects;
 }
-
-
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldStaticAndOverridesStatic()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
@@ -450,8 +448,6 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return symbTypeDetectionsWithParent(client, oldAPI, modified, { extends(), implements() }) 
 		+ symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation() }) ;
 }
-
-
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowFinal()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
@@ -546,7 +542,14 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 	
 	for (<modif, change> <- modified) {
 		tuple[Modifier old, Modifier new] access = getMethodAccessModifiers(modif, delta);
-		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, { modif }) | apiUse <- apiUses };
+		str signature = methodSignature(modif);
+		loc parent = parentType(oldAPI, modif);
+		
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, client) 
+			+ subtypesMethodSymbolic(parent, signature, oldAPI)
+			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) + modif;
+			
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbMeths) | apiUse <- apiUses };
 		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
 			!(fromPublicToProtected(access.old, access.new) && hasProtectedAccess(client, oldAPI, elem, modif)), // Public to protected
 			!(toPackageProtected(access.new) && samePackage(elem, modif)) }; // To package-private same package

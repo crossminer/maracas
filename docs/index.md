@@ -205,8 +205,8 @@ detection(
 ### Constructor Less Accessible
 The constructor or its parent class is less accessible. 
 Client entities cannot create objects with this method.
-The following table provides the less access permited situations of constructors (cf. *JLS 13.4.7*). 
-We report which of them might break client code, and which exceptions must be considered.
+The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+We report which of them might break client code, and which exceptions must be considered regarding constructors use.
 
 | Source | Target | Detection |
 |--------|--------|-----------|
@@ -283,6 +283,42 @@ detection(
   |java+method:///api/IA/m()|,
   implements(),
   methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
+
+---
+
+### Method Less Accessible
+The method or its parent class is less accessible. 
+Some client entities are not able to invoke this method anymore. 
+The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+We report which of them might break client code, and which exceptions must be considered regarding methods use.
+
+| Source | Target | Detection |
+|--------|--------|-----------|
+| `public` | `protected` | All method invocations and overrides except if them are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
+| `public` | `package-private` | All method invocations and overrides except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `public` | `private` | All method invocations and overrides. |
+| `protected` | `package-private` | All method invocations and overrides except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `protected` | `private` |  All method invocations and overrides. |
+| `package-private` | `private` |  All method invocations and overrides. |
+
+**Detection**
+
+1. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the method in `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the method in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+3. Client methods within type `T` invoking or overriding a method of the type `S`, where the method in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
+
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a `public` method `mA()`. 
+Assume `mC()` invokes `mA()`. 
+If the visibility of `mA()` is changed to `package-private`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodInvocation(),
+  methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
 

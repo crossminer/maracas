@@ -1,7 +1,7 @@
-package main;
+package main.methodLessAccessible;
 
 public class MethodLessAccessible {
-
+	
 	protected int methodLessAccessiblePublic2Protected() {
 		return 0;
 	}

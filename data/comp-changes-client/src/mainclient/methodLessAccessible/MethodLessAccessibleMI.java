@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.methodLessAccessible;
 
-import main.MethodLessAccessible;
+import main.methodLessAccessible.MethodLessAccessible;
 
 public class MethodLessAccessibleMI {
 
