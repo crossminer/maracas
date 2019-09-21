@@ -1,4 +1,4 @@
-package main;
+package main.fieldLessAccessible;
 
 public class FieldLessAccessible {
 

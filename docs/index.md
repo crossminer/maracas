@@ -29,6 +29,42 @@ detection(
 
 ---
 
+### Field Less Accessible
+The field or its parent class is less accessible. 
+Some client entities are not able to access this field anymore. 
+The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+We report which of them might break client code, and which exceptions must be considered regarding fields use.
+
+| Source | Target | Detection |
+|--------|--------|-----------|
+| `public` | `protected` | All field accesses except if them are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
+| `public` | `package-private` | All field accesses except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `public` | `private` | All field accesses. |
+| `protected` | `package-private` | All field accesses except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `protected` | `private` |  All field accesses. |
+| `package-private` | `private` |  All field accesses. |
+
+**Detection**
+
+1. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the field in `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the field in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+3. Client methods within type `T` accessing a field of the type `S`, where the field in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
+
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a `public` field `f`. 
+Assume `m()` accesses `f`, and `client.C` is not a subtype of `api.A`. 
+If the visibility of `m()` is changed to `protected`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+field:///api/A/f|,
+  fieldAccess(),
+  fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Field No Longer Static
 A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
 

@@ -170,8 +170,30 @@ private set[Detection] detectionsAllUses(M3 client, set[ModifiedEntity] modified
 	+ detections(client, modified, typeDependency())
 	+ detections(client, modified, methodOverride())
 	;
-	
+
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[APIUse] apiUses = { fieldAccess() };
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		tuple[Modifier old, Modifier new] access = getAccessModifiers(modif, delta);
+		str field = memberName(modif);
+		loc parent = parentType(oldAPI, modif);
+		
+		set[loc] symbFields = subtypesFieldSymbolic(parent, field, client) 
+			+ subtypesFieldSymbolic(parent, field, oldAPI)
+			+ clientSubtypesFieldSymbolic(parent, field, oldAPI, client) + modif;
+		
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbFields) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
+			!(fromPublicToProtected(access.old, access.new) && hasProtectedAccess(client, oldAPI, elem, modif)), // Public to protected
+			!(toPackageProtected(access.new) && samePackage(elem, modif)) }; // To package-private same package
+	}
+	return detects;
+}
+	
+set[Detection] detectionsOld(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
 	
@@ -541,7 +563,7 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 	set[Detection] detects = {};
 	
 	for (<modif, change> <- modified) {
-		tuple[Modifier old, Modifier new] access = getMethodAccessModifiers(modif, delta);
+		tuple[Modifier old, Modifier new] access = getAccessModifiers(modif, delta);
 		str signature = methodSignature(modif);
 		loc parent = parentType(oldAPI, modif);
 		
@@ -557,20 +579,21 @@ private set[Detection] methodLessAccDetections(M3 client, M3 oldAPI, list[APIEnt
 	return detects;
 }
 
-private tuple[Modifier, Modifier] getMethodAccessModifiers(loc meth, list[APIEntity] delta) {
+private tuple[Modifier, Modifier] getAccessModifiers(loc id, list[APIEntity] delta) {
 	set[Modifier] accessModifs = { 
 		org::maracas::delta::JApiCmp::\public(), 
 		org::maracas::delta::JApiCmp::\protected(), 
 		org::maracas::delta::JApiCmp::\packageProtected(), 
 		org::maracas::delta::JApiCmp::\private() };
 		
-	if (/method(meth,_,list[APIEntity] elems,_,_) := delta 
-		|| /constructor(meth,list[APIEntity] elems,_,_) := delta) {
+	if (/method(id,_,list[APIEntity] elems,_,_) := delta 
+		|| /constructor(id,list[APIEntity]elems,_,_) := delta
+		|| /field(id,_,list[APIEntity] elems,_,_) := delta) {
 		for (e <- elems, /modifier(modified(old, new)) := e, old in accessModifs) {
 			return <old, new>;
 		}
 	}
-	throw "There is no reference to <meth> in the delta model.";
+	throw "There is no reference to <id> in the delta model.";
 }
 
 private set[Detection] symbMethodDetections(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange change, set[APIUse] apiUses) {

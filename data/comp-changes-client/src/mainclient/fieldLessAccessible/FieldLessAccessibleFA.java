@@ -1,6 +1,6 @@
-package mainclient;
+package mainclient.fieldLessAccessible;
 
-import main.FieldLessAccessible;
+import main.fieldLessAccessible.FieldLessAccessible;
 
 public class FieldLessAccessibleFA {
 

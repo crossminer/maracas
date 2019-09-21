@@ -3,6 +3,7 @@ module org::maracas::\test::delta::japicmp::detections::AllTests
 extend org::maracas::\test::delta::japicmp::detections::AnnotationDeprecatedAddedTest;
 extend org::maracas::\test::delta::japicmp::detections::ConstructorLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
+extend org::maracas::\test::delta::japicmp::detections::FieldLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldNoLongerStaticTest; // Failing tests (1): superKeyAccess
 extend org::maracas::\test::delta::japicmp::detections::FieldNowFinalTest; // Failing tests (3): simpleAccessNoAssign, superKeyAccessNoAssign, noSuperKeyAccessNoAssign
 extend org::maracas::\test::delta::japicmp::detections::FieldNowStaticTest;
