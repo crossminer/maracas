@@ -117,7 +117,7 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
  	//+ detections(client, oldAPI, delta, classLessAccessible())
- 	+ detections(client, oldAPI, delta, classNoLongerPublic())
+ 	//+ detections(client, oldAPI, delta, classNoLongerPublic())
  	+ detections(client, oldAPI, delta, classNowAbstract())
  	+ detections(client, oldAPI, delta, classNowCheckedException())
  	+ detections(client, oldAPI, delta, classNowFinal())
@@ -189,26 +189,6 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
 			!(fromPublicToProtected(access.old, access.new) && hasProtectedAccess(client, oldAPI, elem, modif)), // Public to protected
 			!(toPackageProtected(access.new) && samePackage(elem, modif)) }; // To package-private same package
-	}
-	return detects;
-}
-	
-set[Detection] detectionsOld(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
-	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	set[Detection] detects = {};
-	
-	for (<modif, change> <- modified) {
-	
-		// Let's get the old and new modifiers
-		if (/apiField:field(modif,_,_,_,_) := delta, /modifier(modified(old, new)) := apiField) {
-			set[loc] affected = domain(rangeR(client.fieldAccess, {modif}));
-			
-			// Include client affected elements that are subtypes of the 
-			// modified field parent class, and where modifiers went from
-			// public to protected
-			detects += { detection(elem, modif, fieldAccess(), change) | elem <- affected,
-				!(fromPublicToProtected(old, new) && hasProtectedAccess(client, oldAPI, elem, modif))};
-		}
 	}
 	return detects;
 }
@@ -334,10 +314,10 @@ set[loc] subtypesWithoutFieldShadowing(loc typ, str signature, M3 m)
 
 set[loc] subtypesWithoutMethShadowing(loc typ, str signature, M3 m)
 	= subtypesWithoutShadowing(typ, signature, m, methodSymbolicRef);
-	
+
 private set[loc] clientSubtypesWithoutShadowing(loc typ, str elemName, M3 api, M3 client, loc (loc, str) funSymbRef) {
 	set[loc] apiSubtypes = subtypesWithoutShadowing(typ, elemName, api, funSymbRef);
-	return { subtypesWithoutShadowing(s, elemName, client, funSymbRef) | s <- apiSubtypes };
+	return { *subtypesWithoutShadowing(s, elemName, client, funSymbRef) | s <- apiSubtypes };
 }
 
 set[loc] clientSubtypesWithoutFieldShadowing(loc typ, str signature, M3 api, M3 client) 
@@ -412,31 +392,48 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
 
 private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAPI, set[ModifiedEntity] modified) {
 	set[Detection] detects = {};
+	set[APIUse] apiUses = { methodInvocation(), methodOverride() };
 	
-	for (<modif, change> <- modified) {
-		// Identify API interface
+	for (<modif, ch> <- modified) {
+		str signature = methodSignature(modif);
 		loc parent = parentType(newAPI, modif);
-
-		if (isKnown(parent)) {
-			// Check client implements 
-			set[loc] affectedClasses = domain(rangeR(client.implements, {parent}));
+		rel[loc, APIUse] affected = {};
+		
+		set[loc] subtypes = subtypesWithoutMethShadowing(parent, signature, newAPI)
+			+ clientSubtypesWithoutMethShadowing(parent, signature, newAPI, client)
+			+ parent;
+		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, newAPI)
+			+ subtypesMethodSymbolic(parent, signature, client) 
+			+ clientSubtypesMethodSymbolic(parent, signature, newAPI, client) 
+			+ modif;
 			
-			// Consider the affected class if it has other implemented interfaces
-			for (elem <- affectedClasses, size(client.implements[elem]) > 1 ) {
-				//Get method declarations
-				set[loc] methods = methodDeclarations(client, elem);
-				
-				// There is a potential issue if one of the invoked methods has 
-				// the same signature
-				if (m <- methods, mi <- client.methodInvocation[m], sameMethodSignature(modif, mi)) {
-					// TODO: change apiUse?
-					detects += detection(elem, modif, methodInvocation(), change);
+		// Check client implements 
+		set[loc] affectedClasses = domain(affectedEntities(client, implements(), subtypes));
+
+		// Consider the affected class if it has other implemented interfaces
+		for (elem <- affectedClasses, size(client.implements[elem]) > 1 ) {
+			//Get method declarations
+			set[loc] methods = methodDeclarations(client, elem);
+			rel[loc, APIUse] affectedInt = {};
+			bool hasDecl = false;
+			
+			// There is a potential issue if one of the invoked methods has 
+			// the same signature
+			for (m <- methods) {
+				if (sameMethodSignature(m, modif)) {
+					hasDecl = true;
+					break;
+				}
+				if (mi <- client.methodInvocation[m], sameMethodSignature(modif, mi), mi in symbMeths) {
+					affectedInt += { <m, methodInvocation()> };
 					continue;
 				}
 			}
+			affected += (hasDecl) ? {} : affectedInt;
 		}
-		
+		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
+	
 	return detects;
 }
 

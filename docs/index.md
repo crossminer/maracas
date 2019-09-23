@@ -360,6 +360,42 @@ detection(
 
 ---
 
+### Method New Default
+A new default method is declared in an interface.
+As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
+Type `T` implements interfaces `I` and `J`.
+`I` is not a subinterface of `J` and visceversa.
+`J` has a default method `m()`.
+Now, we add a new default method in `I` with the same signature and return type of `m()`.
+Suppose there is an invocation of `m()` in `T` that does not follow the form `J.super.m()`.
+With this change `T` will link without error but once the invocation to `m()` is triggered an error is thrown.
+In any case, this change might result in unpredictable behaviour or a compilation error (c.f. *JLS 13.5.6*).
+
+**Detection**
+
+1. Client methods invoking a method `m()` of an interface `J` that has the same signature as the new default method of an interface `I`, and no method override of `m()` is provided.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+
+{% include note.html content="Behavioural changes are not being reported. For instance, no detection is reported if an interface introduces a new default method and there is already a definition of a method with the same signature in the client type." %}
+
+For example, there is a client type `client.C` with a method definition `mC()`, and two API interfaces `api.I` and `otherapi.J`. 
+The type `client.C` implements both `api.I` and `otherapi.J`. 
+Suppose `otherapi.J` defines method `m()` as a default method. 
+The API evolves and `api.I` has a new default method `m()` with the same signature as the one provided in `otherapi.J`. 
+If `client.C` has no definition of a method `m()` that overrides the previous implementation, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/I/m()|,
+  methodInvocation(),
+  methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method No Longer Static
 A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
 

@@ -53,7 +53,7 @@ loc getNonCUChild(loc elem, M3 m) {
 }
 
 loc parentType(M3 m, loc elem) {
-	rel[loc, loc] containers = rangeR(m.containment, {elem});
+	rel[loc, loc] containers = rangeR(m.containment, { elem });
 	if (<p,_> <- containers, isType(p)) {
 		return p;
 	}
