@@ -300,6 +300,42 @@ An abstract method is added to a superclass and no implementation is provided in
 
 ---
 
+### Method Abstract Now Default
+An abstract method in an interface is changed to a default method. 
+As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
+Type `T` implements interfaces `I` and `J`.
+`I` is not a subinterface of `J` and visceversa.
+`J` has a default method `m()`.
+Now, we add a new default method in `I` with the same signature and return type of `m()`.
+Suppose there is an invocation of `m()` in `T` that does not follow the form `J.super.m()`.
+With this change `T` will link without error but once the invocation to `m()` is triggered an error is thrown.
+In any case, this change might result in unpredictable behaviour or a compilation error (c.f. *JLS 13.5.6*).
+
+**Detection**
+
+1. Client methods overriding a method `m()` that is now the a default method in an interface.
+
+{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+
+{% include note.html content="Behavioural changes are not being reported. For instance, no detection is reported regarding invocations of the overriden method." %}
+
+For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
+The type `client.C` implements both `api.I` and `otherapi.J`. 
+Suppose `otherapi.J` defines method `m()` as a default method, and `api.I` declares an abstract method `m()`.
+`client.C` overrides method `m()` from `api.I`.
+If API evolves and `api.I` changes `m()` from an abstract to a default method, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/I/m()|,
+  methodOverride(),
+  methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method Added To Interface
 A new method is added to an interface.
 All client classes implementing the interface will break given that the implementation of the target method is missing.

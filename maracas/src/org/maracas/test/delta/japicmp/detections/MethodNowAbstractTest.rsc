@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool noOverrideExt()
+test bool noOverrideExt()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractExt|,
 		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
@@ -14,7 +14,7 @@ public test bool noOverrideExt()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool noOverrideExtWithImpl()
+test bool noOverrideExtWithImpl()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractExtWithImpl|,
 		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
@@ -22,7 +22,7 @@ public test bool noOverrideExtWithImpl()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 	
-public test bool noOverrideImpl()
+test bool noOverrideImpl()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractImp|,
 		|java+method:///main/methodNowAbstract/IMethodNowAbastract/methodNowAbstract()|,
@@ -30,7 +30,7 @@ public test bool noOverrideImpl()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool superInvExt()
+test bool superInvExt()
 	= detection(
 		|java+method:///mainclient/methodNowAbstract/MethodNowAbstractExt/methodNowAbstractClientSuperKey()|,
 		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
@@ -38,7 +38,7 @@ public test bool superInvExt()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool noSuperInvExt()
+test bool noSuperInvExt()
 	= detection(
 		|java+method:///mainclient/methodNowAbstract/MethodNowAbstractExt/methodNowAbstractClientNoSuperKey()|,
 		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
@@ -46,7 +46,7 @@ public test bool noSuperInvExt()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool superInvImpl()
+test bool superInvImpl()
 	= detection(
 		|java+method:///mainclient/methodNowAbstract/MethodNowAbstractImp/methodNowAbstractClient()|,
 		|java+method:///main/methodNowAbstract/IMethodNowAbastract/methodNowAbstract()|,
@@ -54,7 +54,7 @@ public test bool superInvImpl()
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	
-public test bool noOverrideAbstractSubtype()
+test bool noOverrideAbstractSubtype()
 	= detection(
 		|java+class:///mainclient/methodNowAbstract/MethodNowAbstractAbstractSubtype|,
 		|java+method:///main/methodNowAbstract/IMethodNowAbastract/methodNowAbstract()|,

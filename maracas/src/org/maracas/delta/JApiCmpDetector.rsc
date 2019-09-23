@@ -328,7 +328,7 @@ set[loc] clientSubtypesWithoutMethShadowing(loc typ, str signature, M3 api, M3 c
 
 private set[loc] subtypesElemSymbolic(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
 	set[loc] subtypes = subtypesWithoutShadowing(typ, elemName, m, funSymbRef);
-	return { funSymbRef(s, elemName) | s <- subtypes};
+	return { funSymbRef(s, elemName) | s <- subtypes };
 }
 
 set[loc] subtypesFieldSymbolic(loc typ, str fieldName, M3 m)
@@ -357,8 +357,7 @@ set[loc] clientSubtypesMethodSymbolic(loc typ, str signature, M3 api, M3 client)
 	
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractNowDefault()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	return detections(client, modified, methodOverride()) 
-		+ detectionsMethodNowDefault(client, oldAPI, newAPI, modified);
+	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation(), methodOverride() });
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedToClass()) 
@@ -518,13 +517,6 @@ set[Detection] detectionsMethodRemovedInSuperclass(M3 client, M3 oldAPI, set[Mod
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
 	return detects;
-}
-
-set[loc] subtypesMethodReference(loc typ, str memName, M3 m) {
-	rel[loc, loc] invExtends = invert(m.extends);
-	set[loc] subtypes = invExtends[typ];
-	loc meth = methodSymbolicRef(typ, memName);
-	return { *(subtypesMethodReference(s, memName, m) + methodSymbolicRef(s, memName)) | s <- subtypes, m.declarations[methodSymbolicRef(s, memName)] == {}};
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodReturnTypeChanged()) {

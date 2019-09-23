@@ -10,6 +10,7 @@ extend org::maracas::\test::delta::japicmp::detections::FieldNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedInSuperclassTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldTypeChangedTest; // Failing tests (3): listNoSuperKeyAccess, listSimpleAccess, listSuperKeyAccess
+extend org::maracas::\test::delta::japicmp::detections::MethodAbstractNowDefaultTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodAddedToInterfaceTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNewDefaultTest;
