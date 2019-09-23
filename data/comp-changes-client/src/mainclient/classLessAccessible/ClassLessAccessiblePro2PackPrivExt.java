@@ -6,5 +6,12 @@ public class ClassLessAccessiblePro2PackPrivExt extends ClassLessAccessiblePro2P
 
 	public class ClassLessAccessiblePro2PackPrivExtInner extends ClassLessAccessiblePro2PackPrivInner {
 		
+		public int accessPublicField() {
+			return super.publicField;
+		}
+		
+		public int invokePublicMethod() {
+			return super.publicMethod();
+		}
 	}
 }

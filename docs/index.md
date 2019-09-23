@@ -37,10 +37,10 @@ We report which of them might break client code, and which exceptions must be co
 
 | Source | Target | Detection |
 |--------|--------|-----------|
-| `public` | `protected` | All field accesses except if them are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
-| `public` | `package-private` | All field accesses except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `public` | `protected` | All field accesses except if they are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
+| `public` | `package-private` | All field accesses except if they are made from a type in a package with the same qualified name as the constructor owning type. |
 | `public` | `private` | All field accesses. |
-| `protected` | `package-private` | All field accesses except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `protected` | `package-private` | All field accesses except if they are made from a type in a package with the same qualified name as the constructor owning type. |
 | `protected` | `private` |  All field accesses. |
 | `package-private` | `private` |  All field accesses. |
 
@@ -332,10 +332,10 @@ We report which of them might break client code, and which exceptions must be co
 
 | Source | Target | Detection |
 |--------|--------|-----------|
-| `public` | `protected` | All method invocations and overrides except if them are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
-| `public` | `package-private` | All method invocations and overrides except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `public` | `protected` | All method invocations and overrides except if they are made from a subtype of the owning class. Exceptions related to the `public` to `package-private` change are also considered. |
+| `public` | `package-private` | All method invocations and overrides except if they are made from a type in a package with the same qualified name as the constructor owning type. |
 | `public` | `private` | All method invocations and overrides. |
-| `protected` | `package-private` | All method invocations and overrides except if them are made from a type in a package with the same qualified name as the constructor owning type. |
+| `protected` | `package-private` | All method invocations and overrides except if they are made from a type in a package with the same qualified name as the constructor owning type. |
 | `protected` | `private` |  All method invocations and overrides. |
 | `package-private` | `private` |  All method invocations and overrides. |
 
@@ -551,19 +551,43 @@ detection(
 ---
 
 ### Class Less Accessible 
-Types depending on, implementing, or inheriting from the affected type might not be able to access it anymore. This depends on the new visbility of the type and its relation to depending types. 
+The type is less accessible. 
+Some client entities are not able to depend on, be annotated with, implement, or inherit from this type anymore. 
+The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+We report which of them might break client code, and which exceptions must be considered regarding methods use.
 
-| Source            | Target            | Breakage   
-|-------------------|-------------------|--------------|
-| `public`          | `protected`       | Sometimes (1)|
-| `public`          | `package-private` | Sometimes (2)|
-| `public`          | `private`         | Always       |
-| `protected`       | `package-private` | Sometimes (2)|
-| `protected`       | `private`         | Always       |
-| `package-private` | `private`         | Always       |
+| Source | Target | Detection |
+|--------|--------|-----------|
+| `public` | `protected` | (Only applicable to inner types.) All entities depending on, or all types implementing or extending the target type except if they are subtypes of the supertype of the target type. Exceptions related to the `public` to `package-private` change are also considered. |
+| `public` | `package-private` | All entities depending on, or all types implementing or extending the target type except if they are placed in a package with the same qualified name as the target type. |
+| `public` | `private` | All entities depending on, or all types implementing or extending the target type. |
+| `protected` | `package-private` | All entities depending on, or all types implementing or extending the target type except if they are placed in a package with the same qualified name as the target type. |
+| `protected` | `private` |  All entities depending on, or all types implementing or extending the target type. |
+| `package-private` | `private` |  All entities depending on, or all types implementing or extending the target type. |
 
-1. The type can be accessed by other types that inherit from the parent class, or from types defined in the same package.
-2. The type can be accessed by types defined in the same in the same package.
+**Detection**
+
+1. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
+2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
+3. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+4. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+5. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+6. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+2. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the method in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+3. Client methods within type `T` invoking or overriding a method of the type `S`, where the method in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
+
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a `public` method `mA()`. 
+Assume `mC()` invokes `mA()`. 
+If the visibility of `mA()` is changed to `package-private`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+method:///api/A/mA()|,
+  methodInvocation(),
+  methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 

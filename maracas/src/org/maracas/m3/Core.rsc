@@ -281,6 +281,7 @@ M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 	return setKeywordParameters(m3Filtered, kws);
 } 
 
+// TODO: this is not working with parameters
 str packag(loc elem) {
 	str scheme = elem.scheme;
 	

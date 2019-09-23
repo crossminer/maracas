@@ -116,7 +116,7 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, methodReturnTypeChanged())
  	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
- 	+ detections(client, oldAPI, delta, classLessAccessible())
+ 	//+ detections(client, oldAPI, delta, classLessAccessible())
  	+ detections(client, oldAPI, delta, classNoLongerPublic())
  	+ detections(client, oldAPI, delta, classNowAbstract())
  	+ detections(client, oldAPI, delta, classNowCheckedException())
@@ -586,9 +586,10 @@ private tuple[Modifier, Modifier] getAccessModifiers(loc id, list[APIEntity] del
 		org::maracas::delta::JApiCmp::\packageProtected(), 
 		org::maracas::delta::JApiCmp::\private() };
 		
-	if (/method(id,_,list[APIEntity] elems,_,_) := delta 
-		|| /constructor(id,list[APIEntity]elems,_,_) := delta
-		|| /field(id,_,list[APIEntity] elems,_,_) := delta) {
+	if (/method(id,_,elems,_,_) := delta 
+		|| /constructor(id,elems,_,_) := delta
+		|| /field(id,_,elems,_,_) := delta
+		|| /class(id,_,elems,_,_) := delta) {
 		for (e <- elems, /modifier(modified(old, new)) := e, old in accessModifs) {
 			return <old, new>;
 		}
@@ -654,7 +655,23 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNoLongerPublic())
 	= detectionsClassLessAccess(client, oldAPI, delta, ch);
 
+
 set[Detection] detectionsClassLessAccess(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange ch) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[APIUse] apiUses = { typeDependency(), extends(), implements(), APIUse::annotation() };
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		tuple[Modifier old, Modifier new] access = getAccessModifiers(modif, delta);
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, { modif }) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected,
+			!(fromPublicToProtected(access.old, access.new) && hasProtectedAccess(client, oldAPI, elem, modif)), // Public to protected
+			!(toPackageProtected(access.new) && samePackage(elem, modif)) }; // To package-private same package
+	}
+	return detects;
+}
+
+set[Detection] detectionsClassLessAccessOld(M3 client, M3 oldAPI, list[APIEntity] delta, CompatibilityChange ch) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
 	
