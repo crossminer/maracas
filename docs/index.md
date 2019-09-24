@@ -27,6 +27,8 @@ detection(
 )
 ```
 
+{% include note.html content="Due to type erasure, uses of deprecated types as type parameters cannot be detected." %}
+
 ---
 
 ### Field Less Accessible
