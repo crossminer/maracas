@@ -33,7 +33,7 @@ test bool abstractMethodOverr()
 test bool nonAbstractMethodOverr() 
 	= detection(
 		|java+method:///mainclient/classNowFinal/ClassNowFinalExt/m()|,
-		|java+class:///main/classNowFinal/ClassNowFinal/m()|,
+		|java+method:///main/classNowFinal/ClassNowFinal/m()|,
 		methodOverride(),
 		classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
