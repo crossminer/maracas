@@ -5,7 +5,6 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
-
 test bool abstractClass() 
 	= detection(
 		|java+class:///mainclient/classNowFinal/ClassNowFinalAbsExt|,
@@ -35,5 +34,21 @@ test bool nonAbstractMethodOverr()
 		|java+method:///mainclient/classNowFinal/ClassNowFinalExt/m()|,
 		|java+method:///main/classNowFinal/ClassNowFinal/m()|,
 		methodOverride(),
+		classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool anonymousNonAbstract()
+	= detection(
+		|java+class:///mainclient/classNowFinal/ClassNowFinalAnonymousSub$1|,
+		|java+class:///main/classNowFinal/ClassNowFinal|,
+		extends(),
+		classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool anonymousAbstract()
+	= detection(
+		|java+class:///mainclient/classNowFinal/ClassNowFinalAnonymousSub$2|,
+		|java+class:///main/classNowFinal/ClassNowFinalAbs|,
+		extends(),
 		classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
