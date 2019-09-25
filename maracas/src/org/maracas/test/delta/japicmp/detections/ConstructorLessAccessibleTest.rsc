@@ -29,6 +29,14 @@ test bool simpleAccessPub2Priv()
 		methodInvocation(),
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
+
+test bool anonymousConstructorAccess()
+	= detection(
+		|java+class:///main/constructorLessAccessible/ConstructorLessAccessibleMI$1|,
+		|java+constructor:///main/constructorLessAccessible/ConstructorLessAccessiblePub2PackPriv/ConstructorLessAccessiblePub2PackPriv()|,
+		methodInvocation(),
+		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
 	
 test bool superAccessPub2Pro()
 	= detection(
