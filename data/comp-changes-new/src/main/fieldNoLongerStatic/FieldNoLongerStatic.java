@@ -1,6 +1,6 @@
 package main.fieldNoLongerStatic;
 
-public class FieldNoLongerStatic {
+public class FieldNoLongerStatic extends FieldNoLongerStaticSuper {
 
 	public int fieldStatic;
 	

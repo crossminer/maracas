@@ -11,4 +11,12 @@ public class FieldNoLongerStaticExt extends FieldNoLongerStatic {
 	public int fieldNoLongerStaticClientSuperKey() {
 		return super.fieldStatic;
 	}
+
+	public int fieldNoLongerStaticClientSuperNoSuperKey() {
+		return superFieldStatic;
+	}
+	
+	public int fieldNoLongerStaticClientSuperSuperKey() {
+		return super.superFieldStatic;
+	}
 }

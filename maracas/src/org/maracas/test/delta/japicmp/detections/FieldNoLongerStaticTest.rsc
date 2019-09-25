@@ -33,3 +33,35 @@ public test bool noSuperKeyAccess()
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+
+test bool superKeyAccessSuper()
+	= detection(
+		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperSuperKey()|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
+		fieldAccess(),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool noSuperKeyAccessSuper()
+	= detection(
+		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperNoSuperKey()|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
+		fieldAccess(),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool simpleAccessSuper1()
+	= detection(
+		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticFA/fieldNoLongerStaticSuperClient1()|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
+		fieldAccess(),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool simpleAccessSuper2()
+	= detection(
+		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticFA/fieldNoLongerStaticSuperClient2()|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
+		fieldAccess(),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
