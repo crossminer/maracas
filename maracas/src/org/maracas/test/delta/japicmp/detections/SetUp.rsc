@@ -14,3 +14,4 @@ public M3 m3Client = createM3FromJar(client);
 
 public list[APIEntity] delta = compareJars(apiOld, apiNew, "0.0", "1.0");
 public set[Detection] detects = detections(m3Client, m3ApiOld, m3ApiNew, delta);
+

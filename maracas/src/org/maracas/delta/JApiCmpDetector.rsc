@@ -1,5 +1,6 @@
 module org::maracas::delta::JApiCmpDetector
 
+import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
@@ -361,21 +362,27 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedToClass()) 
-	= detectionsMethodAbstractAdded(newAPI, client.extends, delta, ch, extends());
+	= detectionsMethodAbstractAdded(newAPI, client, delta, ch, extends());
 	
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAddedToInterface()) 
-	= detectionsMethodAbstractAdded(newAPI, client.implements, delta, ch, implements());
+	= detectionsMethodAbstractAdded(newAPI, client, delta, ch, implements());
 
-private set[Detection] detectionsMethodAbstractAdded(M3 newAPI, rel[loc, loc] m3ClientRel, list[APIEntity] delta, CompatibilityChange ch, APIUse apiUse) {
+private set[Detection] detectionsMethodAbstractAdded(M3 newAPI, M3 client, list[APIEntity] delta, CompatibilityChange ch, APIUse apiUse) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[Detection] detects = {};
 	
 	for (<modif, change> <- modified) {
-		// Identify API interface
+		str signature = methodSignature(modif);
 		loc parent = parentType(newAPI, modif);
-		// Chack affected classes
-		set[loc] affected = domain(rangeR(m3ClientRel, {parent}));
-		detects += { detection(elem, modif, apiUse, change) | elem <- affected };
+		
+		set[loc] subtypes = subtypesWithoutMethShadowing(parent, signature, newAPI)
+			+ subtypesWithoutMethShadowing(parent, signature, client)
+			+ clientSubtypesWithoutMethShadowing(parent, signature, newAPI, client)
+			+ parent;
+		rel[loc, APIUse] affected = affectedEntities(client, apiUse, subtypes);
+		
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected, 
+			<elem, \abstract()> notin client.modifiers };
 	}
 	
 	return detects;
@@ -399,6 +406,7 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 		rel[loc, APIUse] affected = {};
 		
 		set[loc] subtypes = subtypesWithoutMethShadowing(parent, signature, newAPI)
+			+ subtypesWithoutMethShadowing(parent, signature, client)
 			+ clientSubtypesWithoutMethShadowing(parent, signature, newAPI, client)
 			+ parent;
 		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, newAPI)

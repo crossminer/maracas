@@ -304,6 +304,31 @@ An abstract method is added to a superclass and no implementation is provided in
 
 ---
 
+### Method Abstract Added To Class
+A new abstract method is added to a class.
+All non-abstract client classes extending the modified class or an abstract subtype will break, given that the definition of the target method is missing.
+This will result in a compilation error (i.e. source incompatible).
+However, at the binary level, no brekage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
+In addition, the JVM does not check if there are missing method implementations at linking time. 
+
+**Detection**
+
+1. Non-abstract client classes extending the class that owns the new abstract method.
+2. Non-abstract client classes extending a subtype of the class that owns the new abstract method.
+
+For example, there is a client type `client.C` that extends the API abstract class `api.A`. Assume `api.A` declares a new abstract method `m()` in its body, then the following detection is reported:
+
+```
+detection(
+  |java+class:///client/C|,
+  |java+method:///api/A/m()|,
+  extendss(),
+  methodAddedToClass(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method Abstract Now Default
 An abstract method in an interface is changed to a default method. 
 As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
