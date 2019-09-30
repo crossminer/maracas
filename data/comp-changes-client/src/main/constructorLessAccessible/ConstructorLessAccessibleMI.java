@@ -10,4 +10,7 @@ public class ConstructorLessAccessibleMI {
 		ConstructorLessAccessiblePub2PackPriv c = new ConstructorLessAccessiblePub2PackPriv();
 	}
 	
+	public void anonymousAccess() {
+		ConstructorLessAccessiblePub2PackPriv c = new ConstructorLessAccessiblePub2PackPriv() {};
+	}
 }

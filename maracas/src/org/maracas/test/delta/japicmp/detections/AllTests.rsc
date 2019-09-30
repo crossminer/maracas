@@ -24,3 +24,4 @@ extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedT
 extend org::maracas::\test::delta::japicmp::detections::ClassNowAbstractTest; // Failing tests (2): createObjectParams, createObject 
 extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::ClassTypeChangedTest;
+extend org::maracas::\test::delta::japicmp::detections::ClassNowFinalTest;

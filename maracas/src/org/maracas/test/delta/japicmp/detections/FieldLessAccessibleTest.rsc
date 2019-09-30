@@ -125,3 +125,59 @@ test bool simpleAccessPro2PackPrivSamePack()
 		methodInvocation(),
 		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+
+test bool superKeySuperPublic2Private()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFASubtype/fieldLessAccessibleSuperPublic2Private()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2Private|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool superKeySuperPublic2Protected()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFASubtype/fieldLessAccessibleSuperPublic2Protected()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2Protected|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool superKeySuperPublic2PackagePrivate()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFASubtype/fieldLessAccessibleSuperPublic2PackagePrivate()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2PackagePrivate|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool superKeySuperProtected2Private()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFASubtype/fieldLessAccessibleSuperProtected2Private()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superProtected2Private|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool simpleAccessSuperPublic2Private()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFA/fieldLessAccessibleSuperPublic2Private()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2Private|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool simpleAccessSuperPublic2Protected()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFA/fieldLessAccessibleSuperPublic2Protected()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2Protected|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool simpleAccessSuperPublic2PackagePrivate()
+	= detection(
+		|java+method:///mainclient/fieldLessAccessible/FieldLessAccessibleFA/fieldLessAccessibleSuperPublic2PackagePrivate()|,
+		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2PackagePrivate|,
+		fieldAccess(),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;

@@ -43,4 +43,20 @@ public class FieldLessAccessibleFASubtype extends FieldLessAccessible {
 	public int fieldLessAccessibleClientPro2PrivSuperKey() {
 		return super.protected2private;
 	}
+	
+	public int fieldLessAccessibleSuperPublic2Private() {
+		return superPublic2Private;
+	}
+
+	public int fieldLessAccessibleSuperPublic2Protected() {
+		return superPublic2Protected;
+	}
+	
+	public int fieldLessAccessibleSuperPublic2PackagePrivate() {
+		return superPublic2PackagePrivate;
+	}
+	
+	public int fieldLessAccessibleSuperProtected2Private() {
+		return superProtected2Private;
+	}
 }

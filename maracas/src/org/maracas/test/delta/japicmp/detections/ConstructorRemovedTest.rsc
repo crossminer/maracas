@@ -30,6 +30,30 @@ public test bool simpleAccessNoParams()
 		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
+public test bool anonymousAccess()
+	= detection(
+		|java+constructor:///mainclient/constructorRemoved/ConstructorRemovedMI$1/ConstructorRemovedMI$1(mainclient.constructorRemoved.ConstructorRemovedMI)|,
+		|java+constructor:///main/constructorRemoved/ConstructorRemovedClass/ConstructorRemovedClass()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool anonymousAccessNoParams()
+	= detection(
+		|java+constructor:///mainclient/constructorRemoved/ConstructorRemovedMI$2/ConstructorRemovedMI$2(mainclient.constructorRemoved.ConstructorRemovedMI)|,
+		|java+constructor:///main/constructorRemoved/ConstructorRemovedNoParams/ConstructorRemovedNoParams()|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool anonymousAccessParams()
+	= detection(
+		|java+constructor:///mainclient/constructorRemoved/ConstructorRemovedMI$3/ConstructorRemovedMI$3(mainclient.constructorRemoved.ConstructorRemovedMI,int)|,
+		|java+constructor:///main/constructorRemoved/ConstructorRemovedParams/ConstructorRemovedParams(int)|,
+		methodInvocation(),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
 public test bool superConsParams()
 	= detection(
 		|java+constructor:///mainclient/constructorRemoved/ConstructorRemovedExtParams/ConstructorRemovedExtParams()|,

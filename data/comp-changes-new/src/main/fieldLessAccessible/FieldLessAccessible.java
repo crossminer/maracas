@@ -1,6 +1,6 @@
 package main.fieldLessAccessible;
 
-public class FieldLessAccessible {
+public class FieldLessAccessible extends FieldLessAccessibleSuper {
 
 	protected int public2protected;
 	int public2packageprivate;

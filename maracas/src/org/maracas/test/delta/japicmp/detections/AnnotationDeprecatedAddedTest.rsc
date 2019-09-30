@@ -69,7 +69,89 @@ test bool methodMI()
 		methodInvocation(),
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
 	in detects;
-	
+
+// Cannot be detected due to type erasure
+//test bool deprecatedInterfaceAsTypeParam()
+//	= detection(
+//		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedInterfaceAsTypeParam()|,
+//		|java+interface:///main/annotationDeprecatedAdded/IAnnDeprAdded|,
+//		typeDependency(),
+//		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+//	in detects;
+
+test bool anonymousDeprecatedEmptyClassExt()
+	= detection(
+    	|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$1|,
+    	|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedEmptyClass|,
+    	extends(),
+    	annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool anonymousDeprecatedEmptyClassTD()
+	= detection(
+    	|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$1|,
+    	|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedEmptyClass|,
+    	typeDependency(),
+    	annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool anonymousDeprecatedNonEmptyClassExt()
+	= detection(
+    	|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$2|,
+    	|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass|,
+    	extends(),
+    	annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool anonymousDeprecatedNonEmptyClassTD()
+	= detection(
+    	|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$2|,
+    	|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass|,
+    	typeDependency(),
+    	annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool anonymousDeprecatedInterfaceIMPL()
+	= detection(
+		|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$3|,
+		|java+interface:///main/annotationDeprecatedAdded/IAnnDeprAdded|,
+		implements(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool anonymousDeprecatedInterfaceTD()
+	= detection(
+		|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA$3|,
+		|java+interface:///main/annotationDeprecatedAdded/IAnnDeprAdded|,
+		typeDependency(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool deprecatedClassAsParameterTD()
+	= detection(
+		|java+parameter:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedClassAsParameter(main.annotationDeprecatedAdded.AnnDeprAddedEmptyClass)/param0|,
+		|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedEmptyClass|,
+		typeDependency(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool deprecatedInterfaceAsReturnTypeTD()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedInterfaceAsReturnType()|,
+		|java+interface:///main/annotationDeprecatedAdded/IAnnDeprAdded|,
+		typeDependency(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+// Cannot be detected due to type erasure
+//test bool deprecatedInterfaceAsTypeParamTD()
+//	= detection(
+//		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedInterfaceAsTypeParam()|,
+//		|java+interface:///main/annotationDeprecatedAdded/IAnnDeprAdded|,
+//		typeDependency(),
+//		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+//	in detects;
+
 test bool extendClass()
 	= detection(
 		|java+class:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExt|,

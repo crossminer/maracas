@@ -9,14 +9,14 @@ A type, method, or field is tagged with the `@Deprecated` annotation. This is ne
 
 1. Client types that extend or implement deprecated API types.
 2. Client methods and fields that depend on deprecated API types.
-3. Client methods that invoke or override deprecated API methods.
+3. Client methods that invoke or override deprecated API methods (including constructors).
 4. Client methods that access deprecated API fields.
 5. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype through the `super` keyword. 
 6. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype without the `super` keyword.
 
 {% include note.html content="We consider all direct subtypes of the type that owns a deprecated method or field, which do not shadow the target entity." %}
 
-For example, there is an API type `api.A` that contains the method `mA()`. There is also a client type `client.C` that contains the method `mC()`, which invokes `mA()`. If `api.A` is annotated with `@Deprecated` then `mC()` is also tagged as deprecated, and the following detection is reported:
+For example, there is an API type `api.A` that contains the method `mA()`. There is also a client type `client.C` that contains the method `mC()`, which invokes `mA()`. If `api.A` is annotated with `@Deprecated` then `mA()` is also tagged as deprecated, and the following detection is reported:
 
 ```
 detection(
@@ -26,6 +26,8 @@ detection(
   annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)
 )
 ```
+
+{% include note.html content="Due to type erasure, uses of deprecated types as type parameters cannot be detected." %}
 
 ---
 
@@ -62,6 +64,8 @@ detection(
   fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+
+{% include note.html content="Due to type erasure, uses of deprecated types as type parameters cannot be detected." %}
 
 ---
 

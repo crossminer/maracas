@@ -17,7 +17,7 @@ test bool createObject()
 test bool createObjectParams() 
 	= detection(
 		|java+method:///mainclient/classNowAbstract/ClassNowAbstractMI/createObjectParams()|,
-		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
+		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract(int)|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
