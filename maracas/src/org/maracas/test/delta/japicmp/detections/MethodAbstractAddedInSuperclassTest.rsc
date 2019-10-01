@@ -3,37 +3,45 @@ module org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedInSup
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-extend org::maracas::\test::delta::japicmp::detections::SetUp;
+import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
 test bool methAddedToSSItself()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExtSS|,
-		|java+class:///main/methodAbstractAddedInSuperclass/SSMethodAbstractAddedInSuperclass|,
+		|java+method:///main/methodAbstractAddedInSuperclass/SSMethodAbstractAddedInSuperclass/methodsSS()|,
 		extends(),
-		methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false))
-	notin detects;
-	
-test bool methAddedToSSAbsSub()
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+	in detects;
+
+test bool methAddedToSConcSub()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExtS|,
-		|java+class:///main/methodAbstractAddedInSuperclass/SMethodAbstractAddedInSuperclass|,
+		|java+method:///main/methodAbstractAddedInSuperclass/SMethodAbstractAddedInSuperclass/methodsS()|,
 		extends(),
-		methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false))
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+    in detects;
+
+test bool methAddedToSSConcSub()
+	= detection(
+		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExtS|,
+		|java+method:///main/methodAbstractAddedInSuperclass/SSMethodAbstractAddedInSuperclass/methodsSS()|,
+		extends(),
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
 
 test bool methAddedToSAbsSub()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExtAbs|,
-		|java+class:///main/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassAbs|,
+		|java+method:///main/methodAbstractAddedInSuperclass/SMethodAbstractAddedInSuperclass/methodsS()|,
 		extends(),
-		methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false))
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
-
-test bool methAddedToSNonAbsSub()
+    
+test bool methAddedToSSAbsSub()
 	= detection(
-		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExt|,
-		|java+class:///main/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclass|,
+		|java+class:///mainclient/methodAbstractAddedInSuperclass/MethodAbstractAddedInSuperclassExtAbs|,
+		|java+method:///main/methodAbstractAddedInSuperclass/SSMethodAbstractAddedInSuperclass/methodsSS()|,
 		extends(),
-		methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false))
-	notin detects;
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+	in detects;

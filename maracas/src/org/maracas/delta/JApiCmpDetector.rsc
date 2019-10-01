@@ -106,7 +106,6 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, fieldNowStatic())
  	+ detections(client, oldAPI, delta, fieldRemoved())
  	+ detections(client, oldAPI, delta, fieldTypeChanged())
- 	+ detections(client, oldAPI, delta, methodAbstractAddedInSuperclass())
  	+ detections(client, oldAPI, delta, methodLessAccessible())
  	+ detections(client, oldAPI, delta, methodNoLongerStatic())
  	+ detections(client, oldAPI, delta, methodNowAbstract())
@@ -449,9 +448,6 @@ private bool hasSameMethod(M3 m, loc typ, loc meth) {
 	}
 	return false;
 }
-
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedInSuperclass())
-	= extendsDetections(client, oldAPI, delta, ch);
 	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNoLongerStatic()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);

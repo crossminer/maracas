@@ -300,7 +300,11 @@ detection(
 ---
 
 ### Method Abstract Added In Superclass
-An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. This change is reported only if subtypes are abstract. Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. 
+This change is reported only if subtypes are abstract. 
+Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
+We do not provide detections linked to this type of change.
+Instead we detect this and more general cases through the *Method Abstract Added To Class* change.
 
 ---
 
