@@ -53,3 +53,11 @@ test bool singleInterfaceOverride()
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+	
+test bool multiInterfaceAbsOwnDef()
+	= detection(
+		|java+class:///mainclient/methodNewDefault/MethodAbstractNowDefaultMultiIntOwnDef|,
+		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
+		implements(),
+		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;

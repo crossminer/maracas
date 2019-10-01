@@ -416,15 +416,12 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 			
 		// Check client implements 
 		set[loc] affectedClasses = domain(affectedEntities(client, implements(), subtypes));
-		iprintln("affectedClasses");
-		iprintln(affectedClasses);
 		
 		// Consider the affected class if it has other implemented interfaces
 		for (elem <- affectedClasses) {
 			set[loc] interfaces = client.implements[elem];
 			
 			if (<elem, \abstract()> in client.modifiers, size(interfaces) > 1) {
-				iprintln("<elem>: abstract + many interfaces");
 				//Get method declarations
 				set[loc] methods = methodDeclarations(client, elem);
 				
@@ -435,7 +432,6 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 				
 				if (i <- interfaces, hasSameMethod(client, i, modif) 
 					|| hasSameMethod(newAPI, i, modif) ) {
-					iprintln(detection(elem, modif, implements(), ch));
 					detects += detection(elem, modif, implements(), ch);
 				}
 			}

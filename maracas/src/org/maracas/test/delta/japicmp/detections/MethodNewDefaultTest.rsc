@@ -5,59 +5,58 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
-
-test bool otherIntWithSameDefault() 
+test bool multiInterfaceNoOverride()
 	= detection(
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultMultiInt/callDefaultMethodOther()|,
+		|java+class:///mainclient/methodNewDefault/AbsMethodNewDefaultMultiInt|,
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
-		methodInvocation(),
+		implements(),
+		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+test bool multiInterfaceOverride()
+	= detection(
+		|java+class:///mainclient/methodNewDefault/MethodNewDefaultMultiInt|,
+		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
+		implements(),
+		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+test bool multiInterfaceSubNoOverride()
+	= detection(
+		|java+class:///mainclient/methodNewDefault/AbsMethodNewDefaultMultiIntSub|,
+		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
+		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	
-test bool otherIntWithSameDefaultOwnDef() 
+test bool multiInterfaceSubOverride() 
 	= detection(
-		|java+class:///mainclient/methodNewDefault/MethodNewDefaultMultiIntOwnDef|,
+		|java+class:///mainclient/methodNewDefault/MethodNewDefaultMultiIntSub|,
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
-		methodInvocation(),
+		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-test bool otherIntWithSameDefaultMultilevel() 
+test bool singleInterfaceNoOverride() 
 	= detection(
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultMultiIntSub/callDefaultMethodOther()|,
+		|java+class:///mainclient/methodNewDefault/AbsMethodNewDefaultSingleInt|,
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
-		methodInvocation(),
-		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-	
-test bool otherIntWithSameDefaultSuper() 
-	= detection(
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultMultiInt/callDefaultMethodOtherSuper()|,
-		|java+method:///main/methodNewDefault/IMethodNewDefaultOther/defaultMethod()|,
-		methodInvocation(),
+		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
-	
-test bool otherIntWithSameDefaultMultilevelSuper() 
+
+test bool singleInterfaceOverride() 
 	= detection(
-	    |java+method:///mainclient/methodNewDefault/MethodNewDefaultMultiIntSub/callDefaultMethodOtherSuper()|,
-	    |java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
-	    methodInvocation(),
-	    methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
-    
-test bool ownDefinitionInter() 
-	= detection(
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultOwnDef/callOwnDefaultMethod()|,
+		|java+class:///mainclient/methodNewDefault/MethodNewDefaultSingleInt|,
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
-		methodInvocation(),
+		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
-	
-test bool ownDefinition() 
+
+test bool multiInterfaceAbsOwnDef()
 	= detection(
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultOwnDef/callOwnDefaultMethod()|,
-		|java+method:///mainclient/methodNewDefault/MethodNewDefaultOwnDef/defaultMethod()|,
-		methodInvocation(),
+		|java+class:///mainclient/methodNewDefault/AbsMethodNewDefaultMultiIntOwnDef|,
+		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
+		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;

@@ -437,13 +437,13 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 
 **Detection**
 
-1. Client methods invoking a method `m()` of an interface `J` that has the same signature as the new default method of an interface `I`, and no method override of `m()` is provided.
+1. Client abstract classes implementing two or more interfaces, where at least one of the interfaces has a method with the same signature of the new default method; and the client class has no new method definition with such signature.
 
 {% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
 
 {% include note.html content="Behavioural changes are not being reported. For instance, no detection is reported if an interface introduces a new default method and there is already a definition of a method with the same signature in the client type." %}
 
-For example, there is a client type `client.C` with a method definition `mC()`, and two API interfaces `api.I` and `otherapi.J`. 
+For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
 The type `client.C` implements both `api.I` and `otherapi.J`. 
 Suppose `otherapi.J` defines method `m()` as a default method. 
 The API evolves and `api.I` has a new default method `m()` with the same signature as the one provided in `otherapi.J`. 
@@ -451,9 +451,9 @@ If `client.C` has no definition of a method `m()` that overrides the previous im
 
 ```
 detection(
-  |java+method:///client/C/mC()|,
+  |java+class:///client/C|,
   |java+method:///api/I/m()|,
-  methodInvocation(),
+  implements(),
   methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
