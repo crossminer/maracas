@@ -330,7 +330,7 @@ detection(
 ---
 
 ### Method Abstract Now Default
-An abstract method in an interface is changed to a default method. 
+An abstract method in an interface is now declared as a default method. 
 As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
 Type `T` implements interfaces `I` and `J`.
 `I` is not a subinterface of `J` and visceversa.
@@ -342,7 +342,7 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 
 **Detection**
 
-1. Client methods overriding a method `m()` that is now the a default method in an interface.
+1. Client abstract classes implementing two or more interfaces, where at least one of the interfaces has a method with the same signature of the now default method; and the client class has no new method definition with such signature.
 
 {% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
 
@@ -350,15 +350,14 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 
 For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
 The type `client.C` implements both `api.I` and `otherapi.J`. 
-Suppose `otherapi.J` defines method `m()` as a default method, and `api.I` declares an abstract method `m()`.
-`client.C` overrides method `m()` from `api.I`.
-If API evolves and `api.I` changes `m()` from an abstract to a default method, then the following detection is reported:
+Suppose `api.I` and `otherapi.J` declare an abstract method `m()` (each one of them has it own definition).
+If the API evolves and `api.I` changes `m()` from an abstract to a default method, and `client.C` has no method definition of `m()`, then the following detection is reported:
 
 ```
 detection(
-  |java+method:///client/C/mC()|,
+  |java+class:///client/C|,
   |java+method:///api/I/m()|,
-  methodOverride(),
+  implements(),
   methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```

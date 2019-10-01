@@ -358,7 +358,7 @@ set[loc] clientSubtypesMethodSymbolic(loc typ, str signature, M3 api, M3 client)
 	
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractNowDefault()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation(), methodOverride() });
+	return detectionsMethodNowDefault(client, oldAPI, newAPI, modified);
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedToClass()) 
@@ -416,32 +416,42 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 oldAPI, M3 newAP
 			
 		// Check client implements 
 		set[loc] affectedClasses = domain(affectedEntities(client, implements(), subtypes));
-
+		iprintln("affectedClasses");
+		iprintln(affectedClasses);
+		
 		// Consider the affected class if it has other implemented interfaces
-		for (elem <- affectedClasses, size(client.implements[elem]) > 1 ) {
-			//Get method declarations
-			set[loc] methods = methodDeclarations(client, elem);
-			rel[loc, APIUse] affectedInt = {};
-			bool hasDecl = false;
+		for (elem <- affectedClasses) {
+			set[loc] interfaces = client.implements[elem];
 			
-			// There is a potential issue if one of the invoked methods has 
-			// the same signature
-			for (m <- methods) {
-				if (sameMethodSignature(m, modif)) {
-					hasDecl = true;
-					break;
-				}
-				if (mi <- client.methodInvocation[m], sameMethodSignature(modif, mi), mi in symbMeths) {
-					affectedInt += { <m, methodInvocation()> };
+			if (<elem, \abstract()> in client.modifiers, size(interfaces) > 1) {
+				iprintln("<elem>: abstract + many interfaces");
+				//Get method declarations
+				set[loc] methods = methodDeclarations(client, elem);
+				
+				// If there is a method override, no problem should be detected
+				if (m <- methods, sameMethodSignature(m, modif)) {
 					continue;
 				}
+				
+				if (i <- interfaces, hasSameMethod(client, i, modif) 
+					|| hasSameMethod(newAPI, i, modif) ) {
+					iprintln(detection(elem, modif, implements(), ch));
+					detects += detection(elem, modif, implements(), ch);
+				}
 			}
-			affected += (hasDecl) ? {} : affectedInt;
+			
 		}
-		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}
 	
 	return detects;
+}
+
+private bool hasSameMethod(M3 m, loc typ, loc meth) {
+	set[loc] methods = methodDeclarations(m, typ);
+	if (e <- methods, sameMethodSignature(e, meth)) {
+		return true;
+	}
+	return false;
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodAbstractAddedInSuperclass())

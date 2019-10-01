@@ -14,7 +14,4 @@ public class MethodAbstractNowDefaultMultiInt implements IMethodAbstractNowDefau
 		return methodAbstractNowDef();
 	}
 
-	public int callMethodOther() {
-		return IMethodAbstractNowDefaultOther.super.methodAbstractNowDef();
-	}
 }

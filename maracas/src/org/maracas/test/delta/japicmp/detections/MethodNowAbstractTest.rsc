@@ -61,3 +61,4 @@ test bool noOverrideAbstractSubtype()
 		methodOverride(),
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+	
