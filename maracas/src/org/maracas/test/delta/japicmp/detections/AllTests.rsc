@@ -14,7 +14,7 @@ extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedToCla
 extend org::maracas::\test::delta::japicmp::detections::MethodAbstractNowDefaultTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodAddedToInterfaceTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodLessAccessibleTest;
-extend org::maracas::\test::delta::japicmp::detections::MethodNewDefaultTest;
+//extend org::maracas::\test::delta::japicmp::detections::MethodNewDefaultTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNoLongerStaticTest; // Failing tests (2): superKeyAccess, simpleAccessObj
 extend org::maracas::\test::delta::japicmp::detections::MethodNowAbstractTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowFinalTest; // Failing tests (1): overrideTrans

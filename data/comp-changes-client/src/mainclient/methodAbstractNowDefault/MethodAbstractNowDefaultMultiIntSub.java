@@ -1,8 +1,9 @@
 package mainclient.methodAbstractNowDefault;
 
+import main.methodAbstractNowDefault.IMethodAbstractNowDefaultOther;
 import main.methodAbstractNowDefault.IMethodAbstractNowDefaultSub;
 
-public class MethodAbstractNowDefaultMultiIntSub implements IMethodAbstractNowDefaultSub {
+public class MethodAbstractNowDefaultMultiIntSub implements IMethodAbstractNowDefaultSub, IMethodAbstractNowDefaultOther {
 	
 	@Override
 	public int methodAbstractNowDef() {
