@@ -656,7 +656,7 @@ detection(
 
 ### Class Less Accessible 
 The type is less accessible. 
-Some client entities are not able to depend on, be annotated with, implement, or inherit from this type anymore. 
+Some client entities are not able to depend on, be annotated with, implement, or inherit from this type anymore (cf. *JLS 13.4.3*). 
 The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
 We report which of them might break client code, and which exceptions must be considered regarding methods use.
 
@@ -675,23 +675,26 @@ We report which of them might break client code, and which exceptions must be co
 2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
 3. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
 4. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-5. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-6. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-2. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the method in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
-3. Client methods within type `T` invoking or overriding a method of the type `S`, where the method in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
+5. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
+6. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
+7. Client entities within type `T` depending on or being annotated with type `S`, where `S` goes from any visibility to `private`. 
+6. Client types each one represented by `T` implementing or extending type `S`, where `S` goes from any visibility to `private`.  
 
-For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a `public` method `mA()`. 
-Assume `mC()` invokes `mA()`. 
-If the visibility of `mA()` is changed to `package-private`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `mC()`.
+There is also a public API type `api.A` with a public method `mA()`.
+`client.C` extends `api.A`.
+Method `mC()` invokes `mA()` through the `super` keyword.
+If the visibility of `api.A` is changed from `public` to `package-private`, then the following detection is reported:
 
 ```
 detection(
   |java+method:///client/C/mC()|,
-  |java+method:///api/A/mA()|,
-  methodInvocation(),
-  methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
+  |java+class:///api/A|,
+  typeDependency(),
+  classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+
 ---
 
 ### Class No Longer Public

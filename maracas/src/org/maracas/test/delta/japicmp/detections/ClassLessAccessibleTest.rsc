@@ -48,7 +48,7 @@ test bool pro2privExt()
 
 test bool packpriv2privExt()
 	= detection(
-		|java+class:///mainclient/classLessAccessible/ClassLessAccessiblePackPriv2PrivExt$ClassLessAccessiblePackPriv2PrivExtInner|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePackPriv2PrivExt$ClassLessAccessiblePackPriv2PrivExtInner|,
 		|java+class:///main/classLessAccessible/ClassLessAccessiblePackPriv2Priv$ClassLessAccessiblePackPriv2PrivInner|,
 		extends(),
 		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))

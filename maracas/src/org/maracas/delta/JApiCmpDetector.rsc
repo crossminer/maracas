@@ -116,7 +116,7 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	+ detections(client, oldAPI, delta, methodReturnTypeChanged())
  	+ detections(client, oldAPI, delta, constructorLessAccessible())
  	+ detections(client, oldAPI, delta, constructorRemoved())
- 	//+ detections(client, oldAPI, delta, classLessAccessible())
+ 	+ detections(client, oldAPI, delta, classLessAccessible())
  	+ detections(client, oldAPI, delta, classNoLongerPublic())
  	+ detections(client, oldAPI, delta, classNowAbstract())
  	+ detections(client, oldAPI, delta, classNowCheckedException())
@@ -659,30 +659,16 @@ set[Detection] detectionsClassLessAccess(M3 client, M3 oldAPI, list[APIEntity] d
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
 	set[APIUse] apiUses = { typeDependency(), extends(), implements(), APIUse::annotation() };
 	set[Detection] detects = {};
-	
-	iprintln("modified");
-	iprintln(modified);
 		
 	for (<modif, change> <- modified) {
 		tuple[Modifier old, Modifier new] access = getAccessModifiers(modif, delta);
 		bool pub2prot = fromPublicToProtected(access.old, access.new);
 		bool pkgProt = toPackageProtected(access.new);
 		
-		iprintln("<modif>");
-		iprintln("pub2prot: <pub2prot>");
-		iprintln("pkgProt: <pkgProt>");
-		
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, { modif }) | apiUse <- apiUses };
-		
-		iprintln("affected");
-		iprintln(affected);
 		
 		for (<elem, apiUse> <- affected) {
 			loc parent = (isType(elem)) ? elem : parentType(client, elem);
-			
-			iprintln("<elem>");
-			iprintln("hasAccess: <hasProtectedAccess(client, oldAPI, elem, modif)>");
-			iprintln("smaePkg: <samePackage(parent, modif)>");
 			
 			if (!(pub2prot && hasProtectedAccess(client, oldAPI, elem, modif)) // Public to protected
 			&& !(pkgProt && samePackage(parent, modif))) { // To package-private same package
