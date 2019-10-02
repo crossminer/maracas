@@ -53,12 +53,17 @@ loc getNonCUChild(loc elem, M3 m) {
 }
 
 loc parentType(M3 m, loc elem) {
-	rel[loc, loc] containers = rangeR(m.containment, { elem });
-	if (<p,_> <- containers, isType(p)) {
+	list[loc] containers = (isMethod(elem) || isField(elem)) 
+		? toList(domain(rangeR(m.containment, { elem })))
+		: sort(domain(rangeR(m.containment+, { elem })), isLongerPath);
+		
+	if (p <- containers, isType(p)) {
 		return p;
 	}
 	return |unknwon:///|;
 }
+
+private bool isLongerPath(loc a, loc b) = size(a.path) > size(b.path);
 
 set[loc] fields(set[loc] locs)       = { e | e <- locs, isField(e) };
 set[loc] methods(set[loc] locs)      = { e | e <- locs, isMethod(e) };

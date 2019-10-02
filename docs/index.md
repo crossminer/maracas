@@ -692,6 +692,29 @@ detection(
   methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+---
+
+### Class No Longer Public
+The visibility of a class is reduced from `public` or `protected` to any other access modifier.
+If a client member depends on the modified type and the change forbids the client member access to the type, then an `IllegalAccessError` is reported at link time (cf. *JLS 13.4.3*).
+A compilation error is also obtained.
+
+**Detection**
+
+1. Client classes extending, implementing, or being annotated with the modified type. These types are reported only if they have no longer access to the modified type.
+2. Client members depending on the modified type. These members are reported only if their parent type has no longer access to the modified type.
+
+For example, there is a client type `client.C` with a method definition `m(api.A)`, and a public API type `api.A`.
+If the visibility of `api.A` is changed from `public` to `package-private`, then the following detection is reported:
+
+```
+detection(
+  |java+parameter:///client/C/m(api.A)/param0|,
+  |java+class:///api/A|,
+  typeDependency(),
+  classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
 
 ---
 
@@ -714,6 +737,10 @@ detection(
   classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+
+---
+
+### Class Now Checked Exception
 
 ---
 
