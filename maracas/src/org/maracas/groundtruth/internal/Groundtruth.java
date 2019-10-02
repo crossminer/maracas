@@ -40,12 +40,12 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
 import io.usethesource.vallang.IConstructor;
+import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
 import io.usethesource.vallang.IListWriter;
 import io.usethesource.vallang.IMapWriter;
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
-import io.usethesource.vallang.IValue;
 import io.usethesource.vallang.IValueFactory;
 import io.usethesource.vallang.type.Type;
 import io.usethesource.vallang.type.TypeFactory;
@@ -74,16 +74,16 @@ public class Groundtruth {
 		for (CompilationMessage msg : msgs) {
 			Type compilerMessage = tf.abstractDataType(ts, "CompilerMessage");
 			Type msgCstTyp = tf.constructor(ts, compilerMessage, "message");
-			IValue rscPath = vf.sourceLocation(msg.path);
-			IValue rscLine = vf.integer(msg.line);
-			IValue rscOffset = vf.integer(msg.offset);
-			IValue rscMessage = vf.string(msg.message);
+			ISourceLocation rscPath = vf.sourceLocation(msg.path);
+			IInteger rscLine = vf.integer(msg.line);
+			IInteger rscColumn = vf.integer(msg.column);
+			IString rscMessage = vf.string(msg.message);
 			IMapWriter rscParams = vf.mapWriter();
 
 			for (String k : msg.parameters.keySet())
 				rscParams.put(vf.string(k), vf.string(msg.parameters.get(k)));
 
-			IConstructor msgCst = vf.constructor(msgCstTyp, rscPath, rscLine, rscOffset, rscMessage, rscParams.done());
+			IConstructor msgCst = vf.constructor(msgCstTyp, rscPath, rscLine, rscColumn, rscMessage, rscParams.done());
 			res.append(msgCst);
 		}
 

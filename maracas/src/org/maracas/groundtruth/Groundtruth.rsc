@@ -12,10 +12,15 @@ module org::maracas::groundtruth::Groundtruth
  */
 
 data CompilerMessage = message(
+	// Affected file
 	loc path,
+	// Line
 	int line,
-	int offset,
+	// Column (this is the only information we have...)
+	int column,
+	// Error message
 	str message,
+	// Additional parameters of the error (affected symbol, location, etc.)
 	map[str, str] params
 );
 
