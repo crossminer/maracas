@@ -6,14 +6,14 @@ import java.util.Map;
 class CompilationMessage {
 	String path;
 	int line;
-	int offset;
+	int column;
 	String message;
 	Map<String, String> parameters = new HashMap<>();
 
-	public CompilationMessage(String path, int line, int offset, String message, Map<String, String> parameters) {
+	public CompilationMessage(String path, int line, int column, String message, Map<String, String> parameters) {
 		this.path = path;
 		this.line = line;
-		this.offset = offset;
+		this.column = column;
 		this.message = message;
 		this.parameters = parameters;
 	}
@@ -23,7 +23,7 @@ class CompilationMessage {
 		return new StringBuilder()
 			.append("Path: " + path)
 			.append(" Line: " + line)
-			.append(" Offset: " + offset)
+			.append(" Offset: " + column)
 			.append(" Message: " + message)
 			.append(" Params: " + parameters)
 			.toString();
