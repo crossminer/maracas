@@ -303,6 +303,28 @@ private set[Detection] symbFieldDetections(M3 client, M3 oldAPI, set[ModifiedEnt
 	return detects;
 }
 
+set[loc] subtypes(loc class, M3 m) 
+	= invert(m.extends+) [class] + invert(m.implements+) [class];
+	
+set[loc] abstractSubtypes(loc class, M3 m) 
+	= domain((subtypes(class, m) * { \abstract() }) & m.modifiers);
+	
+set[loc] concreteSubtypes(loc class, M3 m) 
+	= subtypes(class, m) - abstractSubtypes(class, m);
+
+set[loc] clientSubtypes(loc typ, M3 api, M3 client) {
+	set[loc] apiSubtypes = subtypes(typ, api) + typ;
+	return { *subtypes(s, client) | s <- apiSubtypes };
+}
+
+set[loc] clientAbstractSubtypes(loc typ, M3 api, M3 client) {
+	set[loc] clientSubs = clientSubtypes(typ, api, client);
+	return domain((clientSubs * { \abstract() }) & client.modifiers);
+}
+
+set[loc] clientConcreteSubtypes(loc typ, M3 api, M3 client)
+	= clientSubtypes(typ, api, client) - clientAbstractSubtypes(typ, api, client);
+	
 private set[loc] subtypesWithoutShadowing(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
 	set[loc] subtypes = domain(rangeR(m.extends, { typ })) + domain(rangeR(m.implements, { typ }));
 	return { *(subtypesWithoutShadowing(s, elemName, m, funSymbRef) + s) 
@@ -712,9 +734,19 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowCheckedException()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
-	set[ModifiedEntity] transModified = transitiveSubtypes(oldAPI, modified) + modified;
-	return detections(client, transModified, typeDependency())
-		+ detections(client, transModified, extends());
+	set[APIUse] apiUses = { methodInvocation() };
+	set[Detection] detects = {};
+	
+	for (<modif, change> <- modified) {
+		set[loc] clientConstructors = { *constructors(client, s) | s <- clientConcreteSubtypes(modif, oldAPI, client) };
+		set[loc] apiConstructors = { *constructors(oldAPI, s) | s <- concreteSubtypes(modif, oldAPI) };
+		set[loc] cons = clientConstructors + apiConstructors + constructors(oldAPI, modif);
+		
+		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, cons) | apiUse <- apiUses };
+		detects += { detection(elem, modif, apiUse, change) | <elem, apiUse> <- affected };
+	}
+	
+	return detects;
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::classNowFinal()) {

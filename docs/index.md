@@ -745,6 +745,28 @@ detection(
 
 ### Class Now Checked Exception
 
+A class extends from `java.lang.Exception`.
+This change is binary compatible.
+However, this change triggers compilation errors given that methods depending on the modified type need to add it in the throws declaration.
+
+**Detection**
+
+1. Client methods instantiating and throwing the exception (or a suptybe of it) without the corresponding declaration.
+
+For example, `api.E` is an unchecked exception inheriting from `java.lang.RuntimeException`.
+There is a client type `client.C` that has a method definition `m()`.
+At some point, method `m()` creates and throws `api.E` without adding the exception to the method declaration.
+If `api.E` inherits now from `java.lang.Exception`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+class:///api/E|,
+  methodInvocation(),
+  classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
+
 ---
 
 ### Class Now Final
