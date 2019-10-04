@@ -2,7 +2,9 @@ package main.methodNowThrowsCheckedException;
 
 import java.io.IOException;
 
-public abstract class MethodNowThrowsCheckedException {
+public class MethodNowThrowsCheckedException {
 
-	public abstract int nowThrowsExcep() throws IOException;
+	public void nowThrowsExcep() throws IOException {
+		throw new IOException();
+	}
 }

@@ -2,12 +2,13 @@ package mainclient.methodNowThrowsCheckedException;
 
 import main.methodNowThrowsCheckedException.IMethodNowThrowsCheckedException;
 import main.methodNowThrowsCheckedException.MethodNowThrowsCheckedException;
+import main.methodNowThrowsCheckedException.MethodNowThrowsCheckedExceptionSub;
 
 public class MethodNowThrowsCheckedExceptionMI {
 
-	public int callSuperMethod() {
+	public void callSuperMethod() {
 		MethodNowThrowsCheckedException m = new MethodNowThrowsCheckedExceptionExt();
-		return m.nowThrowsExcep();
+		m.nowThrowsExcep();
 	}
 	
 	public int callInterMethod() {
@@ -15,9 +16,14 @@ public class MethodNowThrowsCheckedExceptionMI {
 		return m.nowThrowsExcep();
 	}
 	
-	public int callSubtypeMethod() {
+	public void callSubtypeMethod() {
+		MethodNowThrowsCheckedExceptionSub m = new MethodNowThrowsCheckedExceptionSub();
+		m.nowThrowsExcep();
+	}
+	
+	public void callClientSubtypeMethod() {
 		MethodNowThrowsCheckedExceptionExt m = new MethodNowThrowsCheckedExceptionExt();
-		return m.nowThrowsExcep();
+		m.nowThrowsExcep();
 	}
 	
 	public int callImpMethod() {

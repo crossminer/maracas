@@ -1,6 +1,8 @@
 package main.methodNowThrowsCheckedException;
 
-public abstract class MethodNowThrowsCheckedException {
+public class MethodNowThrowsCheckedException {
 
-	public abstract int nowThrowsExcep();
+	public void nowThrowsExcep() {
+		
+	}
 }

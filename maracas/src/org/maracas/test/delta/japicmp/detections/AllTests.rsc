@@ -20,6 +20,7 @@ extend org::maracas::\test::delta::japicmp::detections::MethodNoLongerStaticTest
 extend org::maracas::\test::delta::japicmp::detections::MethodNowAbstractTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowFinalTest; // Failing tests (1): overrideTrans
 extend org::maracas::\test::delta::japicmp::detections::MethodNowStaticTest;
+extend org::maracas::\test::delta::japicmp::detections::MethodNowThrowsCheckedExceptionTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedTest; 
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclassTest; // Failing tests (3): overrideSuperSSMethodExtSuper, overrideSuperSSMethodExtSSuper, overrideSuperSMethodExtSuper
 extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (4): superKeyNumeric, noSuperKeyNumeric, overrideList, simpleAccessNumeric

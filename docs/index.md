@@ -559,8 +559,34 @@ detection(
 
 ---
 
+### Method Now Throws Checked Exception
+A method adds a new exception to the throws clause in its declaration.
+This change is binary compatible.
+However, it triggers a set of compilation errors given that client entities invoking the method need to handle the new exception. 
+
+**Detection**
+
+1. Client methods invoking the modified method without using it within a `try-catch` block that catches the new exception. 
+
+For example, there is a client type `client.C` with a method `mC()`.
+There is also an API type `api.A` with a method `mA()` that does not throw any exception.
+`mC()` invokes `mA()` without using a `try-catch` block.
+If the declaration of `mA()` is changed so it now throws a new checked exception, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/mC()|,
+  |java+class:///api/A/mA()|,
+  methodInvocation(),
+  methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
+
+---
+
 ### Method Removed
-A method is removed from its parent class. Client projects are not able to invoke it anymore.
+A method is removed from its parent class. 
+Client projects are not able to invoke it anymore.
 
 **Detection**
 
@@ -570,7 +596,9 @@ A method is removed from its parent class. Client projects are not able to invok
 4. Client methods invoking a supertype method without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Method Removed in Superclass* change. 
 
-For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is removed from `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. 
+Assume `mC()` invokes `mA()`. 
+If `mA()` is removed from `api.A`, then the following detection is reported:
 
 ```
 detection(
@@ -747,7 +775,7 @@ detection(
 
 A class extends from `java.lang.Exception`.
 This change is binary compatible.
-However, this change triggers compilation errors given that methods depending on the modified type need to add it in the throws declaration.
+However, it triggers a set of compilation errors given that methods depending on the modified type need to add it in the throws declaration.
 
 **Detection**
 

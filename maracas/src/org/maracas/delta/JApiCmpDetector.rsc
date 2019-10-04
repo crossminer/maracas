@@ -509,8 +509,11 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation(), methodOverride() });
 }
 
-set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowThrowsCheckedException())
-	= methodAllDetections(client, oldAPI, delta, ch);
+set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodNowThrowsCheckedException()) {
+	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	return symbMethodDetectionsWithParent(client, oldAPI, modified, { methodInvocation() });
+}
+
 		
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::methodRemoved()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
