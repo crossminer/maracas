@@ -4,10 +4,12 @@ module org::maracas::groundtruth::Groundtruth
  * TODOs/FIXMEs
  *
  *   - Maven error message parsing is extremely brittle
- *   - Breaks if the analyzed client already uses one of these two plugins:
+ *   - Overrides the client's configuration if it already uses one of these two plugins:
  *      + maven-dependency-plugin
  *      + build-helper-maven-plugin
- *      + (which is likely ;)
+ *      + maven-compiler-plugin
+ *      + (which is very likely ;)
+ *      + (and will break stuff)
  *   - javac reports 100 errors max. Could be fixed with the -Xmaxerrs/-Xmaxwarns flags
  */
 
