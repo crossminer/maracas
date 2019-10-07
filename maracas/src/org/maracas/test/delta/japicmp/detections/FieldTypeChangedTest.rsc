@@ -57,3 +57,56 @@ public test bool listNoSuperKeyAccess()
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+	
+
+public test bool numericSimpleAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool listSimpleAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+public test bool numericSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: If the field type changes to a subtype type of the old type 
+// no source compatibility error appears.
+public test bool listSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+public test bool numericNoSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: If the field type changes to a subtype type of the old type 
+// no source compatibility error appears.
+public test bool listNoSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
+		fieldAccess(),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;

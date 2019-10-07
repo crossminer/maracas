@@ -59,3 +59,57 @@ public test bool noSuperKeyAccessNoAssign()
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+	
+public test bool simpleAccessAssign() 
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalAssignmentSub()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: We must identify field assignment cases. Flybytes 
+// seems to be an option.
+public test bool simpleAccessNoAssignSub()
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalNoAssignmentSub()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+public test bool superKeyAccessAssignSub()
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalAssignmentSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: We must identify field assignment cases. Flybytes 
+// seems to be an option.
+public test bool superKeyAccessNoAssignSub()
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalNoAssignmentSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+public test bool noSuperKeyAccessAssignSub()
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalAssignmentNoSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+// TODO: We must identify field assignment cases. Flybytes 
+// seems to be an option.
+public test bool noSuperKeyAccessNoAssignSub()
+	= detection(
+		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalNoAssignmentNoSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		fieldAccess(),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;

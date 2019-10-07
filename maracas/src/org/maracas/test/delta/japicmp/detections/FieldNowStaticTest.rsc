@@ -30,3 +30,26 @@ public test bool noSuperKeyAccess()
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;    
 
+public test bool simpleAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldNowStatic/FieldNowStaticFA/fieldNowStaticClientSimpleAccessSub()|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
+		fieldAccess(),
+		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+
+public test bool superKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldNowStatic/FieldNowStaticExtSub/fieldNowStaticClientSuperKeyAccess()|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
+		fieldAccess(),
+		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+
+public test bool noSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldNowStatic/FieldNowStaticExtSub/fieldNowStaticClientNoSuperKeyAccess()|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
+		fieldAccess(),
+		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects; 

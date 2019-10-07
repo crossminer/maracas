@@ -53,6 +53,30 @@ test bool nonEmptyClassFieldDep()
 		typeDependency(),
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
 	in detects;
+	
+test bool nonEmptyClassSubTransField()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedClassNonEmptySub()|,
+		|java+field:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transField|,
+		fieldAccess(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+
+test bool nonEmptyClassSubTransMethod()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/deprecatedClassNonEmptySub()|,
+		|java+method:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transMethod()|,
+		methodInvocation(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+  
+test bool nonEmptyClassSubFieldDep() 
+	= detection(
+		|java+field:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/nonEmptyClassSub|,
+		|java+class:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass|,
+		typeDependency(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	notin detects;
     
 test bool fieldFA() 
 	= detection(
@@ -199,6 +223,46 @@ test bool extendClassTransMehtodNoSuperKey()
 		methodInvocation(),
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
 	in detects;
+
+test bool extendClassSubCons() 
+	= detection(
+		|java+constructor:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExtSub/AnnotationDeprecatedAddedExtSub()|,
+		|java+constructor:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/AnnDeprAddedNonEmptyClass()|,
+		methodInvocation(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+    notin detects;
+
+test bool extendClassSubTransFieldSuperKey()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExtSub/deprecatedSuperKey()|,
+		|java+field:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transField|,
+		fieldAccess(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+    
+test bool extendClassSubTransMehtodSuperKey()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExtSub/deprecatedSuperKey()|,
+		|java+method:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transMethod()|,
+		methodInvocation(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+	
+test bool extendClassSubTransFieldNoSuperKey()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExtSub/deprecatedNoSuperKey()|,
+		|java+field:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transField|,
+		fieldAccess(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
+    
+test bool extendClassSubTransMehtodNoSuperKey()
+	= detection(
+		|java+method:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedExtSub/deprecatedNoSuperKey()|,
+		|java+method:///main/annotationDeprecatedAdded/AnnDeprAddedNonEmptyClass/transMethod()|,
+		methodInvocation(),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	in detects;
 	
 test bool implementInt() 
 	= detection(
@@ -207,3 +271,4 @@ test bool implementInt()
 		implements(),
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
     in detects;
+    

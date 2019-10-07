@@ -5,11 +5,11 @@ extend org::maracas::\test::delta::japicmp::detections::ConstructorLessAccessibl
 extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldNoLongerStaticTest; // Failing tests (1): superKeyAccess
-extend org::maracas::\test::delta::japicmp::detections::FieldNowFinalTest; // Failing tests (3): simpleAccessNoAssign, superKeyAccessNoAssign, noSuperKeyAccessNoAssign
+extend org::maracas::\test::delta::japicmp::detections::FieldNowFinalTest; // Failing tests (6): simpleAccessNoAssign(Sub), superKeyAccessNoAssign(Sub), noSuperKeyAccessNoAssign(Sub)
 extend org::maracas::\test::delta::japicmp::detections::FieldNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldRemovedInSuperclassTest;
-extend org::maracas::\test::delta::japicmp::detections::FieldTypeChangedTest; // Failing tests (3): listNoSuperKeyAccess, listSimpleAccess, listSuperKeyAccess
+extend org::maracas::\test::delta::japicmp::detections::FieldTypeChangedTest; // Failing tests (6): listNoSuperKeyAccess(Sub), listSimpleAccess(Sub), listSuperKeyAccess(Sub)
 extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedInSuperclassTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedToClassTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodAbstractNowDefaultTest;

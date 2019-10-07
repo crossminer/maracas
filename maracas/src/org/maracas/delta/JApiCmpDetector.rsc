@@ -132,11 +132,25 @@ set[Detection] detections(M3 client, M3 oldAPI, M3 newAPI, list[APIEntity] delta
  	
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::annotationDeprecatedAdded()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
+	set[APIUse] apiUses = { 
+		annotation(), 
+		extends(), 
+		implements(), 
+		typeDependency(), 
+		methodInvocation(), 
+		methodOverride(), 
+		fieldAccess()
+	};
+	
 	set[ModifiedEntity] modifiedMeths = transitiveMethods(oldAPI, modified);
+	set[APIUse] apiUsesMeths = { methodInvocation(), methodOverride() };
+	
 	set[ModifiedEntity] modifiedFields = transitiveEntities(oldAPI, modified);
-	return symbMethodDetectionsWithParent(client, oldAPI, modifiedMeths, { methodInvocation(), methodOverride() })
+	set[APIUse] apiUsesFields = { fieldAccess() };
+	
+	return symbMethodDetectionsWithParent(client, oldAPI, modifiedMeths, apiUsesMeths)
 		+ symbFieldDetections(client, oldAPI, modifiedFields, { fieldAccess() })
-		+ detectionsAllUses(client, modified);
+		+ detections(client, modified, apiUses);
 }
 
 private set[ModifiedEntity] transitiveEntities(M3 oldAPI, set[ModifiedEntity] modified, bool (loc) fun) {
@@ -160,16 +174,6 @@ private set[ModifiedEntity] transitiveSubtypes(M3 oldAPI, set[ModifiedEntity] mo
 	rel[loc, loc] transExtends = oldAPI.extends+;
 	return { <e, ch> | <m, ch> <- modified, e <- transExtends[m], isType(e) };
 }
-
-private set[Detection] detectionsAllUses(M3 client, set[ModifiedEntity] modified)
-	= detections(client, modified, methodInvocation())
-	+ detections(client, modified, fieldAccess())
-	+ detections(client, modified, extends())
-	+ detections(client, modified, implements())
-	+ detections(client, modified, APIUse::annotation())
-	+ detections(client, modified, typeDependency())
-	+ detections(client, modified, methodOverride())
-	;
 
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldLessAccessible()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch);
@@ -218,7 +222,7 @@ set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:Compat
 set[Detection] detections(M3 client, M3 oldAPI, list[APIEntity] delta, ch:CompatibilityChange::fieldRemoved()) {
 	set[ModifiedEntity] modified = filterModifiedEntities(modifiedEntities(delta), ch); 
 	return symbFieldDetections(client, oldAPI, modified, { fieldAccess() }) 
-	+ detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
+		+ detections(client, oldAPI, modified, fieldRemovedInSuperclass()); // Pertaining fieldRemovedInSuperclass
 }
 
 set[Detection] detections(M3 client, M3 oldAPI, set[ModifiedEntity] modified, ch:CompatibilityChange::fieldRemovedInSuperclass()) {
@@ -294,7 +298,8 @@ private set[Detection] symbFieldDetections(M3 client, M3 oldAPI, set[ModifiedEnt
 	for (<modif, ch> <- modified) {
 		str fieldName = memberName(modif);
 		loc parent = parentType(oldAPI, modif);
-		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, client) 
+		set[loc] symbFields = subtypesFieldSymbolic(parent, fieldName, oldAPI)
+			+ subtypesFieldSymbolic(parent, fieldName, client) 
 			+ clientSubtypesFieldSymbolic(parent, fieldName, oldAPI, client) + modif;
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbFields) | apiUse <- apiUses };
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
@@ -634,7 +639,8 @@ private set[Detection] symbMethodDetectionsWithParent(M3 client, M3 oldAPI, set[
 		loc parent = parentType(oldAPI, modif);
 		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, oldAPI) 
 			+ subtypesMethodSymbolic(parent, signature, client) 
-			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) + modif;
+			+ clientSubtypesMethodSymbolic(parent, signature, oldAPI, client) 
+			+ modif;
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, symbMeths) | apiUse <- apiUses };
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
 	}

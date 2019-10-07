@@ -29,3 +29,27 @@ public test bool noSuperKeyAccess()
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
+    
+public test bool simpleAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldRemoved/FieldRemovedFA/fieldRemovedClientSub()|,
+		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
+		fieldAccess(),
+		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+
+public test bool superKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldRemoved/FieldRemovedExtSub/fieldRemovedClientSuper()|,
+		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
+		fieldAccess(),
+		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;
+
+public test bool noSuperKeyAccessSub()
+	= detection(
+		|java+method:///mainclient/fieldRemoved/FieldRemovedExtSub/fieldRemovedClientExt()|,
+		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
+		fieldAccess(),
+		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+    in detects;

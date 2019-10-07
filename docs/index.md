@@ -571,7 +571,8 @@ However, it triggers a set of compilation errors given that client entities invo
 For example, there is a client type `client.C` with a method `mC()`.
 There is also an API type `api.A` with a method `mA()` that does not throw any exception.
 `mC()` invokes `mA()` without using a `try-catch` block.
-If the declaration of `mA()` is changed so it now throws a new checked exception, then the following detection is reported:
+If the declaration of `mA()` is changed so it now throws a new checked exception, 
+then the following detection is reported:
 
 ```
 detection(
@@ -895,4 +896,10 @@ detection(
   classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+---
+
+### Interface Added
+
+*JLS 13.4.4*
+
 ---
