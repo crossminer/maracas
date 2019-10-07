@@ -174,12 +174,17 @@ public class Groundtruth {
 			model.getBuild().removePlugin(mdpPlugin);
 			model.getBuild().addPlugin(mdpPlugin);
 
-			// Step 2: insert build-helper-maven-plugin
+			// Step 2: insert maven-compiler-plugin
+			Plugin mcpPlugin = buildMcpPlugin();
+			model.getBuild().removePlugin(mcpPlugin);
+			model.getBuild().addPlugin(mcpPlugin);
+
+			// Step 3: insert build-helper-maven-plugin
 			Plugin bhmPlugin = buildBhmPlugin();
 			model.getBuild().removePlugin(bhmPlugin);
 			model.getBuild().addPlugin(bhmPlugin);
 
-			// Step 3: increase version number for the library
+			// Step 4: increase version number for the library
 			// FIXME: This assumes it exists...
 			for (Dependency d : model.getDependencies()) {
 				if (d.getGroupId().equals(groupId) && d.getArtifactId().equals(artifactId)) {
@@ -309,5 +314,21 @@ public class Groundtruth {
 		mdp.addExecution(mdpExec);
 
 		return mdp;
+	}
+
+	private Plugin buildMcpPlugin() throws XmlPullParserException, IOException {
+		Plugin mcp = new Plugin();
+		mcp.setGroupId("org.apache.maven.plugins");
+		mcp.setArtifactId("maven-compiler-plugin");
+		mcp.setVersion("3.8.1");
+
+		StringBuilder configString = new StringBuilder().append("<configuration>").append("<source>1.8</source>")
+				.append("<target>1.8</target>").append("<compilerArguments>").append("<deprecation/>")
+				.append("<Xmaxerrs>0</Xmaxerrs>").append("</compilerArguments>").append("</configuration>");
+
+		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
+		mcp.setConfiguration(config);
+
+		return mcp;
 	}
 }
