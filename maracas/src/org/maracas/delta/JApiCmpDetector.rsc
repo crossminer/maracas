@@ -277,16 +277,16 @@ private set[loc] getSubtypesWithoutShadowing(loc typ, str elemName, M3 m, loc (l
 set[loc] getMethSubsWithoutShadowing(loc typ, str signature, M3 m)
 	= getSubtypesWithoutShadowing(typ, signature, m, createMethodSymbolicRef);
 
-private set[loc] clientSubtypesWithoutShadowing(loc typ, str elemName, M3 api, M3 client, loc (loc, str) funSymbRef) {
+private set[loc] getHierarchyWithoutShadowing(loc typ, str elemName, M3 api, M3 client, loc (loc, str) funSymbRef) {
 	set[loc] apiSubtypes = getSubtypesWithoutShadowing(typ, elemName, api, funSymbRef);
 	return { *getSubtypesWithoutShadowing(s, elemName, client, funSymbRef) | s <- apiSubtypes };
 }
 
-set[loc] clientSubtypesWithoutFieldShadowing(loc typ, str signature, M3 api, M3 client) 
-	= clientSubtypesWithoutShadowing(typ, signature, api, client, createFieldSymbolicRef);
+set[loc] getHierarchyWithoutFieldShadowing(loc typ, str signature, M3 api, M3 client) 
+	= getHierarchyWithoutShadowing(typ, signature, api, client, createFieldSymbolicRef);
 	
-set[loc] clientSubtypesWithoutMethShadowing(loc typ, str signature, M3 api, M3 client) 
-	= clientSubtypesWithoutShadowing(typ, signature, api, client, createMethodSymbolicRef);
+set[loc] getHierarchyWithoutMethShadowing(loc typ, str signature, M3 api, M3 client) 
+	= getHierarchyWithoutShadowing(typ, signature, api, client, createMethodSymbolicRef);
 
 private set[loc] subtypesElemSymbolic(loc typ, str elemName, M3 m, loc (loc, str) funSymbRef) {
 	set[loc] subtypes = getSubtypesWithoutShadowing(typ, elemName, m, funSymbRef);
@@ -338,7 +338,7 @@ private set[Detection] detectionsMethodAbstractAdded(M3 apiNew, M3 client, list[
 		
 		set[loc] subtypes = getMethSubsWithoutShadowing(parent, signature, apiNew)
 			+ getMethSubsWithoutShadowing(parent, signature, client)
-			+ clientSubtypesWithoutMethShadowing(parent, signature, apiNew, client)
+			+ getHierarchyWithoutMethShadowing(parent, signature, apiNew, client)
 			+ parent;
 		rel[loc, APIUse] affected = affectedEntities(client, apiUse, subtypes);
 		
@@ -368,12 +368,8 @@ private set[Detection] detectionsMethodNowDefault(M3 client, M3 apiOld, M3 apiNe
 		
 		set[loc] subtypes = getMethSubsWithoutShadowing(parent, signature, apiNew)
 			+ getMethSubsWithoutShadowing(parent, signature, client)
-			+ clientSubtypesWithoutMethShadowing(parent, signature, apiNew, client)
+			+ getHierarchyWithoutMethShadowing(parent, signature, apiNew, client)
 			+ parent;
-		set[loc] symbMeths = subtypesMethodSymbolic(parent, signature, apiNew)
-			+ subtypesMethodSymbolic(parent, signature, client) 
-			+ createHierarchyMethSymbRefs(parent, signature, apiNew, client) 
-			+ modif;
 			
 		// Check client implements 
 		set[loc] affectedClasses = domain(affectedEntities(client, implements(), subtypes));
@@ -424,7 +420,7 @@ private set[Detection] symbTypeDetectionsWithParent(M3 client, M3 apiOld, set[Ch
 		loc parent = parentType(apiOld, modif);
 		set[loc] subtypes = getMethSubsWithoutShadowing(parent, signature, client) 
 			+ getMethSubsWithoutShadowing(parent, signature, apiOld)
-			+ clientSubtypesWithoutMethShadowing(parent, signature, apiOld, client)
+			+ getHierarchyWithoutMethShadowing(parent, signature, apiOld, client)
 			+ parent;
 		rel[loc, APIUse] affected = { *affectedEntities(client, apiUse, subtypes) | apiUse <- apiUses };
 		detects += { detection(elem, modif, apiUse, ch) | <elem, apiUse> <- affected };
