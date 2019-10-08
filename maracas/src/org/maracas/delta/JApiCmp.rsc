@@ -169,7 +169,37 @@ set[ChangedEntity] getChangedEntities(APIEntity entity) {
 	return entities;
 }
 
-set[ChangedEntity] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
+//set[ChangedEntity] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
+//	= { *getChangedEntities(e, change) | e <- delta };
+//
+//@doc {
+//	Returns a relation mapping API entities that have been
+//	modified to the type of compatibility change they experienced.
+//	It only considers one API entity as input.
+//	
+//	@param entity: modified API entity between two versions of the 
+//	       target API.
+//	@return relation mapping modified API entities to compatibility
+//	        change types (e.g. renamedMethod())
+//}
+//set[ChangedEntity] getChangedEntities(APIEntity entity, CompatibilityChange change) {
+//	set[loc] entities = {};
+//	visit (entity) {
+//	case /class(id,_,_,[_*,change,_*],_): 
+//		entities += id;
+//	case /interface(id,[_*,change,_*],_):
+//		entities += id;
+//	case /field(id,_,_,[_*,change,_*],_): 
+//		entities += id;
+//	case /method(id,_,_,[_*,change,_*],_): 
+//		entities += id;
+//	case /constructor(id,_,[_*,change,_*],_): 
+//		entities += id;
+//	}
+//	return entities * { change };
+//}
+
+set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
 	= { *getChangedEntities(e, change) | e <- delta };
 
 @doc {
@@ -182,7 +212,7 @@ set[ChangedEntity] getChangedEntities(list[APIEntity] delta, CompatibilityChange
 	@return relation mapping modified API entities to compatibility
 	        change types (e.g. renamedMethod())
 }
-set[ChangedEntity] getChangedEntities(APIEntity entity, CompatibilityChange change) {
+set[loc] getChangedEntities(APIEntity entity, CompatibilityChange change) {
 	set[loc] entities = {};
 	visit (entity) {
 	case /class(id,_,_,[_*,change,_*],_): 
@@ -196,7 +226,7 @@ set[ChangedEntity] getChangedEntities(APIEntity entity, CompatibilityChange chan
 	case /constructor(id,_,[_*,change,_*],_): 
 		entities += id;
 	}
-	return entities * { change };
+	return entities;
 }
 
 @doc {
@@ -278,3 +308,28 @@ tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_,t,_,_,_)) {
 		throw "The type of the class has not changed.";
 	}
 }
+
+tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
+	set[Modifier] accessModifs = { 
+		org::maracas::delta::JApiCmp::\public(), 
+		org::maracas::delta::JApiCmp::\protected(), 
+		org::maracas::delta::JApiCmp::\packageProtected(), 
+		org::maracas::delta::JApiCmp::\private() };
+		
+	if (/method(elem,_,entities,_,_) := delta 
+		|| /constructor(elem,entities,_,_) := delta
+		|| /field(elem,_,entities,_,_) := delta
+		|| /class(elem,_,entities,_,_) := delta) {
+		for (e <- entities, /modifier(modified(old, new)) := e, old in accessModifs) {
+			return <old, new>;
+		}
+	}
+	throw "There is no reference to <elem> in the delta model.";
+}
+
+bool isPackageProtected(Modifier new) 
+	= new == org::maracas::delta::JApiCmp::\packageProtected();
+	
+bool isChangedFromPublicToProtected(Modifier old, Modifier new) 
+	= old == org::maracas::delta::JApiCmp::\public() 
+	&& new == org::maracas::delta::JApiCmp::\protected();

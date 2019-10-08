@@ -2,7 +2,7 @@ module org::maracas::\test::delta::japicmp::detections::SetUp
 
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
-import org::maracas::delta::JApiCmpDetector;
+import org::maracas::delta::JApiCmpDetectorNew;
 
 loc apiOld = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/comp-changes-old.jar|;
 loc apiNew = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/comp-changes-new.jar|;
