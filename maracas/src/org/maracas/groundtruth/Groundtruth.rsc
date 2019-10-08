@@ -8,8 +8,6 @@ import Set;
 import List;
 import IO;
 
-import util::ValueUI;
-
 /**
  * TODOs/FIXMEs
  *
@@ -24,9 +22,8 @@ import util::ValueUI;
  */
 
 data CompilerMessage = message(
-	loc jar,
 	// Affected file
-	loc path,
+	loc file,
 	// Line
 	int line,
 	// Column (this is the only information we have...)
@@ -45,33 +42,56 @@ void main() {
 	loc oldApi = |file:///home/dig/.m2/repository/maracas-data/comp-changes/0.0.1/comp-changes-0.0.1.jar|;
 	loc newApi = |file:///home/dig/.m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar|;
 	loc client = |file:///home/dig/.m2/repository/maracas-data/comp-changes-client/0.0.1/comp-changes-client-0.0.1.jar|;
+	loc srcClient = |file:///home/dig/comp-changes-client-0.0.1.jar/target/extracted-sources/|;
 	
 	M3 oldM3 = createM3FromJar(oldApi);
 	M3 newM3 = createM3FromJar(newApi);
 	M3 clientM3 = createM3FromJar(client);
+	M3 sourceM3 = createM3FromDirectory(srcClient);
 
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
 	set[Detection] detections = detections(clientM3, oldM3, newM3, delta); 
 	list[CompilerMessage] msgs = recordErrors(client, "maracas-data", "comp-changes", "0.0.1", "0.0.2");
 	
-	println(size(delta));
-	println(size(detections));
-	println(size(msgs));
+	println("<size(delta)> breaking changes");
+	println("<size(detections)> detections");
+	println("<size(msgs)> compiler messages");
 	
-	text(msgs);
+	for (Detection d <- detections) {
+		loc physLoc = logicalToPhysical(sourceM3, d.elem);
+		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3);
+		
+		println("For <d>:");
+		
+		if (!isEmpty(matches)) {
+			for (CompilerMessage msg <- matches)
+				println("\tMatched by <msg>");
+		}
+		else if (physLoc == |unknown:///|) {
+			println("\tCouldn\'t find <d.elem> in source code.");
+		}
+		else {
+			set[CompilerMessage] candidates = potentialMatches(physLoc, msgs);
+			
+			if (isEmpty(candidates))
+				println("\tNo compiler message on <physLoc.path>");
+			else {
+				println("\tCompiler messages on file <physLoc.path>:");
+				for (CompilerMessage msg <- candidates)
+					println("\t\t<msg>");
+			}
+		}
+	}
+	
+	set[Detection] fp = falsePositives(detections, msgs, sourceM3);
+	println("Found <size(fp)> false positives");
+	
+	set[CompilerMessage] fn = falseNegatives(detections, msgs, sourceM3);
+	println("Found <size(fn)> false negatives");
 }
 
-Detection toDetection(CompilerMessage msg) {
-	loc jar = msg.jar;
-	
-	// elem should be the location of
-	// the first enclosing element of
-	// the code pointed by <path, line, column>
-	// then, we must match 'message'
-	// against the CompatibilityChange ADT
-
-	return detection(jar, elem, used, mapping, typ);
-}
+set[CompilerMessage] potentialMatches(loc file, list[CompilerMessage] messages) =
+	{msg | msg:message(msgFile, _, _, _, _) <- messages, msgFile.path == file.path};
 
 
 set[Detection] falsePositives(set[Detection] detections, list[CompilerMessage] messages, M3 sourceM3) {
@@ -79,23 +99,30 @@ set[Detection] falsePositives(set[Detection] detections, list[CompilerMessage] m
 }
 
 bool isFalsePositive(Detection d, list[CompilerMessage] messages, M3 sourceM3) {
-	return isEmpty({path | message(path, line, column, _, _) <- messages, isIncludedIn(logicalToPhysical(sourceM3, d.elem), path, line, column)}); 
+	return isEmpty(matchingMessages(d, messages, sourceM3)); 
 }
 
-set[CompilerMessage] falseNegatives(set[Detection] detections, list[CompilerMessage] messages, loc clientSourceJar) {
-	return {};
+set[CompilerMessage] matchingMessages(Detection d, list[CompilerMessage] messages, M3 sourceM3) {
+	return {m | m:message(file, line, column, _, _) <- messages, isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column)};
+}
+
+set[CompilerMessage] falseNegatives(set[Detection] detections, list[CompilerMessage] messages, M3 sourceM3) {
+	return {msg | msg <- messages, isFalseNegative(msg, detections, sourceM3)};
+}
+
+bool isFalseNegative(CompilerMessage msg, set[Detection] detections, M3 sourceM3) {
+	return isEmpty({d | d <- detections, message(file, line, column, _, _) := msg, isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column)});
 }
 
 bool isIncludedIn(loc location, loc path, int line, int column) {
-	println("is <line>,<column> in <location>?");
-	
-	return
-	   location.file == path.file
+	bool res =
+	   path.path == location.path
 	&& line >= location.begin.line
 	&& line <= location.end.line;
 	//&& column >= location.begin.column
 	//&& column <= location.end.column;
+	
+	return res;
 }
 
-@memo
-loc logicalToPhysical(M3 m, loc logical) = getOneFrom(m.declarations[logical]);
+loc logicalToPhysical(M3 m, loc logical) = getOneFrom(m.declarations[logical]) ? |unknown:///|;
