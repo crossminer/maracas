@@ -102,6 +102,8 @@ set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 		+ computeDetections(evol, methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 		+ computeDetections(evol, methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 		+ computeDetections(evol, methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+		+ computeDetections(evol, constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+		+ computeDetections(evol, constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
 		;
 }
 
@@ -185,6 +187,12 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodA
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNewDefault())
 	= computeTypeHierarchyDetectionsNewApi(evol, ch, { implements() }, existsMethodClash);
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::constructorLessAccessible())
+	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() }, isLessAccessible);
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::constructorRemoved()) 
+	= computeDetections(evol, ch, { methodInvocation() });
 	
 // TODO: refactor it
 set[Detection] computeTypeHierarchyDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses)

@@ -18,3 +18,5 @@ extend org::maracas::\test::delta::japicmp::detections::MethodNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowThrowsCheckedExceptionTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedTest; 
 extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (4): superKeyNumeric, noSuperKeyNumeric, overrideList, simpleAccessNumeric
+extend org::maracas::\test::delta::japicmp::detections::ConstructorLessAccessibleTest; // Failing tests (1): anonymousConstructorAccess
+extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
