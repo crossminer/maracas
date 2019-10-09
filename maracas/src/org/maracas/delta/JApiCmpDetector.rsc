@@ -4,6 +4,7 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
+import org::maracas::m3::Inheritance;
 import Relation;
 import Set;
 import IO;
@@ -41,67 +42,6 @@ alias RippleEffect = tuple[loc changed, loc affected];
 // Functions
 //----------------------------------------------
 
-
-// TODO: Move to other module
-private set[loc] getSubtypesWithoutShadowing(loc class, str elemName, M3 m, loc (loc, str) createSymbRef) {
-	set[loc] subtypes = domain(rangeR(m.extends, { class })) + domain(rangeR(m.implements, { class }));
-	
-	return { *(getSubtypesWithoutShadowing(s, elemName, m, createSymbRef) + s) 
-		| s <- subtypes, m.declarations[createSymbRef(s, elemName)] == {} }
-		+ class;
-}
-
-set[loc] getMethSubsWithoutShadowing(loc class, str signature, M3 m)
-	= getSubtypesWithoutShadowing(class, signature, m, createMethodSymbolicRef);
-
-
-private set[loc] getHierarchyWithoutShadowing(loc typ, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef) {
-	set[loc] apiSubtypes = getSubtypesWithoutShadowing(typ, elemName, api, createSymbRef);
-	return { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes }
-		+ apiSubtypes;
-}
-	
-set[loc] getHierarchyWithoutMethShadowing(loc typ, str signature, M3 api, M3 client) 
-	= getHierarchyWithoutShadowing(typ, signature, api, client, createMethodSymbolicRef);
-
-
-private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef) {
-	set[loc] apiSubtypes = getSubtypesWithoutShadowing(class, elemName, api, createSymbRef);
-	set[loc] clientSubtypes = { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes };
-	return { createSymbRef(c, elemName) | c <- apiSubtypes + clientSubtypes };
-}
-
-set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 client)
-	= createHierarchySymbRefs(class, fieldName, api, client, createFieldSymbolicRef);
-
-set[loc] createHierarchyMethSymbRefs(loc class, str signature, M3 api, M3 client)
-	= createHierarchySymbRefs(class, signature, api, client, createMethodSymbolicRef);
-
-set[loc] subtypes(loc class, M3 m) 
-	= invert(m.extends+) [class] + invert(m.implements+) [class];
-	
-set[loc] abstractSubtypes(loc class, M3 m) 
-	= domain((subtypes(class, m) * { \abstract() }) & m.modifiers);
-	
-set[loc] concreteSubtypes(loc class, M3 m) 
-	= subtypes(class, m) - abstractSubtypes(class, m);
-
-set[loc] clientSubtypes(loc typ, M3 api, M3 client) {
-	set[loc] apiSubtypes = subtypes(typ, api) + typ;
-	return { *subtypes(s, client) | s <- apiSubtypes };
-}
-
-set[loc] clientAbstractSubtypes(loc typ, M3 api, M3 client) {
-	set[loc] clientSubs = clientSubtypes(typ, api, client);
-	return domain((clientSubs * { \abstract() }) & client.modifiers);
-}
-
-set[loc] clientConcreteSubtypes(loc typ, M3 api, M3 client)
-	= clientSubtypes(typ, api, client) - clientAbstractSubtypes(typ, api, client);
-	
-	
-	
-	
 set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
 	Evolution evol = evolution(client, apiOld, apiNew, delta);
 	return computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -346,8 +286,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 	set[TransChangedEntity] entities = {}; 
 	
 	for (e <- changed) {
-		set[loc] clientCons = { *constructors(evol.client, s) | s <- clientConcreteSubtypes(e, evol.apiOld, evol.client) };
-		set[loc] apiCons = { *constructors(evol.apiOld, s) | s <- concreteSubtypes(e, evol.apiOld) };
+		set[loc] clientCons = { *constructors(evol.client, s) | s <- getClientConcreteSubtypes(e, evol.apiOld, evol.client) };
+		set[loc] apiCons = { *constructors(evol.apiOld, s) | s <- getConcreteSubtypes(e, evol.apiOld) };
 		set[loc] cons = clientCons + apiCons + constructors(evol.apiOld, e);
 		
 		entities += { e } * cons;
