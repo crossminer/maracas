@@ -1,5 +1,6 @@
 module org::maracas::\test::delta::japicmp::detections::AllTests
 
+extend org::maracas::\test::delta::japicmp::detections::AnnotationDeprecatedAddedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldNoLongerStaticTest; // Failing tests (2): superKeyAccess, simpleAccessSuper1
 extend org::maracas::\test::delta::japicmp::detections::FieldNowFinalTest; // Failing tests (6): simpleAccessNoAssign(Sub), superKeyAccessNoAssign(Sub), noSuperKeyAccessNoAssign(Sub)
@@ -20,3 +21,13 @@ extend org::maracas::\test::delta::japicmp::detections::MethodRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (4): superKeyNumeric, noSuperKeyNumeric, overrideList, simpleAccessNumeric
 extend org::maracas::\test::delta::japicmp::detections::ConstructorLessAccessibleTest; // Failing tests (1): anonymousConstructorAccess
 extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
+extend org::maracas::\test::delta::japicmp::detections::ClassLessAccessibleTest; // Failing tests (3): packpriv2privExt, packpriv2privExt
+extend org::maracas::\test::delta::japicmp::detections::ClassNoLongerPublicTest; // Failing tests (1): impInterface
+extend org::maracas::\test::delta::japicmp::detections::ClassNowAbstractTest; // Failing tests (2): createObjectParams, createObject 
+extend org::maracas::\test::delta::japicmp::detections::ClassNowCheckedExceptionTest;
+extend org::maracas::\test::delta::japicmp::detections::ClassNowFinalTest; // Failing test (3): nonAbstractClass, anonymousNonAbstract, nonAbstractMethodOverr 
+extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
+extend org::maracas::\test::delta::japicmp::detections::ClassTypeChangedTest;
+//extend org::maracas::\test::delta::japicmp::detections::FieldRemovedInSuperclassTest;
+//extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedInSuperclassTest;
+//extend org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclassTest; // Failing tests (3): overrideSuperSSMethodExtSuper, overrideSuperSSMethodExtSSuper, overrideSuperSMethodExtSuper
