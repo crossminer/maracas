@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,12 +22,14 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -52,8 +55,10 @@ import io.usethesource.vallang.type.TypeFactory;
 import io.usethesource.vallang.type.TypeStore;
 
 public class Groundtruth {
-	public final static String MAVEN = "/usr/bin/mvn";
-
+	// Get mvn path from M2_HOME environment variable
+	private final static String MAVEN = ((System.getenv("M2_HOME") == null) ? File.separator + "usr" : System.getenv("M2_HOME")) 
+			+ File.separator + "bin" + File.separator + "mvn";
+	
 	private IValueFactory vf;
 	private PrintWriter out;
 
@@ -93,7 +98,16 @@ public class Groundtruth {
 	public List<CompilationMessage> recordErrors(Path clientJar, String groupId, String artifactId, String v1,
 			String v2) {
 		try {
-			Path extractDest = Paths.get(clientJar.getFileName().toString());
+			// extractDest: <user-home-path>/temp/maracas/<client-jar-name.jar>
+			String extractPath = System.getProperty("user.home") 
+					+ File.separator 
+					+ "temp" 
+					+ File.separator 
+					+ "maracas"
+					+ File.separator 
+					+ clientJar.getFileName().toString();
+			
+			Path extractDest = Paths.get(extractPath);
 
 			// Step 1: extract the content of the client JAR locally
 			extractJAR(clientJar, extractDest);
@@ -120,16 +134,21 @@ public class Groundtruth {
 
 	private void extractJAR(Path jar, Path dest) throws IOException {
 		if (!dest.toFile().exists())
-			dest.toFile().mkdir();
+			dest.toFile().mkdirs();
 
 		String destPath = dest.toAbsolutePath().toString();
-		JarFile jarFile = new JarFile(jar.toAbsolutePath().toString());
+		String jarName = jar.getFileName().toString();
+		String jarSrcName = jarName.substring(0, jarName.lastIndexOf(".")) + "-sources.jar";
+		Path jarSrc = jar.resolveSibling(jarSrcName);
+		
+		JarFile jarFile = new JarFile(jarSrc.toAbsolutePath().toString());
 		Enumeration<JarEntry> enumEntries = jarFile.entries();
 
 		while (enumEntries.hasMoreElements()) {
 			JarEntry file = (JarEntry) enumEntries.nextElement();
 			File f = new File(destPath + File.separator + file.getName());
-
+			f.getParentFile().mkdirs();
+			
 			if (file.isDirectory()) {
 				f.mkdir();
 				continue;

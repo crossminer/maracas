@@ -138,7 +138,7 @@ set[loc] getAbstractSubtypes(loc class, M3 m)
 set[loc] getConcreteSubtypes(loc class, M3 m) 
 	= getSubtypes(class, m) - getAbstractSubtypes(class, m);
 
-@doc {
+@doc{
 	Given a type declared in an API M3 model the 
 	function returns all its direct and transitive 
 	subtypes in a client M3 model.
@@ -153,7 +153,7 @@ set[loc] getClientSubtypes(loc class, M3 api, M3 client) {
 	return { *getSubtypes(s, client) | s <- apiSubtypes };
 }
 
-@doc { 
+@doc{ 
 	Given a type declared in an API M3 model the 
 	function returns all its direct and transitive 
 	ABSTRACT subtypes in a client M3 model.
@@ -168,7 +168,7 @@ set[loc] getClientAbstractSubtypes(loc class, M3 api, M3 client) {
 	return domain((clientSubs * { \abstract() }) & client.modifiers);
 }
 
-@doc {
+@doc{
 	Given a type declared in an API M3 model the 
 	function returns all its direct and transitive 
 	CONCRETE subtypes in a client M3 model.

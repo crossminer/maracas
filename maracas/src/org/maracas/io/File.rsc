@@ -52,3 +52,6 @@ set[loc] walkJARs(loc dataset) {
 
 	return result;
 }
+
+@javaClass{org.maracas.io.internal.File}
+java loc getUserHomeDir();

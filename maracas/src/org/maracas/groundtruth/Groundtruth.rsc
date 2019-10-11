@@ -2,6 +2,7 @@ module org::maracas::groundtruth::Groundtruth
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::io::File;
 import lang::java::m3::Core;
 
 import Set;
@@ -39,19 +40,21 @@ data CompilerMessage = message(
 java list[CompilerMessage] recordErrors(loc clientJar, str groupId, str artifactId, str v1, str v2);
 
 void main() {
-	loc oldApi = |file:///home/dig/.m2/repository/maracas-data/comp-changes/0.0.1/comp-changes-0.0.1.jar|;
-	loc newApi = |file:///home/dig/.m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar|;
-	loc client = |file:///home/dig/.m2/repository/maracas-data/comp-changes-client/0.0.1/comp-changes-client-0.0.1.jar|;
-	loc srcClient = |file:///home/dig/comp-changes-client-0.0.1.jar/target/extracted-sources/|;
+	loc homeDir = getUserHomeDir();
+	loc oldApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.1/comp-changes-0.0.1.jar";
+	loc newApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar";
+	loc client = homeDir + ".m2/repository/maracas-data/comp-changes-client/0.0.1/comp-changes-client-0.0.1.jar";
+	loc srcClient = homeDir + "temp/maracas/comp-changes-client-0.0.1.jar/target/extracted-sources";
 	
 	M3 oldM3 = createM3FromJar(oldApi);
 	M3 newM3 = createM3FromJar(newApi);
 	M3 clientM3 = createM3FromJar(client);
-	M3 sourceM3 = createM3FromDirectory(srcClient);
 
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
 	set[Detection] detections = detections(clientM3, oldM3, newM3, delta); 
 	list[CompilerMessage] msgs = recordErrors(client, "maracas-data", "comp-changes", "0.0.1", "0.0.2");
+	
+	M3 sourceM3 = createM3FromDirectory(srcClient);
 	
 	println("<size(delta)> breaking changes");
 	println("<size(detections)> detections");
@@ -125,4 +128,4 @@ bool isIncludedIn(loc location, loc path, int line, int column) {
 	return res;
 }
 
-loc logicalToPhysical(M3 m, loc logical) = getOneFrom(m.declarations[logical]) ? |unknown:///|;
+loc logicalToPhysical(M3 m, loc logical) = (isEmpty(m.declarations[logical])) ? |unknown:///| : getOneFrom(m.declarations[logical]);
