@@ -380,8 +380,14 @@ private set[Detection] computeDetections(Evolution evol, set[loc] entities, Comp
 	= computeDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; });
 
 private set[Detection] computeDetections(Evolution evol, set[loc] entities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
-	rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, entities) | apiUse <- apiUses };
-	return { detection(elem, used, apiUse, change) | <elem, apiUse> <- affected, used <- entities, predicate(<used, elem>, evol) };
+	set[Detection] detects = {};
+	
+	for (used <- entities) {
+		rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, { used }) | apiUse <- apiUses };
+		detects += { detection(elem, used, apiUse, change) | <elem, apiUse> <- affected, predicate(<used, elem>, evol) };
+	}
+	
+	return detects;
 }
 
 private set[TransChangedEntity] getTransitiveEntities(M3 m, set[loc] entities, bool (loc) fun) {
