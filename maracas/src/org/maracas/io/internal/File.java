@@ -3,6 +3,7 @@ package org.maracas.io.internal;
 import org.rascalmpl.uri.URIResolverRegistry;
 
 import io.usethesource.vallang.ISourceLocation;
+import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValueFactory;
 
 public class File {
@@ -17,5 +18,9 @@ public class File {
 	
 	public ISourceLocation getUserHomeDir() {
 		return factory.sourceLocation(System.getProperty("user.home"));
+	}
+	
+	public IString getLineSeparator() {
+		return factory.string(System.lineSeparator());
 	}
 }

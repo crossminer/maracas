@@ -1,10 +1,12 @@
 module org::maracas::groundtruth::Groundtruth
 
+
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::io::File;
 import lang::java::m3::Core;
 
+import Relation;
 import Set;
 import List;
 import IO;
@@ -35,6 +37,15 @@ data CompilerMessage = message(
 	map[str, str] params
 );
 
+data MatchType 
+	= matched()
+	| unmatched()
+	| candidates()
+	| unknown()
+	;
+
+alias Match = tuple[MatchType typ, Detection detect, str reason];
+
 @javaClass{org.maracas.groundtruth.internal.Groundtruth}
 @reflect{}
 java list[CompilerMessage] recordErrors(loc clientJar, str groupId, str artifactId, str v1, str v2);
@@ -45,52 +56,106 @@ void main() {
 	loc newApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar";
 	loc client = homeDir + ".m2/repository/maracas-data/comp-changes-client/0.0.1/comp-changes-client-0.0.1.jar";
 	loc srcClient = homeDir + "temp/maracas/comp-changes-client-0.0.1.jar/target/extracted-sources";
+	loc report = homeDir + "temp/maracas/comp-changes.txt";
 	
+	println("Recording compilation errors...");
+	list[CompilerMessage] msgs = recordErrors(client, "maracas-data", "comp-changes", "0.0.1", "0.0.2");
+	
+	println("Computing M3 models...");
 	M3 oldM3 = createM3FromJar(oldApi);
 	M3 newM3 = createM3FromJar(newApi);
 	M3 clientM3 = createM3FromJar(client);
-
-	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
-	set[Detection] detections = detections(clientM3, oldM3, newM3, delta); 
-	list[CompilerMessage] msgs = recordErrors(client, "maracas-data", "comp-changes", "0.0.1", "0.0.2");
-	
 	M3 sourceM3 = createM3FromDirectory(srcClient);
 	
-	println("<size(delta)> breaking changes");
-	println("<size(detections)> detections");
-	println("<size(msgs)> compiler messages");
+	println("Computing evolution models...");
+	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
+	set[Detection] detects = detections(clientM3, oldM3, newM3, delta); 
+	set[Match] matches = matchDetectiosn(sourceM3, delta, detects, msgs);
 	
-	for (Detection d <- detections) {
+	println("Generating report...");
+	outputReport(sourceM3, delta, detects, msgs, matches, report);
+	
+	println("Done!");
+}
+
+Match createMatch(MatchType typ, Detection detect, str reason) = <typ, detect, reason>;
+ 
+set[Match] matchDetectiosn(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs) {
+	set[Match] checks = {};
+	
+	for (Detection d <- detects) {
 		loc physLoc = logicalToPhysical(sourceM3, d.elem);
 		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3);
 		
-		println("For <d>:");
-		
 		if (!isEmpty(matches)) {
-			for (CompilerMessage msg <- matches)
-				println("\tMatched by <msg>");
+			checks += { createMatch(matched(), d, "Matched by <msg>") | CompilerMessage msg <- matches };
 		}
 		else if (physLoc == |unknown:///|) {
-			println("\tCouldn\'t find <d.elem> in source code.");
+			checks += createMatch(unknown(), d, "Couldn\'t find <d.elem> in source code.");
 		}
 		else {
 			set[CompilerMessage] candidates = potentialMatches(physLoc, msgs);
-			
-			if (isEmpty(candidates))
-				println("\tNo compiler message on <physLoc.path>");
-			else {
-				println("\tCompiler messages on file <physLoc.path>:");
-				for (CompilerMessage msg <- candidates)
-					println("\t\t<msg>");
-			}
+			checks += (isEmpty(candidates)) 
+				? createMatch(unmatched(), d, "No compiler message on <physLoc.path>")
+				: { createMatch(candidates(), d, "Compiler messages on file <physLoc.path>: <msg>") | CompilerMessage msg <- matches };
 		}
 	}
+	return checks;
+}
+
+void appendEmptyLine(loc path) = appendToFile(path, "<getLineSeparator()>");
+
+void appendToFileLn(loc path, str line) {
+	appendToFile(path, line);
+	appendEmptyLine(path);
+}
+
+void outputReport(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, set[Match] matches, loc path) {
+	// Always rewrite file
+	writeFile(path, "");
+	appendMatches(matches, path);
+	appendModelStats(delta, detects, msgs, path);
+	appendErrorStats(sourceM3, detects, msgs, path);
+}
+
+private void appendMatches(set[Match] matches, loc path) {
+	rel[MatchType, int] typesMatches = {};
 	
-	set[Detection] fp = falsePositives(detections, msgs, sourceM3);
-	println("Found <size(fp)> false positives");
+	for (MatchType m <- domain(matches)) {
+		appendToFileLn(path, "<m> matches:");
+		
+		rel[Detection, str] typeMatches = matches[m];
+		typesMatches += <m, size(domain(typeMatches))>;
+		
+		for (Detection d <- domain(typeMatches)) {
+			appendToFileLn(path, "For <d>:");
+			
+			for (str reason <- typeMatches[d]) {
+				appendToFileLn(path, "\t<d>");
+			}
+			appendEmptyLine(path);
+		}
+		appendEmptyLine(path);
+		appendEmptyLine(path);
+	}
 	
-	set[CompilerMessage] fn = falseNegatives(detections, msgs, sourceM3);
-	println("Found <size(fn)> false negatives");
+	for (MatchType m <- domain(typesMatches)) {
+		appendToFileLn(path, "<m> cases: <getOneFrom(typesMatches[m])>");
+	}
+}
+
+private void appendModelStats(list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, loc path) {
+	appendToFileLn(path, "Breaking changes: <size(delta)>");
+	appendToFileLn(path, "Detections: <size(detects)>");
+	appendToFileLn(path, "Compiler messages: <size(msgs)>");
+}
+
+private void appendErrorStats(M3 sourceM3, set[Detection] detects, list[CompilerMessage] msgs, loc path) {
+	set[Detection] fp = falsePositives(detects, msgs, sourceM3);
+	set[CompilerMessage] fn = falseNegatives(detects, msgs, sourceM3);
+	
+	appendToFileLn(path, "False positives: <size(fp)>");
+	appendToFileLn(path, "False negatives: <size(fn)>");
 }
 
 set[CompilerMessage] potentialMatches(loc file, list[CompilerMessage] messages) =

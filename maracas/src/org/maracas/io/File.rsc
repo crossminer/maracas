@@ -55,3 +55,6 @@ set[loc] walkJARs(loc dataset) {
 
 @javaClass{org.maracas.io.internal.File}
 java loc getUserHomeDir();
+
+@javaClass{org.maracas.io.internal.File}
+java str getLineSeparator();
