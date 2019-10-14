@@ -4,22 +4,20 @@ import analysis::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::m3::Core;
 
+import IO;
 import Message;
 import Set;
+import String;
 
 
 data CompilerMessage = message(
-	// Affected file
-	loc file,
-	// Line
-	int line,
-	// Column (this is the only information we have...)
-	int column,
-	// Error message
-	str message,
-	// Additional parameters of the error (affected symbol, location, etc.)
-	map[str, str] params
+	loc file, // Affected file
+	int line, // Line
+	int column, // Column (this is the only information we have...)
+	str message, // Error message
+	map[str, str] params // Additional parameters of the error (affected symbol, location, etc.)
 );
 
 data MatchType 
@@ -98,4 +96,42 @@ bool isIncludedIn(loc location, loc path, int line, int column) {
 	return res;
 }
 
-loc logicalToPhysical(M3 m, loc logical) = (isEmpty(m.declarations[logical])) ? |unknown:///| : getOneFrom(m.declarations[logical]);
+loc logicalToPhysical(M3 m, loc logical) {
+	loc physical = getDeclaration(logical, m);
+	
+	// Check if the element is declared
+	if (physical != unknownSource) {
+		return physical;
+	}
+	
+	// If not, check if it is an anonympus class and
+	// rewrite it in the M3-src way and check declararion
+	logical = buildAnonymousClassLoc(logical);
+	physical = getDeclaration(logical, m);
+	if (physical != unknownSource) {
+		return physical;
+	}
+	
+	// If it does not exist, check if the element is an
+	// inner class and check declaration
+	logical.path = replaceAll(logical.path, "$", "/");
+	return getDeclaration(logical, m);
+} 
+
+loc buildAnonymousClassLoc(loc logical) {
+	// Match with logical locations from source code M3
+	if (/<pre:^[a-zA-Z0-9_\(\).\/]*>\$<anonClass:\d+$>/ := logical.path) {
+		logical.scheme = (logical.scheme == "java+class") ? "java+anonymousClass" : logical.scheme;
+		logical.path = "<pre>/$anonymous<anonClass>";
+		println("ANONYMOUS1: <logical>");
+		return buildAnonymousClassLoc(logical);
+	}
+	if (/<pre:^[a-zA-Z0-9_\(\).\/]*>\$<anonClass:\d+><post:(\/[a-zA-Z0-9_\(\).\/\$]*)?>$/ := logical.path) {
+		logical.path = "<pre>/$anonymous<anonClass><post>";
+		println("ANONYMOUS2: <logical>");
+		return buildAnonymousClassLoc(logical);
+	}
+	else {
+		return logical;
+	}
+}

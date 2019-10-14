@@ -37,27 +37,27 @@ void main() {
 	loc javacReport = clientDir + "report/comp-changes-javac.txt";
 	loc jdtReport = clientDir + "report/comp-changes-jdt.txt";
 	
-	println("Upgrading client project...");
+	println("Upgrading client project");
 	bool upgraded = upgradeClient(client, "maracas-data", "comp-changes", "0.0.1", "0.0.2");
 	println("Client upgraded: <upgraded>");
 	
-	println("Computing M3 models...");
+	println("Computing M3 models");
 	M3 oldM3 = createM3FromJar(oldApi);
 	M3 newM3 = createM3FromJar(newApi);
 	M3 clientM3 = createM3FromJar(client);
 	M3 sourceM3 = createM3FromDirectory(srcClient);
 	
-	println("Recording compilation errors...");
+	println("Recording compilation errors");
 	list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
 	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
 	
-	println("Computing evolution models...");
+	println("Computing evolution models");
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
 	set[Detection] detects = detections(clientM3, oldM3, newM3, delta); 
 	set[Match] javacMatches = matchDetections(sourceM3, delta, detects, javacMsgs);
 	set[Match] jdtMatches = matchDetections(sourceM3, delta, detects, jdtMsgs);
 	
-	println("Generating report...");
+	println("Generating report");
 	outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
 	outputReport(sourceM3, delta, detects, jdtMsgs, jdtMatches, jdtReport);
 	

@@ -415,3 +415,8 @@ str fieldDeclaration(loc field, M3 m) {
 		throw "Cannot compute a field declaration from <field>";
 	}
 }
+
+loc getDeclaration(loc logical, M3 m) {
+	set[loc] decls = m.declarations[logical];
+	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
+}
