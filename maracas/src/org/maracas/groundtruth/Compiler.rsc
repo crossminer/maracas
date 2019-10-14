@@ -1,9 +1,11 @@
 module org::maracas::groundtruth::Compiler
 
+import analysis::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 
+import Message;
 import Set;
 
 
@@ -29,11 +31,25 @@ data MatchType
 
 alias Match = tuple[MatchType typ, Detection detect, str reason];
 
+@javaClass{org.maracas.groundtruth.internal.Groundtruth}
+@reflect{}
+java bool upgradeClient(loc clientJar, str groupId, str artifactId, str v1, str v2);
 
 @javaClass{org.maracas.groundtruth.internal.Groundtruth}
 @reflect{}
-java list[CompilerMessage] recordErrors(loc clientJar, str groupId, str artifactId, str v1, str v2);
+java list[CompilerMessage] computeJavacErrors(loc pomFile);
 
+list[CompilerMessage] computeJDTErrors(M3 srcClient) 
+	= [ msgToCompilerMsg(m) | Message m <- srcClient.messages, isErrorMsg(m) ];
+
+bool isErrorMsg(Message msg) = error(_, _) := msg || error(_) := msg;
+
+CompilerMessage msgToCompilerMsg(error(str msg, loc at))
+	= message(at, at.begin.line, at.begin.column, msg, ());
+
+CompilerMessage msgToCompilerMsg(error(str msg))
+	= message(unknownSource, -1, -1, msg, ());
+	
 Match createMatch(MatchType typ, Detection detect, str reason) = <typ, detect, reason>;
  
 set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs) {
@@ -57,6 +73,11 @@ set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] de
 		}
 	}
 	return checks;
+}
+
+set[CompilerMessage] getUnmatchCompilerMsgs(set[Match] matches, list[CompilerMessage] msgs) {
+	set[CompilerMessage] matchMsgs = domain(range(matches));
+	return toSet(msgs) - matchMsgs;
 }
 
 set[CompilerMessage] potentialMatches(loc file, list[CompilerMessage] messages) =

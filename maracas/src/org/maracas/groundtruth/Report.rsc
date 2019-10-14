@@ -33,7 +33,7 @@ private void appendMatches(set[Match] matches, loc path) {
 			appendToFileLn(path, "For <d>:");
 			
 			for (str reason <- typeMatches[d]) {
-				appendToFileLn(path, "\t<d>");
+				appendToFileLn(path, "\t<reason>");
 			}
 			appendEmptyLine(path);
 		}

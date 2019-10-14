@@ -42,6 +42,7 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
+import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
@@ -61,42 +62,26 @@ public class Groundtruth {
 	
 	private IValueFactory vf;
 	private PrintWriter out;
+	private TypeStore ts;
+	private TypeFactory tf;
+	private CompilationMessageToRascal compMsgToRascal;
 
 	public Groundtruth(IValueFactory vf) {
 		this.vf = vf;
+		this.ts = new TypeStore();
+		this.tf = TypeFactory.getInstance();
+		this.compMsgToRascal = new CompilationMessageToRascal(vf);
 	}
 
-	public IList recordErrors(ISourceLocation clientJar, IString groupId, IString artifactId, IString v1, IString v2,
+	public IBool upgradeClient(ISourceLocation clientJar, IString groupId, IString artifactId, IString v1, IString v2,
 			IEvaluatorContext ctx) {
 		out = ctx.getStdOut();
-
-		List<CompilationMessage> msgs = recordErrors(Paths.get(clientJar.getPath()), groupId.getValue(),
+		boolean upgraded = upgradeClient(Paths.get(clientJar.getPath()), groupId.getValue(),
 				artifactId.getValue(), v1.getValue(), v2.getValue());
-		IListWriter res = vf.listWriter();
-		TypeStore ts = new TypeStore();
-		TypeFactory tf = TypeFactory.getInstance();
-
-		for (CompilationMessage msg : msgs) {
-			Type compilerMessage = tf.abstractDataType(ts, "CompilerMessage");
-			Type msgCstTyp = tf.constructor(ts, compilerMessage, "message");
-			ISourceLocation rscPath = vf.sourceLocation(msg.path);
-			IInteger rscLine = vf.integer(msg.line);
-			IInteger rscColumn = vf.integer(msg.column);
-			IString rscMessage = vf.string(msg.message);
-			IMapWriter rscParams = vf.mapWriter();
-
-			for (String k : msg.parameters.keySet())
-				rscParams.put(vf.string(k), vf.string(msg.parameters.get(k)));
-
-			IConstructor msgCst = vf.constructor(msgCstTyp, rscPath, rscLine, rscColumn, rscMessage, rscParams.done());
-			res.append(msgCst);
-		}
-
-		return res.done();
+		return vf.bool(upgraded);
 	}
-
-	public List<CompilationMessage> recordErrors(Path clientJar, String groupId, String artifactId, String v1,
-			String v2) {
+	
+	public boolean upgradeClient(Path clientJar, String groupId, String artifactId, String v1, String v2) {
 		try {
 			// extractDest: <user-home-path>/temp/maracas/<client-jar-name.jar>
 			String extractPath = System.getProperty("user.home") 
@@ -121,14 +106,37 @@ public class Groundtruth {
 			// the updated version of the chosen library
 			updatePOM(pomFile, groupId, artifactId, v1, v2);
 			out.println("Updated POM file at " + pomFile.toAbsolutePath());
-
-			// Step 4: Run Maven and record the output
-			return runMaven(pomFile);
-		} catch (Exception e) {
+			return true;	
+		} 
+		catch (Exception e) {
 			out.println(e.getMessage());
 			e.printStackTrace(out);
 		}
 
+		return false;
+	}
+	
+	public IList computeJavacErrors(ISourceLocation pomFile, IEvaluatorContext ctx) {
+		out = ctx.getStdOut();
+		List<CompilationMessage> msgs = computeJavacErrors(Paths.get(pomFile.getPath()));
+		IListWriter res = vf.listWriter();
+
+		for (CompilationMessage msg : msgs) {
+			IConstructor msgCst = compMsgToRascal.javaToRascal(msg);
+			res.append(msgCst);
+		}
+
+		return res.done();
+	}
+	
+	public List<CompilationMessage> computeJavacErrors(Path pomFile) {
+		try {
+			return runMaven(pomFile);
+		} 
+		catch (IOException | InterruptedException e) {
+			out.println(e.getMessage());
+			e.printStackTrace(out);
+		}
 		return Collections.emptyList();
 	}
 
