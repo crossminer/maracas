@@ -58,3 +58,10 @@ java loc getUserHomeDir();
 
 @javaClass{org.maracas.io.internal.File}
 java str getLineSeparator();
+
+void appendEmptyLine(loc path) = appendToFile(path, "<getLineSeparator()>");
+
+void appendToFileLn(loc path, str line) {
+	appendToFile(path, line);
+	appendEmptyLine(path);
+}
