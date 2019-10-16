@@ -52,7 +52,11 @@ private loc resolveAnonymousClass(loc logical, M3 m) {
 			begin = begin + end + index + 1;
 			
 			anonym = resolveAnonymousClass(anonym, anonymName, m);
-			anonym = (anonym == unknownSource) ? anonym : resolve(original, anonym, begin, m);
+			
+			if (index == size(rest) || anonym == unknownSource) {
+				return anonym;
+			}
+			anonym = resolve(original, anonym, begin, m);
 		}
 		else {
 			anonym.scheme = original.scheme;
@@ -93,27 +97,34 @@ private loc resolveAnonymousClass(loc original, loc anonym, int begin, M3 m) {
 	return anonym;
 }
 
-//str anonName = memberName(anonClass);
-private loc resolveAnonymousClass(loc parent, str anonName, M3 m) {
+//str anonymName = memberName(anonymClass);
+private loc resolveAnonymousClass(loc parent, str anonymName, M3 m) {
 	parent = resolveTypeScheme(parent, m);
 	set[loc] children = m.containment[parent];
-	loc anonClass = parent + anonName;
-	anonClass.scheme = "java+anonymousClass";
+	loc anonymClass = parent + anonymName;
+	anonymClass.scheme = "java+anonymousClass";
 
-	if (anonClass in children) {
-		return anonClass;
+	if (anonymClass in children) {
+		return anonymClass;
 	}
 	
 	for (c <- children) {
 		set[loc] localChildren = m.containment[c];
-		anonClass.path = (c + anonName).path;
+		anonymClass.path = (c + anonymName).path;
 		
-		if (anonClass in localChildren) {
-			return anonClass;
+		if (anonymClass in localChildren) {
+			return anonymClass;
+		}
+		if (hasAnonymousClass(localChildren, m)) {
+			return parent;
 		}
 	}
 	
 	return unknownSource;
+}
+
+bool hasAnonymousClass(set[loc] locs, M3 m) {
+	return if (loc l <- locs, isAnonymousClass(l)) true; else false;
 }
 
 // Only considering java+class and java+interface cases

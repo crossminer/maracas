@@ -76,6 +76,7 @@ set[loc] types(set[loc] locs)        = { e | e <- locs, isType(e) };
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
 bool isAPIEntity(loc entity) = isType(entity) || isMethod(entity) || isField(entity);
 bool isKnown(loc elem) = elem != |unknwon:///|;
+bool isAnonymousClass(loc entity) = entity.scheme == "java+anonymousClass";
  	
 bool isTargetMemberExclInterface(loc elem)
 	= isClass(elem)
@@ -419,3 +420,4 @@ loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
 }
+
