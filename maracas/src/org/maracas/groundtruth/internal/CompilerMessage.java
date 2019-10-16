@@ -3,14 +3,14 @@ package org.maracas.groundtruth.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-class CompilationMessage {
+class CompilerMessage {
 	String path;
 	int line;
 	int column;
 	String message;
 	Map<String, String> parameters = new HashMap<>();
 
-	public CompilationMessage(String path, int line, int column, String message, Map<String, String> parameters) {
+	public CompilerMessage(String path, int line, int column, String message, Map<String, String> parameters) {
 		this.path = path;
 		this.line = line;
 		this.column = column;

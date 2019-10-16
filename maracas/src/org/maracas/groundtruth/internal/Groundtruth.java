@@ -64,13 +64,13 @@ public class Groundtruth {
 	private PrintWriter out;
 	private TypeStore ts;
 	private TypeFactory tf;
-	private CompilationMessageToRascal compMsgToRascal;
+	private CompilerMessageToRascal compMsgToRascal;
 
 	public Groundtruth(IValueFactory vf) {
 		this.vf = vf;
 		this.ts = new TypeStore();
 		this.tf = TypeFactory.getInstance();
-		this.compMsgToRascal = new CompilationMessageToRascal(vf);
+		this.compMsgToRascal = new CompilerMessageToRascal(vf);
 	}
 
 	public IBool upgradeClient(ISourceLocation clientJar, IString groupId, IString artifactId, IString v1, IString v2,
@@ -118,10 +118,10 @@ public class Groundtruth {
 	
 	public IList computeJavacErrors(ISourceLocation pomFile, IEvaluatorContext ctx) {
 		out = ctx.getStdOut();
-		List<CompilationMessage> msgs = computeJavacErrors(Paths.get(pomFile.getPath()));
+		List<CompilerMessage> msgs = computeJavacErrors(Paths.get(pomFile.getPath()));
 		IListWriter res = vf.listWriter();
 
-		for (CompilationMessage msg : msgs) {
+		for (CompilerMessage msg : msgs) {
 			IConstructor msgCst = compMsgToRascal.javaToRascal(msg);
 			res.append(msgCst);
 		}
@@ -129,7 +129,7 @@ public class Groundtruth {
 		return res.done();
 	}
 	
-	public List<CompilationMessage> computeJavacErrors(Path pomFile) {
+	public List<CompilerMessage> computeJavacErrors(Path pomFile) {
 		try {
 			return runMaven(pomFile);
 		} 
@@ -227,8 +227,8 @@ public class Groundtruth {
 	}
 
 	// FIXME: Ugly as fuck
-	private List<CompilationMessage> runMaven(Path pomFile) throws IOException, InterruptedException {
-		List<CompilationMessage> errors = new ArrayList<>();
+	private List<CompilerMessage> runMaven(Path pomFile) throws IOException, InterruptedException {
+		List<CompilerMessage> errors = new ArrayList<>();
 		ProcessBuilder pb = new ProcessBuilder(MAVEN, "clean", "compile", "--fail-at-end");
 		pb.directory(pomFile.getParent().toFile());
 
@@ -277,7 +277,7 @@ public class Groundtruth {
 								currentLine = reader.readLine();
 							}
 
-							errors.add(new CompilationMessage(path, line, offset, message, params));
+							errors.add(new CompilerMessage(path, line, offset, message, params));
 							continue;
 						} else {
 							out.println("[2 Couldn't parse " + currentLine);

@@ -11,7 +11,7 @@ import io.usethesource.vallang.type.Type;
 import io.usethesource.vallang.type.TypeFactory;
 import io.usethesource.vallang.type.TypeStore;
 
-public class CompilationMessageToRascal {
+public class CompilerMessageToRascal {
 
 	private IValueFactory vf;
 	private TypeStore ts;
@@ -20,7 +20,7 @@ public class CompilationMessageToRascal {
 	private Type compilerMessageADT;
 	private Type compilerMessageCons;
 	
-	public CompilationMessageToRascal(IValueFactory vf) {
+	public CompilerMessageToRascal(IValueFactory vf) {
 		this.vf = vf;
 		this.ts = new TypeStore();
 		this.tf = TypeFactory.getInstance();
@@ -35,7 +35,7 @@ public class CompilationMessageToRascal {
 		return vf.constructor(compilerMessageCons, path, line, column, message, params);
 	}
 	
-	public IConstructor javaToRascal(CompilationMessage msg) {
+	public IConstructor javaToRascal(CompilerMessage msg) {
 		ISourceLocation path = vf.sourceLocation(msg.path);
 		IInteger line = vf.integer(msg.line);
 		IInteger column = vf.integer(msg.column);

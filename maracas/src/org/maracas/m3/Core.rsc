@@ -339,11 +339,8 @@ str memberName(loc m) {
 	if(isMethod(m)) {
 		return memberName(methodQualName(m));
 	}
-	else if (isType(m) || isField(m)) {
-		return memberName(m.path);
-	}
 	else {
-		throw "Cannot get a name from unsupported memeber <m>.";
+		return memberName(m.path);
 	}
 }
 
@@ -415,6 +412,8 @@ str fieldDeclaration(loc field, M3 m) {
 		throw "Cannot compute a field declaration from <field>";
 	}
 }
+
+bool isDeclared(loc logical, M3 m) = m.declarations[logical] != {};
 
 loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];

@@ -5,6 +5,7 @@ import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
+import org::maracas::m3::JarToSrc;
 
 import IO;
 import Message;
@@ -104,34 +105,7 @@ loc logicalToPhysical(M3 m, loc logical) {
 		return physical;
 	}
 	
-	// If not, check if it is an anonympus class and
-	// rewrite it in the M3-src way and check declararion
-	logical = buildAnonymousClassLoc(logical);
-	physical = getDeclaration(logical, m);
-	if (physical != unknownSource) {
-		return physical;
-	}
-	
-	// If it does not exist, check if the element is an
-	// inner class and check declaration
-	logical.path = replaceAll(logical.path, "$", "/");
+	// Check if the element is an inner class
+	logical = transformNestedClass(logical, m);
 	return getDeclaration(logical, m);
 } 
-
-loc buildAnonymousClassLoc(loc logical) {
-	// Match with logical locations from source code M3
-	if (/<pre:^[a-zA-Z0-9_\(\).\/]*>\$<anonClass:\d+$>/ := logical.path) {
-		logical.scheme = (logical.scheme == "java+class") ? "java+anonymousClass" : logical.scheme;
-		logical.path = "<pre>/$anonymous<anonClass>";
-		println("ANONYMOUS1: <logical>");
-		return buildAnonymousClassLoc(logical);
-	}
-	if (/<pre:^[a-zA-Z0-9_\(\).\/]*>\$<anonClass:\d+><post:(\/[a-zA-Z0-9_\(\).\/\$]*)?>$/ := logical.path) {
-		logical.path = "<pre>/$anonymous<anonClass><post>";
-		println("ANONYMOUS2: <logical>");
-		return buildAnonymousClassLoc(logical);
-	}
-	else {
-		return logical;
-	}
-}
