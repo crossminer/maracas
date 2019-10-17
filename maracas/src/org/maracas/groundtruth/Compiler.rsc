@@ -5,7 +5,7 @@ import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
-import org::maracas::m3::JarToSrc;
+import org::maracas::m3::JarToSource;
 
 import IO;
 import Message;

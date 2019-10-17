@@ -1,4 +1,4 @@
-module org::maracas::m3::JarToSrc
+module org::maracas::m3::JarToSource
 
 import lang::java::m3::AST;
 import lang::java::m3::Core;
@@ -11,6 +11,7 @@ import String;
 loc transformNestedClass(loc logical, M3 m) {
 	println("");
 	println("Starting: <logical>");
+	logical = transformAnonymClassCons(logical); // |java+constructor:///pkg/A$1$1/A$1$1()| -> |java+constructor:///pkg/A$1$1/()|
 	logical = transformInnerClass(logical); // |java+method:///pkg/A$1$1/m()| -> |java+method:///pkg/1/1/m()|
 	logical = transformAnonymClassName(logical); // |java+method:///pkg/A/1/1/m()| -> |java+method:///pkg/A/$anonymous1/$anonymous1/m()|
 	return resolveAnonymousClass(logical, m); // |java+method:///pkg/A/$anonymous1/$anonymous1/m()| -> |java+method:///pkg/A/n()/$anonymous1/n()/$anonymous1/m()|
@@ -19,6 +20,16 @@ loc transformNestedClass(loc logical, M3 m) {
 private loc transformInnerClass(loc logical) {
 	logical.path = replaceAll(logical.path, "$", "/");
 	println("Inner: <logical>");
+	return logical;
+}
+
+private loc transformAnonymClassCons(loc logical) {
+	if (logical.scheme == "java+constructor") {
+		logical.path = visit(logical.path) {
+			case /\/[^\/]+\$\d+\([a-zA-Z0-9_\$.]*\)$/ => "/()"
+		}
+	}
+	println("Constructor: <logical>");
 	return logical;
 }
 
@@ -51,12 +62,12 @@ private loc resolveAnonymousClass(loc logical, M3 m) {
 			str anonymName = rest[..index];
 			begin = begin + end + index + 1;
 			
-			anonym = resolveAnonymousClass(anonym, anonymName, m);
-			
-			if (index == size(rest) || anonym == unknownSource) {
-				return anonym;
+			loc candidate = resolveAnonymousClass(anonym, anonymName, m);
+			if (candidate.path == anonym.path || index == size(rest) || candidate == unknownSource) {
+				return candidate;
 			}
-			anonym = resolve(original, anonym, begin, m);
+			 
+			anonym = resolve(original, candidate, begin, m);
 		}
 		else {
 			anonym.scheme = original.scheme;
@@ -70,31 +81,6 @@ private loc resolveAnonymousClass(loc logical, M3 m) {
 	println("Anonymous: <res>");
 	
 	return res;
-}
-
-private loc resolveAnonymousClass(loc original, loc anonym, int begin, M3 m) {
-	str focus = original.path[begin..];
-	
-	if (contains(focus, "$anonymous")) {
-		int end = findFirst(focus, "/$anonymous");
-		str parent = focus[..end];
-		anonym.path = anonym.path + parent;
-		
-		str rest = focus[end + 1..];
-		int index = contains(rest, "/") ? findFirst(rest, "/") : size(rest);
-		str anonymName = rest[..index];
-		
-		rest = rest[index..];
-		anonym = resolveAnonymousClass(anonym, anonymName, m);
-		anonym = (anonym == unknownSource) ? anonym 
-			: resolveAnonymousClass(original, anonym, begin + end + index + 1, m);
-	}
-	else {
-		anonym.scheme = original.scheme;
-		anonym.path = (!isEmpty(focus)) ? anonym.path + focus : anonym.path;
-	}
-	
-	return anonym;
 }
 
 //str anonymName = memberName(anonymClass);
