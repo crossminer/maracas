@@ -116,6 +116,12 @@ bool hasAnonymousClass(set[loc] locs, M3 m) {
 	return if (loc l <- locs, isAnonymousClass(l)) true; else false;
 }
 
+loc resolveConsClass(loc cons, M3 m) {
+	int index = findLast(cons.path, "/");
+	str path = cons.path[..index];
+	return resolveTypeScheme(|java+class:///| + path, m);
+}
+
 // Only considering java+class and java+interface cases
 // Enums and annotations are left behind
 private loc resolveTypeScheme(loc logical, M3 m) {

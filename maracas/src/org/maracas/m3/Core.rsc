@@ -420,4 +420,3 @@ loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
 }
-

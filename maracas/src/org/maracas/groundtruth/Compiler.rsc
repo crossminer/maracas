@@ -100,12 +100,19 @@ bool isIncludedIn(loc location, loc path, int line, int column) {
 loc logicalToPhysical(M3 m, loc logical) {
 	loc physical = getDeclaration(logical, m);
 	
-	// Check if the element is declared
+	// 1. Check if the element is declared
 	if (physical != unknownSource) {
 		return physical;
 	}
 	
-	// Check if the element is an inner class
+	// 2. Transform nested class locations and check again
 	logical = transformNestedClass(logical, m);
+	physical = getDeclaration(logical, m);
+	if (physical != unknownSource) {
+		return physical;
+	}
+	
+	// 3. Check if it is an implicit constructor and return parent class
+	logical = (isConstructor(logical)) ? resolveConsClass(logical, m) : logical;
 	return getDeclaration(logical, m);
-} 
+}
