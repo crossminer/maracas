@@ -5,35 +5,40 @@ import lang::java::m3::Core;
 import org::maracas::m3::Core;
 
 import IO;
+import List;
 import String;
 
 
 loc transformNestedClass(loc logical, M3 m) {
-	println("");
-	println("Starting: <logical>");
-	logical = transformAnonymClassCons(logical); // |java+constructor:///pkg/A$1$1/A$1$1()| -> |java+constructor:///pkg/A$1$1/()|
+	logical = transformNestedClassCons(logical); // |java+constructor:///pkg/A$1$1/A$1$1()| -> |java+constructor:///pkg/A$1$1/()|
 	logical = transformInnerClass(logical); // |java+method:///pkg/A$1$1/m()| -> |java+method:///pkg/1/1/m()|
 	logical = transformAnonymClassName(logical); // |java+method:///pkg/A/1/1/m()| -> |java+method:///pkg/A/$anonymous1/$anonymous1/m()|
 	return resolveAnonymousClass(logical, m); // |java+method:///pkg/A/$anonymous1/$anonymous1/m()| -> |java+method:///pkg/A/n()/$anonymous1/n()/$anonymous1/m()|
 }
 
-private loc transformInnerClass(loc logical) {
+loc transformInnerClass(loc logical) {
 	logical.path = replaceAll(logical.path, "$", "/");
-	println("Inner: <logical>");
 	return logical;
 }
 
-private loc transformAnonymClassCons(loc logical) {
+loc transformNestedClassCons(loc logical) {
 	if (logical.scheme == "java+constructor") {
 		logical.path = visit(logical.path) {
-			case /\/[^\/]+\$\d+\([a-zA-Z0-9_\$.]*\)$/ => "/()"
+			// Anonymous class: |java+constructor:///pkg/A$1$1/A$1$1()| -> |java+constructor:///pkg/A$1$1/()|
+			case /\/[^\/]+\$\d+\([a-zA-Z0-9_\$.]*\)$/ => "/()" 
+			
+			// Inner class: |java+constructor:///pkg/A$D/A$D(main.A,java.lang.String)| -> |java+constructor:///pkg/A$D/D(java.lang.String)|
+			case /\/[^\/]+\$<name:\w+>\(<params:[a-zA-Z0-9_\$.,]*>\)$/: { 
+				list[str] paramsList = split(",", params); // First element is always the owner class
+				params = (size(paramsList) == 1) ? "" : ( "" | it + ",<p>" | p <- paramsList[1..] )[1..];
+				insert "/<name>(<params>)"; 
+			}
 		}
 	}
-	println("Constructor: <logical>");
 	return logical;
 }
 
-private loc transformAnonymClassName(loc logical) {
+loc transformAnonymClassName(loc logical) {
 	bool match = true;
 	do {
 		logical.path = visit(logical.path) {
@@ -45,7 +50,7 @@ private loc transformAnonymClassName(loc logical) {
 	return logical;
 }
 
-private loc resolveAnonymousClass(loc logical, M3 m) {
+loc resolveAnonymousClass(loc logical, M3 m) {
 	loc anonym = logical;
 	anonym.path = "";
 	
@@ -78,12 +83,10 @@ private loc resolveAnonymousClass(loc logical, M3 m) {
 	}
 	
 	res = resolve(logical, anonym, 0, m);
-	println("Anonymous: <res>");
 	
 	return res;
 }
 
-//str anonymName = memberName(anonymClass);
 private loc resolveAnonymousClass(loc parent, str anonymName, M3 m) {
 	parent = resolveTypeScheme(parent, m);
 	set[loc] children = m.containment[parent];
