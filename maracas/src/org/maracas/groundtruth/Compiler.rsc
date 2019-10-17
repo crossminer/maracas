@@ -56,7 +56,7 @@ set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] de
 	
 	for (Detection d <- detects) {
 		loc physLoc = logicalToPhysical(sourceM3, d.elem);
-		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3);
+		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3); // Calling logicalToPhysical twice
 		
 		if (!isEmpty(matches)) {
 			checks += { createMatch(matched(), d, "Matched by <msg>") | CompilerMessage msg <- matches };
@@ -65,10 +65,10 @@ set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] de
 			checks += createMatch(unknown(), d, "Couldn\'t find <d.elem> in source code.");
 		}
 		else {
-			set[CompilerMessage] candidates = potentialMatches(physLoc, msgs);
-			checks += (isEmpty(candidates)) 
+			set[CompilerMessage] candidats = potentialMatches(physLoc, msgs);
+			checks += (isEmpty(candidats)) 
 				? createMatch(unmatched(), d, "No compiler message on <physLoc.path>")
-				: { createMatch(candidates(), d, "Compiler messages on file <physLoc.path>: <msg>") | CompilerMessage msg <- matches };
+				: { createMatch(candidates(), d, "Compiler messages on file <physLoc.path>: <msg>") | CompilerMessage msg <- candidats };
 		}
 	}
 	return checks;
