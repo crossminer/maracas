@@ -116,7 +116,7 @@ bool hasAnonymousClass(set[loc] locs, M3 m) {
 	return if (loc l <- locs, isAnonymousClass(l)) true; else false;
 }
 
-loc resolveConsClass(loc cons, M3 m) {
+loc resolveMethClass(loc cons, M3 m) {
 	int index = findLast(cons.path, "/");
 	str path = cons.path[..index];
 	return resolveTypeScheme(|java+class:///| + path, m);

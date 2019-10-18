@@ -3,7 +3,7 @@ module org::maracas::groundtruth::Report
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-import org::maracas::groundtruth::Compiler;
+import org::maracas::groundtruth::MessageMatcher;
 import org::maracas::io::File;
 
 import IO;

@@ -1,6 +1,7 @@
-module org::maracas::groundtruth::Compiler
+module org::maracas::groundtruth::MessageMatcher
 
 import analysis::m3::AST;
+import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
@@ -62,7 +63,10 @@ set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] de
 			checks += { createMatch(matched(), d, "Matched by <msg>") | CompilerMessage msg <- matches };
 		}
 		else if (physLoc == |unknown:///|) {
-			checks += createMatch(unknown(), d, "Couldn\'t find <d.elem> in source code.");
+			// Skip if we are dealing with an inherited method from a protected class
+			if (!isInheritedMethod(d.elem, sourceM3)) {
+				checks += createMatch(unknown(), d, "Couldn\'t find <d.elem> in source code.");
+			}
 		}
 		else {
 			set[CompilerMessage] candidats = potentialMatches(physLoc, msgs);
@@ -113,6 +117,27 @@ loc logicalToPhysical(M3 m, loc logical) {
 	}
 	
 	// 3. Check if it is an implicit constructor and return parent class
-	logical = (isConstructor(logical)) ? resolveConsClass(logical, m) : logical;
+	logical = (isConstructor(logical)) ? resolveMethClass(logical, m) : logical;
 	return getDeclaration(logical, m);
+}
+
+// FIXME: missing information related to the API.
+// This will happen only when the parent class has protected modifier.
+// However, we don't have information related to the API modifiers.
+bool isInheritedMethod(loc meth, m) {
+	if (!isDeclared(meth, m)) {
+		loc class = resolveMethClass(transformNestedClass(meth, m), m);
+		set[loc] extends = m.extends[class];
+		
+		if (!isEmpty(extends)) {
+			loc super = getOneFrom(extends);
+			set[loc] children = m.containment[super];
+			set[Modifier] modifs = m.modifiers[super];
+			loc inheritedMeth = super + methodSignature(meth);
+			inheritedMeth.scheme = meth.scheme;
+		
+			return inheritedMeth in children && protected() in modifs;
+		}
+	}
+	return false;
 }
