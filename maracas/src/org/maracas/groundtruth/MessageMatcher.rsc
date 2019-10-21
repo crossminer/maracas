@@ -44,13 +44,28 @@ java bool upgradeClient(loc clientJar, str groupId, str artifactId, str v1, str 
 java list[CompilerMessage] computeJavacErrors(loc pomFile);
 
 list[CompilerMessage] computeJDTErrors(M3 srcClient) 
-	= [ msgToCompilerMsg(m) | Message m <- srcClient.messages, isErrorMsg(m) ];
+	= computeJDTMessage(srcClient, isDetectedMsg);
 
+list[CompilerMessage] computeJDTWarning(M3 srcClient) 
+	= computeJDTMessage(srcClient, isWarningMsg);
+
+list[CompilerMessage] computeJDTMessage(M3 srcClient, bool (Message) predicate) 
+	= [ msgToCompilerMsg(m) | Message m <- srcClient.messages, predicate(m) ];
+
+bool isDetectedMsg(Message msg) = isErrorMsg(msg) || isDeprecatedMsg(msg);
 bool isErrorMsg(Message msg) = error(_, _) := msg || error(_) := msg;
+bool isWarningMsg(Message msg) = warning(_, _) := msg;
+bool isDeprecatedMsg(Message msg) = warning(m, _) := msg && /is deprecated$/ := m;
 
 CompilerMessage msgToCompilerMsg(error(str msg, loc at))
-	= message(at, at.begin.line, at.begin.column, msg, ());
+	= msgToCompilerMsg(msg, at);
 
+CompilerMessage msgToCompilerMsg(warning(str msg, loc at))
+	= msgToCompilerMsg(msg, at);
+
+CompilerMessage msgToCompilerMsg(str msg, loc at)
+	= message(at, at.begin.line, at.begin.column, msg, ());
+	
 CompilerMessage msgToCompilerMsg(error(str msg))
 	= message(unknownSource, -1, -1, msg, ());
 	
@@ -140,13 +155,7 @@ bool isInheritedMethod(loc meth, M3 sourceM3, M3 api) {
 			set[Modifier] modifs = api.modifiers[super];
 			loc inheritedMeth = super + methodSignature(meth);
 			inheritedMeth.scheme = meth.scheme;
-		
-			println("<meth> - <super>");
-			println("Children");
-			println("<children>");
-			println("Modifs");
-			println("<modifs>");
-			println("");
+
 			return inheritedMeth in children && protected() in modifs;
 		}
 	}
