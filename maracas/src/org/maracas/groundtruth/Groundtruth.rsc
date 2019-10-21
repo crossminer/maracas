@@ -2,7 +2,7 @@ module org::maracas::groundtruth::Groundtruth
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
-import org::maracas::groundtruth::Compiler;
+import org::maracas::groundtruth::MessageMatcher;
 import org::maracas::groundtruth::Report;
 import org::maracas::io::File;
 import lang::java::m3::Core;
@@ -48,17 +48,20 @@ void main() {
 	M3 sourceM3 = createM3FromDirectory(srcClient);
 	
 	println("Recording compilation errors");
-	list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
+	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
 	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
 	
 	println("Computing evolution models");
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
+	Evolution evol = evolution(clientM3, oldM3, newM3, delta);
 	set[Detection] detects = detections(clientM3, oldM3, newM3, delta); 
-	set[Match] javacMatches = matchDetections(sourceM3, delta, detects, javacMsgs);
-	set[Match] jdtMatches = matchDetections(sourceM3, delta, detects, jdtMsgs);
+	
+	println("Matching detections");
+	//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
+	set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
 	
 	println("Generating report");
-	outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
+	//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
 	outputReport(sourceM3, delta, detects, jdtMsgs, jdtMatches, jdtReport);
 	
 	println("Done!");

@@ -7,8 +7,10 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
 import org::maracas::m3::JarToSource;
+import org::maracas::m3::SourceToJar;
 
 import IO;
+import List;
 import Message;
 import Set;
 import String;
@@ -29,7 +31,9 @@ data MatchType
 	| unknown()
 	;
 
-alias Match = tuple[MatchType typ, Detection detect, str reason];
+alias Match = tuple[MatchType typ, Detection detect, CompilerMessage msg];
+
+CompilerMessage emptyMsg() = message(unknownSource, -1, -1, "", ()); 
 
 @javaClass{org.maracas.groundtruth.internal.Groundtruth}
 @reflect{}
@@ -50,9 +54,9 @@ CompilerMessage msgToCompilerMsg(error(str msg, loc at))
 CompilerMessage msgToCompilerMsg(error(str msg))
 	= message(unknownSource, -1, -1, msg, ());
 	
-Match createMatch(MatchType typ, Detection detect, str reason) = <typ, detect, reason>;
+Match createMatch(MatchType typ, Detection detect, CompilerMessage msg) = <typ, detect, msg>;
  
-set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs) {
+set[Match] matchDetections(M3 sourceM3, Evolution evol, set[Detection] detects, list[CompilerMessage] msgs) {
 	set[Match] checks = {};
 	
 	for (Detection d <- detects) {
@@ -60,26 +64,26 @@ set[Match] matchDetections(M3 sourceM3, list[APIEntity] delta, set[Detection] de
 		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3); // Calling logicalToPhysical twice
 		
 		if (!isEmpty(matches)) {
-			checks += { createMatch(matched(), d, "Matched by <msg>") | CompilerMessage msg <- matches };
+			checks += { createMatch(matched(), d, msg) | CompilerMessage msg <- matches };
 		}
 		else if (physLoc == |unknown:///|) {
 			// Skip if we are dealing with an inherited method from a protected class
-			if (!isInheritedMethod(d.elem, sourceM3)) {
-				checks += createMatch(unknown(), d, "Couldn\'t find <d.elem> in source code.");
+			if (!isInheritedMethod(d.elem, sourceM3, evol.apiOld)) {
+				checks += createMatch(unknown(), d, emptyMsg());
 			}
 		}
 		else {
 			set[CompilerMessage] candidats = potentialMatches(physLoc, msgs);
 			checks += (isEmpty(candidats)) 
-				? createMatch(unmatched(), d, "No compiler message on <physLoc.path>")
-				: { createMatch(candidates(), d, "Compiler messages on file <physLoc.path>: <msg>") | CompilerMessage msg <- candidats };
+				? createMatch(unmatched(), d, emptyMsg())
+				: { createMatch(candidates(), d, msg) | CompilerMessage msg <- candidats };
 		}
 	}
 	return checks;
 }
 
 set[CompilerMessage] getUnmatchCompilerMsgs(set[Match] matches, list[CompilerMessage] msgs) {
-	set[CompilerMessage] matchMsgs = domain(range(matches));
+	set[CompilerMessage] matchMsgs = matches.msg;
 	return toSet(msgs) - matchMsgs;
 }
 
@@ -124,18 +128,25 @@ loc logicalToPhysical(M3 m, loc logical) {
 // FIXME: missing information related to the API.
 // This will happen only when the parent class has protected modifier.
 // However, we don't have information related to the API modifiers.
-bool isInheritedMethod(loc meth, m) {
-	if (!isDeclared(meth, m)) {
-		loc class = resolveMethClass(transformNestedClass(meth, m), m);
-		set[loc] extends = m.extends[class];
+bool isInheritedMethod(loc meth, M3 sourceM3, M3 api) {
+	if (!isDeclared(meth, sourceM3)) {
+		loc class = resolveMethClass(transformNestedClass(meth, sourceM3), sourceM3);
+		set[loc] extends = sourceM3.extends[class];
 		
 		if (!isEmpty(extends)) {
 			loc super = getOneFrom(extends);
-			set[loc] children = m.containment[super];
-			set[Modifier] modifs = m.modifiers[super];
+			super = toJarInnerClass(super);
+			set[loc] children = api.containment[super];
+			set[Modifier] modifs = api.modifiers[super];
 			loc inheritedMeth = super + methodSignature(meth);
 			inheritedMeth.scheme = meth.scheme;
 		
+			println("<meth> - <super>");
+			println("Children");
+			println("<children>");
+			println("Modifs");
+			println("<modifs>");
+			println("");
 			return inheritedMeth in children && protected() in modifs;
 		}
 	}
