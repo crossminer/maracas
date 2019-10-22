@@ -31,7 +31,12 @@ data APIUse
 	| typeDependency()
 	;
 
-data Evolution = evolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta);
+data Evolution = evolution(
+	M3 client, 
+	M3 apiOld, 
+	M3 apiNew, 
+	list[APIEntity] delta
+);
 
 alias TransChangedEntity = tuple[loc main, loc trans];
 
@@ -135,7 +140,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	= computeDetections(evol, ch, { methodInvocation() });
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowAbstract())
-	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() })
+	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() }, isAffectedByAbsMeth)
 	+ computeMethSymbDetections(evol, ch, { methodInvocation() });
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowFinal()) 
@@ -433,6 +438,20 @@ private bool hasProtectedAccess(RippleEffect effect, Evolution evol) {
 		&& <clientParent, apiParent> in evol.client.extends+);
 }
 
+private bool isAffectedByAbsMeth(RippleEffect effect, Evolution evol)
+	= isNotAbstract(effect, evol) && !hasMethodOverride(effect, evol);
+
+private bool hasMethodOverride(RippleEffect effect, Evolution evol) {
+	//Get method declarations
+	set[loc] methods = methodDeclarations(evol.client, effect.affected);
+		
+	// If there is a method override, no problem should be detected
+	if (m <- methods, sameMethodSignature(m, effect.changed)) {
+		return true;
+	}
+	return false;
+}
+
 private bool isNotAbstract(RippleEffect effect, Evolution evol)
 	= <effect.affected, \abstract()> notin evol.client.modifiers;
 	
@@ -441,12 +460,9 @@ private bool existsMethodClash(RippleEffect effect, Evolution evol) {
 	loc changed = effect.changed;
 	set[loc] interfaces = evol.client.implements[affected];
 	
-	if (<affected, \abstract()> in evol.client.modifiers, size(interfaces) > 1) {
-		//Get method declarations
-		set[loc] methods = methodDeclarations(evol.client, affected);
-		
+	if (<affected, \abstract()> in evol.client.modifiers, size(interfaces) > 1) {		
 		// If there is a method override, no problem should be detected
-		if (m <- methods, sameMethodSignature(m, changed)) {
+		if (hasMethodOverride(effect, evol)) {
 			return false;
 		}
 		

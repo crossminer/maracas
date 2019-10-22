@@ -49,7 +49,7 @@ void main() {
 	
 	println("Recording compilation errors");
 	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
-	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
+	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3); // add java version 1.8
 	
 	println("Computing evolution models");
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");

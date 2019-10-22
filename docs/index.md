@@ -118,7 +118,7 @@ A field goes from `non-static` to `static`.
 This results in an `IncompatibleClassChangeError` at linking time. 
 The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. 
 The former is used to access objects fields and the later to access static fields. 
-Client code must be recompiled to get rid of the issue.
+Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.10*).
 
 **Detection**
 
@@ -534,7 +534,7 @@ detection(
 ---
 
 ### Method Now Static
-A method goes from `non-static` to `static`. This results in a linkage error, mainly because static methods must be invoked with the JVM instruction `invokestatic`. Client code must be recompiled to get rid of the issue.
+A method goes from `non-static` to `static`. This results in a linkage error, mainly because static methods must be invoked with the JVM instruction `invokestatic`. Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.19*).
 
 **Detection**
 
