@@ -53,7 +53,7 @@ private void appendUnmatchMsgs(set[Match] matches, list[CompilerMessage] msgs, l
 	set[CompilerMessage] unmatchMsgs = getUnmatchCompilerMsgs(matches, msgs);
 	appendTitle(path, "Detection Unmatches");
 	
-	for (CompilerMessage m <- msgs) {
+	for (CompilerMessage m <- unmatchMsgs) {
 		appendToFileLn(path, "<m>");
 		appendEmptyLine(path);
 	}

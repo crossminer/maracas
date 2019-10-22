@@ -45,11 +45,11 @@ void main() {
 	M3 oldM3 = createM3FromJar(oldApi);
 	M3 newM3 = createM3FromJar(newApi);
 	M3 clientM3 = createM3FromJar(client);
-	M3 sourceM3 = createM3FromDirectory(srcClient);
+	M3 sourceM3 = createM3FromDirectory(srcClient, javaVersion="1.8");
 	
 	println("Recording compilation errors");
 	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
-	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3); // add java version 1.8
+	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
 	
 	println("Computing evolution models");
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");

@@ -16,7 +16,7 @@ public test bool override()
     
 public test bool overrideTrans()
 	= detection(
-		|java+method:///mainclient/methodNowFinal/MethodNowFinalExt/methodNowFinal()|,
+		|java+method:///mainclient/methodNowFinal/MethodNowFinalExt/sMethodNowFinal()|,
 		|java+method:///main/methodNowFinal/SMethodNowFinal/sMethodNowFinal()|,
 		methodOverride(),
 		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
