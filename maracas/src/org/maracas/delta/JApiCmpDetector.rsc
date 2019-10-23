@@ -7,6 +7,7 @@ import org::maracas::m3::Core;
 import org::maracas::m3::Inheritance;
 import Relation;
 import Set;
+import String;
 import IO;
 
 
@@ -414,7 +415,8 @@ private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
 	bool pkgProt = isPackageProtected(access.new);
 		
-	return !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
+	return isLessVisible(access.new, access.old)
+		&& !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
 		&& !(pkgProt && samePackage(effect.affected, effect.changed)); // To package-private same package
 }
 
@@ -427,7 +429,8 @@ private bool isClassLessAccessible(RippleEffect effect, Evolution evol) {
 	loc changed = effect.changed;
 	loc parent = (isType(affected)) ? affected : parentType(evol.client, affected);
 	
-	return !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
+	return isLessVisible(access.new, access.old)
+		&& !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
 		&& !(pkgProt && samePackage(parent, changed)); // To package-private same package
 }
 

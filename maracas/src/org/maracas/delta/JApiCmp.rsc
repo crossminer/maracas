@@ -327,6 +327,18 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 	throw "There is no reference to <elem> in the delta model.";
 }
 
+bool isLessVisible(Modifier m, Modifier n) {
+	map[Modifier, int] level = (
+		\private() : 0,
+		packageProtected() : 1,
+		protected() : 2,
+		\public() : 3
+	);
+	val = level[m] < level[n];
+	
+	return level[m] < level[n];
+}
+
 bool isPackageProtected(Modifier new) 
 	= new == org::maracas::delta::JApiCmp::\packageProtected();
 	

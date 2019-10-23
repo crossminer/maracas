@@ -159,7 +159,7 @@ public class JApiCmpToRascal {
 	 */
 	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion) {
 		Options defaultOptions = Options.newDefault();
-		//defaultOptions.setAccessModifier(AccessModifier.PRIVATE);
+		defaultOptions.setAccessModifier(AccessModifier.PACKAGE_PROTECTED);
 		defaultOptions.setOutputOnlyModifications(true);
 
 		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
