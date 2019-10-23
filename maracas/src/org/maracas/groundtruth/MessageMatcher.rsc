@@ -11,6 +11,7 @@ import org::maracas::m3::SourceToJar;
 
 import IO;
 import List;
+import Location;
 import Message;
 import Set;
 import String;
@@ -97,16 +98,22 @@ set[Match] matchDetections(M3 sourceM3, Evolution evol, set[Detection] detects, 
 	return checks;
 }
 
-set[CompilerMessage] getUnmatchCompilerMsgs(set[Match] matches, list[CompilerMessage] msgs) {
+set[CompilerMessage] getUnmatchCompilerMsgs(M3 sourceM3, set[Match] matches, list[CompilerMessage] msgs) {
 	set[CompilerMessage] matchMsgs = matches.msg;
-	return toSet(msgs) - matchMsgs;
+	set[CompilerMessage] candidateMsgs = toSet(msgs) - matchMsgs;
+	return candidateMsgs - getImportMessages(sourceM3, candidateMsgs);
+}
+
+set[CompilerMessage] getImportMessages(M3 sourceM3, set[CompilerMessage] msgs) {
+	rel[loc, loc] decls = sourceM3.declarations;
+	return { m | m <- msgs, <e, p> <- decls, isClass(e) && isBefore(m.file, p) }; // TODO: Can be optimized (profile first)
 }
 
 set[CompilerMessage] potentialMatches(loc file, list[CompilerMessage] messages) =
-	{msg | msg:message(msgFile, _, _, _, _) <- messages, msgFile.path == file.path};
+	{ msg | msg:message(msgFile, _, _, _, _) <- messages, msgFile.path == file.path };
 
 set[CompilerMessage] matchingMessages(Detection d, list[CompilerMessage] messages, M3 sourceM3) {
-	return {m | m:message(file, line, column, _, _) <- messages, isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column)};
+	return { m | m:message(file, line, column, _, _) <- messages, isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column) };
 }
 
 bool isIncludedIn(loc location, loc path, int line, int column) {

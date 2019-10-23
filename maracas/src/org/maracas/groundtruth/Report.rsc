@@ -16,7 +16,7 @@ void outputReport(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, li
 	// Always rewrite file
 	writeFile(path, "");
 	appendMatches(matches, path);
-	appendUnmatchMsgs(matches, msgs, path);
+	appendUnmatchMsgs(sourceM3, matches, msgs, path);
 	appendModelStats(delta, detects, msgs, path);
 	appendErrorStats(sourceM3, detects, msgs, path);
 }
@@ -49,8 +49,8 @@ private void appendMatches(set[Match] matches, loc path) {
 	appendSectionEnd(path);
 }
 
-private void appendUnmatchMsgs(set[Match] matches, list[CompilerMessage] msgs, loc path) {
-	set[CompilerMessage] unmatchMsgs = getUnmatchCompilerMsgs(matches, msgs);
+private void appendUnmatchMsgs(M3 sourceM3, set[Match] matches, list[CompilerMessage] msgs, loc path) {
+	set[CompilerMessage] unmatchMsgs = getUnmatchCompilerMsgs(sourceM3, matches, msgs);
 	appendTitle(path, "Detection Unmatches");
 	
 	for (CompilerMessage m <- unmatchMsgs) {
