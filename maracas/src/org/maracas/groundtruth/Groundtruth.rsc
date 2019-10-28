@@ -31,8 +31,9 @@ void main() {
 	loc newApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar";
 	loc client = homeDir + ".m2/repository/maracas-data/comp-changes-client/0.0.1/comp-changes-client-0.0.1.jar";
 	
-	loc clientDir = homeDir + "temp/maracas/comp-changes-client-0.0.1.jar/";
-	loc srcClient = clientDir + "target/extracted-sources";
+	loc clientDir = homeDir + "temp/maracas/comp-changes-client-0.0.1.jar";
+	//loc srcClient = clientDir + "target/extracted-sources";
+	loc srcClient = clientDir + "";
 	loc clientPom = clientDir + "pom.xml";
 	loc javacReport = clientDir + "report/comp-changes-javac.txt";
 	loc jdtReport = clientDir + "report/comp-changes-jdt.txt";
@@ -53,8 +54,8 @@ void main() {
 	
 	println("Computing evolution models");
 	list[APIEntity] delta = compareJars(oldApi, newApi, "0.0.1", "0.0.2");
-	Evolution evol = evolution(clientM3, oldM3, newM3, delta);
-	set[Detection] detects = detections(clientM3, oldM3, newM3, delta); 
+	Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
+	set[Detection] detects = detections(evol); 
 	
 	println("Matching detections");
 	//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);

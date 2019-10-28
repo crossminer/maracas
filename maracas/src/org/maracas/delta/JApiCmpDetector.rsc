@@ -48,37 +48,49 @@ alias RippleEffect = tuple[loc changed, loc affected];
 // Functions
 //----------------------------------------------
 
+// Use this function instead of directly calling the
+// Evolution constructor. 
+Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
+	client = filterConstructorOverride(client); // TODO: remove once a decision is taken in the M3 side
+	iprintln("Evol");
+	iprintln(client.methodOverrides);
+	return evolution(client, apiOld, apiNew, delta);
+}
+
+set[Detection] detections(Evolution evol) 
+	= computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	+ computeDetections(evol, classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	;
+
 set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
-	Evolution evol = evolution(client, apiOld, apiNew, delta);
-	return computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
-		+ computeDetections(evol, methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
-		+ computeDetections(evol, methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-		+ computeDetections(evol, methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
-		+ computeDetections(evol, classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-		+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-		+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
-		;
+	Evolution evol = createEvolution(client, apiOld, apiNew, delta);
+	return detections(evol);
 }
 
 

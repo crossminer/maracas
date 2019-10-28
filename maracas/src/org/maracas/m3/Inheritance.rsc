@@ -2,6 +2,8 @@ module org::maracas::m3::Inheritance
 
 import lang::java::m3::AST;
 import lang::java::m3::Core;
+
+import IO;
 import Relation;
 
 @doc{
@@ -180,3 +182,8 @@ set[loc] getClientAbstractSubtypes(loc class, M3 api, M3 client) {
 }
 set[loc] getClientConcreteSubtypes(loc class, M3 api, M3 client)
 	= getClientSubtypes(class, api, client) - getClientAbstractSubtypes(class, api, client);
+	
+M3 filterConstructorOverride(M3 m) {
+	m.methodOverrides = { <from, to> | <loc from, loc to> <- m.methodOverrides, !(isConstructor(from) && isConstructor(to)) };
+	return m;
+}
