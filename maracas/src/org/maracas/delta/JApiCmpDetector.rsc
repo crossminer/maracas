@@ -52,8 +52,6 @@ alias RippleEffect = tuple[loc changed, loc affected];
 // Evolution constructor. 
 Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
 	client = filterConstructorOverride(client); // TODO: remove once a decision is taken in the M3 side
-	iprintln("Evol");
-	iprintln(client.methodOverrides);
 	return evolution(client, apiOld, apiNew, delta);
 }
 
@@ -147,7 +145,9 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, Comp
 //----------------------------------------------
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodLessAccessible())
-	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() }, isLessAccessible);
+	= computeMethSymbDetections(evol, ch, { methodInvocation() }, isLessAccessible)
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, isLessAccessible, allowShadowing = true);
+	
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) 
 	= computeDetections(evol, ch, { methodInvocation() });
@@ -157,19 +157,23 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	+ computeMethSymbDetections(evol, ch, { methodInvocation() });
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowFinal()) 
-	= computeMethSymbDetections(evol, ch, { methodOverride() });
+	= computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowStatic()) 
-	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() });
-
+	= computeMethSymbDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
+	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) 
 	= computeMethSymbDetections(evol, ch, { methodInvocation() });
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodRemoved()) 
-	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() });
+	= computeMethSymbDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
+	
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodReturnTypeChanged()) 
-	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() });
+	= computeMethSymbDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodAbstractAddedToClass()) 
 	= computeTypeHierarchyDetectionsNewApi(evol, ch, { extends() }, isNotAbstract);
@@ -184,7 +188,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	= computeTypeHierarchyDetectionsNewApi(evol, ch, { implements() }, existsMethodClash);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::constructorLessAccessible())
-	= computeMethSymbDetections(evol, ch, { methodInvocation(), methodOverride() }, isLessAccessible);
+	= computeMethSymbDetections(evol, ch, { methodInvocation() }, isLessAccessible)
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, isLessAccessible, allowShadowing = true);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::constructorRemoved()) 
 	= computeDetections(evol, ch, { methodInvocation() });
@@ -225,26 +230,28 @@ set[Detection] computeTypeHierarchyDetectionsNewApi(Evolution evol, Compatibilit
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
-set[Detection] computeMethSymbDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses)
-	= computeMethSymbDetections(evol, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; });
+set[Detection] computeMethSymbDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false)
+	= computeMethSymbDetections(evol, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing);
 	
-set[Detection] computeMethSymbDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
+set[Detection] computeMethSymbDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false) {
 	set[loc] changed = getChangedEntities(evol.delta, change);
-	return computeMethSymbDetections(evol, changed, change, apiUses, predicate);
+	return computeMethSymbDetections(evol, changed, change, apiUses, predicate, allowShadowing = allowShadowing);
 }
 
-set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, set[APIUse] apiUses)
-	= computeMethSymbDetections(evol, changed, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; });
+set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false)
+	= computeMethSymbDetections(evol, changed, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing);
 	
-set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
+set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false) {
 	set[TransChangedEntity] entities = {}; 
 	
 	for (e <- changed) {
 		str signature = methodSignature(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client);
+		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbMeths;
 	}
+	
+	iprintln(entities);
 	
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
@@ -272,7 +279,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::annotat
 	
 	return computeDetections(evol, ch, apiUses)
 		+ computeFieldSymbDetections(evol, transFields, ch)
-		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation(), methodOverride() });
+		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation() })
+		+ computeMethSymbDetections(evol, transMeths, ch, { methodOverride() }, allowShadowing = true);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classLessAccessible()) {
@@ -295,7 +303,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[loc] transMeths = range(getTransitiveMethods(evol.apiOld, entities)); // Don't like diff between set[loc] and set[TransChangedEntity]
 	return computeDetections(evol, ch, { extends() })
-		+ computeMethSymbDetections(evol, transMeths, ch, { methodOverride() });
+		+ computeMethSymbDetections(evol, transMeths, ch, { methodOverride() }, allowShadowing = true);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowCheckedException()) {

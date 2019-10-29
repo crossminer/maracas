@@ -69,9 +69,19 @@ set[loc] getHierarchyWithoutMethShadowing(loc class, str signature, M3 api, M3 c
 	       reference of the member gicen the logical location 
 	       of a type and the member's name.
 }
-private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef) {
-	set[loc] apiSubtypes = getSubtypesWithoutShadowing(class, elemName, api, createSymbRef);
-	set[loc] clientSubtypes = { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes };
+private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef, bool allowShadowing) {
+	set[loc] apiSubtypes = {};
+	set[loc] clientSubtypes = {};
+	
+	if (!allowShadowing) {
+		apiSubtypes = getSubtypesWithoutShadowing(class, elemName, api, createSymbRef);
+		clientSubtypes = { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes };
+	}
+	else {
+		apiSubtypes = getSubtypes(class, api) + class;
+		clientSubtypes = { *getSubtypes(s, client) | s <- apiSubtypes };
+	}
+	
 	return { createSymbRef(c, elemName) | c <- apiSubtypes + clientSubtypes };
 }
 
@@ -87,7 +97,7 @@ private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 cli
 	@param m: M3 owning the main types and its subtypes
 }
 set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 client)
-	= createHierarchySymbRefs(class, fieldName, api, client, createFieldLoc);
+	= createHierarchySymbRefs(class, fieldName, api, client, createFieldLoc, false);
 
 @doc{
 	Given a type and the signature of a method within that 
@@ -101,8 +111,8 @@ set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 clien
 	       the method
 	@param m: M3 owning the main types and its subtypes
 }
-set[loc] createHierarchyMethSymbRefs(loc class, str signature, M3 api, M3 client)
-	= createHierarchySymbRefs(class, signature, api, client, createMethodLoc);
+set[loc] createHierarchyMethSymbRefs(loc class, str signature, M3 api, M3 client, bool allowShadowing = false)
+	= createHierarchySymbRefs(class, signature, api, client, createMethodLoc, allowShadowing);
 
 @doc{
 	Returns a set of locations pointing to the subtypes 
