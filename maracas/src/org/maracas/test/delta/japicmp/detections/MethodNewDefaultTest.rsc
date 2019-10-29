@@ -19,7 +19,7 @@ test bool multiInterfaceOverride()
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
 		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 	
 test bool multiInterfaceSubNoOverride()
 	= detection(
@@ -35,7 +35,7 @@ test bool multiInterfaceSubOverride()
 		|java+method:///main/methodNewDefault/IMethodNewDefault/defaultMethod()|,
 		implements(),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
 test bool singleInterfaceNoOverride() 
 	= detection(

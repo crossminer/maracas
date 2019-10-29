@@ -55,7 +55,7 @@ Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 	return evolution(client, apiOld, apiNew, delta);
 }
 
-set[Detection] detections(Evolution evol) 
+set[Detection] detections(Evolution evol)
 	= computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -250,8 +250,6 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, Compa
 		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbMeths;
 	}
-	
-	iprintln(entities);
 	
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
@@ -483,7 +481,7 @@ private bool existsMethodClash(RippleEffect effect, Evolution evol) {
 	loc changed = effect.changed;
 	set[loc] interfaces = evol.client.implements[affected];
 	
-	if (<affected, \abstract()> in evol.client.modifiers, size(interfaces) > 1) {		
+	if (size(interfaces) > 1) {		
 		// If there is a method override, no problem should be detected
 		if (hasMethodOverride(effect, evol)) {
 			return false;
