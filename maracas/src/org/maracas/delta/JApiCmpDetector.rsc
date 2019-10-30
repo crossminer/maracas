@@ -100,7 +100,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 	= computeFieldSymbDetections(evol, ch, isLessAccessible);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
-	= computeDetections(evol, ch, { fieldAccess() });
+	= computeFieldSymbDetections(evol, ch);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNowFinal()) 
 	= computeFieldSymbDetections(evol, ch); 

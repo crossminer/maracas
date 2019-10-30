@@ -17,38 +17,42 @@ public test bool simpleAccess()
 // TODO: the super keyword refers to the parent class OBJECT.
 // Even though it is a bad practice to access class fields 
 // through objects it is not a problem when the we refer to 
-// an instance field. 
+// an instance field. This is only true for source incompatibility.
+// Breaks at the binary level.
 public test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
+// Breaks at the binary level.
 public test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientNoSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
+// Breaks at the binary level.
 test bool superKeyAccessSuper()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
+// Breaks at the binary level.
 test bool noSuperKeyAccessSuper()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperNoSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
 test bool simpleAccessSuper1()
 	= detection(
