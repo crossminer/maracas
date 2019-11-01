@@ -329,7 +329,6 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 	set[loc] changed = getChangedEntities(evol.delta, ch);
 	set[loc] entitiesExt = {};
 	set[loc] entitiesImp = {};
-	set[loc] entitiesTypeDep = {};
 	set[loc] entitiesAnn = {};
 	
 	for (e <- changed) {
@@ -343,14 +342,13 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 			entitiesImp += e;
 		}
 		case <annotation(), _> : entitiesAnn += e;
-		case <_, annotation()> : entitiesTypeDep += e;
 		default: ;
 		}
 	}
 	
+	//  computeDetections(evol, entitiesExt, ch, { extends() }, isInterNotExtendAnn)
 	return computeDetections(evol, entitiesExt, ch, { extends() })
 		+ computeDetections(evol, entitiesImp, ch, { implements() })
-		+ computeDetections(evol, entitiesTypeDep, ch, { typeDependency() })
 		+ computeDetections(evol, entitiesAnn, ch, { annotation() });
 }
 
@@ -427,7 +425,7 @@ private set[TransChangedEntity] getTransitiveMethods(M3 m, set[loc] entities)
 
 private set[TransChangedEntity] getTransitiveFields(M3 m, set[loc] entities) 
 	= getTransitiveEntities(m, entities, isField);
-	
+
 private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);
 	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);

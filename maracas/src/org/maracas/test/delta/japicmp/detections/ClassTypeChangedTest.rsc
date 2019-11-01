@@ -5,6 +5,7 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
+
 test bool c2iExt()
 	= detection(
 		|java+class:///mainclient/classTypeChanged/ClassTypeChangedC2IExt|,
@@ -51,7 +52,7 @@ test bool i2aExt()
 		|java+interface:///main/classTypeChanged/ClassTypeChangedI2A|,
 		extends(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
+	notin detects;
 
 test bool i2cImp()
 	= detection(
@@ -77,10 +78,78 @@ test bool i2aImp()
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-//test bool e2iFieldTD();
-//test bool e2cFieldTD();
-//test bool e2aFieldTD();
-//
+test bool e2iFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedE2AllTD/e2i|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedE2I|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+test bool e2cFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedE2AllTD/e2c|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedE2C|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool e2aFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedE2AllTD/e2a|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedE2A|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool i2eFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedI2AllTD/i2e|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedI2E|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+test bool i2cFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedI2AllTD/i2c|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedI2C|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool i2aFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedI2AllTD/i2a|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedI2A|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool c2eFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedC2AllTD/c2e|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedC2E|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
+test bool c2iFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedC2AllTD/c2i|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedC2I|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+
+test bool c2aFieldTD()
+	= detection(
+		|java+field:///mainclient/classTypeChanged/ClassTypeChangedC2AllTD/c2a|,
+		|java+enum:///main/classTypeChanged/ClassTypeChangedC2A|,
+		typeDependency(),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
+	
 //test bool e2iVarTD();
 //test bool e2cVarTD();
 //test bool e2aVarTD();
