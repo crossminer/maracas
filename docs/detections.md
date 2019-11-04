@@ -18,7 +18,9 @@ A type, method, or field is tagged with the `@Deprecated` annotation. This is ne
 5. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype through the `super` keyword. 
 6. Client methods that invoke deprecated API methods or access deprecated API fields of a supertype without the `super` keyword.
 
-{% include note.html content="We consider all direct subtypes of the type that owns a deprecated method or field, which do not shadow the target entity." %}
+<p class="message"> 
+  We consider all direct subtypes of the type that owns a deprecated method or field, which do not shadow the target entity.
+</p>
 
 For example, there is an API type `api.A` that contains the method `mA()`. There is also a client type `client.C` that contains the method `mC()`, which invokes `mA()`. If `api.A` is annotated with `@Deprecated` then `mA()` is also tagged as deprecated, and the following detection is reported:
 
@@ -31,7 +33,9 @@ detection(
 )
 ```
 
-{% include note.html content="Due to type erasure, uses of deprecated types as type parameters cannot be detected." %}
+<p class="message">
+  Due to type erasure, uses of deprecated types as type parameters cannot be detected."
+</p>
 
 ---
 
@@ -69,7 +73,9 @@ detection(
 )
 ```
 
-{% include note.html content="Due to type erasure, uses of deprecated types as type parameters cannot be detected." %}
+<p class="message">
+  Due to type erasure, uses of deprecated types as type parameters cannot be detected."
+</p>
 
 ---
 
@@ -102,7 +108,9 @@ A field goes from `non-final` to `final`, thus the field value cannot be modifie
 2. Client methods accessing through the `super` keyword a supertype field that is now `final` and assigning it a new value.
 3. Client methods accessing without the `super` keyword a supertype field that is now `final` and assigning it a new value.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field."
+</p>
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f` and assigns a new value to `f`. If `f` is declared as `final` in `api.A`, then the following detection is reported:
 
@@ -130,7 +138,9 @@ Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.10*).
 2. Client methods accessing a supertype field that is now `static` through the `super` keyword.
 3. Client methods accessing a supertype field that is now `static` without the `super` keyword.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field."
+</p>
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is declared as `static` in `api.A`, then the following detection is reported:
 
@@ -156,7 +166,9 @@ A field is removed from its parent class. Client projects are not able to access
 4. Client methods accessing a removed supertype field without using the `super` keyword.
 5. Transitive detections affecting all subtypes are reported with the *Field Removed in Superclass* change. 
 
-{% include note.html content="`javac` inlines constant values, thus this type of field access is lost." %}
+<p class="message">
+  `javac` inlines constant values, thus this type of field access is lost."
+</p>
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is removed from `api.A`, then the following detection is reported:
 
@@ -181,7 +193,9 @@ A field is removed from a supertype class. Subtypes are not able to access it an
 3. Client methods accessing a field that has been inherited from a supertype through the `super` keyword.
 4. Client methods accessing a field that has been inherited from a supertype without using the `super` keyword.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field."
+</p>
 
 For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later declares a field `f`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` accesses `f`. If `f` is removed from `api.SuperA`, then the following detection is reported:
 
@@ -231,7 +245,9 @@ Check conversion cases in assignment, invocation, String, casting, and numeric c
 2. Client methods accessing a modified supertype field through the `super` keyword.
 4. Client methods accessing a modified supertype field without using the `super` keyword.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field."
+</p>
  
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f` of type `T`. Assume `m()` accesses `f`. If the type of `f` is changed to type `R`, then the following detection is reported:
  
@@ -352,9 +368,13 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 
 1. Client abstract classes implementing two or more interfaces, where at least one of the interfaces has a method with the same signature of the now default method; and the client class has no new method definition with such signature.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
 
-{% include note.html content="Behavioural changes are not being reported. For instance, no detection is reported regarding invocations of the overriden method." %}
+<p class="message">
+  Behavioural changes are not being reported. For instance, no detection is reported regarding invocations of the overriden method.
+</p>
 
 For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
 The type `client.C` implements both `api.I` and `otherapi.J`. 
@@ -447,9 +467,13 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 
 1. Client abstract classes implementing two or more interfaces, where at least one of the interfaces has a method with the same signature of the new default method; and the client class has no new method definition with such signature.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
 
-{% include note.html content="Behavioural changes are not being reported. For instance, no detection is reported if an interface introduces a new default method and there is already a definition of a method with the same signature in the client type." %}
+<p class="message">
+  Behavioural changes are not being reported. For instance, no detection is reported if an interface introduces a new default method and there is already a definition of a method with the same signature in the client type.
+</p>
 
 For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
 The type `client.C` implements both `api.I` and `otherapi.J`. 
@@ -475,7 +499,9 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 
 1. Client methods invoking a method that is no longer `static`.
 
-{% include note.html content="Static methods cannot be overriden, that is why we do not consider overriding relations." %}
+<p class="message">
+  Static methods cannot be overriden, that is why we do not consider overriding relations.
+</p>
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a static method `mA()`. Assume `mC()` invokes `mA()` in a static manner (i.e. `A.mA()`). If the `static` modifier is removed from `mA()`, then the following detection is reported:
 
@@ -499,7 +525,9 @@ A method goes from `non-abstract` to `abstract`. Non-abstract client types must 
 2. Client methods invoking a method that is now `abstract` in the direct parent type and no implementation is provided.
 2. Client methods overriding a method that is now `abstract ` in a transitive parent type and no implementation is provided.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is declared as `abstract` in `api.A`, then the following detection is reported:
 
@@ -522,7 +550,9 @@ A method goes from `non-final` to `final`, thus the method cannot be overriden. 
 1. Client methods overriding a method that is now `final` in the direct parent type.
 2. Client methods overriding a method that is now `final` in a transitive parent type.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` overrides `mA()`. If `mA()` is declared as `final` in `api.A`, then the following detection is reported:
 
@@ -548,7 +578,9 @@ A method goes from `non-static` to `static`. This results in a linkage error, ma
 4. Client methods overriding a method that is now `static` in the direct parent type.
 5. Client methods overriding a method that is now `static` in a transitive parent type.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not define the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()`. Assume `mC()` invokes `mA()`. If `mA()` is declared as `static` in `api.A`, then the following detection is reported:
 
@@ -627,7 +659,9 @@ A method is removed from a supertype class. Subtypes are not able to invoke it a
 3. Client methods invoking or overriding a method that has been inherited from a supertype through the `super` keyword.
 4. Client methods invoking or overriding a method that has been inherited from a supertype without using the `super` keyword.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the removed method, which do not shadow the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the removed method, which do not shadow the target method.
+</p>
 
 For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later defines a method `mSuper()`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` invokes `mSuper()`. If `mSUper()` is removed from `api.SuperA`, then the following detection is reported:
 
@@ -672,7 +706,9 @@ Check conversion cases in assignment, invocation, String, casting, and numeric c
 5. Client methods overriding a method with modified return type in the direct parent type.
 5. Client methods overriding a method with modified return type in a transitive parent type.
 
-{% include note.html content="We consider all direct subtypes of the type that owns the modified method, which do not shadow the target method." %}
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not shadow the target method.
+</p>
  
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a method `mA()` with return type `T`. Assume `mC()` invokes `mA()`. If the return type of `mA()` is changed to type `R`, then the following detection is reported:
  
@@ -810,7 +846,9 @@ A class goes from `non-final` to `final`, thus the class cannot be extended by o
 1. Client types extending an API class that is now `final`.
 2. Client methods overriding a method contained in an API class that is now `final`.
 
-{% include note.html content="We consider all transitive client subtypes of the client type that extends the `final` API type." %}
+<p class="message">
+  We consider all transitive client subtypes of the client type that extends the `final` API type.
+</p>
 
 For example, there is a client type `client.C` and an API type `api.A`. If `client.C` extends `api.A` and `api.A` is declared as `final`, then the following detection is reported:
 
