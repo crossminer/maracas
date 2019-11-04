@@ -6,18 +6,16 @@ gems: [jekyll-paginate]
 paginate_path: "page:num"
 
 # Setup
-title:               Lanyon
-tagline:             'A Jekyll theme'
-description:         'A reserved <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that places the utmost gravity on content with a hidden drawer. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
+title:               Maracas
+tagline:             'The API-client co-evolution project'
+description:         'Maracas is a source code and bytecode analysis framework --written in Rascal-- that is designed to support the co-evolution of Java APIs and client code.'
 url:                 http://lanyon.getpoole.com
 baseurl:             '/maracas'
 paginate:            5
 
 # About/contact
 author:
-  name:              Mark Otto
-  url:               https://twitter.com/mdo
-  email:             markdotto@gmail.com
+  name:              lmove
 
 # Custom vars
 version:             1.0.0
