@@ -2,6 +2,7 @@ module org::maracas::m3::Core
 
 import IO;
 //import lang::java::m3::ClassPaths;
+import analysis::m3::AST;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
@@ -60,7 +61,7 @@ loc parentType(M3 m, loc elem) {
 	if (p <- containers, isType(p)) {
 		return p;
 	}
-	return |unknwon:///|;
+	return unknownSource;
 }
 
 private bool isLongerPath(loc a, loc b) = size(a.path) > size(b.path);
@@ -75,7 +76,7 @@ set[loc] types(set[loc] locs)        = { e | e <- locs, isType(e) };
 // TODO: consider moving this function to Rascal module lang::java::m3::Core
 bool isType(loc entity) = isClass(entity) || isInterface(entity);
 bool isAPIEntity(loc entity) = isType(entity) || isMethod(entity) || isField(entity);
-bool isKnown(loc elem) = elem != |unknwon:///|;
+bool isKnown(loc elem) = elem != unknownSource;
 bool isAnonymousClass(loc entity) = entity.scheme == "java+anonymousClass";
  	
 bool isTargetMemberExclInterface(loc elem)
@@ -291,14 +292,26 @@ M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
 str packag(loc elem) {
 	str scheme = elem.scheme;
 	
+	if (elem == unknownSource) {
+		return "";
+	}
 	if (scheme == "java+method" || scheme == "java+constructor" || scheme == "java+field") {
-		return (/<pkg: [a-zA-Z0-9.$\/]+><rest:\/[a-zA-Z0-9.$\/]*\/[a-zA-Z0-9.$\/()]*$>/ := elem.path) ? pkg : ""; 
+		return (/<pkg: [a-zA-Z0-9.$\/]+><rest:\/[a-zA-Z0-9.$\/]*\/[a-zA-Z0-9.$\/(),]*$>/ := elem.path) ? pkg : ""; 
 	}
 	if (scheme == "java+class" || scheme == "java+interface"
 		|| scheme == "java+enum" || scheme == "java+annotation") {
 		return (/<pkg: [a-zA-Z0-9.$\/]+><rest:\/[a-zA-Z0-9.$\/]*$>/ := elem.path) ? pkg : "";
 	}
 	throw "The scheme of <elem> is not supported.";
+}
+
+loc getMethod(loc param) { 
+	meth = (isParameter(param)) ? |java+method:///| + substring(param.path, 0, findLast(param.path, "/")) : unknownSource;
+	if (/[a-zA-Z0-9.$\/]\/+<typ:[a-zA-Z0-9.$]+>\/<name:[a-zA-Z0-9.$]>\([a-zA-Z0-9.$,]*\)$/ := meth.path
+		&& typ == name) {
+		meth.scheme = "java+constructor";
+	}
+	return meth;
 }
 
 set[loc] methodDeclarations(M3 m, loc class) 

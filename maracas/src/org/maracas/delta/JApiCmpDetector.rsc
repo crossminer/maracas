@@ -367,7 +367,12 @@ private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] 
 	case implements(): affected = domain(rangeR(client.implements, entities));
 	case methodInvocation(): affected = domain(rangeR(client.methodInvocation, entities));
 	case methodOverride(): affected = domain(rangeR(client.methodOverrides, entities));
-	case typeDependency(): affected = domain(rangeR(client.typeDependency, entities));
+	case typeDependency(): {
+		raw = domain(rangeR(client.typeDependency, entities));
+		for (loc e <- raw) {
+			affected += (isParameter(e)) ? getMethod(e) : e; // Parameters special treatment
+		}
+	}
 	default: throw "Wrong APIUse for member type: <apiUse>";
 	}
 	
