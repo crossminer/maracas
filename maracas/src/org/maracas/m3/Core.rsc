@@ -307,9 +307,10 @@ str packag(loc elem) {
 
 loc getMethod(loc param) { 
 	meth = (isParameter(param)) ? |java+method:///| + substring(param.path, 0, findLast(param.path, "/")) : unknownSource;
-	if (/[a-zA-Z0-9.$\/]\/+<typ:[a-zA-Z0-9.$]+>\/<name:[a-zA-Z0-9.$]>\([a-zA-Z0-9.$,]*\)$/ := meth.path
+	if (/[a-zA-Z0-9.$\/]\/+<typ:[a-zA-Z0-9.$]+>\/<name:[a-zA-Z0-9.$]+>\([a-zA-Z0-9.$,]*\)$/ := meth.path
 		&& typ == name) {
 		meth.scheme = "java+constructor";
+	
 	}
 	return meth;
 }
