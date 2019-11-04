@@ -140,7 +140,7 @@ test bool superKeySuperPublic2Protected()
 		|java+field:///main/fieldLessAccessible/FieldLessAccessibleSuper/superPublic2Protected|,
 		fieldAccess(),
 		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
+	notin detects;
 
 test bool superKeySuperPublic2PackagePrivate()
 	= detection(

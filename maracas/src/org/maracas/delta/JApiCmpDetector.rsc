@@ -453,8 +453,9 @@ private bool isClassLessAccessible(RippleEffect effect, Evolution evol) {
 private bool hasProtectedAccess(RippleEffect effect, Evolution evol) {
 	loc apiParent = parentType(evol.apiOld, effect.changed);
 	loc clientParent = parentType(evol.client, effect.affected);
+	
 	return (isKnown(clientParent) && isKnown(apiParent) 
-		&& <clientParent, apiParent> in evol.client.extends+);
+		&& <clientParent, apiParent> in composeExtends({ evol.client, evol.apiOld })+);
 }
 
 private bool isAffectedByAbsMeth(RippleEffect effect, Evolution evol)

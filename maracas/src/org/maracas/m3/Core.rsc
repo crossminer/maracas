@@ -420,3 +420,7 @@ loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
 }
+
+@memo
+rel[loc, loc] composeExtends(set[M3] m3s)
+	= { *m.extends | M3 m <- m3s };

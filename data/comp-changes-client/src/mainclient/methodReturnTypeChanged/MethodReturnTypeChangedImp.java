@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import main.methodReturnTypeChanged.IMethodReturnTypeChanged;
 
-public class MethodReturnTypeChangedImp implements IMethodReturnTypeChanged{
+public class MethodReturnTypeChangedImp implements IMethodReturnTypeChanged {
 
 	@Override
 	public ArrayList methodReturnTypeChangedList() {
