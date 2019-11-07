@@ -317,7 +317,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 		entities += { e } * cons;
 	}
 	
-	return computeDetections(evol, entities, ch, apiUses);
+	return computeDetections(evol, entities, ch, apiUses, isNotSuperInvocation);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classRemoved()) {
@@ -431,13 +431,16 @@ private set[TransChangedEntity] getTransitiveMethods(M3 m, set[loc] entities)
 private set[TransChangedEntity] getTransitiveFields(M3 m, set[loc] entities) 
 	= getTransitiveEntities(m, entities, isField);
 
+private bool isNotSuperInvocation(RippleEffect effect, Evolution evol) 
+	= !(isConstructor(effect.affected) && areInSameHierarchy(effect, evol));
+
 private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);
 	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
 	bool pkgProt = isPackageProtected(access.new);
 		
 	return isLessVisible(access.new, access.old)
-		&& !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
+		&& !(pub2prot && areInSameHierarchy(effect, evol)) // Public to protected
 		&& !(pkgProt && samePackage(effect.affected, effect.changed)); // To package-private same package
 }
 
@@ -451,13 +454,13 @@ private bool isClassLessAccessible(RippleEffect effect, Evolution evol) {
 	loc parent = (isType(affected)) ? affected : parentType(evol.client, affected);
 	
 	return isLessVisible(access.new, access.old)
-		&& !(pub2prot && hasProtectedAccess(effect, evol)) // Public to protected
+		&& !(pub2prot && areInSameHierarchy(effect, evol)) // Public to protected
 		&& !(pkgProt && samePackage(parent, changed)); // To package-private same package
 }
 
-private bool hasProtectedAccess(RippleEffect effect, Evolution evol) {
-	loc apiParent = parentType(evol.apiOld, effect.changed);
-	loc clientParent = parentType(evol.client, effect.affected);
+private bool areInSameHierarchy(RippleEffect effect, Evolution evol) {
+	loc apiParent = (isType(effect.changed)) ? effect.changed : parentType(evol.apiOld, effect.changed);
+	loc clientParent = (isType(effect.affected)) ? effect.affected : parentType(evol.client, effect.affected);
 	
 	return (isKnown(clientParent) && isKnown(apiParent) 
 		&& <clientParent, apiParent> in composeExtends({ evol.client, evol.apiOld })+);
