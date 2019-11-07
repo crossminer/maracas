@@ -294,7 +294,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowAbstract()) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[TransChangedEntity] transCons = getTransitiveConstructors(evol.apiOld, entities);
-	return computeDetections(evol, transCons, ch, { methodInvocation() });
+	return computeDetections(evol, transCons, ch, { methodInvocation() }, isNotSuperInvocation);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowFinal()) {
