@@ -123,7 +123,7 @@ data Modifier
 	;
 	
 alias ChangedEntity 
-	= tuple[loc elem, CompatibilityChange change];
+	= tuple[CompatibilityChange change, loc elem];
 
 @javaClass{org.maracas.delta.internal.JApiCmp}
 @reflect{for debugging}
@@ -139,8 +139,14 @@ java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str new
 	@return relation mapping modified API entities to compatibility
 	        change types (e.g. renamedMethod())
 }
+@memo
 set[ChangedEntity] getChangedEntities(list[APIEntity] delta) 
 	= { *getChangedEntities(e) | e <- delta };
+
+set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) {
+	set[ChangedEntity] entities = getChangedEntities(delta);
+	return entities[change];
+}
 
 @doc {
 	Returns a relation mapping API entities that have been
@@ -169,66 +175,6 @@ set[ChangedEntity] getChangedEntities(APIEntity entity) {
 	return entities;
 }
 
-//set[ChangedEntity] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
-//	= { *getChangedEntities(e, change) | e <- delta };
-//
-//@doc {
-//	Returns a relation mapping API entities that have been
-//	modified to the type of compatibility change they experienced.
-//	It only considers one API entity as input.
-//	
-//	@param entity: modified API entity between two versions of the 
-//	       target API.
-//	@return relation mapping modified API entities to compatibility
-//	        change types (e.g. renamedMethod())
-//}
-//set[ChangedEntity] getChangedEntities(APIEntity entity, CompatibilityChange change) {
-//	set[loc] entities = {};
-//	visit (entity) {
-//	case /class(id,_,_,[_*,change,_*],_): 
-//		entities += id;
-//	case /interface(id,[_*,change,_*],_):
-//		entities += id;
-//	case /field(id,_,_,[_*,change,_*],_): 
-//		entities += id;
-//	case /method(id,_,_,[_*,change,_*],_): 
-//		entities += id;
-//	case /constructor(id,_,[_*,change,_*],_): 
-//		entities += id;
-//	}
-//	return entities * { change };
-//}
-
-set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
-	= { *getChangedEntities(e, change) | e <- delta };
-
-@doc {
-	Returns a relation mapping API entities that have been
-	modified to the type of compatibility change they experienced.
-	It only considers one API entity as input.
-	
-	@param entity: modified API entity between two versions of the 
-	       target API.
-	@return relation mapping modified API entities to compatibility
-	        change types (e.g. renamedMethod())
-}
-set[loc] getChangedEntities(APIEntity entity, CompatibilityChange change) {
-	set[loc] entities = {};
-	visit (entity) {
-	case /class(id,_,_,[_*,change,_*],_): 
-		entities += id;
-	case /interface(id,[_*,change,_*],_):
-		entities += id;
-	case /field(id,_,_,[_*,change,_*],_): 
-		entities += id;
-	case /method(id,_,_,[_*,change,_*],_): 
-		entities += id;
-	case /constructor(id,_,[_*,change,_*],_): 
-		entities += id;
-	}
-	return entities;
-}
-
 @doc {
 	Adds new tuples to a relation mapping API modified entities
 	to compatibility change types. These tuples map the element
@@ -245,7 +191,7 @@ set[loc] getChangedEntities(APIEntity entity, CompatibilityChange change) {
 	        change types (e.g. renamedMethod())
 }
 private set[ChangedEntity] addChangedEntity(loc entity, list[CompatibilityChange] changes, set[ChangedEntity] entities)
-	= { <entity, c> | c <- changes } + entities;
+	= { <c, entity> | c <- changes } + entities;
 	
 set[CompatibilityChange] compatibilityChanges(APIEntity entity) 
 	= { ch | /CompatibilityChange ch := entity };
