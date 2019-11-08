@@ -162,6 +162,7 @@ public class JApiCmpToRascal {
 		defaultOptions.setAccessModifier(AccessModifier.PACKAGE_PROTECTED);
 		defaultOptions.setOutputOnlyModifications(true);
 		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
+		defaultOptions.setIgnoreMissingClasses(true);
 
 		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
 
