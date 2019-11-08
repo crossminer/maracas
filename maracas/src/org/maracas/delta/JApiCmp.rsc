@@ -3,6 +3,7 @@ module org::maracas::delta::JApiCmp
 import IO;
 import lang::java::m3::AST;
 import Node;
+import Set;
 
 data APIEntity
 	= class(loc classId, 
@@ -255,20 +256,43 @@ tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_,t,_,_,_)) {
 	}
 }
 
-tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
+@memo
+rel[loc, tuple[Modifier, Modifier]] getAccessModifiers(list[APIEntity] delta) 
+	= { *getAccessModifiers(e) | e <- delta };
+
+rel[loc, tuple[Modifier, Modifier]] getAccessModifiers(APIEntity entity) {
+	rel[loc, tuple[Modifier, Modifier]] modifiers = {};
+	
+	visit (entity) {
+	case /class(elem,_,entities,_,_) : 
+		modifiers += createAccessModifiers(elem, entities);
+	case /method(elem,_,entities,_,_) : 
+		modifiers += createAccessModifiers(elem, entities);
+	case /constructor(elem,entities,_,_) : 
+		modifiers += createAccessModifiers(elem, entities);
+	case /field(elem,_,entities,_,_) : 
+		modifiers += createAccessModifiers(elem, entities);
+	}
+	return modifiers;
+}
+
+private rel[loc, tuple[Modifier, Modifier]] createAccessModifiers(loc elem, list[APIEntity] entities) {
 	set[Modifier] accessModifs = { 
 		org::maracas::delta::JApiCmp::\public(), 
 		org::maracas::delta::JApiCmp::\protected(), 
 		org::maracas::delta::JApiCmp::\packageProtected(), 
 		org::maracas::delta::JApiCmp::\private() };
 		
-	if (/method(elem,_,entities,_,_) := delta 
-		|| /constructor(elem,entities,_,_) := delta
-		|| /field(elem,_,entities,_,_) := delta
-		|| /class(elem,_,entities,_,_) := delta) {
-		for (e <- entities, /modifier(modified(old, new)) := e, old in accessModifs) {
-			return <old, new>;
-		}
+	for (APIEntity e <- entities, /modifier(modified(old, new)) := e, old in accessModifs) {
+		return { <elem, <old, new>> };
+	}
+	return {}; // No reference to elem
+}
+
+tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
+	rel[loc, tuple[Modifier, Modifier]] modifiers = getAccessModifiers(delta);	
+	if (!isEmpty(modifiers[elem])) {
+		return getOneFrom(modifiers[elem]);
 	}
 	throw "There is no reference to <elem> in the delta model.";
 }
