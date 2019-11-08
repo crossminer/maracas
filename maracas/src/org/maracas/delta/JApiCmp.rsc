@@ -128,7 +128,7 @@ alias ChangedEntity
 
 @javaClass{org.maracas.delta.internal.JApiCmp}
 @reflect{for debugging}
-java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion);
+java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []);
 
 @doc {
 	Returns a relation mapping API entities that have been
