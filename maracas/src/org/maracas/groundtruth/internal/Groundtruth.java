@@ -140,7 +140,7 @@ public class Groundtruth {
 		return Collections.emptyList();
 	}
 
-	private void extractJAR(Path jar, Path dest) throws IOException {
+	public void extractJAR(Path jar, Path dest) throws IOException {
 		if (!dest.toFile().exists())
 			dest.toFile().mkdirs();
 
@@ -173,7 +173,7 @@ public class Groundtruth {
 		jarFile.close();
 	}
 
-	private Path movePOM(Path dest) throws IOException {
+	public Path movePOM(Path dest) throws IOException {
 		// FIXME: This assumes there's one and only one pom.xml file...
 		try (Stream<Path> walk = Files.walk(dest)) {
 			Path oldPom = walk.filter(f -> f.getFileName().toString().equals("pom.xml")).findFirst().get();
@@ -197,19 +197,16 @@ public class Groundtruth {
 			}
 
 			// Step 1: insert maven-dependency-plugin
-			Plugin mdpPlugin = buildMdpPlugin(model.getGroupId(), model.getArtifactId(), model.getVersion());
-			model.getBuild().removePlugin(mdpPlugin);
-			model.getBuild().addPlugin(mdpPlugin);
+			Plugin mdpPlugin = buildMdpPlugin(model);
+			addPlugin(model, mdpPlugin);
 
 			// Step 2: insert maven-compiler-plugin
 			Plugin mcpPlugin = buildMcpPlugin();
-			model.getBuild().removePlugin(mcpPlugin);
-			model.getBuild().addPlugin(mcpPlugin);
+			addPlugin(model, mcpPlugin);
 
 			// Step 3: insert build-helper-maven-plugin
 			Plugin bhmPlugin = buildBhmPlugin();
-			model.getBuild().removePlugin(bhmPlugin);
-			model.getBuild().addPlugin(bhmPlugin);
+			addPlugin(model, bhmPlugin);
 
 			// Step 4: increase version number for the library
 			// FIXME: This assumes it exists...
@@ -293,30 +290,71 @@ public class Groundtruth {
 		return errors;
 	}
 
-	private Plugin buildMdpPlugin(String groupId, String artifactId, String version)
+	public void addPlugin(Model model, Plugin plugin) {
+		model.getBuild().removePlugin(plugin);
+		model.getBuild().addPlugin(plugin);
+	}
+	
+	private Plugin createPlugin(Model model, String groupId, String pluginId, String version) {
+		Map<String, Plugin> plugins = model.getBuild().getPluginsAsMap();
+		String key = groupId + ":" + pluginId;
+		if (plugins.containsKey(key)) {
+			return plugins.get(key);
+		}
+		else {
+			Plugin mdp = new Plugin();
+			mdp.setGroupId(groupId);
+			mdp.setArtifactId(pluginId);
+			mdp.setVersion(version);
+			return mdp;
+		}
+	}
+	
+	private void addPluginExecution(Plugin plugin, String goal, String phase, Xpp3Dom config) {
+		Map<String, PluginExecution> execs = plugin.getExecutionsAsMap();
+		PluginExecution mdpExec = (!execs.containsKey(goal)) ? new PluginExecution() : execs.get(goal);
+		addGoal(mdpExec, goal, phase);
+		addExecConfiguration(mdpExec, config);
+		plugin.addExecution(mdpExec);
+	}
+	
+	private void addPluginExecution(Plugin plugin, String goal, String phase) {
+		addPluginExecution(plugin, goal, phase, null);
+	}
+	
+	private void addGoal(PluginExecution exec, String goal, String phase) {
+		List<String> goals = exec.getGoals();
+		
+		if (goals.contains(goal)) {
+			exec.removeGoal(goal);
+		}
+		exec.setId(goal);
+		exec.setPhase(phase);
+		exec.addGoal(goal);
+	}
+	
+	private void addExecConfiguration(PluginExecution exec, Xpp3Dom config) {
+		if (config != null) {
+			Xpp3Dom execConfig = (Xpp3Dom) exec.getConfiguration();
+			config = Xpp3Dom.mergeXpp3Dom(config, execConfig);
+		}
+		exec.setConfiguration(config);
+	}
+	
+	public Plugin buildMdpPlugin(Model model)
 			throws XmlPullParserException, IOException {
-		Plugin mdp = new Plugin();
-		mdp.setGroupId("org.apache.maven.plugins");
-		mdp.setArtifactId("maven-dependency-plugin");
-		mdp.setVersion("3.1.1");
-
-		PluginExecution mdpExec = new PluginExecution();
-		mdpExec.setId("unpack");
-		mdpExec.setPhase("process-sources");
-		mdpExec.addGoal("unpack");
+		String mdpArtifactId = "maven-dependency-plugin";
+		Plugin mdp = createPlugin(model, "org.apache.maven.plugins", mdpArtifactId, "3.1.1");
 
 		StringBuilder configString = new StringBuilder().append("<configuration><artifactItems><artifactItem>")
-				.append("<groupId>" + groupId + "</groupId>").append("<artifactId>" + artifactId + "</artifactId>")
-				.append("<version>" + version + "</version>").append("<classifier>sources</classifier>")
+				.append("<groupId>" + model.getGroupId() + "</groupId>").append("<artifactId>" + model.getArtifactId() + "</artifactId>")
+				.append("<version>" + model.getVersion() + "</version>").append("<classifier>sources</classifier>")
 				.append("<overWrite>true</overWrite>")
 				.append("<outputDirectory>${project.build.directory}/extracted-sources</outputDirectory>")
 				.append("</artifactItem></artifactItems></configuration>");
-
+		
 		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
-		mdpExec.setConfiguration(config);
-
-		mdp.addExecution(mdpExec);
-
+		addPluginExecution(mdp, "unpack", "process-sources", config);
 		return mdp;
 	}
 
