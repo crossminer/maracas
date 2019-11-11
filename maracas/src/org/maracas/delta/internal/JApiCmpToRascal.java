@@ -19,7 +19,7 @@ import io.usethesource.vallang.IValueFactory;
 import io.usethesource.vallang.type.Type;
 import io.usethesource.vallang.type.TypeFactory;
 import io.usethesource.vallang.type.TypeStore;
-
+import japicmp.cli.JApiCli.ClassPathMode;
 import japicmp.cmp.JApiCmpArchive;
 import japicmp.cmp.JarArchiveComparator;
 import japicmp.cmp.JarArchiveComparatorOptions;
@@ -35,14 +35,13 @@ import japicmp.model.JApiBehavior;
 import japicmp.model.JApiChangeStatus;
 import japicmp.model.JApiClass;
 import japicmp.model.JApiClassType;
-import japicmp.model.JApiField;
-import japicmp.model.JApiImplementedInterface;
-import japicmp.model.JApiMethod;
 import japicmp.model.JApiClassType.ClassType;
-import japicmp.output.OutputFilter;
 import japicmp.model.JApiCompatibilityChange;
 import japicmp.model.JApiConstructor;
 import japicmp.model.JApiException;
+import japicmp.model.JApiField;
+import japicmp.model.JApiImplementedInterface;
+import japicmp.model.JApiMethod;
 import japicmp.model.JApiModifier;
 import japicmp.model.JApiModifierBase;
 import japicmp.model.JApiParameter;
@@ -51,6 +50,7 @@ import japicmp.model.JApiSuperclass;
 import japicmp.model.JApiType;
 import japicmp.model.StaticModifier;
 import japicmp.model.SyntheticModifier;
+import japicmp.output.OutputFilter;
 
 public class JApiCmpToRascal {
 	
@@ -157,12 +157,18 @@ public class JApiCmpToRascal {
 	 * @return list of API entities compared between the two API versions 
 	 *         (see module org::maracas::delta::JApiCmp). 
 	 */
-	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion) {
+	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion, IList oldCP, IList newCP) {
 		Options defaultOptions = Options.newDefault();
 		defaultOptions.setAccessModifier(AccessModifier.PACKAGE_PROTECTED);
 		defaultOptions.setOutputOnlyModifications(true);
+		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
+		defaultOptions.setIgnoreMissingClasses(true);
 
 		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
+
+		oldCP.forEach(v -> options.getOldClassPath().add(((ISourceLocation) v).getPath()));
+		newCP.forEach(v -> options.getNewClassPath().add(((ISourceLocation) v).getPath()));
+
 		JarArchiveComparator comparator = new JarArchiveComparator(options);
 		
 		JApiCmpArchive oldAPI = new JApiCmpArchive(sourceLocationToFile(oldJar), oldVersion.getValue());
