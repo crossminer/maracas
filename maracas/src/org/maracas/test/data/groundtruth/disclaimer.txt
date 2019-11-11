@@ -1,0 +1,21 @@
+These projects have been used as examples to use the target test plugins.
+
+1) build-helper-maven-plugin:
+	Original name: jaxb-examples
+	Owner: tinosteinort
+	Source: https://github.com/tinosteinort/jaxb-examples
+	Accessed: 11/11/2019
+	
+2) maven-compiler-plugin:
+	Original name: Maven Compiler Plugin Example
+	Owner: Francisco Hernandez 
+	Organization: Java Code Geeks
+	Source: https://examples.javacodegeeks.com/enterprise-java/maven/maven-compiler-plugin-example/
+	Accessed: 11/11/2019
+
+3) maven-dependency-plugin:
+	Original name: Maven Dependency Plugin Example
+	Owner: Francisco Hernandez 
+	Organization: Java Code Geeks
+	Source: https://examples.javacodegeeks.com/enterprise-java/maven/maven-dependency-plugin-example/
+	Accessed: 11/11/2019

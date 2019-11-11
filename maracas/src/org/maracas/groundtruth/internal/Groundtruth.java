@@ -201,11 +201,11 @@ public class Groundtruth {
 			addPlugin(model, mdpPlugin);
 
 			// Step 2: insert maven-compiler-plugin
-			Plugin mcpPlugin = buildMcpPlugin();
+			Plugin mcpPlugin = buildMcpPlugin(model);
 			addPlugin(model, mcpPlugin);
 
 			// Step 3: insert build-helper-maven-plugin
-			Plugin bhmPlugin = buildBhmPlugin();
+			Plugin bhmPlugin = buildBhmPlugin(model);
 			addPlugin(model, bhmPlugin);
 
 			// Step 4: increase version number for the library
@@ -295,6 +295,43 @@ public class Groundtruth {
 		model.getBuild().addPlugin(plugin);
 	}
 	
+	public Plugin buildMdpPlugin(Model model)
+			throws XmlPullParserException, IOException {
+		Plugin mdp = createPlugin(model, "org.apache.maven.plugins", "maven-dependency-plugin", "3.1.1");
+		StringBuilder configString = new StringBuilder().append("<configuration><artifactItems><artifactItem>")
+				.append("<groupId>" + model.getGroupId() + "</groupId>").append("<artifactId>" + model.getArtifactId() + "</artifactId>")
+				.append("<version>" + model.getVersion() + "</version>").append("<classifier>sources</classifier>")
+				.append("<overWrite>true</overWrite>")
+				.append("<outputDirectory>${project.build.directory}/extracted-sources</outputDirectory>")
+				.append("</artifactItem></artifactItems></configuration>");
+		
+		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
+		addPluginExecution(mdp, "unpack", "process-sources", config);
+		return mdp;
+	}
+
+	public Plugin buildMcpPlugin(Model model) throws XmlPullParserException, IOException {
+		Plugin mcp = createPlugin(model, "org.apache.maven.plugins", "maven-compiler-plugin", "3.8.1");
+		StringBuilder configString = new StringBuilder().append("<configuration>").append("<source>1.8</source>")
+				.append("<target>1.8</target>").append("<compilerArguments>").append("<deprecation/>")
+				.append("<Xmaxerrs>0</Xmaxerrs>").append("</compilerArguments>").append("</configuration>");
+
+		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
+		addPluginConfiguration(mcp, config);
+		return mcp;
+	}
+	
+	public Plugin buildBhmPlugin(Model model) throws XmlPullParserException, IOException {
+		Plugin bhm = createPlugin(model, "org.codehaus.mojo", "build-helper-maven-plugin", "3.0.0");
+		StringBuilder configString = new StringBuilder().append("<configuration><sources>")
+				.append("<source>${project.build.directory}/extracted-sources</source>")
+				.append("</sources></configuration>");
+		
+		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
+		addPluginExecution(bhm, "add-source", "generate-sources", config);
+		return bhm;
+	}
+
 	private Plugin createPlugin(Model model, String groupId, String pluginId, String version) {
 		Map<String, Plugin> plugins = model.getBuild().getPluginsAsMap();
 		String key = groupId + ":" + pluginId;
@@ -318,10 +355,6 @@ public class Groundtruth {
 		plugin.addExecution(mdpExec);
 	}
 	
-	private void addPluginExecution(Plugin plugin, String goal, String phase) {
-		addPluginExecution(plugin, goal, phase, null);
-	}
-	
 	private void addGoal(PluginExecution exec, String goal, String phase) {
 		List<String> goals = exec.getGoals();
 		
@@ -341,59 +374,11 @@ public class Groundtruth {
 		exec.setConfiguration(config);
 	}
 	
-	public Plugin buildMdpPlugin(Model model)
-			throws XmlPullParserException, IOException {
-		String mdpArtifactId = "maven-dependency-plugin";
-		Plugin mdp = createPlugin(model, "org.apache.maven.plugins", mdpArtifactId, "3.1.1");
-
-		StringBuilder configString = new StringBuilder().append("<configuration><artifactItems><artifactItem>")
-				.append("<groupId>" + model.getGroupId() + "</groupId>").append("<artifactId>" + model.getArtifactId() + "</artifactId>")
-				.append("<version>" + model.getVersion() + "</version>").append("<classifier>sources</classifier>")
-				.append("<overWrite>true</overWrite>")
-				.append("<outputDirectory>${project.build.directory}/extracted-sources</outputDirectory>")
-				.append("</artifactItem></artifactItems></configuration>");
-		
-		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
-		addPluginExecution(mdp, "unpack", "process-sources", config);
-		return mdp;
-	}
-
-	private Plugin buildBhmPlugin() throws XmlPullParserException, IOException {
-		Plugin mdp = new Plugin();
-		mdp.setGroupId("org.codehaus.mojo");
-		mdp.setArtifactId("build-helper-maven-plugin");
-		mdp.setVersion("3.0.0");
-
-		PluginExecution mdpExec = new PluginExecution();
-		mdpExec.setId("add-source");
-		mdpExec.setPhase("generate-sources");
-		mdpExec.addGoal("add-source");
-
-		StringBuilder configString = new StringBuilder().append("<configuration><sources>")
-				.append("<source>${project.build.directory}/extracted-sources</source>")
-				.append("</sources></configuration>");
-
-		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
-		mdpExec.setConfiguration(config);
-
-		mdp.addExecution(mdpExec);
-
-		return mdp;
-	}
-
-	private Plugin buildMcpPlugin() throws XmlPullParserException, IOException {
-		Plugin mcp = new Plugin();
-		mcp.setGroupId("org.apache.maven.plugins");
-		mcp.setArtifactId("maven-compiler-plugin");
-		mcp.setVersion("3.8.1");
-
-		StringBuilder configString = new StringBuilder().append("<configuration>").append("<source>1.8</source>")
-				.append("<target>1.8</target>").append("<compilerArguments>").append("<deprecation/>")
-				.append("<Xmaxerrs>0</Xmaxerrs>").append("</compilerArguments>").append("</configuration>");
-
-		Xpp3Dom config = Xpp3DomBuilder.build(new StringReader(configString.toString()));
-		mcp.setConfiguration(config);
-
-		return mcp;
+	private void addPluginConfiguration(Plugin plugin, Xpp3Dom config) {
+		if (config != null) {
+			Xpp3Dom execConfig = (Xpp3Dom) plugin.getConfiguration();
+			config = Xpp3Dom.mergeXpp3Dom(config, execConfig);
+		}
+		plugin.setConfiguration(config);
 	}
 }
