@@ -3,7 +3,7 @@ package main.interfaceRemoved;
 public class InterfaceRemoved implements IInterfaceRemoved {
 
 	@Override
-	public int intRemoved() {
+	public int methodAbs() {
 		return 0;
 	}
 

@@ -1,11 +1,16 @@
 package mainclient.interfaceRemoved;
 
-import main.interfaceRemoved.IInterfaceRemoved;
+import main.interfaceRemoved.IInterfaceRemovedMulti;
 
-public class InterfaceRemovedImp implements IInterfaceRemoved {
+public class InterfaceRemovedImp implements IInterfaceRemovedMulti {
 
 	@Override
-	public int intRemoved() {
+	public int methodAbs() {
+		return 0;
+	}
+
+	@Override
+	public int mMulti() {
 		return 0;
 	}
 

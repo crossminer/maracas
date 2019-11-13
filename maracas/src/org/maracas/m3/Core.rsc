@@ -428,8 +428,13 @@ str fieldDeclaration(loc field, M3 m) {
 	}
 }
 
-bool isDeclared(loc logical, M3 m) = m.declarations[logical] != {};
+bool isDeclared(loc logical, M3 m) 
+	= m.declarations[logical] != {};
 
+bool isAbstract(loc logical, M3 m) 
+	= isInterface(logical) 
+	|| <logical, \abstract()> in m.modifiers;
+	
 loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
