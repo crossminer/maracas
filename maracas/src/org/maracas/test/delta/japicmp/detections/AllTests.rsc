@@ -30,5 +30,7 @@ extend org::maracas::\test::delta::japicmp::detections::ClassNowCheckedException
 extend org::maracas::\test::delta::japicmp::detections::ClassNowFinalTest; // Failing test (3): nonAbstractClass, anonymousNonAbstract, nonAbstractMethodOverr 
 extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::ClassTypeChangedTest;
+extend org::maracas::\test::delta::japicmp::detections::InterfaceAddedTest;
+extend org::maracas::\test::delta::japicmp::detections::InterfaceRemovedTest;
 //extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedInSuperclassTest;
 

@@ -131,3 +131,11 @@ If it happens that `f` is declared as `final` in a new version of the Jar, Marac
 **Action:** Get this information from the bytecode level.
 
 **Status**: *TO-DO*
+
+---
+
+## `classNowCheckedException` and `classNowAbstract` constructor invocations from subtypes constructors
+
+---
+
+## Ignoring casts when facing a `interfaceRemoved` or `superclassRemoved` change

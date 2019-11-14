@@ -954,6 +954,35 @@ Moreover, method overriding of the removed interface methods also raise a compil
 3. Client methods accessing fields of the removed interface.
 
 <p class="message">
+  We consider all direct subtypes of the affected type do not redefine target methods.
+</p>
+
+For example, there is an abstract API class `api.A`, an API interface `api.IA`, and a client type `client.C`. 
+The class `client.C` extends `api.A` and `api.IA` declares method `m()`. 
+If `api.IA` is added to the set of superinterfaces of `api.A` then `client.C` is forced to override `m()`.
+The following detection is then reported:
+
+```
+detection(
+	|java+class:///client/C|,
+	|java+class:///api/A|,
+	extends(),
+	interfaceAdded(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
+
+---
+
+## Interface Added
+A type adds an interface to its set of superinterfaces.
+Subtypes of an abstract affected type are obliged to override the interface methods (if any) (cf. *JLS 13.4.4*).
+
+**Detection**
+
+1. Concrete client types extending or implementing the affected type. 
+They are included only if the added interface is resolved within the API and has more than one declared method.
+  
+<p class="message">
   We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
 </p>
 
@@ -972,10 +1001,5 @@ detection(
 )
 ```
 
----
-
-## Interface Added
-
-*JLS 13.4.4*
 
 ---

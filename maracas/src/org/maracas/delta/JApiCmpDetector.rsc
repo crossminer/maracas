@@ -84,6 +84,7 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
 
@@ -409,8 +410,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfa
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
-	set[loc] changed = getChangedEntities(evol.delta, ch);
-	set[loc] entitiesAbs = { c | loc c <- changed, isAbstract(c, evol.apiNew) };
+	rel[loc, loc] changed = getInterAddedEntities(evol.delta);
+	set[loc] entitiesAbs = { c | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew), methods(evol.apiNew, i) != {} };
 	
 	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
 }

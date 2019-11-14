@@ -298,17 +298,20 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 }
 
 rel[loc, loc] getInterRemovedEntities(list[APIEntity] delta) 
-	= { *getInterRemovedEntities(entity) | APIEntity entity <- delta };
+	= { *getInterRemovedEntities(entity, removed()) | APIEntity entity <- delta };
 
-rel[loc, loc] getInterRemovedEntities(APIEntity entity) {
-	rel[loc, loc] removed = {};
+rel[loc, loc] getInterAddedEntities(list[APIEntity] delta) 
+	= { *getInterRemovedEntities(entity, new()) | APIEntity entity <- delta };
+	
+private rel[loc, loc] getInterRemovedEntities(APIEntity entity, APISimpleChange apiCh) {
+	rel[loc, loc] interfaces = {};
 	visit (entity) {
 	case /class(id,_,entities,_,_): 
-		for (/interface(inter,_,removed()) := entities) {
-			removed += <id, inter>;
+		for (/interface(inter, _, apiCh) := entities) {
+			interfaces += <id, inter>;
 		}
 	}
-	return removed;
+	return interfaces;
 }
 
 bool isLessVisible(Modifier m, Modifier n) {
