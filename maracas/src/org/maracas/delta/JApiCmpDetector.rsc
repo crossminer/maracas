@@ -86,6 +86,7 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
 
 set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
@@ -399,14 +400,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceRemoved()) {
 	rel[loc, loc] changed = getInterRemovedEntities(evol.delta);
-	rel[loc, loc] entitiesAbs = { <c, i> | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew) };
-	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, range(changed));
-	set[TransChangedEntity] defMeths = getTransitiveMethods(evol.apiOld, range(changed));
-	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
-
-	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
-		+ computeMethSymbDetections(evol, defMeths, ch, { methodInvocation() }, includeParent = false)
-		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = false);
+	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
@@ -414,6 +408,22 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfa
 	set[loc] entitiesAbs = { c | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew), methods(evol.apiNew, i) != {} };
 	
 	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
+}
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassRemoved()) {
+	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta);
+	return computeSuperRemovedDetections(evol, changed, ch);
+}
+
+set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
+	rel[loc, loc] entitiesAbs = { <c, i> | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew) };
+	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, range(changed));
+	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, range(changed));
+	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
+
+	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
+		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation() }, includeParent = false)
+		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = false);
 }
 
 

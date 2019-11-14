@@ -298,12 +298,12 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 }
 
 rel[loc, loc] getInterRemovedEntities(list[APIEntity] delta) 
-	= { *getInterRemovedEntities(entity, removed()) | APIEntity entity <- delta };
+	= { *getInterEntities(entity, removed()) | APIEntity entity <- delta };
 
 rel[loc, loc] getInterAddedEntities(list[APIEntity] delta) 
-	= { *getInterRemovedEntities(entity, new()) | APIEntity entity <- delta };
+	= { *getInterEntities(entity, new()) | APIEntity entity <- delta };
 	
-private rel[loc, loc] getInterRemovedEntities(APIEntity entity, APISimpleChange apiCh) {
+private rel[loc, loc] getInterEntities(APIEntity entity, APISimpleChange apiCh) {
 	rel[loc, loc] interfaces = {};
 	visit (entity) {
 	case /class(id,_,entities,_,_): 
@@ -312,6 +312,20 @@ private rel[loc, loc] getInterRemovedEntities(APIEntity entity, APISimpleChange 
 		}
 	}
 	return interfaces;
+}
+
+rel[loc, loc] getSuperRemovedEntities(list[APIEntity] delta) 
+	= { *getSuperRemovedEntities(entity) | APIEntity entity <- delta };
+	
+private rel[loc, loc] getSuperRemovedEntities(APIEntity entity) {
+	rel[loc, loc] supers = {};
+	visit (entity) {
+	case /class(id,_,entities,_,_): 
+		for (/superclass(modified(old, new)) := entities) {
+			supers += <id, old>;
+		}
+	}
+	return supers;
 }
 
 bool isLessVisible(Modifier m, Modifier n) {

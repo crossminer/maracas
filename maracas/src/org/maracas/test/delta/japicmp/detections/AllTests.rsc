@@ -32,5 +32,6 @@ extend org::maracas::\test::delta::japicmp::detections::ClassRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::ClassTypeChangedTest;
 extend org::maracas::\test::delta::japicmp::detections::InterfaceAddedTest;
 extend org::maracas::\test::delta::japicmp::detections::InterfaceRemovedTest;
+extend org::maracas::\test::delta::japicmp::detections::SuperclassRemovedTest;
 //extend org::maracas::\test::delta::japicmp::detections::MethodAbstractAddedInSuperclassTest;
 
