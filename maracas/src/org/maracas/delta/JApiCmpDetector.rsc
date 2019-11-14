@@ -84,6 +84,7 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
 
 set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
@@ -134,6 +135,28 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, Comp
 		loc parent = parentType(evol.apiOld, e);
 		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client);
 		entities += { e } * symbFields;
+	}
+	
+	return computeDetections(evol, entities, change, apiUses, predicate);
+}
+
+set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, bool includeParent = true)
+	 = computeFieldSymbDetections(evol, entities, change, bool (RippleEffect effect, Evolution evol) { return true; }, includeParent = includeParent);
+	 
+set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, bool (RippleEffect, Evolution) predicate, bool includeParent = true) {
+	set[APIUse] apiUses = { fieldAccess() };
+	set[loc] changed = domain(chEntities);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (loc used <- changed) {
+		set[loc] transChanged = chEntities[used];
+		
+		for (loc e <- transChanged) {
+			str field = memberName(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client, includeParent = includeParent);
+			entities += { used } * symbFields;
+		}
 	}
 	
 	return computeDetections(evol, entities, change, apiUses, predicate);
@@ -254,6 +277,27 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, Compa
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
+set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false, bool includeParent = true)
+	= computeMethSymbDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing, includeParent = includeParent);
+
+set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false, bool includeParent = true) {
+	set[loc] changed = domain(chEntities);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (loc used <- changed) {
+		set[loc] transChanged = chEntities[used];
+		
+		for (loc e <- transChanged) {
+			str signature = methodSignature(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
+			entities += { used } * symbMeths;
+		}
+	}
+	
+	return computeDetections(evol, entities, change, apiUses, predicate);
+}
+
 
 //----------------------------------------------
 // Class detections
@@ -331,7 +375,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 	set[loc] entitiesImp = {};
 	set[loc] entitiesAnn = {};
 	
-	for (e <- changed) {
+	for (loc e <- changed) {
 		APIEntity entity = entityFromLoc(e, evol.delta);
 		tuple[ClassType, ClassType] types = classModifiedType(entity);
 		
@@ -350,6 +394,25 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 	return computeDetections(evol, entitiesExt, ch, { extends() })
 		+ computeDetections(evol, entitiesImp, ch, { implements() })
 		+ computeDetections(evol, entitiesAnn, ch, { annotation() });
+}
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceRemoved()) {
+	rel[loc, loc] changed = getInterRemovedEntities(evol.delta);
+	rel[loc, loc] entitiesAbs = { <c, i> | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew) };
+	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, range(changed));
+	set[TransChangedEntity] defMeths = getTransitiveMethods(evol.apiOld, range(changed));
+	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
+
+	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
+		+ computeMethSymbDetections(evol, defMeths, ch, { methodInvocation() }, includeParent = false)
+		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = false);
+}
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
+	set[loc] changed = getChangedEntities(evol.delta, ch);
+	set[loc] entitiesAbs = { c | loc c <- changed, isAbstract(c, evol.apiNew) };
+	
+	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
 }
 
 
@@ -417,6 +480,7 @@ private set[Detection] computeDetections(Evolution evol, set[loc] entities, Comp
 	return detects;
 }
 
+// TODO: check if these functions can be replaced by the ones offered by M3 Core
 private set[TransChangedEntity] getTransitiveEntities(M3 m, set[loc] entities, bool (loc) fun) {
 	rel[loc, loc] transContain = m.containment+;
 	return { <e, c> | e <- entities, c <- transContain[e], fun(c) };
@@ -481,7 +545,7 @@ private bool hasMethodOverride(RippleEffect effect, Evolution evol) {
 }
 
 private bool isNotAbstract(RippleEffect effect, Evolution evol)
-	= <effect.affected, \abstract()> notin evol.client.modifiers;
+	= !isAbstract(effect.affected, evol.client);
 	
 private bool existsMethodClash(RippleEffect effect, Evolution evol) {
 	loc affected = effect.affected;

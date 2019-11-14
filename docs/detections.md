@@ -864,7 +864,8 @@ detection(
 ---
 
 ## Class Removed
-API members depending on or annotated with the removed type are affected. Types extending or implementing the removed type cannot use it anymore.
+API members depending on or annotated with the removed type are affected. 
+Types extending or implementing the removed type cannot use it anymore.
  
 **Detection**
 
@@ -938,6 +939,39 @@ detection(
   classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
+---
+
+## Interface Removed
+A type removes an interface from its set of superinterfaces.
+Some castings might result in a linkage (or runtime) error.
+Subtypes won't be able to access interface fields and default methods anymore.
+Moreover, method overriding of the removed interface methods also raise a compilation error (cf. *JLS 13.4.4*).
+
+**Detection**
+
+1. Client methods overriding methods from the removed interface. These methods are owned by a client class that extends or implements the affected type. The latter must be an abstract class.
+2. Client methods invoking a default method of the removed interface.
+3. Client methods accessing fields of the removed interface.
+
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
+
+For example, there is an abstract API class `api.A`, an API interface `api.IA`, and a client type `client.C`. 
+The class `api.A` implements `api.IA` and `client.C` extends `api.A`.
+Method `m()` in `client.C` overrides the corresponding method declared in `api.IA`.
+If `api.IA` is removed from the set of superinterfaces of `api.A` then `m()` cannot override the corresponding method of the interface anymore.
+The following detection is then reported:
+
+```
+detection(
+	|java+method:///client/C/m()|,
+	|java+interface:///api/IA|,
+	methodOverride(),
+	interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
 ---
 
 ## Interface Added

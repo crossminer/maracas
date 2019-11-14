@@ -14,11 +14,17 @@ public class InterfaceRemovedTD {
 	
 	public void intCons() {
 		int ia = InterfaceRemoved.CTE;
+	}
+	
+	public void intConsInter() {
 		int ii = IInterfaceRemoved.CTE;
 	}
 	
 	public void listCons() {
 		List<String> la = InterfaceRemoved.LIST;
+	}
+	
+	public void listConsInter() {
 		List<String> li = IInterfaceRemoved.LIST;
 	}
 	

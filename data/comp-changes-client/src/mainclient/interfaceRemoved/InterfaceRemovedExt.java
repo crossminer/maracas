@@ -14,13 +14,25 @@ public class InterfaceRemovedExt extends InterfaceRemoved {
 	
 	public void intCons() {
 		int ia = InterfaceRemoved.CTE;
+	}
+	
+	public void intConsInter() {
 		int ii = IInterfaceRemoved.CTE;
+	}
+	
+	public void intConsDirect() {
 		int in = CTE;
 	}
 	
 	public void listCons() {
 		List<String> la = InterfaceRemoved.LIST;
+	}
+	
+	public void listConsInter() {
 		List<String> li = IInterfaceRemoved.LIST;
+	}
+	
+	public void listConsDirect() {
 		List<String> ln = LIST;
 	}
 	

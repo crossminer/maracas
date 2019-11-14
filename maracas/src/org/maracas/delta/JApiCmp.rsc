@@ -297,6 +297,20 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 	throw "There is no reference to <elem> in the delta model.";
 }
 
+rel[loc, loc] getInterRemovedEntities(list[APIEntity] delta) 
+	= { *getInterRemovedEntities(entity) | APIEntity entity <- delta };
+
+rel[loc, loc] getInterRemovedEntities(APIEntity entity) {
+	rel[loc, loc] removed = {};
+	visit (entity) {
+	case /class(id,_,entities,_,_): 
+		for (/interface(inter,_,removed()) := entities) {
+			removed += <id, inter>;
+		}
+	}
+	return removed;
+}
+
 bool isLessVisible(Modifier m, Modifier n) {
 	map[Modifier, int] level = (
 		\private() : 0,
