@@ -315,14 +315,17 @@ private rel[loc, loc] getInterEntities(APIEntity entity, APISimpleChange apiCh) 
 }
 
 rel[loc, loc] getSuperRemovedEntities(list[APIEntity] delta) 
-	= { *getSuperRemovedEntities(entity) | APIEntity entity <- delta };
+	= { *getSuperEntities(entity, true) | APIEntity entity <- delta };
+
+rel[loc, loc] getSuperAddedEntities(list[APIEntity] delta) 
+	= { *getSuperEntities(entity, false) | APIEntity entity <- delta };
 	
-private rel[loc, loc] getSuperRemovedEntities(APIEntity entity) {
+private rel[loc, loc] getSuperEntities(APIEntity entity, bool oldSuper) {
 	rel[loc, loc] supers = {};
 	visit (entity) {
 	case /class(id,_,entities,_,_): 
 		for (/superclass(modified(old, new)) := entities) {
-			supers += <id, old>;
+			supers += (oldSuper) ? <id, old> : <id, new>;
 		}
 	}
 	return supers;

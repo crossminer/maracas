@@ -945,7 +945,7 @@ detection(
 A type removes an interface from its set of superinterfaces.
 Some castings might result in a linkage (or runtime) error.
 Subtypes won't be able to access interface fields and default methods anymore.
-Moreover, method overriding of the removed interface methods also raise a compilation error (cf. *JLS 13.4.4*).
+Moreover, method overridings of the removed interface methods also raise a compilation error (cf. *JLS 13.4.4*).
 
 **Detection**
 
@@ -958,8 +958,9 @@ Moreover, method overriding of the removed interface methods also raise a compil
 </p>
 
 For example, there is an abstract API class `api.A`, an API interface `api.IA`, and a client type `client.C`. 
-The class `client.C` extends `api.A` and `api.IA` declares method `m()`. 
-If `api.IA` is added to the set of superinterfaces of `api.A` then `client.C` is forced to override `m()`.
+The class `api.A` implements `api.IA` and `client.C` extends `api.A`.
+Method `m()` in `client.C` overrides the corresponding method declared in `api.IA`.
+If `api.IA` is removed from the set of superinterfaces of `api.A` then `m()` cannot override the corresponding method of the interface anymore.
 The following detection is then reported:
 
 ```
@@ -987,19 +988,77 @@ They are included only if the added interface is resolved within the API and has
 </p>
 
 For example, there is an abstract API class `api.A`, an API interface `api.IA`, and a client type `client.C`. 
-The class `api.A` implements `api.IA` and `client.C` extends `api.A`.
-Method `m()` in `client.C` overrides the corresponding method declared in `api.IA`.
-If `api.IA` is removed from the set of superinterfaces of `api.A` then `m()` cannot override the corresponding method of the interface anymore.
+The class `client.C` extends `api.A` and `api.IA` declares method `m()`. 
+If `api.IA` is added to the set of superinterfaces of `api.A` then `client.C` is forced to override `m()`.
 The following detection is then reported:
 
 ```
 detection(
-	|java+method:///client/C/m()|,
+	|java+class:///client/C|,
 	|java+interface:///api/IA|,
-	methodOverride(),
-	interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)
+	implements(),
+	interfaceAdded(binaryCompatibility=true,sourceCompatibility=false)
 )
 ```
 
+---
+
+## Superclass Removed
+A type removes its original superclass.
+Castings might result in a compilation error.
+Subtypes won't be able to access superclass fields and methods anymore.
+Method overridings of the removed superclass methods also raise a compilation error (cf. *JLS 13.4.4*).
+
+**Detection**
+
+1. Client methods overriding methods from the removed superclass. These methods are owned by a client class that extends the affected type. The latter must be an abstract class.
+2. Client methods invoking a default method of the removed superclass.
+3. Client methods accessing fields of the removed superclass.
+
+<p class="message">
+  We consider all direct subtypes of the affected type do not redefine target methods.
+</p>
+
+For example, there is an abstract API class `api.A`, an API superclass `api.SA`, and a client type `client.C`. 
+The class `api.A` extends `api.SA` and `client.C` extends `api.A`.
+Method `m()` in `client.C` overrides the corresponding method declared in `api.SA`.
+If `api.IA` is not the superclass of `api.A` anymore, then `m()` cannot override the corresponding method of the superclass.
+The following detection is then reported:
+
+```
+detection(
+	|java+class:///client/C|,
+	|java+class:///api/A|,
+	extends(),
+	superclassAdded(binaryCompatibility=true,sourceCompatibility=false)
+)
+```
 
 ---
+
+## Superclass Added
+A type adds a superclass.
+Subtypes of an abstract affected type are obliged to override the type methods (if any) (cf. *JLS 13.4.4*).
+
+**Detection**
+
+1. Concrete client types extending or implementing the affected type. 
+They are included only if the added superclass is resolved within the API and has more than one declared method.
+  
+<p class="message">
+  We consider all direct subtypes of the type that owns the modified method, which do not define the target method.
+</p>
+
+For example, there is an abstract API class `api.A`, an API superclass `api.SA`, and a client type `client.C`. 
+The class `client.C` extends `api.A` and `api.SA` declares the abstract method `m()`. 
+If `api.SA` is now the superclass of `api.A` then `client.C` is forced to override `m()`.
+The following detection is then reported:
+
+```
+detection(
+	|java+class:///client/C|,
+	|java+class:///api/SA|,
+	extends(),
+	superclassAdded(binaryCompatibility=false,sourceCompatibility=false)
+)
+```

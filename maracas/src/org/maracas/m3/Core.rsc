@@ -435,6 +435,10 @@ bool isAbstract(loc logical, M3 m)
 	= isInterface(logical) 
 	|| <logical, \abstract()> in m.modifiers;
 	
+@memo 
+set[loc] abstractMeths(M3 m, loc class) 
+	= { e | e <- elements(m, class), isMethod(e), isAbstract(class, m) };
+
 loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;

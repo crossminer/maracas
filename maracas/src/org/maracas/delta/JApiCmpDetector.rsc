@@ -86,6 +86,7 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
 
@@ -405,14 +406,23 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfa
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
 	rel[loc, loc] changed = getInterAddedEntities(evol.delta);
-	set[loc] entitiesAbs = { c | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew), methods(evol.apiNew, i) != {} };
-	
-	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
+	return computeSuperAddedDetections(evol, changed, ch);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassRemoved()) {
 	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta);
 	return computeSuperRemovedDetections(evol, changed, ch);
+}
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassAdded()) {
+	rel[loc, loc] changed = getSuperAddedEntities(evol.delta);
+	return computeSuperAddedDetections(evol, changed, ch);
+}
+
+set[Detection] computeSuperAddedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
+	set[loc] entitiesAbs = { c | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew), abstractMeths(evol.apiNew, i) != {} };
+	entitiesAbs += { *getAbstractSubtypes(e, evol.apiNew) | loc e <- entitiesAbs };
+	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
 }
 
 set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
