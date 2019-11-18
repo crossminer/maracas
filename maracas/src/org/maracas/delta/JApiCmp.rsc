@@ -6,39 +6,50 @@ import Node;
 import Set;
 
 data APIEntity
-	= class(loc classId, 
+	= class(
+		loc classId, 
 	    EntityType classType, 
 	    list[APIEntity] classEntities,
 	    list[CompatibilityChange] classChanges,
 	    APISimpleChange classChange)
-	| interface(loc interId, 
+	| interface(
+		loc interId, 
 		list[CompatibilityChange] interChanges,
 		APISimpleChange interChange) 
-	| field(loc fieldName, // TODO: is it align with m3 names?
+	| field(
+		loc fieldName, // TODO: is it align with m3 names?
 		EntityType fieldType,
 		list[APIEntity] fieldEntities, 
 		list[CompatibilityChange] fieldChanges,
 		APISimpleChange fieldChange)
-	| method(loc methId,
+	| method(
+		loc methId,
 		EntityType returnType,
 		list[APIEntity] methEntities,
 		list[CompatibilityChange] methChanges,
 		APISimpleChange methChange)
-	| constructor(loc consId,
+	| constructor(
+		loc consId,
 		list[APIEntity] consEntities,
 		list[CompatibilityChange] consChanges,
 		APISimpleChange consChange)
-	| annotation(loc annId,
+	| annotation(
+		loc annId,
 		list[APIEntity] annEntities,
 		list[CompatibilityChange] annChanges,
 		APISimpleChange annChange)
-	| annotationElement(str annElemName, APIChange[list[str]] annElemChange)
-	| exception(loc excepId, 
+	| annotationElement(
+		str annElemName, 
+		APIChange[list[str]] annElemChange)
+	| exception(
+		loc excepId, 
 		bool checkedException, 
 		APISimpleChange excepChange)
 	| parameter(loc \type)
 	| modifier(APIChange[Modifier] modifChange)
-	| superclass(APIChange[loc] superChange)
+	| superclass(
+		list[CompatibilityChange] superChanges,
+		APIChange[loc] superChange)
 	;   
 
 data APIChange[&T]
@@ -306,7 +317,7 @@ rel[loc, loc] getInterAddedEntities(list[APIEntity] delta)
 private rel[loc, loc] getInterEntities(APIEntity entity, APISimpleChange apiCh) {
 	rel[loc, loc] interfaces = {};
 	visit (entity) {
-	case /class(id,_,entities,_,_): 
+	case /class(id, _, entities, _, _): 
 		for (/interface(inter, _, apiCh) := entities) {
 			interfaces += <id, inter>;
 		}
@@ -323,8 +334,8 @@ rel[loc, loc] getSuperAddedEntities(list[APIEntity] delta)
 private rel[loc, loc] getSuperEntities(APIEntity entity, bool oldSuper) {
 	rel[loc, loc] supers = {};
 	visit (entity) {
-	case /class(id,_,entities,_,_): 
-		for (/superclass(modified(old, new)) := entities) {
+	case /class(id, _, entities, _, _): 
+		for (/superclass(_, modified(old, new)) := entities) {
 			supers += (oldSuper) ? <id, old> : <id, new>;
 		}
 	}

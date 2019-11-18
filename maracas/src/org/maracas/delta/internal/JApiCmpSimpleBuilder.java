@@ -151,7 +151,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.sourceLocationType(), typeFactory.boolType(), apiSimpleChangeADT);
 		this.apiEntityParameter = typeFactory.constructor(typeStore, apiEntityADT, "parameter", typeFactory.sourceLocationType());
 		this.apiEntityModifier = typeFactory.constructor(typeStore, apiEntityADT, "modifier", apiChangeADT);
-		this.apiEntitySuperclass = typeFactory.constructor(typeStore, apiEntityADT, "superclass", apiChangeADT);
+		this.apiEntitySuperclass = typeFactory.constructor(typeStore, apiEntityADT, "superclass", typeFactory.listType(compatibilityChangeADT), apiChangeADT);
 		this.apiChangeNew = typeFactory.constructor(typeStore, apiChangeADT, "new", typeFactory.parameterType("T"));
 		this.apiChangeRemoved = typeFactory.constructor(typeStore, apiChangeADT, "removed", typeFactory.parameterType("T"));
 		this.apiChangeUnchanged = typeFactory.constructor(typeStore, apiChangeADT, "unchanged");
@@ -280,8 +280,8 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntitySuperclassCons(IConstructor apiChange) {
-		return valueFactory.constructor(apiEntitySuperclass, apiChange);
+	public IConstructor buildApiEntitySuperclassCons(IList changes, IConstructor apiChange) {
+		return valueFactory.constructor(apiEntitySuperclass, changes, apiChange);
 	}
 
 	@Override

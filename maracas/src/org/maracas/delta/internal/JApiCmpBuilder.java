@@ -22,7 +22,7 @@ public interface JApiCmpBuilder {
 	IConstructor buildApiEntityExceptionCons(ISourceLocation id, IBool checkedException, IConstructor apiChange);
 	IConstructor buildApiEntityParameterCons(ISourceLocation type);
 	IConstructor buildApiEntityModifierCons(IConstructor apiChange);
-	IConstructor buildApiEntitySuperclassCons(IConstructor apiChange);
+	IConstructor buildApiEntitySuperclassCons(IList changes, IConstructor apiChange);
 	IConstructor buildApiChangeNewCons(Type concrete, IValue elem);
 	IConstructor buildApiChangeRemovedCons(Type concrete, IValue elem);
 	IConstructor buildApiChangeUnchangedCons();

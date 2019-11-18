@@ -305,11 +305,14 @@ public class JApiCmpToRascal {
 	private IConstructor translate(JApiSuperclass superclass) {
 		String oldSuperclass = (superclass.getOldSuperclass().isPresent()) ? superclass.getOldSuperclass().get().getName() : "";
 		String newSuperclass = (superclass.getNewSuperclass().isPresent()) ? superclass.getNewSuperclass().get().getName()  : "";
+		
+		IList changes = translateCompatibilityChanges(superclass.getCompatibilityChanges());
+		
 		ISourceLocation oldSuperclassId = resolver.resolveSuperclass(oldSuperclass);
 		ISourceLocation newSuperclassId = resolver.resolveSuperclass(newSuperclass);
 		IConstructor apiChange = buildApiChangeConstructor(typeFactory.sourceLocationType(), oldSuperclassId, newSuperclassId, superclass.getChangeStatus());
 		
-		return builder.buildApiEntitySuperclassCons(apiChange);
+		return builder.buildApiEntitySuperclassCons(changes, apiChange);
 	}
 
 	/**
