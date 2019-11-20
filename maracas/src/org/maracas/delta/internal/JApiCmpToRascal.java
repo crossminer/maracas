@@ -305,7 +305,7 @@ public class JApiCmpToRascal {
 	private IConstructor translate(JApiSuperclass superclass) {
 		String oldSuperclass = (superclass.getOldSuperclass().isPresent()) ? superclass.getOldSuperclass().get().getName() : "";
 		String newSuperclass = (superclass.getNewSuperclass().isPresent()) ? superclass.getNewSuperclass().get().getName()  : "";
-		
+
 		IList changes = translateCompatibilityChanges(superclass.getCompatibilityChanges());
 		
 		ISourceLocation oldSuperclassId = resolver.resolveSuperclass(oldSuperclass);
@@ -632,6 +632,8 @@ public class JApiCmpToRascal {
 		case CONSTRUCTOR_REMOVED:
 			return builder.buildCCConstructorRemovedCons(common);
 		case FIELD_LESS_ACCESSIBLE:
+			return builder.buildCCFieldLessAccessibleCons(common);
+		case FIELD_MORE_ACCESSIBLE:
 			return builder.buildCCFieldLessAccessibleCons(common);
 		case FIELD_LESS_ACCESSIBLE_THAN_IN_SUPERCLASS:
 			return builder.buildCCFieldLessAccessibleThanInSuperclassCons(common);

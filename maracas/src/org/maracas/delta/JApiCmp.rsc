@@ -90,6 +90,7 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| methodRemovedInSuperclass()
 	| methodLessAccessible()
 	| methodLessAccessibleThanInSuperclass()
+	| methodMoreAccessible()
 	| methodIsStaticAndOverridesNotStatic()
 	| methodReturnTypeChanged()
 	| methodNowAbstract()
@@ -112,6 +113,7 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| fieldRemoved()
 	| fieldRemovedInSuperclass()
 	| fieldLessAccessible()
+	| fieldMoreAccessible()
 	| constructorRemoved()
 	| constructorLessAccessible()
 	;

@@ -1,0 +1,1 @@
+module org::maracas::\test::m3::InheritanceTest

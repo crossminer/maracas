@@ -72,6 +72,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type ccMethodRemovedInSuperclass;
 	private final Type ccMethodLessAccessible;
 	private final Type ccMethodLessAccessibleThanInSuperclass;
+	private final Type ccMethodMoreAccessible;
 	private final Type ccMethodIsStaticAndOverridesNotStatic;
 	private final Type ccMethodReturnTypeChanged;
 	private final Type ccMethodNowAbstract;
@@ -94,6 +95,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type ccFieldRemoved;
 	private final Type ccFieldRemovedInSuperclass;
 	private final Type ccFieldLessAccessible;
+	private final Type ccFieldMoreAccessible;
 	private final Type ccConstructorRemoved;
 	private final Type ccConstructorLessAccessible;
 	private final Type classTypeAnnotation;
@@ -180,6 +182,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.ccMethodRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodRemovedInSuperclass");
 		this.ccMethodLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodLessAccessible");
 		this.ccMethodLessAccessibleThanInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodLessAccessibleThanInSuperclass");
+		this.ccMethodMoreAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodMoreAccessible");
 		this.ccMethodIsStaticAndOverridesNotStatic = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodIsStaticAndOverridesNotStatic");
 		this.ccMethodReturnTypeChanged = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodReturnTypeChanged");
 		this.ccMethodNowAbstract = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodNowAbstract");
@@ -202,6 +205,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.ccFieldRemoved = typeFactory.constructor(typeStore, compatibilityChangeADT, "fieldRemoved");
 		this.ccFieldRemovedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeADT, "fieldRemovedInSuperclass");
 		this.ccFieldLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "fieldLessAccessible");
+		this.ccFieldMoreAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "fieldMoreAccessible");
 		this.ccConstructorRemoved = typeFactory.constructor(typeStore, compatibilityChangeADT, "constructorRemoved");
 		this.ccConstructorLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "constructorLessAccessible");
 		this.classTypeAnnotation = typeFactory.constructor(typeStore, classTypeADT, "annotation");
@@ -451,6 +455,12 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
+	public IConstructor buildCCMethodMoreAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodMoreAccessible);
+		return apply(common, change);
+	}
+	
+	@Override
 	public IConstructor buildCCMethodIsStaticAndOverridesNotStaticCons(CompatibilityChange common) {
 		IConstructor change = valueFactory.constructor(ccMethodIsStaticAndOverridesNotStatic);
 		return apply(common, change);
@@ -582,6 +592,12 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		return apply(common, change);
 	}
 
+	@Override
+	public IConstructor buildCCFieldMoreAccessibleCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccFieldMoreAccessible);
+		return apply(common, change);
+	}
+	
 	@Override
 	public IConstructor buildCCConstructorRemovedCons(CompatibilityChange common) {
 		IConstructor change = valueFactory.constructor(ccConstructorRemoved);
