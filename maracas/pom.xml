@@ -20,6 +20,12 @@
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
+			<resource>
+				<directory>${basedir}</directory>
+				<includes>
+					<include>META-INF/RASCAL.MF</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
