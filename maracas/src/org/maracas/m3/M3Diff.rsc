@@ -2,7 +2,7 @@ module org::maracas::m3::M3Diff
 
 import lang::java::m3::Core;
 import Relation;
-
+import Set;
 
 data M3Diff(
 		M3 removals = m3(|file:///|),
@@ -30,7 +30,6 @@ private M3 m3Removals(M3 from, M3 to)
 private M3 m3Additions(M3 from, M3 to) 
 	= diffJavaM3(to.id, [to, from]);
 
-
 private set[loc] m3RemovedDecls(M3 from, M3 to) 
 	= m3DiffDecls(from, to);
 	
@@ -39,3 +38,9 @@ private set[loc] m3AddedDecls(M3 from, M3 to)
 	
 private set[loc] m3DiffDecls(M3 target, M3 rest)
 	= domain(target.declarations) - domain(rest.declarations);
+
+public int countAdditions(loc from, loc to) =
+	size(m3AddedDecls(createM3FromJar(from), createM3FromJar(to)));
+
+public int countRemovals(loc from, loc to) =
+	size(m3RemovedDecls(createM3FromJar(from), createM3FromJar(to)));
