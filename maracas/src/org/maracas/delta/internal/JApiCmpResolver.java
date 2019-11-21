@@ -2,7 +2,6 @@ package org.maracas.delta.internal;
 
 import io.usethesource.vallang.ISourceLocation;
 import japicmp.model.JApiAnnotation;
-import japicmp.model.JApiBehavior;
 import japicmp.model.JApiClass;
 import japicmp.model.JApiConstructor;
 import japicmp.model.JApiException;

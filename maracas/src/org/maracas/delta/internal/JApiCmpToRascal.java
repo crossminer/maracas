@@ -634,7 +634,7 @@ public class JApiCmpToRascal {
 		case FIELD_LESS_ACCESSIBLE:
 			return builder.buildCCFieldLessAccessibleCons(common);
 		case FIELD_MORE_ACCESSIBLE:
-			return builder.buildCCFieldLessAccessibleCons(common);
+			return builder.buildCCFieldMoreAccessibleCons(common);
 		case FIELD_LESS_ACCESSIBLE_THAN_IN_SUPERCLASS:
 			return builder.buildCCFieldLessAccessibleThanInSuperclassCons(common);
 		case FIELD_NO_LONGER_STATIC:
@@ -671,6 +671,8 @@ public class JApiCmpToRascal {
 			return builder.buildCCMethodLessAccessibleCons(common);
 		case METHOD_LESS_ACCESSIBLE_THAN_IN_SUPERCLASS:
 			return builder.buildCCMethodLessAccessibleThanInSuperclassCons(common);
+		case METHOD_MORE_ACCESSIBLE:
+			return builder.buildCCMethodMoreAccessibleCons(common);
 		case METHOD_NEW_DEFAULT:
 			return builder.buildCCMethodNewDefaultCons(common);
 		case METHOD_NO_LONGER_STATIC:
