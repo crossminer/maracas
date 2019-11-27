@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,14 +21,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -40,20 +37,20 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
 import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
-import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
 import io.usethesource.vallang.IListWriter;
-import io.usethesource.vallang.IMapWriter;
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValueFactory;
-import io.usethesource.vallang.type.Type;
 import io.usethesource.vallang.type.TypeFactory;
 import io.usethesource.vallang.type.TypeStore;
+import nl.cwi.swat.aethereal.AetherDownloader;
 
 public class Groundtruth {
 	// Get mvn path from M2_HOME environment variable
@@ -65,12 +62,18 @@ public class Groundtruth {
 	private TypeStore ts;
 	private TypeFactory tf;
 	private CompilerMessageToRascal compMsgToRascal;
+	private AetherDownloader downloader = new AetherDownloader(10);
 
 	public Groundtruth(IValueFactory vf) {
 		this.vf = vf;
 		this.ts = new TypeStore();
 		this.tf = TypeFactory.getInstance();
 		this.compMsgToRascal = new CompilerMessageToRascal(vf);
+	}
+
+	public ISourceLocation downloadJar(IString group, IString artifact, IString version, IEvaluatorContext ctx) {
+		Artifact resolved = downloader.downloadArtifact(new DefaultArtifact(group.getValue(), artifact.getValue(), "jar", version.getValue()));
+		return vf.sourceLocation(resolved.getFile().getPath());
 	}
 
 	public IBool upgradeClient(ISourceLocation clientJar, IString groupId, IString artifactId, IString v1, IString v2,
