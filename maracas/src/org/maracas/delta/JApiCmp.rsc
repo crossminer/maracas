@@ -86,34 +86,34 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| superclassModifiedIncompatible()
 	| interfaceAdded()
 	| interfaceRemoved()
-	| methodRemoved()
-	| methodRemovedInSuperclass()
+	| methodAbstractAddedInImplementedInterface()
+	| methodAbstractAddedInSuperclass()
+	| methodAbstractAddedToClass()
+	| methodAbstractNowDefault()
+	| methodAddedToInterface()
+	| methodIsStaticAndOverridesNotStatic()
 	| methodLessAccessible()
 	| methodLessAccessibleThanInSuperclass()
 	| methodMoreAccessible()
-	| methodIsStaticAndOverridesNotStatic()
-	| methodReturnTypeChanged()
+	| methodNewDefault()
+	| methodNoLongerStatic()
 	| methodNowAbstract()
 	| methodNowFinal()
 	| methodNowStatic()
-	| methodNoLongerStatic()
-	| methodAddedToInterface()
 	| methodNowThrowsCheckedException()
-	| methodAbstractAddedToClass()
-	| methodAbstractAddedInSuperclass()
-	| methodAbstractAddedInImplementedInterface()
-	| methodNewDefault()
-	| methodAbstractNowDefault()
-	| fieldStaticAndOverridesStatic()
+	| methodRemoved()
+	| methodRemovedInSuperclass()
+	| methodReturnTypeChanged()
+	| fieldLessAccessible()
 	| fieldLessAccessibleThanInSuperclass()
+	| fieldMoreAccessible()
+	| fieldNoLongerStatic()
 	| fieldNowFinal()
 	| fieldNowStatic()
-	| fieldNoLongerStatic()
-	| fieldTypeChanged()
 	| fieldRemoved()
 	| fieldRemovedInSuperclass()
-	| fieldLessAccessible()
-	| fieldMoreAccessible()
+	| fieldStaticAndOverridesStatic()
+	| fieldTypeChanged()
 	| constructorRemoved()
 	| constructorLessAccessible()
 	;
@@ -344,16 +344,22 @@ private rel[loc, loc] getSuperEntities(APIEntity entity, bool oldSuper) {
 	return supers;
 }
 
-bool isLessVisible(Modifier m, Modifier n) {
-	map[Modifier, int] level = (
+private map[Modifier, int] getModifierLevels() 
+	= (	
 		\private() : 0,
 		packageProtected() : 1,
 		protected() : 2,
-		\public() : 3
-	);
-	val = level[m] < level[n];
-	
+		\public() : 3 
+	);	
+	 
+bool isLessVisible(Modifier m, Modifier n) {
+	map[Modifier, int] level = getModifierLevels();
 	return level[m] < level[n];
+}
+
+bool isMoreVisible(Modifier m, Modifier n) {
+	map[Modifier, int] level = getModifierLevels();
+	return level[m] > level[n];
 }
 
 bool isPackageProtected(Modifier new) 

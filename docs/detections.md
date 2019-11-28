@@ -452,6 +452,29 @@ detection(
 
 ---
 
+## Method More Accessible
+The method is more accessible than its previous version. 
+Client types overriding such methods will break if the visibility of their own declaration is lower than the API definition.
+
+**Detection**
+
+1. Client methods within type `T`overriding a method of the type `S`, where the new method declaration in `T` is less accessible than the corresponding definition in `S`.
+
+For example, there is an API type `api.A` with a `protected` method `m()`.
+The later is overriden in client type `client.C` with a `protected` visibility. 
+If the visibility of `m()` is changed to `public` in `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+method:///client/C/m()|,
+  |java+method:///api/A/m()|,
+  methodOverride(),
+  methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)
+)
+```
+
+---
+
 ## Method New Default
 A new default method is declared in an interface.
 As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
