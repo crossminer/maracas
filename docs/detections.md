@@ -103,11 +103,13 @@ detection(
 ---
 
 ## Field No Longer Static
-A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
+A field goes from `static` to `non-static` becoming an instance field. 
+The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
 
 **Detection**
 
 1. Client methods accessing a field that is no longer `static`.
+2. Client types extending the owner class of the modified field, which declare a `static` field with the same name of the target field (cf. *JLS 13.4.8*).
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a class field `f`. Assume `m()` accesses `f` in a static manner (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
 
@@ -160,9 +162,10 @@ Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.10*).
 1. Client methods accessing a field that is now `static`.
 2. Client methods accessing a supertype field that is now `static` through the `super` keyword.
 3. Client methods accessing a supertype field that is now `static` without the `super` keyword.
+4. Client types extending the owner class of the modified field, which declare a non-static field with the same name of the target field (cf. *JLS 13.4.8*).
 
 <p class="message">
-  We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field."
+  We consider all direct subtypes of the type that owns the modified field, which do not shadow the target field.
 </p>
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a field `f`. Assume `m()` accesses `f`. If `f` is declared as `static` in `api.A`, then the following detection is reported:
@@ -230,13 +233,6 @@ detection(
   fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)
 )
 ```
-
----
-
-## Field Static And Overrides Static
-A client type overrides a static supertype field with a non-static field. This means that a non-static field with the same name is declared within the subtype class.
-
-"If a new field of type X with the same name as f is added to a subclass of S that is a superclass of T or T itself, then a linkage error may occur."
 
 ---
 
@@ -544,6 +540,7 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 **Detection**
 
 1. Client methods invoking a method that is no longer `static`.
+2. Client types extending the owner class of the modified method, which declare a `static` method with the same name of the target method (cf. *JLS 13.4.12*).
 
 <p class="message">
   Static methods cannot be overriden, that is why we do not consider overriding relations.
@@ -623,6 +620,7 @@ A method goes from `non-static` to `static`. This results in a linkage error, ma
 3. Client methods invoking a supertype method that is now `static` without the `super` keyword.
 4. Client methods overriding a method that is now `static` in the direct parent type.
 5. Client methods overriding a method that is now `static` in a transitive parent type.
+6. Client types extending the owner class of the modified method, which declare a non-static method with the same name of the target method (cf. *JLS 13.4.12*).
 
 <p class="message">
   We consider all direct subtypes of the type that owns the modified method, which do not define the target method.

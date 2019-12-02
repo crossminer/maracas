@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool numericSimpleAccess()
+test bool numericSimpleAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClient()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -14,7 +14,7 @@ public test bool numericSimpleAccess()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool listSimpleAccess()
+test bool listSimpleAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClient()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
@@ -22,7 +22,7 @@ public test bool listSimpleAccess()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-public test bool numericSuperKeyAccess()
+test bool numericSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldTypeChangedClientSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -32,7 +32,7 @@ public test bool numericSuperKeyAccess()
 
 // TODO: If the field type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool listSuperKeyAccess()
+test bool listSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldTypeChangedClientSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
@@ -40,7 +40,7 @@ public test bool listSuperKeyAccess()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-public test bool numericNoSuperKeyAccess()
+test bool numericNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldTypeChangedClientNoSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -50,7 +50,7 @@ public test bool numericNoSuperKeyAccess()
 
 // TODO: If the field type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool listNoSuperKeyAccess()
+test bool listNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldTypeChangedClientNoSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
@@ -59,7 +59,7 @@ public test bool listNoSuperKeyAccess()
 	notin detects;
 	
 
-public test bool numericSimpleAccessSub()
+test bool numericSimpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -67,7 +67,7 @@ public test bool numericSimpleAccessSub()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool listSimpleAccessSub()
+test bool listSimpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
@@ -75,7 +75,7 @@ public test bool listSimpleAccessSub()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-public test bool numericSuperKeyAccessSub()
+test bool numericSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -85,7 +85,7 @@ public test bool numericSuperKeyAccessSub()
 
 // TODO: If the field type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool listSuperKeyAccessSub()
+test bool listSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
@@ -93,7 +93,7 @@ public test bool listSuperKeyAccessSub()
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-public test bool numericNoSuperKeyAccessSub()
+test bool numericNoSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
@@ -103,7 +103,7 @@ public test bool numericNoSuperKeyAccessSub()
 
 // TODO: If the field type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool listNoSuperKeyAccessSub()
+test bool listNoSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,

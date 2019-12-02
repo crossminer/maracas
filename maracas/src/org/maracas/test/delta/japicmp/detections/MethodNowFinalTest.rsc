@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool override()
+test bool override()
 	= detection(
 		|java+method:///mainclient/methodNowFinal/MethodNowFinalExt/methodNowFinal()|,
 		|java+method:///main/methodNowFinal/MethodNowFinal/methodNowFinal()|,
@@ -14,7 +14,7 @@ public test bool override()
 		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool overrideTrans()
+test bool overrideTrans()
 	= detection(
 		|java+method:///mainclient/methodNowFinal/MethodNowFinalExt/sMethodNowFinal()|,
 		|java+method:///main/methodNowFinal/SMethodNowFinal/sMethodNowFinal()|,
@@ -22,7 +22,7 @@ public test bool overrideTrans()
 		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool simpleAccess()
+test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/MethodNowFinalExt/methodNowFinalClient()|,
 		|java+method:///main/MethodNowFinal/methodNowFinal()|,

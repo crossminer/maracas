@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool simpleAccess() 
+test bool simpleAccess() 
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticFA/fieldNoLongerStaticClient()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
@@ -19,7 +19,7 @@ public test bool simpleAccess()
 // through objects it is not a problem when the we refer to 
 // an instance field. This is only true for source incompatibility.
 // Breaks at the binary level.
-public test bool superKeyAccess()
+test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
@@ -28,7 +28,7 @@ public test bool superKeyAccess()
 	in detects;
 
 // Breaks at the binary level.
-public test bool noSuperKeyAccess()
+test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientNoSuperKey()|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,

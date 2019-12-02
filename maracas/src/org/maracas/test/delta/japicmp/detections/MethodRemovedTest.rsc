@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool simpleAccess()
+test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedMI/methodRemovedClient()|,
     	|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
@@ -14,7 +14,7 @@ public test bool simpleAccess()
     	methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool superKeyAccess()
+test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemovedClientSuper()|,
 		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
@@ -22,7 +22,7 @@ public test bool superKeyAccess()
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool noSuperKeyAccess()
+test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemovedClientExt()|,
 		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
@@ -33,7 +33,7 @@ public test bool noSuperKeyAccess()
 // TODO: Removed interface methods are not identified as a change.
 // This is not a JApiCmp problem but rather a Rascal M3 issue (check 
 // methodOverrides relation).
-public test bool methodOverrides()
+test bool methodOverrides()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedImp/methodRemoved()|,
 		|java+method:///main/methodRemoved/IMethodRemoved/methodRemoved()|,

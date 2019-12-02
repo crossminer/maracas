@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool simpleAccess()
+test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedFA/fieldRemovedClient()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
@@ -14,7 +14,7 @@ public test bool simpleAccess()
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 
-public test bool superKeyAccess()
+test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedExt/fieldRemovedClientSuper()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
@@ -22,7 +22,7 @@ public test bool superKeyAccess()
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 
-public test bool noSuperKeyAccess()
+test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedExt/fieldRemovedClientExt()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
@@ -30,7 +30,7 @@ public test bool noSuperKeyAccess()
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
     
-public test bool simpleAccessSub()
+test bool simpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedFA/fieldRemovedClientSub()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
@@ -38,7 +38,7 @@ public test bool simpleAccessSub()
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 
-public test bool superKeyAccessSub()
+test bool superKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedExtSub/fieldRemovedClientSuper()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,
@@ -46,7 +46,7 @@ public test bool superKeyAccessSub()
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 
-public test bool noSuperKeyAccessSub()
+test bool noSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldRemoved/FieldRemovedExtSub/fieldRemovedClientExt()|,
 		|java+field:///main/fieldRemoved/FieldRemoved/fieldRemoved|,

@@ -8,7 +8,7 @@ import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 // TODO: If the method type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool simpleAccessNumeric()
+test bool simpleAccessNumeric()
 	= detection(
 		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedMI/numericClient()|,
 		|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedNumeric()|,
@@ -16,7 +16,7 @@ public test bool simpleAccessNumeric()
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 
-public test bool simpleAccessList()
+test bool simpleAccessList()
     = detection(
     	|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedMI/listClient()|,
     	|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedList()|,
@@ -26,7 +26,7 @@ public test bool simpleAccessList()
 
 // TODO: If the method type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool superKeyNumeric()
+test bool superKeyNumeric()
     = detection(
     	|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/numericClientSuperKey()|,
     	|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedNumeric()|,
@@ -34,7 +34,7 @@ public test bool superKeyNumeric()
     	methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
     notin detects;
 
-public test bool superKeyList()
+test bool superKeyList()
 	= detection(
 		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/listClientSuperKey()|,
 		|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedList()|,
@@ -44,7 +44,7 @@ public test bool superKeyList()
 
 // TODO: If the method type changes to a subtype type of the old type 
 // no source compatibility error appears.
-public test bool noSuperKeyNumeric()
+test bool noSuperKeyNumeric()
     = detection(
     	|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/numericClientNoSuperKey()|,
     	|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedNumeric()|,
@@ -52,7 +52,7 @@ public test bool noSuperKeyNumeric()
     	methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
     notin detects;
 
-public test bool noSuperKeyList()
+test bool noSuperKeyList()
 	= detection(
 		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/listClientNoSuperKey()|,
 		|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedList()|,
@@ -60,7 +60,7 @@ public test bool noSuperKeyList()
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool overrideNumeric()
+test bool overrideNumeric()
 	= detection(
 		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedImp/methodReturnTypeChangedNumeric()|,
 		|java+method:///main/methodReturnTypeChanged/IMethodReturnTypeChanged/methodReturnTypeChangedNumeric()|,
@@ -68,7 +68,7 @@ public test bool overrideNumeric()
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool overrideList()
+test bool overrideList()
     = detection(
     	|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedImp/methodReturnTypeChangedList()|,
     	|java+method:///main/methodReturnTypeChanged/IMethodReturnTypeChanged/methodReturnTypeChangedList()|,

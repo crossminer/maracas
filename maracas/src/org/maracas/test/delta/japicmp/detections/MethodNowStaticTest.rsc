@@ -6,7 +6,7 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::detections::SetUp;
 
 
-public test bool simpleAccess()
+test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticMI/methodNowStaticClient()|,
 		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
@@ -14,7 +14,7 @@ public test bool simpleAccess()
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 	    
-public test bool superKeyAccess()
+test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticExt/methodNowStaticClientSuperKeyAccess()|,
 		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
@@ -22,7 +22,7 @@ public test bool superKeyAccess()
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool noSuperKeyAccess()
+test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticExt/methodNowStaticClientNoSuperKeyAccess()|,
 		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
@@ -30,7 +30,7 @@ public test bool noSuperKeyAccess()
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-public test bool override()
+test bool override()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticExtOverriden/methodNowStatic()|,
 		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
@@ -38,7 +38,7 @@ public test bool override()
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	
-public test bool interface()
+test bool interface()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticImp/methodNowStaticClient()|,
 		|java+method:///main/methodNowStatic/IMethodNowStatic/methodNowStatic()|,
