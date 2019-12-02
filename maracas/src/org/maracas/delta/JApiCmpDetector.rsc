@@ -108,7 +108,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 	= computeFieldSymbDetections(evol, ch, isLessAccessible);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMoreAccessible()) 
-	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true);
+	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
 	= computeFieldSymbDetections(evol, ch);
@@ -117,7 +117,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNo
 	= computeFieldSymbDetections(evol, ch); 
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNowStatic()) 
-	= computeFieldSymbDetections(evol, ch);
+	= computeFieldSymbDetections(evol, ch)
+	+ computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldRemoved()) 
 	= computeFieldSymbDetections(evol, ch);
@@ -559,6 +560,14 @@ private bool isMoreAccessible(RippleEffect effect, Evolution evol) {
 	set[Modifier] modifsClient = getAccessModifier(effect.affected, evol.client);
 	Modifier accessClient = (modifsClient == {}) ? \packageProtected() : getOneFrom(modifsClient);
 	return isMoreVisible(accessApi.new, accessApi.old) && isLessVisible(accessClient, accessApi.new);
+}
+
+private bool areStaticIncompatible(RippleEffect effect, Evolution evol) {
+	set[Modifier] modifsApi = getStaticModifier(effect.changed, evol.apiNew);
+	set[Modifier] modifsClient = getStaticModifier(effect.affected, evol.client);
+	Modifier modifClient = (modifsClient == {}) ? \nonStatic() : getOneFrom(modifsClient);
+	Modifier modifApi = (modifsClient == {}) ? \nonStatic() : getOneFrom(modifsClient);
+	return modifClient == modifApi;
 }
 
 private bool areInSameHierarchy(RippleEffect effect, Evolution evol) {
