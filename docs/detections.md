@@ -79,6 +79,29 @@ detection(
 
 ---
 
+## Field More Accessible
+The field is more accessible than its previous version. 
+Client types higding such fields will break if the visibility of their own declaration is lower than the API definition.
+
+**Detection**
+
+1. Client fields within type `T`hiding a field of the type `S`, where the new field declaration in `T` is less accessible than the corresponding definition in `S`.
+
+For example, there is an API type `api.A` with a `package-protected` field `f`.
+The later is hidden in client type `client.C` with a `protected` visibility. 
+If the visibility of `f` is changed to `public` in `api.A`, then the following detection is reported:
+
+```
+detection(
+  |java+field:///client/C/f|,
+  |java+field:///api/A/f|,
+  declaration(),
+  fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=true)
+)
+```
+
+---
+
 ## Field No Longer Static
 A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
 

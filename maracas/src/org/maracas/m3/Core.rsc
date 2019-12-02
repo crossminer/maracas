@@ -431,6 +431,14 @@ str fieldDeclaration(loc field, M3 m) {
 bool isDeclared(loc logical, M3 m) 
 	= m.declarations[logical] != {};
 
+set[Modifier] getAccessModifier(loc logical, M3 m) {
+	set[Modifier] accessModifs = { 
+		\public(), 
+		\protected(), 
+		\private() };
+	return m.modifiers[logical] & accessModifs;
+}
+
 bool isAbstract(loc logical, M3 m) 
 	= isInterface(logical) 
 	|| <logical, \abstract()> in m.modifiers;

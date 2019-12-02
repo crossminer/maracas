@@ -30,6 +30,7 @@ data APIUse
 	| implements()
 	| annotation()
 	| typeDependency()
+	| declaration()
 	;
 
 data Evolution = evolution(
@@ -56,42 +57,41 @@ Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 }
 
 set[Detection] detections(Evolution evol)
-	= computeDetections(evol, methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false));
-	//= computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
-	//+ computeDetections(evol, classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//+ computeDetections(evol, superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
-	//+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
-	//;
+	= computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+	+ computeDetections(evol, classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
+	+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	;
 	
 
 set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
@@ -106,6 +106,9 @@ set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLessAccessible()) 
 	= computeFieldSymbDetections(evol, ch, isLessAccessible);
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMoreAccessible()) 
+	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
 	= computeFieldSymbDetections(evol, ch);
@@ -124,23 +127,25 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldTy
 	
 set[Detection] computeFieldSymbDetections(Evolution evol, CompatibilityChange change)
 	= computeFieldSymbDetections(evol, change, bool (RippleEffect effect, Evolution evol) { return true; });
+
+set[Detection] computeFieldSymbDetections(Evolution evol, CompatibilityChange change, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false)
+	= computeFieldSymbDetections(evol, change, { fieldAccess() }, predicate, allowShadowing = allowShadowing);
 	
-set[Detection] computeFieldSymbDetections(Evolution evol, CompatibilityChange change, bool (RippleEffect, Evolution) predicate) {
+set[Detection] computeFieldSymbDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false) {
 	set[loc] changed = getChangedEntities(evol.delta, change);
-	return computeFieldSymbDetections(evol, changed, change, predicate);
+	return computeFieldSymbDetections(evol, changed, change, apiUses, predicate, allowShadowing = allowShadowing);
 }
 
 set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change)
-	 = computeFieldSymbDetections(evol, changed, change, bool (RippleEffect effect, Evolution evol) { return true; });
-	 
-set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, bool (RippleEffect, Evolution) predicate) {
-	set[APIUse] apiUses = { fieldAccess() };
+	 = computeFieldSymbDetections(evol, changed, change, { fieldAccess() }, bool (RippleEffect effect, Evolution evol) { return true; });
+		 
+set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false) {
 	set[TransChangedEntity] entities = {}; 
 	
 	for (e <- changed) {
 		str field = memberName(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client);
+		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbFields;
 	}
 	
@@ -451,6 +456,7 @@ private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] 
 	
 	switch (apiUse) {
 	case APIUse::annotation(): affected = domain(rangeR(client.annotations, entities));
+	case declaration(): affected = domain(domainR(client.declarations, entities));
 	case extends(): affected = domain(rangeR(client.extends, entities));
 	case fieldAccess(): affected = domain(rangeR(client.fieldAccess, entities));
 	case implements(): affected = domain(rangeR(client.implements, entities));
@@ -549,8 +555,10 @@ private bool isClassLessAccessible(RippleEffect effect, Evolution evol) {
 }
 
 private bool isMoreAccessible(RippleEffect effect, Evolution evol) {
-	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);		
-	return isMoreVisible(access.new, access.old);
+	tuple[Modifier old, Modifier new] accessApi = getAccessModifiers(effect.changed, evol.delta);
+	set[Modifier] modifsClient = getAccessModifier(effect.affected, evol.client);
+	Modifier accessClient = (modifsClient == {}) ? \packageProtected() : getOneFrom(modifsClient);
+	return isMoreVisible(accessApi.new, accessApi.old) && isLessVisible(accessClient, accessApi.new);
 }
 
 private bool areInSameHierarchy(RippleEffect effect, Evolution evol) {

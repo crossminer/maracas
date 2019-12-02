@@ -100,8 +100,8 @@ private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 cli
 	       field
 	@param m: M3 owning the main types and its subtypes
 }
-set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 client, bool includeParent = true)
-	= createHierarchySymbRefs(class, fieldName, api, client, createFieldLoc, false, includeParent);
+set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
+	= createHierarchySymbRefs(class, fieldName, api, client, createFieldLoc, allowShadowing, includeParent);
 
 @doc{
 	Given a type and the signature of a method within that 
