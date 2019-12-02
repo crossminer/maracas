@@ -111,7 +111,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMo
 	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
-	= computeFieldSymbDetections(evol, ch);
+	= computeFieldSymbDetections(evol, ch)
+	+ computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNowFinal()) 
 	= computeFieldSymbDetections(evol, ch); 

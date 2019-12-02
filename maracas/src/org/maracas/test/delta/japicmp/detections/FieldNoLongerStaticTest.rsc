@@ -69,3 +69,11 @@ test bool simpleAccessSuper2()
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
+
+test bool hideNonStaticAsStatic()
+	= detection(
+		|java+field:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticHideExt/fieldStatic|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
+		declaration(),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
