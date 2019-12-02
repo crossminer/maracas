@@ -200,7 +200,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowStatic()) 
 	= computeMethSymbDetections(evol, ch, { methodInvocation() })
-	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) 
 	= computeMethSymbDetections(evol, ch, { methodInvocation() });
