@@ -189,7 +189,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodM
 	= computeMethSymbDetections(evol, ch, { methodOverride() }, isMoreAccessible, allowShadowing = true);	
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) 
-	= computeDetections(evol, ch, { methodInvocation() });
+	= computeDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowAbstract())
 	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() }, isAffectedByAbsMeth)

@@ -50,3 +50,19 @@ public test bool interface()
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
+	
+test bool hideNonStaticAsStatic()
+	= detection(
+		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodNoLongerStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
+		methodOverride(),
+		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+	
+test bool hideStaticAsStatic()
+	= detection(
+		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodRemainsStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodRemainsStatic()|,
+		methodOverride(),
+		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	notin detects;
