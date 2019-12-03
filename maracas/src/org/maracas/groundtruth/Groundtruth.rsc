@@ -5,14 +5,17 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::groundtruth::MessageMatcher;
 import org::maracas::groundtruth::Report;
 import org::maracas::io::File;
-import lang::java::m3::Core;
+import org::maracas::m3::ClassPaths;
 import org::maracas::measure::delta::Evolution;
-import lang::csv::IO;
 
+import lang::csv::IO;
+import lang::java::m3::Core;
+
+import IO;
+import List;
+import Map;
 import Relation;
 import Set;
-import List;
-import IO;
 import String;
 import ValueIO;
 
@@ -146,8 +149,10 @@ void runGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossmin
 				
 				if (upgraded) {
 					println("Loading M3 of the client");
+					map[loc, list[loc]] srcClasspath = getClassPath(clientDir, mavenExecutable = |file:///Users/ochoa/installations/apache-maven-3.5.4|);
+					
 					M3 clientM3 = createM3FromJar(client, classPath = []); // FIXME: classpath
-					M3 clientSrcM3 = createM3FromDirectory(clientDir); // FIXME: classpath
+					M3 clientSrcM3 = createM3FromDirectory(clientDir, classPath = range(srcClasspath), javaVersion="1.8"); // FIXME: classpath
 					
 					generateReport(homeDir + "tmp/gt/reports/<group>:<artifact>:<v1>_to_<v2>:<cg>:<ca>:<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
 					allClients += client;
