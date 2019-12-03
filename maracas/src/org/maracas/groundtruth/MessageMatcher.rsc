@@ -38,7 +38,7 @@ CompilerMessage emptyMsg() = message(unknownSource, -1, -1, "", ());
 
 @javaClass{org.maracas.groundtruth.internal.Groundtruth}
 @reflect{}
-java bool upgradeClient(loc clientJar, str groupId, str artifactId, str v1, str v2);
+java bool upgradeClient(loc clientJar, loc extractDir, str groupId, str artifactId, str v1, str v2);
 
 @javaClass{org.maracas.groundtruth.internal.Groundtruth}
 @reflect{}

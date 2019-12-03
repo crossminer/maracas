@@ -12,6 +12,26 @@ import Relation;
 import Set;
 
 
+void generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3, list[APIEntity] delta) {
+	println("Recording compilation errors");
+	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
+	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
+	
+	println("Computing evolution models");
+	Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
+	set[Detection] detects = detections(evol); 
+	
+	println("Matching detections");
+	//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
+	set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
+	
+	println("Generating report");
+	//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
+	outputReport(sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
+	
+	println("Done!");
+}
+
 void outputReport(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, set[Match] matches, loc path) {
 	// Always rewrite file
 	writeFile(path, "");

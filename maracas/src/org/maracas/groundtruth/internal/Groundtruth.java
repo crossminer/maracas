@@ -75,34 +75,28 @@ public class Groundtruth {
 		Artifact resolved = downloader.downloadArtifact(new DefaultArtifact(group.getValue(), artifact.getValue(), "jar", version.getValue()));
 		return vf.sourceLocation(resolved.getFile().getPath());
 	}
+	
+	public ISourceLocation downloadSrcs(IString group, IString artifact, IString version, IEvaluatorContext ctx) {
+		Artifact resolved = downloader.downloadArtifact(new DefaultArtifact(group.getValue(), artifact.getValue(), "sources", "jar", version.getValue()));
+		return vf.sourceLocation(resolved.getFile().getPath());
+	}
 
-	public IBool upgradeClient(ISourceLocation clientJar, IString groupId, IString artifactId, IString v1, IString v2,
+	public IBool upgradeClient(ISourceLocation clientJar, ISourceLocation extractDir, IString groupId, IString artifactId, IString v1, IString v2,
 			IEvaluatorContext ctx) {
 		out = ctx.getStdOut();
-		boolean upgraded = upgradeClient(Paths.get(clientJar.getPath()), groupId.getValue(),
+		boolean upgraded = upgradeClient(Paths.get(clientJar.getPath()), Paths.get(extractDir.getPath()), groupId.getValue(),
 				artifactId.getValue(), v1.getValue(), v2.getValue());
 		return vf.bool(upgraded);
 	}
 	
-	public boolean upgradeClient(Path clientJar, String groupId, String artifactId, String v1, String v2) {
+	public boolean upgradeClient(Path clientJar, Path extractDir, String groupId, String artifactId, String v1, String v2) {
 		try {
-			// extractDest: <user-home-path>/temp/maracas/<client-jar-name.jar>
-			String extractPath = System.getProperty("user.home") 
-					+ File.separator 
-					+ "temp" 
-					+ File.separator 
-					+ "maracas"
-					+ File.separator 
-					+ clientJar.getFileName().toString();
-			
-			Path extractDest = Paths.get(extractPath);
-
 			// Step 1: extract the content of the client JAR locally
-			extractJAR(clientJar, extractDest);
-			out.println("Extracted " + clientJar.toAbsolutePath() + " to " + extractDest.toAbsolutePath());
+			extractJAR(clientJar, extractDir);
+			out.println("Extracted " + clientJar.toAbsolutePath() + " to " + extractDir.toAbsolutePath());
 
 			// Step 2: Move its pom.xml file to the root of the dest folder
-			Path pomFile = movePOM(extractDest);
+			Path pomFile = movePOM(extractDir);
 			out.println("Moved extracted pom.xml to " + pomFile.toAbsolutePath());
 
 			// Step 3: Update the pom.xml file to enable compilation with
@@ -112,8 +106,7 @@ public class Groundtruth {
 			return true;	
 		} 
 		catch (Exception e) {
-			out.println(e.getMessage());
-			e.printStackTrace(out);
+			// Don't do anything
 		}
 
 		return false;
