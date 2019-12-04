@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rascalmpl.interpreter.IEvaluatorContext;
+
 import io.usethesource.vallang.IListWriter;
 import io.usethesource.vallang.IMap;
 import io.usethesource.vallang.IMapWriter;
@@ -27,11 +29,12 @@ public class ClassPaths {
 		this.vf = vf;
 	}
 	
-	public IMap getClassPath(ISourceLocation directory, IMap dependencyUpdateSites, ISourceLocation mavenExecutable) throws UnsupportedOperationException, BuildException {
+	public IMap getClassPath(ISourceLocation directory, IMap dependencyUpdateSites, ISourceLocation mavenExecutable, 
+			IEvaluatorContext ctx) throws UnsupportedOperationException, BuildException {
 		assert directory.getScheme().equals("file");
 		assert mavenExecutable.getScheme().equals("file");
 
-		BuildManager bmw = new BuildManager(mavenExecutable.getPath());
+		BuildManager bmw = new BuildManager(mavenExecutable.getPath(), ctx);
 		HashMap<String, String> dependencies = new HashMap<String, String>();
 
 		for (IValue id: dependencyUpdateSites) {

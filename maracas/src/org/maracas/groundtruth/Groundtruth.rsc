@@ -9,6 +9,7 @@ import org::maracas::m3::ClassPaths;
 import org::maracas::measure::delta::Evolution;
 
 import lang::csv::IO;
+import lang::java::m3::AST;
 import lang::java::m3::Core;
 
 import IO;
@@ -17,6 +18,7 @@ import Map;
 import Relation;
 import Set;
 import String;
+import util::FileSystem;
 import ValueIO;
 
 /**
@@ -67,7 +69,7 @@ java loc downloadJar(str group, str artifact, str version);
 @reflect{for debugging}
 java loc downloadSrcs(str group, str artifact, str version);
 
-void runGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|, loc deltasDir = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/deltas|) {
+void runGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|, loc deltasDir = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/deltas|, loc mavenExecutable = |file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	// You can get the rq2-clients-clean.csv at https://github.com/tdegueul/maven-api-dataset/blob/master/notebooks/rq2-clients-clean.csv
 	println("Loading clients CSV...");
 	clients = readCSV(#rel[int id, str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsCsv);
@@ -141,21 +143,28 @@ void runGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossmin
 			for (<_, group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
 				loc client = downloadJar(cg, ca, cv);
 				loc clientSrc = downloadSrcs(cg, ca, cv);
-				loc clientDir = clientSrc;
-				clientDir.path = replaceLast(clientDir.path, ".<clientDir.extension>", "");
+				loc clientDir = homeDir + "tmp/gt/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
 				
 				bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
 				println("Client upgraded: <upgraded>");
 				
 				if (upgraded) {
-					println("Loading M3 of the client");
-					map[loc, list[loc]] srcClasspath = getClassPath(clientDir, mavenExecutable = |file:///Users/ochoa/installations/apache-maven-3.5.4|);
-					
-					M3 clientM3 = createM3FromJar(client, classPath = []); // FIXME: classpath
-					M3 clientSrcM3 = createM3FromDirectory(clientDir, classPath = range(srcClasspath), javaVersion="1.8"); // FIXME: classpath
-					
-					generateReport(homeDir + "tmp/gt/reports/<group>:<artifact>:<v1>_to_<v2>:<cg>:<ca>:<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
-					allClients += client;
+					try {
+						println("Loading M3 of the client");
+						set[loc] srcPaths = getPaths(clientDir, "java");
+						set[loc] srcFiles = { p | sp <- srcPaths, p <- find(sp, "java"), isFile(p)};
+						map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
+						list[loc] srcClasspath = [ *mapClasspath[c] | c <- mapClasspath ];
+						
+						M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
+						M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
+						
+						generateReport(homeDir + "tmp/gt/reports/<group>:<artifact>:<v1>_to_<v2>:<cg>:<ca>:<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
+						allClients += client;
+					}
+					catch e: {
+						continue; // Just skip!
+					}
 				}
 			}
 		}

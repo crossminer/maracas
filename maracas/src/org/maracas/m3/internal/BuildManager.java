@@ -27,6 +27,7 @@ import org.apache.maven.model.Repository;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.rascalmpl.interpreter.IEvaluatorContext;
 
 /**
  * This code has been extracted from
@@ -35,13 +36,16 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  * @author Jurgen Vinju, Davy Landman and Ashim Shahi
  */
 public class BuildManager {
+	
 	private static final String MAVEN_CLASSPATH_TXT = "mavenClasspath.txt";
 	private final String mavenExecutable;
 	private Map<String, String> eclipseRepos = new HashMap<String, String>();
+	private IEvaluatorContext ctx;
 	
-	public BuildManager(String mavenExecutable) {
+	public BuildManager(String mavenExecutable, IEvaluatorContext ctx) {
 		assert mavenExecutable != null;
 		this.mavenExecutable = mavenExecutable;
+		this.ctx = ctx;
 	}
 	
 	public void addEclipseRepositories(Map<String, String> repos) {
@@ -106,6 +110,7 @@ public class BuildManager {
 
 	private void runMaven(File workingDirectory, String MAVEN_EXECUTABLE, boolean compile)
 			throws IOException, InterruptedException, BuildException {
+		ctx.getStdOut().println("WD: " + workingDirectory.getAbsolutePath());
 		// Tycho does its magic here and writes a file into every subdirectory of workDirectory which is a maven project
 		ProcessBuilder pb;
 		if (compile) {
@@ -114,30 +119,47 @@ public class BuildManager {
 		else {
 		    pb = new ProcessBuilder(MAVEN_EXECUTABLE, "dependency:build-classpath", "-Dmdep.outputFile=" + MAVEN_CLASSPATH_TXT);
 		}
+		
+		ctx.getStdOut().println("ProcessBuilder initilized.");
+		
 		pb.directory(workingDirectory);
 		//pb.inheritIO();
 		
+		ctx.getStdOut().println("Starting process.");
+		
 		Process process = pb.start();
+		
+		ctx.getStdOut().println("Starting process.");
+		process.getErrorStream();
+
 		boolean hadDependencyError = false;
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 		    String currentLine;
 		    while ((currentLine = reader.readLine()) != null) {
 		        if (currentLine.contains("Could not resolve dependencies")) {
+		        	ctx.getStdOut().append("Has dependency error.");
 		            hadDependencyError = true;
 		        }
+		        ctx.getStdOut().println(currentLine);
 		        System.out.println(currentLine);
 		    }
 		    reader.close();
 		}
-		catch (IOException _) {
+		catch (IOException e) {
+			ctx.getStdOut().println("BR exception.");
 		}
+		
+		ctx.getStdOut().println("First flag.");
+		
 		if (process.waitFor() != 0) {
 		    if (!compile && hadDependencyError) {
+		    	ctx.getStdOut().println("Retrying with compile enabled.");
 		        System.err.println("Retrying with compile enabled");
 		        // we might be able to solve it with a compile since multi modules maven's tend to be depending on previously build modules
 		        runMaven(workingDirectory, MAVEN_EXECUTABLE, true);
 		    }
 		    else {
+		    	ctx.getStdOut().println("Retrieving classpath from maven failed because maven exited with a non-zero exit status.");
 		        throw new BuildException("Retrieving classpath from maven failed because maven exited with a non-zero exit status");
 		    }
 		}
