@@ -110,7 +110,6 @@ public class BuildManager {
 
 	private void runMaven(File workingDirectory, String MAVEN_EXECUTABLE, boolean compile)
 			throws IOException, InterruptedException, BuildException {
-		ctx.getStdOut().println("WD: " + workingDirectory.getAbsolutePath());
 		// Tycho does its magic here and writes a file into every subdirectory of workDirectory which is a maven project
 		ProcessBuilder pb;
 		if (compile) {
@@ -119,47 +118,33 @@ public class BuildManager {
 		else {
 		    pb = new ProcessBuilder(MAVEN_EXECUTABLE, "dependency:build-classpath", "-Dmdep.outputFile=" + MAVEN_CLASSPATH_TXT);
 		}
-		
-		ctx.getStdOut().println("ProcessBuilder initilized.");
-		
 		pb.directory(workingDirectory);
 		//pb.inheritIO();
 		
-		ctx.getStdOut().println("Starting process.");
-		
 		Process process = pb.start();
-		
-		ctx.getStdOut().println("Starting process.");
-		process.getErrorStream();
 
 		boolean hadDependencyError = false;
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 		    String currentLine;
 		    while ((currentLine = reader.readLine()) != null) {
 		        if (currentLine.contains("Could not resolve dependencies")) {
-		        	ctx.getStdOut().append("Has dependency error.");
 		            hadDependencyError = true;
 		        }
-		        ctx.getStdOut().println(currentLine);
 		        System.out.println(currentLine);
 		    }
 		    reader.close();
 		}
 		catch (IOException e) {
-			ctx.getStdOut().println("BR exception.");
+			// Don't do anything
 		}
-		
-		ctx.getStdOut().println("First flag.");
 		
 		if (process.waitFor() != 0) {
 		    if (!compile && hadDependencyError) {
-		    	ctx.getStdOut().println("Retrying with compile enabled.");
 		        System.err.println("Retrying with compile enabled");
 		        // we might be able to solve it with a compile since multi modules maven's tend to be depending on previously build modules
 		        runMaven(workingDirectory, MAVEN_EXECUTABLE, true);
 		    }
 		    else {
-		    	ctx.getStdOut().println("Retrieving classpath from maven failed because maven exited with a non-zero exit status.");
 		        throw new BuildException("Retrieving classpath from maven failed because maven exited with a non-zero exit status");
 		    }
 		}

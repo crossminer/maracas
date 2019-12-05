@@ -26,10 +26,10 @@ data CompilerMessage = message(
 );
 
 data MatchType 
-	= matched()
-	| unmatched()
-	| candidates()
-	| unknown()
+	= matched() // Detection -> Compilation message
+	| unmatched() // Detection -> No compilation message
+	| candidates() // Detection -> Many compilation messages
+	| unknown() // Cannot find the physical location of the affected client entity
 	;
 
 alias Match = tuple[MatchType typ, Detection detect, CompilerMessage msg];

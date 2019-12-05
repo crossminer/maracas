@@ -34,7 +34,7 @@ import ValueIO;
  *   - javac reports 100 errors max. Could be fixed with the -Xmaxerrs/-Xmaxwarns flags
  */
 
-void main() {
+void runArtifGroundtruth() {
 	loc homeDir = getUserHomeDir();
 	loc oldApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.1/comp-changes-0.0.1.jar";
 	loc newApi = homeDir + ".m2/repository/maracas-data/comp-changes/0.0.2/comp-changes-0.0.2.jar";
@@ -69,107 +69,149 @@ java loc downloadJar(str group, str artifact, str version);
 @reflect{for debugging}
 java loc downloadSrcs(str group, str artifact, str version);
 
-void runGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|, loc deltasDir = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/deltas|, loc mavenExecutable = |file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
+set[CompatibilityChange] getGroundtruthCCs() 
+	= {
+		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false),
+		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false),
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
+		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false),
+		interfaceAdded(binaryCompatibility=true,sourceCompatibility=true),
+		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false),
+		methodRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false),
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false),
+		superclassAdded(binaryCompatibility=true,sourceCompatibility=true),
+		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false),
+		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false),
+		superclassRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false),
+		classNowFinal(binaryCompatibility=false,sourceCompatibility=false),
+		//methodIsStaticAndOverridesNotStatic(binaryCompatibility=false,sourceCompatibility=false),
+		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false),
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), // Do it later
+		//methodAbstractAddedInImplementedInterface(binaryCompatibility=true,sourceCompatibility=false),
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true),
+		//fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
+		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		//methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
+		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false),
+		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
+		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
+		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false),
+		//methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false),
+		//fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
+		classRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false),
+		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		//fieldStaticAndOverridesStatic(binaryCompatibility=false,sourceCompatibility=false),
+		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+	};
+	
+rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clientsFile = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|) {
+	clients = readCSV(#rel[str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsFile);
+	rel[str, str, str] usedDeltas = clients<0, 1, 2>;
+	rel[loc, int, int] stats = {};
+	
+	for (<str g, str a, str v> <- usedDeltas) {
+		loc currentDir = deltasDir + "<g>/<a>";
+		if (exists(currentDir)) {
+			println(currentDir);
+			
+			for (loc l <- currentDir.ls, startsWith(l.file, "<v>")) {
+				list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l);
+				stats += <l, numberChangesPerType(delta, cc), numberChanges(delta)> ;
+			}
+		}
+	}
+	
+	return stats;
+}
+
+// <location, numberChangesPerType, numberChanges>
+lrel[loc, int, int] orderDeltas(CompatibilityChange cc, loc deltasPath, loc file) {
+	rel[loc, int, int] stats = getDeltaStats(deltasPath, cc);
+	rel[int, int, loc] statsInv = invert(stats);
+	lrel[loc, int, int] orderedDeltas = [];
+	list[int] ccValues = sort(stats<2>);
+	
+	for (int ccVal <- ccValues, ccVal != 0) {
+		list[int] bcsValues = sort(stats[_, ccVal]);
+		
+		for (int bcsVal <- bcsValues) {
+			set[loc] currentDeltas = statsInv[ccVal, bcsVal];
+			orderedDeltas += [ <d, ccVal, bcsVal> | loc d <- currentDeltas ];
+		}
+	}
+	writeCSV(orderedDeltas, file);
+	return orderedDeltas;
+}
+
+void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|, loc deltasDir = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/deltas|, loc mavenExecutable = |file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	// You can get the rq2-clients-clean.csv at https://github.com/tdegueul/maven-api-dataset/blob/master/notebooks/rq2-clients-clean.csv
 	println("Loading clients CSV...");
-	clients = readCSV(#rel[int id, str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsCsv);
-
-	// Pre-computed map of the deltas we should look at to cover all kinds of BC
-	map[CompatibilityChange, loc] deltas = (
-	  methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.seleniumhq.selenium/selenium-firefox-driver/2.46.0_to_2.47.0.delta",
-	  methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.springframework/spring-jdbc/5.0.2.RELEASE_to_5.0.3.RELEASE.delta",
-	  methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.neo4j/neo4j-udc/1.8.M07_to_1.8.RC1.delta",
-	  classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.openehealth.ipf.platform-camel/ipf-platform-camel-hl7/3.4.2_to_3.5-20180302.delta",
-	  interfaceAdded(binaryCompatibility=true,sourceCompatibility=true) : deltasDir + "org.apache.cxf/cxf-rt-ws-addr/3.0.0-milestone2_to_3.0.1.delta",
-	  fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.springframework/spring-core/2.0.6_to_2.0.7.delta",
-	  methodRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-http/8.1.5.v20120716_to_8.1.6.v20120903.delta",
-	  methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "org.apache.camel/camel-flatpack/2.16.1_to_2.16.2.delta",
-	  fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.solr/solr-core/3.3.0_to_3.4.0.delta",
-	  superclassAdded(binaryCompatibility=true,sourceCompatibility=true) : deltasDir + "org.apache.cxf/cxf-rt-ws-policy/3.1.9_to_3.1.10.delta",
-	  methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-jmx/9.4.8.v20171121_to_9.4.9.v20180320.delta",
-	  fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-http/8.1.0.v20120127_to_8.1.1.v20120215.delta",
-	  fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.springframework/spring-jdbc/5.0.3.RELEASE_to_5.0.4.RELEASE.delta",
-	  classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "org.drools/drools-compiler/6.1.0.Beta2_to_6.1.0.Beta3.delta",
-	  superclassRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.gravitee.gateway/gravitee-gateway-env/1.13.3_to_1.14.0.delta",
-	  methodNowStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.neo4j/neo4j-udc/2.1.0-RC2_to_2.1.0.delta",
-	  classNowFinal(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.cxf/cxf-rt-ws-addr/2.1.8_to_2.1.9.delta",
-	  methodIsStaticAndOverridesNotStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.scala-js/scalajs-library_2.12.0-M2/0.6.4_to_0.6.5.delta",
-	  methodNewDefault(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-io/9.3.9.v20160517_to_9.3.10.M0.delta",
-	  classTypeChanged(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.dropwizard.metrics/metrics-core/4.0.0_to_4.0.1.delta",
-	  methodAbstractAddedInImplementedInterface(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-jmx/9.4.3.v20170317_to_9.4.4.v20170414.delta",
-	  annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true) : deltasDir + "org.eclipse.jetty/jetty-http/9.4.0.v20180619_to_9.4.1.v20180619.delta",
-	  fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.solr/solr-core/4.0.0-BETA_to_4.0.0.delta",
-	  methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.santuario/xmlsec/2.0.1_to_2.0.2.delta",
-	  methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.fabric8/fabric8-cxf/2.2.115_to_2.2.122.delta",
-	  methodNowFinal(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "com.typesafe.akka/akka-actor_2.11/2.4.12_to_2.4.13.delta",
-	  classNowAbstract(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.cxf/cxf-rt-management/2.6.16_to_2.7.13.delta",
-	  fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-io/9.1.0.RC1_to_9.1.0.RC2.delta",
-	  methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.fabric8/openshift-client/1.3.78_to_1.3.79.delta",
-	  constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-http/9.4.0.M1_to_9.4.0.RC0.delta",
-	  fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.gravitee.gateway/gravitee-gateway-env/1.0.1_to_1.4.0.delta",
-	  methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "io.dropwizard.metrics/metrics-core/3.1.1_to_3.1.2.delta",
-	  methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-io/9.0.0.M2_to_9.0.0.M3.delta",
-	  fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.apache.camel/camel-http/2.16.1_to_2.16.2.delta",
-	  classRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-io/9.3.5.v20151012_to_9.3.6.v20151106.delta",
-	  methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false) : deltasDir + "org.eclipse.jetty/jetty-http/7.5.0.RC1_to_7.5.0.RC2.delta",
-	  interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "io.ultreia.java4all.i18n/i18n-api/4.0-alpha-6_to_4.0-alpha-9.delta",
-	  classLessAccessible(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.openehealth.ipf.platform-camel/ipf-platform-camel-hl7/3.4.2_to_3.5-20180302.delta",
-	  fieldStaticAndOverridesStatic(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.pac4j/pac4j-oauth/3.0.1_to_3.1.0.delta",
-	  fieldRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "org.scala-lang/scala-compiler/2.9.0.RC5_to_2.9.0-1.delta",
-	  constructorRemoved(binaryCompatibility=false,sourceCompatibility=false) : deltasDir + "com.netflix.eureka/eureka-client/1.8.7_to_1.9.2.delta"
-	);
+	clients = readCSV(#rel[str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsCsv);
+	set[CompatibilityChange] ccs = getGroundtruthCCs();
 	loc homeDir = getUserHomeDir();
 
 	set[loc] allClients = {};
 	// For all deltas, get the JARs of libV1/libV2/client, and compare Maracas against the GT
-	for (CompatibilityChange cc <- deltas) {
+	for (CompatibilityChange cc <- ccs) {
+		lrel[loc, int, int] deltas = orderDeltas(cc, deltasDir);
 		loc deltaLoc = deltas[cc];
-		list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaLoc);
-		println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]");
-
-		str group = deltaLoc.parent.parent.file;
-		str artifact = deltaLoc.parent.file;
-
-		// Help, I don't know how to match a regex without having to use an if :(
-		if (/^<v1:.*>_to_<v2:.*>.delta$/ := deltaLoc.file) {
-			loc jarV1 = downloadJar(group, artifact, v1);
-			loc jarV2 = downloadJar(group, artifact, v2);
-
-			println("Loading M3s of the library");
-			M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
-			M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
-
-			// Find clients using group:artifact:v1
-			for (<_, group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
-				loc client = downloadJar(cg, ca, cv);
-				loc clientSrc = downloadSrcs(cg, ca, cv);
-				loc clientDir = homeDir + "tmp/gt/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
-				
-				bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
-				println("Client upgraded: <upgraded>");
-				
-				if (upgraded) {
+		
+		for (<loc l, int b, int c> <- deltas) {
+			list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l, |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas| + "<cc>.csv");
+			println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]");
+	
+			str group = deltaLoc.parent.parent.file;
+			str artifact = deltaLoc.parent.file;
+			
+			// Help, I don't know how to match a regex without having to use an if :(
+			if (/^<v1:.*>_to_<v2:.*>.delta$/ := deltaLoc.file) {
+				loc jarV1 = downloadJar(group, artifact, v1);
+				loc jarV2 = downloadJar(group, artifact, v2);
+	
+				println("Loading M3s of the library");
+				M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
+				M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
+	
+				// Find clients using group:artifact:v1
+				for (<group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
+					println("<cg> <ca> <cv>");
 					try {
-						println("Loading M3 of the client");
-						set[loc] srcPaths = getPaths(clientDir, "java");
-						set[loc] srcFiles = { p | sp <- srcPaths, p <- find(sp, "java"), isFile(p)};
-						map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
-						list[loc] srcClasspath = [ *mapClasspath[c] | c <- mapClasspath ];
+						loc client = downloadJar(cg, ca, cv);
+						loc clientSrc = downloadSrcs(cg, ca, cv);
+						loc clientDir = homeDir + "tmp/gt/<cc>/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
 						
-						M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
-						M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
+						bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
+						println("Client upgraded: <upgraded>");
 						
-						generateReport(homeDir + "tmp/gt/reports/<group>:<artifact>:<v1>_to_<v2>:<cg>:<ca>:<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
-						allClients += client;
+						if (upgraded) {
+							println("Loading M3 of the client");
+							set[loc] srcPaths = getPaths(clientDir, "java");
+							set[loc] srcFiles = { p | sp <- srcPaths, p <- find(sp, "java"), isFile(p)};
+							map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
+							list[loc] srcClasspath = [ *mapClasspath[c] | c <- mapClasspath ];
+								
+							M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
+							M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
+								
+							generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
+							allClients += client;
+						}
 					}
 					catch e: {
-						continue; // Just skip!
+						continue; // Just skip if there are no client sources or if the project cannot compile.
 					}
 				}
 			}
 		}
 	}
-
-	println(clients);
-	println(size(allClients));
 }
