@@ -21,6 +21,9 @@ import ValueIO;
 data Modifier =
 	\defaultAccess();
 
+@memo
+rel[loc, loc] getTransContainment(M3 m) = m.containment+;
+
 set[value] getM3Set(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? m[elem] : {};
 	

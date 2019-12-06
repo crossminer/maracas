@@ -12,7 +12,7 @@ import Relation;
 import Set;
 
 
-void generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3, list[APIEntity] delta) {
+bool generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3, list[APIEntity] delta) {
 	println("Recording compilation errors");
 	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
 	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
@@ -21,24 +21,28 @@ void generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3
 	Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
 	set[Detection] detects = detections(evol); 
 	
-	println("Matching detections");
-	//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
-	set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
-	
-	println("Generating report");
-	//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
-	outputReport(sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
-	
-	println("Done!");
+	if (detects != {}) {
+		println("Matching detections");
+		//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
+		set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
+		
+		println("Generating report");
+		//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
+		outputReport(sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
+		println("Done!");
+		return true;
+	}
+	return false;
 }
 
 void outputReport(M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, set[Match] matches, loc path) {
 	// Always rewrite file
 	writeFile(path, "");
 	appendMatches(matches, path);
+	appendUnmatchDetects(detects, matches, path);
 	appendUnmatchMsgs(sourceM3, matches, msgs, path);
 	appendModelStats(delta, detects, msgs, path);
-	appendErrorStats(sourceM3, detects, msgs, path);
+	//appendErrorStats(sourceM3, detects, msgs, path);
 }
 
 private void appendMatches(set[Match] matches, loc path) {
@@ -69,9 +73,22 @@ private void appendMatches(set[Match] matches, loc path) {
 	appendSectionEnd(path);
 }
 
+private void appendUnmatchDetects(set[Detection] detects, set[Match] matches, loc path) {
+	set[Detection] unmatchDetects = detects - matches<2>;
+	appendTitle(path, "Unmatched Detections");
+	
+	for (Detection d <- unmatchDetects) {
+		appendToFileLn(path, "<d>");
+		appendEmptyLine(path);
+	}
+	appendEmptyLine(path);
+	appendToFileLn(path, "Unmatched detections: <size(unmatchDetects)>");
+	appendSectionEnd(path);
+}
+
 private void appendUnmatchMsgs(M3 sourceM3, set[Match] matches, list[CompilerMessage] msgs, loc path) {
 	set[CompilerMessage] unmatchMsgs = getUnmatchCompilerMsgs(sourceM3, matches, msgs);
-	appendTitle(path, "Detection Unmatches");
+	appendTitle(path, "Unmatched Compiler Messages");
 	
 	for (CompilerMessage m <- unmatchMsgs) {
 		appendToFileLn(path, "<m>");

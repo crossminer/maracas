@@ -517,7 +517,7 @@ private set[Detection] computeDetections(Evolution evol, set[loc] entities, Comp
 
 // TODO: check if these functions can be replaced by the ones offered by M3 Core
 private set[TransChangedEntity] getTransitiveEntities(M3 m, set[loc] entities, bool (loc) fun) {
-	rel[loc, loc] transContain = m.containment+;
+	rel[loc, loc] transContain = getTransContainment(m);
 	return { <e, c> | e <- entities, c <- transContain[e], fun(c) };
 }
 

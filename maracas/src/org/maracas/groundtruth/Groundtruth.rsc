@@ -71,7 +71,7 @@ java loc downloadSrcs(str group, str artifact, str version);
 
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false),
+		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), UNCOMMENT
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false),
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false),
@@ -145,7 +145,7 @@ lrel[loc, int, int] orderDeltas(CompatibilityChange cc, loc deltasPath, loc file
 		list[int] bcsValues = sort(stats[_, ccVal]);
 		
 		for (int bcsVal <- bcsValues) {
-			set[loc] currentDeltas = statsInv[ccVal, bcsVal];
+			set[loc] currentDeltas = statsInv[bcsVal, ccVal];
 			orderedDeltas += [ <d, ccVal, bcsVal> | loc d <- currentDeltas ];
 		}
 	}
@@ -163,18 +163,21 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 	set[loc] allClients = {};
 	// For all deltas, get the JARs of libV1/libV2/client, and compare Maracas against the GT
 	for (CompatibilityChange cc <- ccs) {
-		lrel[loc, int, int] deltas = orderDeltas(cc, deltasDir);
-		loc deltaLoc = deltas[cc];
+		loc deltasCsv = homeDir + "tmp/gt/<cc>/orderedDeltas.csv";
+		lrel[loc, int, int] deltas = (exists(deltasCsv)) 
+			? readCSV(#lrel[loc, int, int], deltasCsv) 
+			: orderDeltas(cc, deltasDir, homeDir + "tmp/gt/<cc>/orderedDeltas.csv");
+		bool hasReport = false;
 		
-		for (<loc l, int b, int c> <- deltas) {
-			list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l, |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas| + "<cc>.csv");
+		for (<loc l, int b, int c> <- deltas, !hasReport) {
+			list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l);
 			println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]");
 	
-			str group = deltaLoc.parent.parent.file;
-			str artifact = deltaLoc.parent.file;
+			str group = l.parent.parent.file;
+			str artifact = l.parent.file;
 			
 			// Help, I don't know how to match a regex without having to use an if :(
-			if (/^<v1:.*>_to_<v2:.*>.delta$/ := deltaLoc.file) {
+			if (/^<v1:.*>_to_<v2:.*>.delta$/ := l.file) {
 				loc jarV1 = downloadJar(group, artifact, v1);
 				loc jarV2 = downloadJar(group, artifact, v2);
 	
@@ -196,15 +199,20 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 						if (upgraded) {
 							println("Loading M3 of the client");
 							set[loc] srcPaths = getPaths(clientDir, "java");
-							set[loc] srcFiles = { p | sp <- srcPaths, p <- find(sp, "java"), isFile(p)};
+							set[loc] srcFiles = { p | loc sp <- srcPaths, loc p <- find(sp, "java"), isFile(p)};
 							map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
-							list[loc] srcClasspath = [ *mapClasspath[c] | c <- mapClasspath ];
+							list[loc] srcClasspath = [ *mapClasspath[cp] | loc cp <- mapClasspath ];
 								
 							M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
 							M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
 								
-							generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
-							allClients += client;
+							hasReport = generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
+							
+							if (hasReport) {
+								println("Found report for <group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>");
+								allClients += client;
+								break;
+							}
 						}
 					}
 					catch e: {
