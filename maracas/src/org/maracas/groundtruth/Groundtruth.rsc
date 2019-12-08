@@ -71,7 +71,7 @@ java loc downloadSrcs(str group, str artifact, str version);
 
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
-		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), UNCOMMENT
+		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false),
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false),

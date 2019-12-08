@@ -3,6 +3,8 @@ module org::maracas::m3::Inheritance
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 
+import org::maracas::m3::Core;
+
 import IO;
 import Relation;
 
@@ -30,7 +32,7 @@ loc createMethodLoc(loc class, str methName)
 	
 
 private set[loc] getSubtypesWithoutShadowing(loc class, str elemName, M3 m, loc (loc, str) createSymbRef) {
-	set[loc] subtypes = domain(rangeR(m.extends, { class })) + domain(rangeR(m.implements, { class }));
+	set[loc] subtypes = domainRangeR(m.extends, { class }) + domainRangeR(m.implements, { class });
 	
 	return { *(getSubtypesWithoutShadowing(s, elemName, m, createSymbRef) + s) 
 		| s <- subtypes, m.declarations[createSymbRef(s, elemName)] == {} }

@@ -457,23 +457,37 @@ set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] chang
 private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] entities) {
 	set[loc] affected = {};
 	
-	switch (apiUse) {
-	case APIUse::annotation(): affected = domain(rangeR(client.annotations, entities));
-	case declaration(): affected = domain(domainR(client.declarations, entities));
-	case extends(): affected = domain(rangeR(client.extends, entities));
-	case fieldAccess(): affected = domain(rangeR(client.fieldAccess, entities));
-	case implements(): affected = domain(rangeR(client.implements, entities));
-	case methodInvocation(): affected = domain(rangeR(client.methodInvocation, entities));
-	case methodOverride(): affected = domain(rangeR(client.methodOverrides, entities));
-	case typeDependency(): {
-		raw = domain(rangeR(client.typeDependency, entities));
+	if (apiUse == APIUse::annotation()) {
+		affected = domainRangeR(client.annotations, entities);
+	}
+	elseif (apiUse == declaration()) {
+		affected = domain(domainR(client.declarations, entities));
+	}
+	elseif (apiUse == extends()) {
+		affected = domainRangeR(client.extends, entities);
+	}
+	elseif (apiUse == fieldAccess()) {
+		affected = domainRangeR(client.fieldAccess, entities);
+	}
+	elseif (apiUse == implements()) {
+		affected = domainRangeR(client.implements, entities);
+	}
+	elseif (apiUse == methodInvocation()) {
+		affected = domainRangeR(client.methodInvocation, entities);
+	}
+	elseif (apiUse == methodOverride()) {
+		affected = domainRangeR(client.methodOverrides, entities);
+	}
+	elseif (apiUse == typeDependency()) {
+		raw = domainRangeR(client.typeDependency, entities);
 		for (loc e <- raw) {
 			affected += (isParameter(e)) ? getMethod(e) : e; // Parameters special treatment
 		}
 	}
-	default: throw "Wrong APIUse for member type: <apiUse>";
+	else { 
+		throw "Wrong APIUse for member type: <apiUse>";
 	}
-	
+
 	return affected * { apiUse };
 }
 

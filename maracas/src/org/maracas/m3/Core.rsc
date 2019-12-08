@@ -56,10 +56,15 @@ loc getNonCUChild(loc elem, M3 m) {
 	return elem;
 }
 
+set[loc] domainRangeR(rel[loc, loc] r, set[loc] elems) {
+	rel[loc, loc] inv = invert(r);
+	return { *inv[e] | loc e <- elems };
+}
+
 loc parentType(M3 m, loc elem) {
 	list[loc] containers = (isMethod(elem) || isField(elem)) 
-		? toList(domain(rangeR(m.containment, { elem })))
-		: sort(domain(rangeR(m.containment+, { elem })), isLongerPath);
+		? toList(domainRangeR(m.containment, { elem }))
+		: sort(domainRangeR(m.containment+, { elem }), isLongerPath);
 		
 	if (p <- containers, isType(p)) {
 		return p;
