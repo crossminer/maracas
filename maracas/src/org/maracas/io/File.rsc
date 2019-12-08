@@ -22,6 +22,24 @@ bool existFileWithName(loc directory, str name) {
 	return false;
 }
 
+bool existFileWithExtension(loc directory, str ext) {
+	if (isDirectory(directory)) {
+		found = false;
+		for (f <- directory.ls) {
+			if (isDirectory(f)) {
+				found = found || existFileWithExtension(f, ext);
+				if(found) {
+					return true;
+				}
+			}
+			if (isFile(f) && endsWith(f.path, ".<ext>")) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 str getFileName(loc file) {
 	int begin = findLast(file.path, "/"); 
 	int end = size(file.path);

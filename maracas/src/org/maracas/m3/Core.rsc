@@ -104,14 +104,15 @@ M3 createM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-m
 }
 
 M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
-	if (existFileWithName(project, "pom.xml") 
-		|| existFileWithName(project, "MANIFEST.MF")) {
+	if ((existFileWithName(project, "pom.xml") 
+		|| existFileWithName(project, "MANIFEST.MF"))
+		&& existFileWithExtension(project, "java")) {
 		
 		// This step seems to take too long
 		classPath = projectClassPath(project, mvnExec);
-		
+		files = fetchFilesByExtension(project, "java");
 		return createM3FromFiles(project,
-			fetchFilesByExtension(project, "java"),
+			files,
 			sourcePath=[project],
 			classPath=classPath);
 	}
