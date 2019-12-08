@@ -114,8 +114,8 @@ set[CompatibilityChange] getGroundtruthCCs()
 		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
 	};
 	
-rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clientsFile = |file:///Users/ochoa/Documents/cwi/crossminer/data/deltas/clients.csv|) {
-	clients = readCSV(#rel[str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsFile);
+rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clientsCsv) {
+	clients = readCSV(#rel[str group, str artifact, str version, str cgroup, str cartifact, str cversion, bool external, int cjava_version, int cdeclarations, int capideclarations], clientsCsv);
 	rel[str, str, str] usedDeltas = clients<0, 1, 2>;
 	rel[loc, int, int] stats = {};
 	
@@ -135,8 +135,8 @@ rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clie
 }
 
 // <location, numberChangesPerType, numberChanges>
-lrel[loc, int, int] orderDeltas(CompatibilityChange cc, loc deltasPath, loc file) {
-	rel[loc, int, int] stats = getDeltaStats(deltasPath, cc);
+lrel[loc, int, int] orderDeltas(CompatibilityChange cc, loc clientsCsv, loc deltasDir, loc file) {
+	rel[loc, int, int] stats = getDeltaStats(deltasDir, cc, clientsCsv);
 	rel[int, int, loc] statsInv = invert(stats);
 	lrel[loc, int, int] orderedDeltas = [];
 	list[int] ccValues = sort(stats<2>);
@@ -166,7 +166,7 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 		loc deltasCsv = homeDir + "tmp/gt/<cc>/orderedDeltas.csv";
 		lrel[loc, int, int] deltas = (exists(deltasCsv)) 
 			? readCSV(#lrel[loc, int, int], deltasCsv) 
-			: orderDeltas(cc, deltasDir, homeDir + "tmp/gt/<cc>/orderedDeltas.csv");
+			: orderDeltas(cc, clientsCsv, deltasDir, homeDir + "tmp/gt/<cc>/orderedDeltas.csv");
 		bool hasReport = false;
 		
 		for (<loc l, int b, int c> <- deltas, !hasReport) {
