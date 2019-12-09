@@ -74,8 +74,8 @@ set[CompatibilityChange] getGroundtruthCCs()
 		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
-		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false),
-		interfaceAdded(binaryCompatibility=true,sourceCompatibility=true),
+		//classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), //UNCOMMENT
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false),
@@ -180,11 +180,16 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 				
 				loc jarV1 = downloadJar(group, artifact, v1);
 				loc jarV2 = downloadJar(group, artifact, v2);
-	
-				println("Loading M3s of the library");
-				M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
-				M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
-	
+				
+				try {
+					println("Loading M3s of the library");
+					M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
+					M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
+				}
+				catch : {
+					continue; // Skip
+				}
+				
 				// Find clients using group:artifact:v1
 				for (<group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
 					println("<cg> <ca> <cv>");
