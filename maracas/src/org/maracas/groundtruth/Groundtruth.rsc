@@ -185,44 +185,44 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 					println("Loading M3s of the library");
 					M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
 					M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
+					
+					// Find clients using group:artifact:v1
+					for (<group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
+						println("<cg> <ca> <cv>");
+						try {
+							loc client = downloadJar(cg, ca, cv);
+							loc clientSrc = downloadSrcs(cg, ca, cv);
+							loc clientDir = homeDir + "tmp/gt/<cc>/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
+							
+							bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
+							println("Client upgraded: <upgraded>");
+							
+							if (upgraded) {
+								println("Loading M3 of the client");
+								set[loc] srcPaths = getPaths(clientDir, "java");
+								set[loc] srcFiles = { p | loc sp <- srcPaths, loc p <- find(sp, "java"), isFile(p)};
+								map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
+								list[loc] srcClasspath = [ *mapClasspath[cp] | loc cp <- mapClasspath ];
+									
+								M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
+								M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
+									
+								hasReport = generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
+								
+								if (hasReport) {
+									println("Found report for <group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>");
+									allClients += client;
+									break;
+								}
+							}
+						}
+						catch e: {
+							continue; // Just skip if there are no client sources or if the project cannot compile.
+						}
+					}
 				}
 				catch : {
 					continue; // Skip
-				}
-				
-				// Find clients using group:artifact:v1
-				for (<group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
-					println("<cg> <ca> <cv>");
-					try {
-						loc client = downloadJar(cg, ca, cv);
-						loc clientSrc = downloadSrcs(cg, ca, cv);
-						loc clientDir = homeDir + "tmp/gt/<cc>/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
-						
-						bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
-						println("Client upgraded: <upgraded>");
-						
-						if (upgraded) {
-							println("Loading M3 of the client");
-							set[loc] srcPaths = getPaths(clientDir, "java");
-							set[loc] srcFiles = { p | loc sp <- srcPaths, loc p <- find(sp, "java"), isFile(p)};
-							map[loc, list[loc]] mapClasspath = getClassPath(clientDir, mavenExecutable = mavenExecutable);
-							list[loc] srcClasspath = [ *mapClasspath[cp] | loc cp <- mapClasspath ];
-								
-							M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
-							M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
-								
-							hasReport = generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
-							
-							if (hasReport) {
-								println("Found report for <group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>");
-								allClients += client;
-								break;
-							}
-						}
-					}
-					catch e: {
-						continue; // Just skip if there are no client sources or if the project cannot compile.
-					}
 				}
 			}
 		}
