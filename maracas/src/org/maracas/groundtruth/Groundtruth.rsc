@@ -71,9 +71,9 @@ java loc downloadSrcs(str group, str artifact, str version);
 
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
-		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false),
-		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
+		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false),
 		interfaceAdded(binaryCompatibility=true,sourceCompatibility=true),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false),
@@ -87,7 +87,7 @@ set[CompatibilityChange] getGroundtruthCCs()
 		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false),
 		superclassRemoved(binaryCompatibility=false,sourceCompatibility=false),
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false),
-		classNowFinal(binaryCompatibility=false,sourceCompatibility=false),
+		//classNowFinal(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodIsStaticAndOverridesNotStatic(binaryCompatibility=false,sourceCompatibility=false),
 		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), // Do it later
@@ -96,7 +96,7 @@ set[CompatibilityChange] getGroundtruthCCs()
 		//fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false),
 		//methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
-		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false),
+		//methodNowFinal(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
@@ -171,13 +171,13 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 		
 		for (<loc l, int b, int c> <- deltas, !hasReport) {
 			list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l);
-			println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]");
-	
 			str group = l.parent.parent.file;
 			str artifact = l.parent.file;
 			
 			// Help, I don't know how to match a regex without having to use an if :(
 			if (/^<v1:.*>_to_<v2:.*>.delta$/ := l.file) {
+				println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]: <group>:<artifact>:<v1> to <v2>");
+				
 				loc jarV1 = downloadJar(group, artifact, v1);
 				loc jarV2 = downloadJar(group, artifact, v2);
 	
