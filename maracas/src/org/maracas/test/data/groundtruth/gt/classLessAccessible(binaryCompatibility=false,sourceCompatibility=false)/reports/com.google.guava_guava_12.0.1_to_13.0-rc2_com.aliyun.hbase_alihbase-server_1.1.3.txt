@@ -1,0 +1,572 @@
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+class:///org/apache/hadoop/hbase/security/visibility/VisibilityReplicationEndpoint|,|java+method:///com/google/common/util/concurrent/Service/addListener(com.google.common.util.concurrent.Service$Listener,java.util.concurrent.Executor)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/visibility/VisibilityReplicationEndpoint.java|(1601,29,<40,0>,<40,0>),40,0,"The type VisibilityReplicationEndpoint must implement the inherited abstract method Service.addListener(Service.Listener, Executor)",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+class:///org/apache/hadoop/hbase/security/visibility/VisibilityReplicationEndpoint|,|java+method:///com/google/common/util/concurrent/Service/addListener(com.google.common.util.concurrent.Service$Listener,java.util.concurrent.Executor)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(10475,25,<327,0>,<327,0>),327,0,"The method setAutoFlushTo(boolean) from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(6764,26,<155,0>,<155,0>),155,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(9692,15,<248,0>,<248,0>),248,0,"The type HLogInputFormat is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessControlLists.java|(22410,33,<610,0>,<610,0>),610,0,"The type HbaseObjectWritableFor96Migration is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6609,9,<192,0>,<192,0>),192,0,"The method getNode() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/Export.java|(2840,33,<70,0>,<70,0>),70,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(18419,88,<476,0>,<476,0>),476,0,"The method add(byte[], byte[], byte[]) from the type Put is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/snapshot_jsp.java|(8368,49,<154,0>,<154,0>),154,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6472,11,<189,0>,<189,0>),189,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/CellCounter.java|(7276,33,<190,0>,<190,0>),190,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(11389,10,<339,0>,<339,0>),339,0,"The method getValue() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/ReaderBase.java|(3381,7,<96,0>,<96,0>),96,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/master/MasterStatusTmplImpl.java|(26957,10,<518,0>,<518,0>),518,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(33990,12,<853,0>,<853,0>),853,0,"The method initialize() from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(4304,7,<94,0>,<94,0>),94,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/HFileLink.java|(19737,42,<488,0>,<488,0>),488,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WAL.java|(9558,9,<234,0>,<234,0>),234,0,"The constructor HLogKey() is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/RegionObserver.java|(2688,48,<59,0>,<59,0>),59,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(4980,9,<140,0>,<140,0>),140,0,"The method getNode() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/handler/RegionReplicaFlushHandler.java|(4987,18,<106,0>,<106,0>),106,0,"The method getConfiguration() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(17497,15,<502,0>,<502,0>),502,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/ReplayHLogKey.java|(1167,7,<32,0>,<32,0>),32,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(4470,11,<124,0>,<124,0>),124,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(4304,41,<94,0>,<94,0>),94,0,"The constructor HLogKey(byte[], TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6104,111,<181,0>,<181,0>),181,0,"The method updateExistingNodeData(ZooKeeperWatcher, String, byte[], int) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/ScopeWALEntryFilter.java|(1774,11,<48,0>,<48,0>),48,0,"The method getFamily() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(10103,10,<305,0>,<305,0>),305,0,"The method getValue() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/regionserver/HBaseInterClusterReplicationEndpoint.java|(3891,27,<86,0>,<86,0>),86,0,"The method createConnection(Configuration) from the type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(7497,20,<220,0>,<220,0>),220,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessController.java|(43067,16,<1021,0>,<1021,0>),1021,0,"The method getOwnerString() from the type HTableDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(9543,10,<291,0>,<291,0>),291,0,"The method getValue() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALSplitter.java|(84436,253,<2276,0>,<2276,0>),2276,0,"The constructor HLogKey(byte[], TableName, long, long, List\<UUID\>, long, long) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(2824,11,<66,0>,<66,0>),66,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/tablesDetailed_jsp.java|(4298,16,<64,0>,<64,0>),64,0,"The constructor HBaseAdmin(Configuration) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(10574,20,<332,0>,<332,0>),332,0,"The method getWriteBufferSize() from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(2458,52,<66,0>,<66,0>),66,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HMerge.java|(10821,26,<294,0>,<294,0>),294,0,"The method getHRegionInfo(Result) from the type HRegionInfo is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(19362,105,<498,0>,<498,0>),498,0,"The method add(byte[], byte[], byte[]) from the type Put is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/handler/DeleteTableHandler.java|(6036,35,<148,0>,<148,0>),148,0,"The method getTable(TableName) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/ScanQueryMatcher.java|(13340,16,<341,0>,<341,0>),341,0,"The method getMvccVersion() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(6380,19,<189,0>,<189,0>),189,0,"The type KeyValueCompression is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/BlockCacheTmplImpl.java|(5115,62,<121,0>,<121,0>),121,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/StripeMultiFileWriter.java|(14907,8,<344,0>,<344,0>),344,0,"The method getRow() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(16897,134,<444,0>,<444,0>),444,0,"The method reportRegionStateTransition(RegionServerStatusProtos.RegionStateTransition.TransitionCode, HRegionInfo...) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/HRegionFileSystem.java|(23229,11,<614,0>,<614,0>),614,0,"The method getBuffer() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HBaseFsckRepair.java|(2779,11,<73,0>,<73,0>),73,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/Import.java|(21693,16,<519,0>,<519,0>),519,0,"The constructor HBaseAdmin(Configuration) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(4510,60,<125,0>,<125,0>),125,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(5054,52,<155,0>,<155,0>),155,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(11697,49,<246,0>,<246,0>),246,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALKey.java|(18825,14,<540,0>,<540,0>),540,0,"The method hasClusterId() from the type WALProtos.WALKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/BaseWALObserver.java|(2221,7,<57,0>,<57,0>),57,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2273,15,<58,0>,<58,0>),58,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/replication/VerifyReplication.java|(5188,11,<125,0>,<125,0>),125,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(6497,7,<178,0>,<178,0>),178,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/procedure/DeleteTableProcedure.java|(13989,35,<363,0>,<363,0>),363,0,"The method getTable(TableName) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/replication/VerifyReplication.java|(5080,18,<123,0>,<123,0>),123,0,"The type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/HalfStoreFileReader.java|(5093,44,<123,0>,<123,0>),123,0,"The method getScanner(boolean, boolean, boolean) from the type StoreFile.Reader is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/regionserver/HBaseInterClusterReplicationEndpoint.java|(3872,18,<86,0>,<86,0>),86,0,"The type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2987,25,<75,0>,<75,0>),75,0,"The method getTable(TableName, ExecutorService) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(11302,20,<222,0>,<222,0>),222,0,"The method getRegionLocations() from the type HTable is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/regionserver/ReplicationSink.java|(9724,11,<255,0>,<255,0>),255,0,"The method batch(List\<? extends Row\>) from the type Table is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(5014,11,<154,0>,<154,0>),154,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(4933,11,<139,0>,<139,0>),139,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(2844,60,<74,0>,<74,0>),74,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(7712,41,<171,0>,<171,0>),171,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALKey.java|(18990,14,<543,0>,<543,0>),543,0,"The method getClusterId() from the type WALProtos.WALKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALKey.java|(19030,14,<543,0>,<543,0>),543,0,"The method getClusterId() from the type WALProtos.WALKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/visibility/ZKVisibilityLabelWatcher.java|(5373,48,<144,0>,<144,0>),144,0,"The method updateExistingNodeData(ZooKeeperWatcher, String, byte[], int) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5431,11,<151,0>,<151,0>),151,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/replication/VerifyReplication.java|(5555,27,<131,0>,<131,0>),131,0,"The constructor HTable(Configuration, TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(10082,7,<311,0>,<311,0>),311,0,"The method start() from the type ZKLeaderManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/GetClosestRowBeforeTracker.java|(3795,18,<96,0>,<96,0>),96,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(16518,14,<452,0>,<452,0>),452,0,"The method getTableName() from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/hfile/AbstractHFileReader.java|(9942,28,<320,0>,<320,0>),320,0,"The method reseekTo(byte[], int, int) from the type HFileScanner is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/hfile/AbstractHFileReader.java|(9686,26,<310,0>,<310,0>),310,0,"The method seekTo(byte[], int, int) from the type HFileScanner is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/migration/NamespaceUpgrade.java|(15963,12,<407,0>,<407,0>),407,0,"The method initialize() from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(4965,48,<135,0>,<135,0>),135,0,"The method preWALWrite(ObserverContext\<WALCoprocessorEnvironment\>, HRegionInfo, HLogKey, WALEdit) from the type WALObserver is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/snapshot/SnapshotManager.java|(47073,31,<1114,0>,<1114,0>),1114,0,"The field SnapshotDescriptionUtils.SNAPSHOT_TIMEOUT_MILLIS_DEFAULT is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/RegionStates.java|(27837,62,<727,0>,<727,0>),727,0,"The method getRegion(Connection, byte[]) from the type MetaTableAccessor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/GetClosestRowBeforeTracker.java|(7095,10,<204,0>,<204,0>),204,0,"The method isDelete() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(6892,13,<211,0>,<211,0>),211,0,"The method isAutoFlush() from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/snapshot_jsp.java|(5691,10,<101,0>,<101,0>),101,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/ScopeWALEntryFilter.java|(1732,11,<47,0>,<47,0>),47,0,"The method getFamily() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/master/MasterStatusTmplImpl.java|(22017,59,<421,0>,<421,0>),421,0,"The method limitDecimalTo2(double) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HFileArchiveUtil.java|(3143,48,<71,0>,<71,0>),71,0,"The method getStoreHomedir(Path, HRegionInfo, byte[]) from the type HStore is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/TableMapReduceUtil.java|(36459,17,<863,0>,<863,0>),863,0,"The method makeQualified(FileSystem) from the type Path is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/HStore.java|(88929,48,<2335,0>,<2335,0>),2335,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(6400,30,<189,0>,<189,0>),189,0,"The method readKV(DataInput, CompressionContext) from the type KeyValueCompression is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(7057,8,<163,0>,<163,0>),163,0,"The method getRow() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/MultiHConnection.java|(2705,22,<67,0>,<67,0>),67,0,"The method createConnection(Configuration) from the type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(7467,57,<167,0>,<167,0>),167,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(28805,132,<715,0>,<715,0>),715,0,"The method reportRegionStateTransition(RegionServerStatusProtos.RegionStateTransition.TransitionCode, HRegionInfo...) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/CompactionTool.java|(13965,9,<348,0>,<348,0>),348,0,"The constructor Job(Configuration) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/FSTableDescriptors.java|(7786,14,<205,0>,<205,0>),205,0,"The field HTableDescriptor.META_TABLEDESC is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(13921,15,<384,0>,<384,0>),384,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2824,15,<72,0>,<72,0>),72,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(7211,58,<163,0>,<163,0>),163,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(9783,23,<308,0>,<308,0>),308,0,"The method setAutoFlush(boolean) from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(17900,15,<513,0>,<513,0>),513,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/PutSortReducer.java|(2901,25,<75,0>,<75,0>),75,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/LocalHBaseCluster.java|(16159,16,<477,0>,<477,0>),477,0,"The constructor HBaseAdmin(Configuration) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HFileArchiveUtil.java|(2159,71,<51,0>,<51,0>),51,0,"The method getStoreHomedir(Path, String, byte[]) from the type HStore is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/regionserver/HBaseInterClusterReplicationEndpoint.java|(2703,11,<58,0>,<58,0>),58,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(7451,14,<233,0>,<233,0>),233,0,"The method getTableName() from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(5804,7,<122,0>,<122,0>),122,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/MultiHConnection.java|(2579,11,<65,0>,<65,0>),65,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/migration/NamespaceUpgrade.java|(12466,74,<322,0>,<322,0>),322,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessController.java|(14807,14,<339,0>,<339,0>),339,0,"The method getQualifier() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/handler/RegionReplicaFlushHandler.java|(5141,18,<109,0>,<109,0>),109,0,"The method getConfiguration() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(2827,7,<62,0>,<62,0>),62,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/BaseRegionObserver.java|(17474,7,<476,0>,<476,0>),476,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/replication/TableCfWALEntryFilter.java|(2555,11,<65,0>,<65,0>),65,0,"The method getFamily() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/HBasePolicyProvider.java|(2508,28,<52,0>,<52,0>),52,0,"The field ServiceAuthorizationManager.SERVICE_AUTHORIZATION_CONFIG is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/migration/NamespaceUpgrade.java|(14499,21,<375,0>,<375,0>),375,0,"The method setName(TableName) from the type HTableDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/HalfStoreFileReader.java|(11531,22,<343,0>,<343,0>),343,0,"The method getScanner(boolean, boolean) from the type StoreFile.Reader is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(9406,15,<280,0>,<280,0>),280,0,"The type ZKLeaderManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/PutSortReducer.java|(2677,20,<68,0>,<68,0>),68,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/BlockCacheTmplImpl.java|(5477,59,<125,0>,<125,0>),125,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/master/MasterStatusTmplImpl.java|(24528,10,<458,0>,<458,0>),458,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/snapshot_jsp.java|(8637,37,<158,0>,<158,0>),158,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(9908,10,<188,0>,<188,0>),188,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEditsReplaySink.java|(9215,8,<237,0>,<237,0>),237,0,"The method getRow() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/HalfStoreFileReader.java|(11583,25,<345,0>,<345,0>),345,0,"The method seekBefore(byte[]) from the type HFileScanner is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5511,9,<153,0>,<153,0>),153,0,"The method getNode() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(9058,34,<168,0>,<168,0>),168,0,"The method encode(String) from the type URLEncoder is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(6821,14,<207,0>,<207,0>),207,0,"The method flushCommits() from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(5804,41,<122,0>,<122,0>),122,0,"The constructor HLogKey(byte[], TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapred/TableInputFormatBase.java|(8576,38,<214,0>,<214,0>),214,0,"The method getRegionLocation(byte[]) from the type HTable is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(2827,41,<62,0>,<62,0>),62,0,"The constructor HLogKey(byte[], TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(2415,11,<65,0>,<65,0>),65,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/MultiHConnection.java|(2007,11,<50,0>,<50,0>),50,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/MultiHConnection.java|(2686,18,<67,0>,<67,0>),67,0,"The type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(5074,9,<143,0>,<143,0>),143,0,"The method getData() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(11237,47,<238,0>,<238,0>),238,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/CatalogJanitor.java|(14092,30,<343,0>,<343,0>),343,0,"The method getDaughterRegions(Result) from the type HRegionInfo is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(21036,138,<532,0>,<532,0>),532,0,"The method reportRegionStateTransition(RegionServerStatusProtos.RegionStateTransition.TransitionCode, HRegionInfo...) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(9406,137,<280,0>,<280,0>),280,0,"The constructor ZKLeaderManager(ZooKeeperWatcher, String, byte[], Stoppable) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(19250,104,<496,0>,<496,0>),496,0,"The method add(byte[], byte[], byte[]) from the type Put is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/Merge.java|(4830,23,<142,0>,<142,0>),142,0,"The method getHRegionInfo(Result) from the type HRegionInfo is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEditsReplaySink.java|(9186,38,<237,0>,<237,0>),237,0,"The method locateRegion(TableName, byte[]) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(11013,42,<234,0>,<234,0>),234,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(3549,52,<106,0>,<106,0>),106,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/SequenceFileLogReader.java|(9430,7,<246,0>,<246,0>),246,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/http/InfoServer.java|(2286,13,<61,0>,<61,0>),61,0,"The method setName(String) from the type HttpServer.Builder is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(6988,25,<159,0>,<159,0>),159,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapred/TableInputFormatBase.java|(7882,14,<199,0>,<199,0>),199,0,"The method getStartKeys() from the type HTable is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5019,11,<140,0>,<140,0>),140,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(6741,54,<189,0>,<189,0>),189,0,"The method updateExistingNodeData(ZooKeeperWatcher, String, byte[], int) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/FSTableDescriptors.java|(7860,14,<206,0>,<206,0>),206,0,"The field HTableDescriptor.META_TABLEDESC is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2238,15,<56,0>,<56,0>),56,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/ReplayHLogKey.java|(1598,83,<41,0>,<41,0>),41,0,"The constructor HLogKey(byte[], TableName, long, long, List\<UUID\>, long, long) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6566,9,<191,0>,<191,0>),191,0,"The method isEmpty() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/backup/example/HFileArchiveManager.java|(1878,11,<47,0>,<47,0>),47,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/RowCounter.java|(4689,33,<133,0>,<133,0>),133,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/compactions/CompactionRequest.java|(7421,27,<221,0>,<221,0>),221,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/handler/RegionReplicaFlushHandler.java|(6341,50,<131,0>,<131,0>),131,0,"The method isTableDisabled(TableName) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/HRegionFileSystem.java|(22720,11,<602,0>,<602,0>),602,0,"The method getBuffer() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(9761,12,<249,0>,<249,0>),249,0,"The field HLogInputFormat.END_TIME_KEY is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6697,9,<194,0>,<194,0>),194,0,"The method getData() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/Import.java|(17177,33,<432,0>,<432,0>),432,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(7587,36,<222,0>,<222,0>),222,0,"The method writeKV(DataOutput, KeyValue, CompressionContext) from the type KeyValueCompression is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HBaseFsckRepair.java|(3214,10,<84,0>,<84,0>),84,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/MetricsWAL.java|(2297,22,<64,0>,<64,0>),64,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HFileArchiveUtil.java|(4691,43,<104,0>,<104,0>),104,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/snapshot/ExportSnapshot.java|(31221,9,<786,0>,<786,0>),786,0,"The constructor Job(Configuration) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(14000,15,<385,0>,<385,0>),385,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALSplitter.java|(84436,7,<2276,0>,<2276,0>),2276,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(28747,27,<714,0>,<714,0>),714,0,"The method postOpenDeployTasks(Region) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(2541,11,<63,0>,<63,0>),63,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapred/TableInputFormat.java|(3009,11,<82,0>,<82,0>),82,0,"The method getHTable() from the type TableInputFormatBase is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(2579,60,<64,0>,<64,0>),64,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(3552,41,<77,0>,<77,0>),77,0,"The constructor HLogKey(byte[], TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/BlockCacheTmplImpl.java|(17456,37,<350,0>,<350,0>),350,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(2804,11,<73,0>,<73,0>),73,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WAL.java|(9558,7,<234,0>,<234,0>),234,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(4989,7,<135,0>,<135,0>),135,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(6531,49,<179,0>,<179,0>),179,0,"The method postWALWrite(ObserverContext\<WALCoprocessorEnvironment\>, HRegionInfo, HLogKey, WALEdit) from the type WALObserver is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(4931,7,<134,0>,<134,0>),134,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/WALObserver.java|(1133,48,<27,0>,<27,0>),27,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2550,15,<66,0>,<66,0>),66,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(6187,11,<147,0>,<147,0>),147,0,"The method getFamily() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2515,15,<66,0>,<66,0>),66,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALUtil.java|(3552,7,<77,0>,<77,0>),77,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/PutCombiner.java|(2835,20,<71,0>,<71,0>),71,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(10106,20,<312,0>,<312,0>),312,0,"The method waitToBecomeLeader() from the type ZKLeaderManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/ReaderBase.java|(3381,9,<96,0>,<96,0>),96,0,"The constructor HLogKey() is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HMerge.java|(9497,23,<260,0>,<260,0>),260,0,"The method getHRegionInfo(Result) from the type HRegionInfo is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(6529,11,<190,0>,<190,0>),190,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(18313,88,<474,0>,<474,0>),474,0,"The method add(byte[], byte[], byte[]) from the type Put is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/master/MasterStatusTmplImpl.java|(30358,10,<603,0>,<603,0>),603,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(10793,38,<230,0>,<230,0>),230,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/procedure/DeleteTableProcedure.java|(13072,48,<341,0>,<341,0>),341,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(3419,11,<91,0>,<91,0>),91,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(33510,12,<838,0>,<838,0>),838,0,"The method initialize() from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(6984,8,<161,0>,<161,0>),161,0,"The method getRow() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/GetClosestRowBeforeTracker.java|(3724,18,<94,0>,<94,0>),94,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5059,53,<141,0>,<141,0>),141,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(2867,53,<67,0>,<67,0>),67,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(9903,18,<303,0>,<303,0>),303,0,"The method stepDownAsLeader() from the type ZKLeaderManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/procedure/DeleteTableProcedure.java|(12486,7,<326,0>,<326,0>),326,0,"The method isDir() from the type FileStatus is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/snapshot/SnapshotManager.java|(46999,27,<1113,0>,<1113,0>),1113,0,"The field SnapshotDescriptionUtils.SNAPSHOT_TIMEOUT_MILLIS_KEY is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(9745,15,<249,0>,<249,0>),249,0,"The type HLogInputFormat is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(6363,18,<113,0>,<113,0>),113,0,"The constructor HTable(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/io/hfile/AbstractHFileReader.java|(9815,30,<315,0>,<315,0>),315,0,"The method seekBefore(byte[], int, int) from the type HFileScanner is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEditsReplaySink.java|(8182,39,<213,0>,<213,0>),213,0,"The method getAdmin(ServerName) from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessController.java|(14617,14,<337,0>,<337,0>),337,0,"The method getQualifier() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALCoprocessorHost.java|(6556,7,<179,0>,<179,0>),179,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/StoreFileScanner.java|(6860,16,<215,0>,<215,0>),215,0,"The method getMvccVersion() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/snapshot/RestoreSnapshotHelper.java|(25730,100,<639,0>,<639,0>),639,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5393,11,<150,0>,<150,0>),150,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/TextSortReducer.java|(6800,20,<184,0>,<184,0>),184,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/GetClosestRowBeforeTracker.java|(5863,9,<161,0>,<161,0>),161,0,"The method getType() from the type KeyValue is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(7152,54,<199,0>,<199,0>),199,0,"The method updateExistingNodeData(ZooKeeperWatcher, String, byte[], int) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5619,9,<156,0>,<156,0>),156,0,"The method getData() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(7567,19,<222,0>,<222,0>),222,0,"The type KeyValueCompression is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(10299,32,<264,0>,<264,0>),264,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(7444,10,<124,0>,<124,0>),124,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/StripeMultiFileWriter.java|(15865,8,<367,0>,<367,0>),367,0,"The method getRow() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/ZKNamespaceManager.java|(3509,11,<105,0>,<105,0>),105,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/replication/VerifyReplication.java|(10540,33,<265,0>,<265,0>),265,0,"The constructor Job(Configuration, String) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(32661,146,<819,0>,<819,0>),819,0,"The method reportRegionStateTransition(RegionServerStatusProtos.RegionStateTransition.TransitionCode, HRegionInfo...) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/Merge.java|(5287,23,<152,0>,<152,0>),152,0,"The method getHRegionInfo(Result) from the type HRegionInfo is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(2357,15,<60,0>,<60,0>),60,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/snapshot_jsp.java|(8175,43,<150,0>,<150,0>),150,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/DefaultStoreFlusher.java|(3359,36,<88,0>,<88,0>),88,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/BlockCacheTmplImpl.java|(17064,33,<341,0>,<341,0>),341,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/MultiHConnection.java|(2667,11,<67,0>,<67,0>),67,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/snapshot/SnapshotInfo.java|(16458,22,<457,0>,<457,0>),457,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(19475,86,<500,0>,<500,0>),500,0,"The method add(byte[], byte[], byte[]) from the type Put is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/WALPlayer.java|(9708,14,<248,0>,<248,0>),248,0,"The field HLogInputFormat.START_TIME_KEY is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(12407,26,<253,0>,<253,0>),253,0,"The method encode(String) from the type URLEncoder is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/AuthenticationTokenSecretManager.java|(9215,15,<275,0>,<275,0>),275,0,"The type ZKLeaderManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/wal/WALPrettyPrinter.java|(9240,10,<291,0>,<291,0>),291,0,"The method getValue() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(3459,53,<92,0>,<92,0>),92,0,"The method getChildDataAndWatchForNewChildren(ZooKeeperWatcher, String) from the type ZKUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/snapshot_jsp.java|(2472,10,<64,0>,<64,0>),64,0,"The method getAdmin() from the type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessController.java|(46445,16,<1108,0>,<1108,0>),1108,0,"The method getOwnerString() from the type HTableDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessController.java|(46413,16,<1108,0>,<1108,0>),1108,0,"The method getOwnerString() from the type HTableDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEditsReplaySink.java|(7270,11,<188,0>,<188,0>),188,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/tmpl/regionserver/ServerMetricsTmplImpl.java|(11466,49,<242,0>,<242,0>),242,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/RegionMergeTransactionImpl.java|(17383,11,<455,0>,<455,0>),455,0,"The type HConnection is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/AccessControlLists.java|(22444,20,<610,0>,<610,0>),610,0,"The method readObject(DataInput, Configuration) from the type HbaseObjectWritableFor96Migration is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/master/handler/DeleteTableHandler.java|(7783,48,<189,0>,<189,0>),189,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/LoadIncrementalHFiles.java|(36032,37,<877,0>,<877,0>),877,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/GetClosestRowBeforeTracker.java|(7076,18,<204,0>,<204,0>),204,0,"The method ensureKeyValue(Cell) from the type KeyValueUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/TableInputFormatBase.java|(7758,36,<177,0>,<177,0>),177,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/compactions/CompactionRequest.java|(7149,89,<214,0>,<214,0>),214,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/access/ZKPermissionWatcher.java|(5468,9,<152,0>,<152,0>),152,0,"The method isEmpty() from the type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/client/HTableWrapper.java|(10699,35,<337,0>,<337,0>),337,0,"The method setWriteBufferSize(long) from the type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/BaseRegionObserver.java|(16951,7,<462,0>,<462,0>),462,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HMerge.java|(9090,39,<248,0>,<248,0>),248,0,"The constructor HTable(Configuration, TableName) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/WALEdit.java|(12448,10,<368,0>,<368,0>),368,0,"The method getValue() from the type Cell is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/token/ZKSecretWatcher.java|(4895,11,<138,0>,<138,0>),138,0,"The type ZKUtil.NodeAndData is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/SequenceFileLogReader.java|(8700,7,<235,0>,<235,0>),235,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/TextSortReducer.java|(7368,25,<199,0>,<199,0>),199,0,"The method humanReadableInt(long) from the type StringUtils is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/replication/VerifyReplication.java|(5099,697,<123,0>,<123,0>),123,0,"The method execute(HConnectable\<Void\>) from the type HConnectionManager is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/HRegionFileSystem.java|(8597,22,<228,0>,<228,0>),228,0,"The method makeQualified(FileSystem) from the type Path is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/BaseWALObserver.java|(2726,7,<70,0>,<70,0>),70,0,"The type HLogKey is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/StoreScanner.java|(22385,36,<587,0>,<587,0>),587,0,"The method estimatedHeapSizeOfWithoutTags(Cell) from the type CellUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/util/HFileArchiveUtil.java|(3952,43,<89,0>,<89,0>),89,0,"The method getRegionDir(Path, String) from the type HRegion is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/generated/master/table_jsp.java|(13729,26,<292,0>,<292,0>),292,0,"The method encode(String) from the type URLEncoder is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/handler/CloseRegionHandler.java|(6785,62,<157,0>,<157,0>),157,0,"The method reportRegionStateTransition(RegionServerStatusProtos.RegionStateTransition.TransitionCode, HRegionInfo...) from the type RegionServerServices is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/regionserver/wal/ReplayHLogKey.java|(1341,72,<36,0>,<36,0>),36,0,"The constructor HLogKey(byte[], TableName, long, List\<UUID\>, long, long) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/mapreduce/Import.java|(21726,16,<520,0>,<520,0>),520,0,"The method flush(String) from the type HBaseAdmin is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/coprocessor/CoprocessorHost.java|(16252,15,<446,0>,<446,0>),446,0,"The type HTableInterface is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/alihbase-server-1.1.3-sources/org/apache/hadoop/hbase/security/visibility/DefaultVisibilityLabelServiceImpl.java|(11359,40,<279,0>,<279,0>),279,0,"The method deleteColumns(byte[], byte[]) from the type Delete is deprecated",())
+
+
+Unmatched messages: 266
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 323
+Detections: 1
+Compiler messages: 422
+
+

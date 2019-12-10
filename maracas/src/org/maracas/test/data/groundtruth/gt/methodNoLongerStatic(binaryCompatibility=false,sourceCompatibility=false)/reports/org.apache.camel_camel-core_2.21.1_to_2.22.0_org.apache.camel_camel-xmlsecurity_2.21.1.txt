@@ -1,0 +1,46 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/apache/camel/dataformat/xmlsecurity/XMLSecurityDataFormat/setDefaultsFromContext(org.apache.camel.CamelContext)|,|java+method:///org/apache/camel/CamelContext/getProperty(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/apache/camel/dataformat/xmlsecurity/XMLSecurityDataFormat/setDefaultsFromContext(org.apache.camel.CamelContext)|,|java+method:///org/apache/camel/CamelContext/getProperty(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1376,20,<31,0>,<31,0>),31,0,"The type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1749,43,<43,0>,<43,0>),43,0,"The constructor UriEndpointComponent(CamelContext, Class\<? extends Endpoint\>) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1638,34,<39,0>,<39,0>),39,0,"The constructor UriEndpointComponent(Class\<? extends Endpoint\>) is deprecated",())
+
+
+Unmatched messages: 3
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 94
+Detections: 1
+Compiler messages: 4
+
+

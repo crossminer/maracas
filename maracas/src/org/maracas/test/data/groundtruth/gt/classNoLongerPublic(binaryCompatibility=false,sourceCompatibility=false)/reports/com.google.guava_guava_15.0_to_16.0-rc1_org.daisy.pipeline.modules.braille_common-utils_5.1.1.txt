@@ -1,0 +1,70 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$2/apply(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$Concat$1$1/computeNext()|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$1/apply(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+constructor:///org/daisy/pipeline/braille/common/CSSStyledText/CSSStyledText(java.lang.String,java.lang.String)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/daisy/pipeline/braille/common/AbstractTransformProvider$util$Iterables$3/iterator(org.slf4j.Logger)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$4/iterator(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/daisy/pipeline/braille/common/AbstractTransformProvider/get(org.daisy.pipeline.braille.common.Query,org.slf4j.Logger)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 7
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$2/apply(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$Concat$1$1/computeNext()|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$1/apply(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+constructor:///org/daisy/pipeline/braille/common/CSSStyledText/CSSStyledText(java.lang.String,java.lang.String)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/daisy/pipeline/braille/common/AbstractTransformProvider$util$Iterables$3/iterator(org.slf4j.Logger)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/daisy/pipeline/braille/common/WithSideEffect$util$Iterables$4/iterator(java.lang.Object)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/daisy/pipeline/braille/common/AbstractTransformProvider/get(org.daisy.pipeline.braille.common.Query,org.slf4j.Logger)|,|java+interface:///com/google/common/base/Function|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 7
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 133
+Detections: 7
+Compiler messages: 0
+
+

@@ -1,0 +1,99 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$InstanceOfPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/hash/BloomFilter|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$CompositionPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$NotPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$AndPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$OrPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$InPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Equivalence$EquivalentToPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$IsEqualToPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/collect/Range|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$SubtypeOfPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$ContainsPatternPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unknown() cases: 12
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$InstanceOfPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/hash/BloomFilter|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$CompositionPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$NotPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$AndPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$OrPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$InPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Equivalence$EquivalentToPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$IsEqualToPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/collect/Range|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$SubtypeOfPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/apache/curator/shaded/com/google/common/base/Predicates$ContainsPatternPredicate|,|java+method:///com/google/common/base/Predicate/test(java.lang.Object)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 12
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNowStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/curator-client-4.0.1-sources/org/apache/curator/utils/ThreadUtils.java|(2819,12,<77,0>,<77,0>),77,0,"The method propagate(Throwable) from the type Throwables is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/curator-client-4.0.1-sources/org/apache/curator/utils/ExceptionAccumulator.java|(1238,17,<38,0>,<38,0>),38,0,"The method propagate(Throwable) from the type Throwables is deprecated",())
+
+
+Unmatched messages: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 324
+Detections: 12
+Compiler messages: 4
+
+

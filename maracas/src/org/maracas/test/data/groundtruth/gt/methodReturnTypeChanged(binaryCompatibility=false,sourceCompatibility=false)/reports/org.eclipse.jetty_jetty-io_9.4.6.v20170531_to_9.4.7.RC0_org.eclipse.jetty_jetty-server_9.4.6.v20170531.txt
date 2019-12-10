@@ -1,0 +1,42 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/eclipse/jetty/server/ServerConnector/doStart()|,|java+method:///org/eclipse/jetty/io/SelectorManager/acceptor(java.nio.channels.SelectableChannel)|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/eclipse/jetty/server/ServerConnector/doStart()|,|java+method:///org/eclipse/jetty/io/SelectorManager/acceptor(java.nio.channels.SelectableChannel)|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.6.v20170531-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+
+Unmatched messages: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 6
+Detections: 1
+Compiler messages: 5
+
+

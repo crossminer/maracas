@@ -1,0 +1,42 @@
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+class:///org/eclipse/jetty/server/ProxyConnectionFactory$ProxyEndPoint|,|java+method:///org/eclipse/jetty/io/EndPoint/tryFillInterested(org.eclipse.jetty.util.Callback)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)/srcs/jetty-server-9.4.0.RC3-sources/org/eclipse/jetty/server/ProxyConnectionFactory.java|(20803,13,<576,0>,<576,0>),576,0,"The type ProxyConnectionFactory.ProxyEndPoint must implement the inherited abstract method EndPoint.tryFillInterested(Callback)",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+class:///org/eclipse/jetty/server/ProxyConnectionFactory$ProxyEndPoint|,|java+method:///org/eclipse/jetty/io/EndPoint/tryFillInterested(org.eclipse.jetty.util.Callback)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)/srcs/jetty-server-9.4.0.RC3-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+
+Unmatched messages: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 1
+Compiler messages: 6
+
+

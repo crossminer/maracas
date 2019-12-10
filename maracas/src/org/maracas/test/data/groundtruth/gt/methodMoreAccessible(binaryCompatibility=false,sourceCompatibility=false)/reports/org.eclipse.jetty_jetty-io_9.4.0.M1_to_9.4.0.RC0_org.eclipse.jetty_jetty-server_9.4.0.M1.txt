@@ -1,0 +1,107 @@
+----------------------------
+Detection Matches
+----------------------------
+
+candidates() matches:
+For detection(|java+constructor:///org/eclipse/jetty/server/ConnectorStatistics$Sample/ConnectorStatistics$Sample(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesIn()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3289,27,<79,0>,<79,0>),79,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(9576,26,<301,0>,<301,0>),301,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3237,26,<78,0>,<78,0>),78,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(9629,27,<302,0>,<302,0>),302,0,"Type mismatch: cannot convert from long to int",())
+
+For detection(|java+constructor:///org/eclipse/jetty/server/ConnectorStatistics$Sample/ConnectorStatistics$Sample(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesOut()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3289,27,<79,0>,<79,0>),79,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(9576,26,<301,0>,<301,0>),301,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3237,26,<78,0>,<78,0>),78,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(9629,27,<302,0>,<302,0>),302,0,"Type mismatch: cannot convert from long to int",())
+
+
+
+matched() matches:
+For detection(|java+method:///org/eclipse/jetty/server/ConnectorStatistics/onClosed(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesOut()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3289,27,<79,0>,<79,0>),79,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3237,26,<78,0>,<78,0>),78,0,"Type mismatch: cannot convert from long to int",())
+
+For detection(|java+method:///org/eclipse/jetty/server/ConnectorStatistics/onClosed(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesIn()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3289,27,<79,0>,<79,0>),79,0,"Type mismatch: cannot convert from long to int",())
+	message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/ConnectorStatistics.java|(3237,26,<78,0>,<78,0>),78,0,"Type mismatch: cannot convert from long to int",())
+
+
+
+candidates() cases: 2
+matched() cases: 2
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/eclipse/jetty/server/ConnectorStatistics/onClosed(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesOut()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+constructor:///org/eclipse/jetty/server/ConnectorStatistics$Sample/ConnectorStatistics$Sample(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesIn()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/server/ConnectorStatistics/onClosed(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesIn()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+constructor:///org/eclipse/jetty/server/ConnectorStatistics$Sample/ConnectorStatistics$Sample(org.eclipse.jetty.io.Connection)|,|java+method:///org/eclipse/jetty/io/Connection/getMessagesOut()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 4
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5259,36,<109,0>,<109,0>),109,0,"The constructor PathMap\<IPAddressMap\<Boolean\>\>(boolean) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(9061,7,<231,0>,<231,0>),231,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/AbstractNCSARequestLog.java|(12864,37,<428,0>,<428,0>),428,0,"The method put(String, String) from the type PathMap\<String\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(11439,16,<307,0>,<307,0>),307,0,"The method getMatches(String) from the type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(10626,7,<278,0>,<278,0>),278,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/AbstractNCSARequestLog.java|(12762,7,<426,0>,<426,0>),426,0,"The type PathMap is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(13153,7,<370,0>,<370,0>),370,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5173,36,<108,0>,<108,0>),108,0,"The constructor PathMap\<IPAddressMap\<Boolean\>\>(boolean) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/AbstractNCSARequestLog.java|(12762,11,<426,0>,<426,0>),426,0,"The constructor PathMap\<String\>() is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/AbstractNCSARequestLog.java|(3692,33,<104,0>,<104,0>),104,0,"The method getMatch(String) from the type PathMap\<String\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(10694,7,<280,0>,<280,0>),280,0,"The method clear() from the type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5259,7,<109,0>,<109,0>),109,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5215,7,<109,0>,<109,0>),109,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(12156,16,<332,0>,<332,0>),332,0,"The method getMatches(String) from the type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/session/Session.java|(17171,18,<561,0>,<561,0>),561,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5129,7,<108,0>,<108,0>),108,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(5173,7,<108,0>,<108,0>),108,0,"The type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/handler/IPAccessHandler.java|(9991,17,<259,0>,<259,0>),259,0,"The method put(String, IPAddressMap\<Boolean\>) from the type PathMap\<IPAddressMap\<Boolean\>\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.0.M1-sources/org/eclipse/jetty/server/AbstractNCSARequestLog.java|(2205,7,<57,0>,<57,0>),57,0,"The type PathMap\<String\> is deprecated",())
+
+
+Unmatched messages: 20
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 10
+Detections: 4
+Compiler messages: 35
+
+

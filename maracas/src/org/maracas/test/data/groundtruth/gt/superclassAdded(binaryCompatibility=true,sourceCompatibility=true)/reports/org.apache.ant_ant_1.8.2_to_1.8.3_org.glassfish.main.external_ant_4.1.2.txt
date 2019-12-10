@@ -1,0 +1,40 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///org/apache/tools/ant/types/PropertySet/iterator()|,|java+constructor:///org/apache/tools/ant/types/PropertySet$1/PropertySet$1(org.apache.tools.ant.types.PropertySet,java.util.Enumeration)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unknown() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/apache/tools/ant/types/PropertySet/iterator()|,|java+constructor:///org/apache/tools/ant/types/PropertySet$1/PropertySet$1(org.apache.tools.ant.types.PropertySet,java.util.Enumeration)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 25
+Detections: 1
+Compiler messages: 0
+
+

@@ -1,0 +1,75 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+field:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/reporter|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter$Builder|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter$Builder/build()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/close()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/start()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/forRegistry(com.codahale.metrics.MetricRegistry)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 8
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+field:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/reporter|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter$Builder|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter$Builder/build()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/close()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/start()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/forRegistry(com.codahale.metrics.MetricRegistry)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 8
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 41
+Detections: 8
+Compiler messages: 8
+
+

@@ -1,0 +1,45 @@
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/drools/cdi/CDIHelper/wireListnersAndWIHs(javax.enterprise.inject.spi.BeanManager,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.StatelessKieSession)|,|java+method:///org/drools/compiler/kie/util/InjectionHelper/wireListnersAndWIHs(org.drools.compiler.kie.util.BeanCreator,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.StatelessKieSession)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/drools-cdi-7.3.0.Final-sources/org/drools/cdi/CDIHelper.java|(1554,19,<40,0>,<40,0>),40,0,"The method wireListnersAndWIHs(CDIHelper.CDIBeanCreator, KieSessionModel, StatelessKieSession) is undefined for the type InjectionHelper",())
+
+For detection(|java+method:///org/drools/cdi/CDIHelper/wireListnersAndWIHs(javax.enterprise.inject.spi.BeanManager,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.KieSession)|,|java+method:///org/drools/compiler/kie/util/InjectionHelper/wireListnersAndWIHs(org.drools.compiler.kie.util.BeanCreator,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.KieSession)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/drools-cdi-7.3.0.Final-sources/org/drools/cdi/CDIHelper.java|(1326,19,<36,0>,<36,0>),36,0,"The method wireListnersAndWIHs(CDIHelper.CDIBeanCreator, KieSessionModel, KieSession) is undefined for the type InjectionHelper",())
+
+
+
+matched() cases: 2
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/drools/cdi/CDIHelper/wireListnersAndWIHs(javax.enterprise.inject.spi.BeanManager,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.StatelessKieSession)|,|java+method:///org/drools/compiler/kie/util/InjectionHelper/wireListnersAndWIHs(org.drools.compiler.kie.util.BeanCreator,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.StatelessKieSession)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/drools/cdi/CDIHelper/wireListnersAndWIHs(javax.enterprise.inject.spi.BeanManager,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.KieSession)|,|java+method:///org/drools/compiler/kie/util/InjectionHelper/wireListnersAndWIHs(org.drools.compiler.kie.util.BeanCreator,org.kie.api.builder.model.KieSessionModel,org.kie.api.runtime.KieSession)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 2
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 10
+Detections: 2
+Compiler messages: 2
+
+

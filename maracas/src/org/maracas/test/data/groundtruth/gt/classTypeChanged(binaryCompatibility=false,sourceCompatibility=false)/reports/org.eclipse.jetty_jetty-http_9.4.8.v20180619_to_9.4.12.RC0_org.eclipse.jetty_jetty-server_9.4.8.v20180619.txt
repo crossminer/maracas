@@ -1,0 +1,88 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/MultiPartCleanerListener.java|(2011,13,<51,0>,<51,0>),51,0,"The method deleteParts() from the type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77295,26,<2329,0>,<2329,0>),2329,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(78909,9,<2355,0>,<2355,0>),2355,0,"The method getName() from the type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(76906,26,<2320,0>,<2320,0>),2320,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(79064,10,<2362,0>,<2362,0>),2362,0,"The method getParts() from the type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(78008,31,<2340,0>,<2340,0>),2340,0,"The method getContentDispositionFilename() from the type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(7175,15,<200,0>,<200,0>),200,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(76321,13,<2305,0>,<2305,0>),2305,0,"The method getPart(String) from the type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77295,278,<2329,0>,<2329,0>),2329,0,"The constructor MultiPartInputStreamParser(InputStream, String, MultipartConfigElement, File) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(78396,16,<2347,0>,<2347,0>),2347,0,"The method getInputStream() from the type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(4290,12,<105,0>,<105,0>),105,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77767,10,<2335,0>,<2335,0>),2335,0,"The method getParts() from the type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(9537,26,<205,0>,<205,0>),205,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77972,9,<2339,0>,<2339,0>),2339,0,"The type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77929,9,<2339,0>,<2339,0>),2339,0,"The type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(6776,15,<187,0>,<187,0>),187,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77902,26,<2339,0>,<2339,0>),2339,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/MultiPartCleanerListener.java|(1495,26,<41,0>,<41,0>),41,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/MultiPartCleanerListener.java|(1460,26,<41,0>,<41,0>),41,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(77945,26,<2339,0>,<2339,0>),2339,0,"The type MultiPartInputStreamParser is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/MultiPartCleanerListener.java|(2067,14,<53,0>,<53,0>),53,0,"Unreachable catch block for MultiException. This exception is never thrown from the try statement body",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(78331,16,<2345,0>,<2345,0>),2345,0,"The method getContentType() from the type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20180619-sources/org/eclipse/jetty/server/Request.java|(78232,16,<2344,0>,<2344,0>),2344,0,"The method getContentType() from the type MultiPartInputStreamParser.MultiPart is deprecated",())
+
+
+Unmatched messages: 24
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 19
+Detections: 1
+Compiler messages: 32
+
+

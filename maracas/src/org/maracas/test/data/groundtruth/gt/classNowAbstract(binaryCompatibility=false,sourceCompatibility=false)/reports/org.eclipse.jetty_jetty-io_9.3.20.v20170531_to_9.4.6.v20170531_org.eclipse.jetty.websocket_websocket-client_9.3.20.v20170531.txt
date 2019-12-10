@@ -1,0 +1,117 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/ConnectionManager$PhysicalConnect/run()|,|java+method:///org/eclipse/jetty/io/SelectorManager/accept(java.nio.channels.SocketChannel,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/upgradeConnection(org.eclipse.jetty.websocket.client.ClientUpgradeResponse)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection$SendUpgradeRequest/run()|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/failUpgrade(java.lang.Throwable)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/ConnectionManager$PhysicalConnect/run()|,|java+method:///org/eclipse/jetty/io/SelectorManager/connect(java.nio.channels.SocketChannel,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/read(java.nio.ByteBuffer)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/disconnect(boolean)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+matched() matches:
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+constructor:///org/eclipse/jetty/io/SelectChannelEndPoint/SelectChannelEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey,org.eclipse.jetty.util.thread.Scheduler,long)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,21,<123,0>,<123,0>),123,0,"The type SelectChannelEndPoint is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4574,107,<119,0>,<119,0>),119,0,"The method newEndPoint(SocketChannel, ManagedSelector, SelectionKey) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,92,<123,0>,<123,0>),123,0,"The constructor SelectChannelEndPoint(SelectableChannel, ManagedSelector, SelectionKey, Scheduler, long) is deprecated",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+class:///org/eclipse/jetty/io/SelectChannelEndPoint|,typeDependency(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,21,<123,0>,<123,0>),123,0,"The type SelectChannelEndPoint is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4574,107,<119,0>,<119,0>),119,0,"The method newEndPoint(SocketChannel, ManagedSelector, SelectionKey) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,92,<123,0>,<123,0>),123,0,"The constructor SelectChannelEndPoint(SelectableChannel, ManagedSelector, SelectionKey, Scheduler, long) is deprecated",())
+
+For detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+constructor:///org/eclipse/jetty/io/SelectChannelEndPoint/SelectChannelEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey,org.eclipse.jetty.util.thread.Scheduler,long)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,21,<123,0>,<123,0>),123,0,"The type SelectChannelEndPoint is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4574,107,<119,0>,<119,0>),119,0,"The method newEndPoint(SocketChannel, ManagedSelector, SelectionKey) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,92,<123,0>,<123,0>),123,0,"The constructor SelectChannelEndPoint(SelectableChannel, ManagedSelector, SelectionKey, Scheduler, long) is deprecated",())
+
+For detection(|java+class:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager|,|java+method:///org/eclipse/jetty/io/SelectorManager/newEndPoint(java.nio.channels.SelectableChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,extends(),methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(2534,105,<70,0>,<70,0>),70,0,"The method newConnection(SocketChannel, EndPoint, Object) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(1595,30,<41,0>,<41,0>),41,0,"The type WebSocketClientSelectorManager must implement the inherited abstract method SelectorManager.newEndPoint(SelectableChannel, ManagedSelector, SelectionKey)",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,21,<123,0>,<123,0>),123,0,"The type SelectChannelEndPoint is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,92,<123,0>,<123,0>),123,0,"The constructor SelectChannelEndPoint(SelectableChannel, ManagedSelector, SelectionKey, Scheduler, long) is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(1595,30,<41,0>,<41,0>),41,0,"The type WebSocketClientSelectorManager must implement the inherited abstract method SelectorManager.newConnection(SelectableChannel, EndPoint, Object)",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(2143,72,<56,0>,<56,0>),56,0,"The method connectionFailed(SocketChannel, Throwable, Object) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4574,107,<119,0>,<119,0>),119,0,"The method newEndPoint(SocketChannel, ManagedSelector, SelectionKey) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+
+For detection(|java+class:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager|,|java+method:///org/eclipse/jetty/io/SelectorManager/newConnection(java.nio.channels.SelectableChannel,org.eclipse.jetty.io.EndPoint,java.lang.Object)|,extends(),methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(2534,105,<70,0>,<70,0>),70,0,"The method newConnection(SocketChannel, EndPoint, Object) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(1595,30,<41,0>,<41,0>),41,0,"The type WebSocketClientSelectorManager must implement the inherited abstract method SelectorManager.newEndPoint(SelectableChannel, ManagedSelector, SelectionKey)",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,21,<123,0>,<123,0>),123,0,"The type SelectChannelEndPoint is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4822,92,<123,0>,<123,0>),123,0,"The constructor SelectChannelEndPoint(SelectableChannel, ManagedSelector, SelectionKey, Scheduler, long) is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(1595,30,<41,0>,<41,0>),41,0,"The type WebSocketClientSelectorManager must implement the inherited abstract method SelectorManager.newConnection(SelectableChannel, EndPoint, Object)",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(2143,72,<56,0>,<56,0>),56,0,"The method connectionFailed(SocketChannel, Throwable, Object) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+	message(|file:///home/lina/tmp/gt/classNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/websocket-client-9.3.20.v20170531-sources/org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager.java|(4574,107,<119,0>,<119,0>),119,0,"The method newEndPoint(SocketChannel, ManagedSelector, SelectionKey) of type WebSocketClientSelectorManager must override or implement a supertype method",())
+
+
+
+unmatched() cases: 7
+matched() cases: 5
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+constructor:///org/eclipse/jetty/io/SelectChannelEndPoint/SelectChannelEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey,org.eclipse.jetty.util.thread.Scheduler,long)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/upgradeConnection(org.eclipse.jetty.websocket.client.ClientUpgradeResponse)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection$SendUpgradeRequest/run()|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+class:///org/eclipse/jetty/io/SelectChannelEndPoint|,typeDependency(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager/newEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,|java+constructor:///org/eclipse/jetty/io/SelectChannelEndPoint/SelectChannelEndPoint(java.nio.channels.SocketChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey,org.eclipse.jetty.util.thread.Scheduler,long)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/ConnectionManager$PhysicalConnect/run()|,|java+method:///org/eclipse/jetty/io/SelectorManager/accept(java.nio.channels.SocketChannel,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/failUpgrade(java.lang.Throwable)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/ConnectionManager$PhysicalConnect/run()|,|java+method:///org/eclipse/jetty/io/SelectorManager/connect(java.nio.channels.SocketChannel,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/read(java.nio.ByteBuffer)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/eclipse/jetty/websocket/client/io/UpgradeConnection/disconnect(boolean)|,|java+interface:///org/eclipse/jetty/io/Connection|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+class:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager|,|java+method:///org/eclipse/jetty/io/SelectorManager/newEndPoint(java.nio.channels.SelectableChannel,org.eclipse.jetty.io.ManagedSelector,java.nio.channels.SelectionKey)|,extends(),methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+
+detection(|java+class:///org/eclipse/jetty/websocket/client/io/WebSocketClientSelectorManager|,|java+method:///org/eclipse/jetty/io/SelectorManager/newConnection(java.nio.channels.SelectableChannel,org.eclipse.jetty.io.EndPoint,java.lang.Object)|,extends(),methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
+
+
+Unmatched detections: 12
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 46
+Detections: 12
+Compiler messages: 8
+
+

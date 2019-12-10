@@ -1,0 +1,40 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///com/google/common/base/Optional/presentInstances(java.lang.Iterable)|,|java+constructor:///com/google/common/base/Optional$1/Optional$1(java.util.Iterator)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unknown() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///com/google/common/base/Optional/presentInstances(java.lang.Iterable)|,|java+constructor:///com/google/common/base/Optional$1/Optional$1(java.util.Iterator)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+
+Unmatched messages: 0
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 2
+Detections: 1
+Compiler messages: 0
+
+

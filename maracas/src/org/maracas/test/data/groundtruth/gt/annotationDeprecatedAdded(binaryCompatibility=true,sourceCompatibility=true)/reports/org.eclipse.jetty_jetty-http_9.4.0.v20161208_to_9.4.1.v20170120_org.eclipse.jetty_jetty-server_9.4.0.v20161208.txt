@@ -1,0 +1,42 @@
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/eclipse/jetty/server/Response/getWriter()|,|java+method:///org/eclipse/jetty/http/MimeTypes/inferCharsetFromContentType(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/Response.java|(25934,41,<840,0>,<840,0>),840,0,"The method inferCharsetFromContentType(String) from the type MimeTypes is deprecated",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+method:///org/eclipse/jetty/server/Response/getWriter()|,|java+method:///org/eclipse/jetty/http/MimeTypes/inferCharsetFromContentType(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+
+Unmatched messages: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 1
+Compiler messages: 6
+
+

@@ -1,0 +1,48 @@
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Unmatched Detections
+----------------------------
+
+detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+
+Unmatched detections: 1
+
+
+----------------------------
+Unmatched Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(6776,15,<187,0>,<187,0>),187,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(4290,12,<105,0>,<105,0>),105,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(7175,15,<200,0>,<200,0>),200,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+
+Unmatched messages: 4
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 7
+Detections: 1
+Compiler messages: 9
+
+
