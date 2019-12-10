@@ -76,28 +76,28 @@ set[CompatibilityChange] getGroundtruthCCs()
 		//methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), //UNCOMMENT
-		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false),
-		methodRemoved(binaryCompatibility=false,sourceCompatibility=false),
-		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false),
-		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false),
-		superclassAdded(binaryCompatibility=true,sourceCompatibility=true),
-		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
-		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false),
-		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false),
-		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false),
-		superclassRemoved(binaryCompatibility=false,sourceCompatibility=false),
-		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false),
+		//fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//methodRemoved(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false), //UNCOMMENT
+		//fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//superclassAdded(binaryCompatibility=true,sourceCompatibility=true), //UNCOMMENT
+		//methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false), //UNCOMMENT
+		//superclassRemoved(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//methodNowStatic(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//classNowFinal(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodIsStaticAndOverridesNotStatic(binaryCompatibility=false,sourceCompatibility=false),
-		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false),
-		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), // Do it later
+		//methodNewDefault(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
+		//classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodAbstractAddedInImplementedInterface(binaryCompatibility=true,sourceCompatibility=false),
-		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true),
+		//annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true), //UNCOMMENT
 		//fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
-		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		//methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		//methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false),
 		//methodNowFinal(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
-		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false),
+		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false), //UNCOMMENT
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
