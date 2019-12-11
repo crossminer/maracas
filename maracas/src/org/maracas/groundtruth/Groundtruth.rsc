@@ -71,47 +71,47 @@ java loc downloadSrcs(str group, str artifact, str version);
 
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
-		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), 
-		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
-		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), 
-		interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), 
-		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		methodRemoved(binaryCompatibility=false,sourceCompatibility=false), 
-		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
-		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		superclassAdded(binaryCompatibility=true,sourceCompatibility=true), 
-		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false), 
-		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
-		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
-		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
-		superclassRemoved(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
+		//classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), 
+		//interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), 
+		//fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodRemoved(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
+		//fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		//superclassAdded(binaryCompatibility=true,sourceCompatibility=true), 
+		//methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false), 
+		//fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
+		//fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
+		//classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
+		//superclassRemoved(binaryCompatibility=false,sourceCompatibility=false), 
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		classNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
-		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)
-		//classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), 
-		//annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true), 
-		//methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
-		//classNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
-		//fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
-		//methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
-		//constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
-		//fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
-		//methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false),
-		//classRemoved(binaryCompatibility=false,sourceCompatibility=false),
-		//methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false),
-		//interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false),
-		//classLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
-		//fieldRemoved(binaryCompatibility=false,sourceCompatibility=false),
-		//constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
+		//classNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
+		//methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)
+		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), 
+		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true), 
+		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
+		methodNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
+		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
+		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
+		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false),
+		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false),
+		classRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false),
+		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false),
+		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false),
+		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)
 		//methodIsStaticAndOverridesNotStatic(binaryCompatibility=false,sourceCompatibility=false), //PERMANENT
 		//methodAbstractAddedInImplementedInterface(binaryCompatibility=true,sourceCompatibility=false), //PERMANENT
 		//methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false), //PERMANENT
 		//methodAbstractAddedInSuperclass(binaryCompatibility=true,sourceCompatibility=false), //PERMANENT
 		//fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false), //PERMANENT
 		//fieldStaticAndOverridesStatic(binaryCompatibility=false,sourceCompatibility=false), //PERMANENT
-		//fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false), //PERMANENT
+		//fieldLessAccessibleThanInSuperclass(binaryCompatibility=false,sourceCompatibility=false) //PERMANENT
 	};
 	
 rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clientsCsv) {
