@@ -71,24 +71,24 @@ java loc downloadSrcs(str group, str artifact, str version);
 
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
-		//methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
-		//classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), 
-		//interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), 
-		//fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodRemoved(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
-		//fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		//superclassAdded(binaryCompatibility=true,sourceCompatibility=true), 
-		//methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false), 
-		//fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
-		//fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
-		//classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
-		//superclassRemoved(binaryCompatibility=false,sourceCompatibility=false), 
+		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false), 
+		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false), 
+		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false), 
+		interfaceAdded(binaryCompatibility=true,sourceCompatibility=true), 
+		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		methodRemoved(binaryCompatibility=false,sourceCompatibility=false), 
+		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
+		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 
+		superclassAdded(binaryCompatibility=true,sourceCompatibility=true), 
+		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false), 
+		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
+		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
+		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false), 
+		superclassRemoved(binaryCompatibility=false,sourceCompatibility=false), 
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false), 
-		//classNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
-		//methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)
+		classNowFinal(binaryCompatibility=false,sourceCompatibility=false), 
+		methodNewDefault(binaryCompatibility=false,sourceCompatibility=false),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false), 
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true), 
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false), 
@@ -160,7 +160,6 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 	set[CompatibilityChange] ccs = getGroundtruthCCs();
 	loc homeDir = getUserHomeDir();
 
-	set[loc] allClients = {};
 	// For all deltas, get the JARs of libV1/libV2/client, and compare Maracas against the GT
 	for (CompatibilityChange cc <- ccs) {
 		loc deltasCsv = homeDir + "tmp/gt/<cc>/orderedDeltas.csv";
@@ -193,6 +192,7 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 							loc client = downloadJar(cg, ca, cv);
 							loc clientSrc = downloadSrcs(cg, ca, cv);
 							loc clientDir = homeDir + "tmp/gt/<cc>/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
+							loc hasReport = false;
 							
 							bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
 							println("Client upgraded: <upgraded>");
@@ -206,14 +206,28 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 									
 								M3 clientM3 = createM3FromJar(client, classPath = srcClasspath);
 								M3 clientSrcM3 = composeJavaM3(clientDir, createM3sFromFiles(srcFiles, sourcePath = [ *findRoots(srcPaths) ], classPath = srcClasspath, javaVersion = "1.8"));
-									
-								hasReport = generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", m3V1, m3V2, clientM3, clientSrcM3, delta);
 								
-								if (hasReport) {
-									println("Found report for <group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>");
-									allClients += client;
-									break;
+								println("Computing evolution models");
+								Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
+								set[Detection] detects = detections(evol); 
+								
+								bool hasCCDetect = false;
+								for (Detection d <- detects) {
+									if (d.change == cc) {
+										hasCCDetect = true;
+										break;
+									}
 								}
+								
+								hasReport = (hasCCDetect) ? generateReport(homeDir + "tmp/gt/<cc>/reports/<group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>.txt", evol, detects, clientSrcM3) : false;
+							}
+							
+							if (hasReport) {
+								println("Found report for <group>_<artifact>_<v1>_to_<v2>_<cg>_<ca>_<cv>");
+								break;
+							}
+							else {
+								deleteDir(clientDir);
 							}
 						}
 						catch e: {

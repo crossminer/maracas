@@ -35,6 +35,25 @@ bool generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3
 	return false;
 }
 
+bool generateReport(loc reportFile, Evolution evol, set[Detection] detects, M3 sourceM3) {
+	println("Recording compilation errors");
+	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
+	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
+	
+	if (detects != {}) {
+		println("Matching detections");
+		//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
+		set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
+		
+		println("Generating report");
+		//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
+		outputReport(oldM3.id, newM3.id, clientM3.id, sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
+		println("Done!");
+		return true;
+	}
+	return false;
+}
+
 void outputReport(loc oldAPI, loc newAPI, loc client, M3 sourceM3, list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, set[Match] matches, loc path) {
 	// Always rewrite file
 	writeFile(path, "");

@@ -77,6 +77,9 @@ java loc getUserHomeDir();
 @javaClass{org.maracas.io.internal.File}
 java str getLineSeparator();
 
+@javaClass{org.maracas.io.internal.File}
+java bool deleteDir(loc dir);
+
 void appendEmptyLine(loc path) = appendToFile(path, "<getLineSeparator()>");
 
 void appendToFileLn(loc path, str line) {
