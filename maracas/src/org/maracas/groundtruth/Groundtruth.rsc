@@ -192,7 +192,7 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 							loc client = downloadJar(cg, ca, cv);
 							loc clientSrc = downloadSrcs(cg, ca, cv);
 							loc clientDir = homeDir + "tmp/gt/<cc>/srcs/<replaceLast(clientSrc.file, ".<clientSrc.extension>", "")>";
-							loc hasReport = false;
+							bool hasReport = false;
 							
 							bool upgraded = upgradeClient(client, clientDir, group, artifact, v1, v2);
 							println("Client upgraded: <upgraded>");
