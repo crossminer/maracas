@@ -182,8 +182,8 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 				
 				try {
 					println("Loading M3s of the library");
-					M3 m3V1 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
-					M3 m3V2 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
+					M3 oldM3 = createM3FromJar(jarV1, classPath = []); // FIXME: classpath
+					M3 newM3 = createM3FromJar(jarV2, classPath = []); // FIXME: classpath
 					
 					// Find clients using group:artifact:v1
 					for (<group, artifact, v1, cg, ca, cv, _, _, _, _> <- clients) {
