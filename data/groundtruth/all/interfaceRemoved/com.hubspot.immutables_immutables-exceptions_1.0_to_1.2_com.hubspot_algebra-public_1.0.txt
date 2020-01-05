@@ -1,0 +1,57 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/com/hubspot/immutables/immutables-exceptions/1.0/immutables-exceptions-1.0.jar
+New API: /home/lina/maracas/maracas/local-repo/com/hubspot/immutables/immutables-exceptions/1.2/immutables-exceptions-1.2.jar
+Client: /home/lina/maracas/maracas/local-repo/com/hubspot/algebra-public/1.0/algebra-public-1.0.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///com/hubspot/algebra/HttpResultWrapper$Builder/build()|,|java+class:///com/hubspot/immutables/exceptions/InvalidImmutableStateException|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/AbstractHttpResultWrapper.java|(560,5,<19,0>,<19,0>),19,0,"The method build() from the type HttpResultWrapper.Builder\<T,E\> refers to the missing type InvalidImmutableStateException",())
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/AbstractHttpResultWrapper.java|(775,5,<26,0>,<26,0>),26,0,"The method build() from the type HttpResultWrapper.Builder\<T,E\> refers to the missing type InvalidImmutableStateException",())
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/HttpResultWrapper.java|(200,33,<6,0>,<6,0>),6,0,"The import com.hubspot.immutables.exceptions cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/HttpResultWrapper.java|(9215,5,<234,0>,<234,0>),234,0,"The method build() from the type HttpResultWrapper.Builder\<T,E\> refers to the missing type InvalidImmutableStateException",())
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/HttpResultWrapper.java|(10067,5,<257,0>,<257,0>),257,0,"The method build() from the type HttpResultWrapper.Builder\<T,E\> refers to the missing type InvalidImmutableStateException",())
+
+message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/HttpResultWrapper.java|(14744,30,<367,0>,<367,0>),367,0,"InvalidImmutableStateException cannot be resolved to a type",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///com/hubspot/algebra/HttpResultWrapper$Builder/build()|,|java+class:///com/hubspot/immutables/exceptions/InvalidImmutableStateException|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/algebra-public-1.0-sources/com/hubspot/algebra/HttpResultWrapper.java|(14744,30,<367,0>,<367,0>),367,0,"InvalidImmutableStateException cannot be resolved to a type",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 1
+Compiler messages: 6
+
+

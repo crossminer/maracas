@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: .source
+Built-By: jenkins
+Specification-Title: Kie Workbench - Common - Services Backend
+Implementation-Vendor-Id: org.kie.workbench.services
+Eclipse-SourceBundle: ;version="7.1.0.201705311113";roots:="."
+Scm-Url: https://github.com/kiegroup/droolsjbpm-build-bootstrap/kie-wb
+ -common/kie-wb-common-services/kie-wb-common-services-backend
+Bundle-Name: Kie Workbench - Common - Services Backend
+Implementation-Title: Kie Workbench - Common - Services Backend
+Implementation-Version: 7.1.0.Beta2
+Java-Version: 1.8.0_112
+Scm-Connection: scm:git:https://github.com/kiegroup/droolsjbpm-build-b
+ ootstrap.git/kie-wb-common/kie-wb-common-services/kie-wb-common-servi
+ ces-backend
+Specification-Vendor: JBoss by Red Hat
+Bundle-ManifestVersion: 2
+Os-Arch: amd64
+Bundle-Vendor: JBoss by Red Hat
+Java-Vendor: Oracle Corporation
+Os-Name: Linux
+Implementation-Vendor: JBoss by Red Hat
+Os-Version: 3.10.0-514.el7.x86_64
+Bundle-Version: 7.1.0.201705311113
+Scm-Revision: 29c113469bbda84393b67ea6043bee95b9e5a34d
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_112
+Specification-Version: 7.1
+Implementation-URL: http://www.kiegroup.org/kie-wb-common/kie-wb-commo
+ n-services/kie-wb-common-services-backend
+

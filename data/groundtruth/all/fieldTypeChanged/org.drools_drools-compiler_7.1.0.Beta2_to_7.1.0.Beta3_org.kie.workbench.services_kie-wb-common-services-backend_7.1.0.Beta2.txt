@@ -1,0 +1,74 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.1.0.Beta2/drools-compiler-7.1.0.Beta2.jar
+New API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.1.0.Beta3/drools-compiler-7.1.0.Beta3.jar
+Client: /home/lina/maracas/maracas/local-repo/org/kie/workbench/services/kie-wb-common-services-backend/7.1.0.Beta2/kie-wb-common-services-backend-7.1.0.Beta2.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/createKieBuilder(org.kie.api.builder.KieFileSystem)|,|java+method:///org/drools/compiler/kie/builder/impl/KieBuilderImpl/setPomModel(org.drools.compiler.kproject.xml.PomModel)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/getKieModuleMetaDataIgnoringErrors()|,|java+field:///org/drools/compiler/kproject/xml/DependencyFilter/COMPILE_FILTER|,fieldAccess(),fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/build()|,|java+method:///org/drools/compiler/kie/builder/impl/KieBuilderImpl/getPomModel()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/LRUPomModelCache.java|(814,41,<23,0>,<23,0>),23,0,"The import org.drools.compiler.kproject.xml.PomModel cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/LRUPomModelCache.java|(1287,8,<32,0>,<32,0>),32,0,"PomModel cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(0,1,<1,0>,<1,0>),1,0,"The type org.drools.compiler.kproject.xml.DependencyFilter cannot be resolved. It is indirectly referenced from required .class files",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(1347,49,<37,0>,<37,0>),37,0,"The import org.drools.compiler.kproject.xml.DependencyFilter cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(1405,41,<38,0>,<38,0>),38,0,"The import org.drools.compiler.kproject.xml.PomModel cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(10672,8,<232,0>,<232,0>),232,0,"PomModel cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(14637,8,<305,0>,<305,0>),305,0,"PomModel cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(14799,8,<307,0>,<307,0>),307,0,"The method getEntry(Project) from the type LRUCache\<Project,PomModel\> refers to the missing type PomModel",())
+
+message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(28126,16,<590,0>,<590,0>),590,0,"DependencyFilter cannot be resolved to a variable",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/createKieBuilder(org.kie.api.builder.KieFileSystem)|,|java+method:///org/drools/compiler/kie/builder/impl/KieBuilderImpl/setPomModel(org.drools.compiler.kproject.xml.PomModel)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(14637,8,<305,0>,<305,0>),305,0,"PomModel cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(14799,8,<307,0>,<307,0>),307,0,"The method getEntry(Project) from the type LRUCache\<Project,PomModel\> refers to the missing type PomModel",())
+
+For detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/getKieModuleMetaDataIgnoringErrors()|,|java+field:///org/drools/compiler/kproject/xml/DependencyFilter/COMPILE_FILTER|,fieldAccess(),fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(28126,16,<590,0>,<590,0>),590,0,"DependencyFilter cannot be resolved to a variable",())
+
+For detection(|java+method:///org/kie/workbench/common/services/backend/builder/core/Builder/build()|,|java+method:///org/drools/compiler/kie/builder/impl/KieBuilderImpl/getPomModel()|,methodInvocation(),methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-wb-common-services-backend-7.1.0.Beta2-sources/org/kie/workbench/common/services/backend/builder/core/Builder.java|(10672,8,<232,0>,<232,0>),232,0,"PomModel cannot be resolved to a type",())
+
+
+
+matched() cases: 3
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 24
+Detections: 3
+Compiler messages: 9
+
+

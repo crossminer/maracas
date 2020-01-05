@@ -1,0 +1,56 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/net/officefloor/core/officebuilding/2.2.0/officebuilding-2.2.0.jar
+New API: /home/lina/maracas/maracas/local-repo/net/officefloor/core/officebuilding/2.3.0/officebuilding-2.3.0.jar
+Client: /home/lina/maracas/maracas/local-repo/net/officefloor/plugin/officeplugin_launch/2.2.0/officeplugin_launch-2.2.0.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+constructor:///net/officefloor/building/classpath/ClassPathFactoryImpl/ClassPathFactoryImpl(org.codehaus.plexus.PlexusContainer,java.io.File)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+method:///net/officefloor/building/classpath/ClassPathFactoryImpl/registerRemoteRepository(java.lang.String,java.lang.String,java.lang.String)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(2810,65,<78,0>,<78,0>),78,0,"The constructor ClassPathFactoryImpl(DefaultPlexusContainer, null) is undefined",())
+
+message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3741,24,<105,0>,<105,0>),105,0,"The method registerRemoteRepository(String, String, String) is undefined for the type ClassPathFactoryImpl",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+constructor:///net/officefloor/building/classpath/ClassPathFactoryImpl/ClassPathFactoryImpl(org.codehaus.plexus.PlexusContainer,java.io.File)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3741,24,<105,0>,<105,0>),105,0,"The method registerRemoteRepository(String, String, String) is undefined for the type ClassPathFactoryImpl",())
+	message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(2810,65,<78,0>,<78,0>),78,0,"The constructor ClassPathFactoryImpl(DefaultPlexusContainer, null) is undefined",())
+
+For detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+method:///net/officefloor/building/classpath/ClassPathFactoryImpl/registerRemoteRepository(java.lang.String,java.lang.String,java.lang.String)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3741,24,<105,0>,<105,0>),105,0,"The method registerRemoteRepository(String, String, String) is undefined for the type ClassPathFactoryImpl",())
+	message(|file:///home/lina/tmp/gt/fieldRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.2.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(2810,65,<78,0>,<78,0>),78,0,"The constructor ClassPathFactoryImpl(DefaultPlexusContainer, null) is undefined",())
+
+
+
+matched() cases: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 3
+Detections: 2
+Compiler messages: 2
+
+

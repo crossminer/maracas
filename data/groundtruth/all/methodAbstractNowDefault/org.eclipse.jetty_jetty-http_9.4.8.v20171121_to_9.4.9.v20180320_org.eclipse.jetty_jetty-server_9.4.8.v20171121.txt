@@ -1,0 +1,63 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.8.v20171121/jetty-http-9.4.8.v20171121.jar
+New API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.9.v20180320/jetty-http-9.4.9.v20180320.jar
+Client: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-server/9.4.8.v20171121/jetty-server-9.4.8.v20171121.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(4290,12,<105,0>,<105,0>),105,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(6776,15,<187,0>,<187,0>),187,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/handler/StatisticsHandler.java|(7175,15,<200,0>,<200,0>),200,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/session/Session.java|(1313,37,<35,0>,<35,0>),35,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/session/SessionHandler.java|(1724,37,<47,0>,<47,0>),47,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7782,18,<196,0>,<196,0>),196,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7826,18,<196,0>,<196,0>),196,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.8.v20171121-sources/org/eclipse/jetty/server/session/SessionHandler.java|(44281,87,<1238,0>,<1238,0>),1238,0,"The method set(long) from the type SampleStatistic is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$ComplianceHandler/onComplianceViolation(org.eclipse.jetty.http.HttpCompliance,org.eclipse.jetty.http.HttpComplianceSection,java.lang.String)|,implements(),methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 7
+Detections: 1
+Compiler messages: 9
+
+

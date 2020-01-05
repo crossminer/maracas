@@ -1,0 +1,50 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/net/officefloor/core/officebuilding/2.11.0/officebuilding-2.11.0.jar
+New API: /home/lina/maracas/maracas/local-repo/net/officefloor/core/officebuilding/2.16.0/officebuilding-2.16.0.jar
+Client: /home/lina/maracas/maracas/local-repo/net/officefloor/plugin/officeplugin_launch/2.11.0/officeplugin_launch-2.11.0.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+constructor:///net/officefloor/building/classpath/ClassPathFactoryImpl/ClassPathFactoryImpl(org.codehaus.plexus.PlexusContainer,java.io.File,net.officefloor.building.classpath.RemoteRepository%5B%5D)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.11.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3310,77,<91,0>,<91,0>),91,0,"The constructor ClassPathFactoryImpl(PlexusContainer, null, RemoteRepository[]) is undefined",())
+
+message(|file:///home/lina/tmp/gt/fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.11.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3897,144,<104,0>,<104,0>),104,0,"The constructor ClassPathFactoryImpl(PlexusContainer, null, remoteRepositories.toArray(new RemoteRepository[remoteRepositories.size()])) is undefined",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader/getDevModeClassPath(java.io.File)|,|java+constructor:///net/officefloor/building/classpath/ClassPathFactoryImpl/ClassPathFactoryImpl(org.codehaus.plexus.PlexusContainer,java.io.File,net.officefloor.building.classpath.RemoteRepository%5B%5D)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.11.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3310,77,<91,0>,<91,0>),91,0,"The constructor ClassPathFactoryImpl(PlexusContainer, null, RemoteRepository[]) is undefined",())
+	message(|file:///home/lina/tmp/gt/fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/officeplugin_launch-2.11.0-sources/net/officefloor/launch/woof/WoofDevelopmentConfigurationLoader.java|(3897,144,<104,0>,<104,0>),104,0,"The constructor ClassPathFactoryImpl(PlexusContainer, null, remoteRepositories.toArray(new RemoteRepository[remoteRepositories.size()])) is undefined",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 70
+Detections: 1
+Compiler messages: 2
+
+

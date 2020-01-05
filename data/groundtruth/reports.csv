@@ -1,0 +1,29 @@
+Change,Exists,API,API V1,API V2,Client,Client V,All Changes,Type Changes,Detections,Compilation Msgs,Reviewed,Changes,Detections,Compilation messages
+annotationDeprecatedAdded,YES,jetty-http,9.4.0.v20161208,9.4.1.v20170120,jetty-server,9.4.0.v20161208,1,1,1,6,YES,|java+method:///org/eclipse/jetty/http/MimeTypes/inferCharsetFromContentType(java.lang.String)|: correct detection ,Correct,HttpSessionContext: deprecated in previous versions (cannot be detected between these two deltas)
+classLessAccessible,YES,guava,12.0.1,13.0-rc2,alihbase-server,1.1.3,628,1,1,422,YES,|java+class:///com/google/common/collect/TreeMultiset$Reference|: no occurrence,"|java+method:///com/google/common/util/concurrent/Service/addListener(com.google.common.util.concurrent.Service$Listener,java.util.concurrent.Executor)| methodAddedToInterface: correct. No provided implementation",Just one message related to unique detection. The remainder of messages are related to modifications in other APIs.
+classNoLongerPublic,YES,guava,15,16-rc1,common-utils,5.1.1,203,2,7,0,YES,Problems with interface removed. Check!,,
+classNowAbstract,YES,jetty-io,9.3.20.v20170531,9.4.6.v20170531,websocket-client,9.3.20.v20170531,151,1,12,8,YES,|java+class:///org/eclipse/jetty/io/ChannelEndPoint|: uses SelectChannelEndPoint concrete class. Expected.,"interfaceRemoved. Check!
+methodRemoved, constructorRemoved, annotationDeprecatedAdded, methodAbstractAddedToClass ok",
+classNowCheckedException,NO,-,-,-,-,-,-,-,-,-,YES,-,-,-
+classNowFinal,YES,spring-core,4.3.6.RELEASE,4.3.7.RELEASE,spring-data-commons,1.13.0.RELEASE,12,1,88,208,YES,|java+class:///org/springframework/util/concurrent/SettableListenableFuture$1|: no occurrence,annotationDeprecatedAdded ok,Other compilation messages are related to types of the client project itself and other dependencies. Remaining messages are related to deprecated methods of the Assert type.
+classRemoved,YES,drools-compiler,7.2.0.Final,7.3.0.Final,kie-server-services-common,7.2.0.Final,11,1,4,4,YES,|java+class:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion|: identified,"classRemoved, constructorRremoved, methodRemoved correct",All related to the classRemoved change
+classTypeChanged,YES,jetty-http,9.4.8.v20180619,9.4.12.RC0,jetty-server,9.4.8.v20180619,35,1,1,32,YES,|java+interface:///org/eclipse/jetty/http/HttpTokens|: no occurrences,methodNewDefault report when no default method with the same name is defined in the other interface,These messages are related to deprecated elements in other APIs
+constructorLessAccessible,YES,drools-compiler,7.5.0.Final,7.6.0.t022,kie-pmml,7.5.0.Final,28,1,2,2,YES,|java+constructor:///org/drools/compiler/kie/util/ChangeSetBuilder/ChangeSetBuilder()|: no occurrences,methodAddedToInterface ok,All messages are related to methodAddedToInterface detections
+constructorRemoved,YES,guava,11.0,11.0.1,dnd-tck,0.2.0-incubating,1,1,1,0,YES,|java+constructor:///com/google/common/base/Optional$1/Optional$1(java.util.Iterator)|: detected,constructorRemoved correct,Cannot access client sources
+fieldLessAccessible,YES,uberfire-widgets-core-client,1.1.0.Beta1,1.1.0.Beta2,kie-wb-common-project-explorer-client,7.1.0.Beta1,19,1,8,9,YES,|java+field:///org/uberfire/ext/widgets/core/client/tree/Tree/container|: no occurrences,"fieldRemoved, methodremoved, constructorRemoved ok",All messages related to previous detections
+fieldMoreAccessible,YES,uberfire-widgets-core-client,1.1.0.Beta1,1.1.0.Beta2,kie-wb-common-project-explorer-client,7.1.0.Beta1,19,1,8,9,YES,|java+field:///org/uberfire/ext/widgets/core/client/tree/TreeItem/content|: no occurrences,"fieldRemoved, methodremoved, constructorRemoved ok",All messages related to previous detections
+fieldNoLongerStatic,NO,-,-,-,-,-,-,-,-,-,YES,-,-,-
+fieldNowFinal,YES,officebuilding,2.11.0,2.16.0,officeplugin_launch,2.11.0,79,1,1,2,YES,|java+field:///net/officefloor/building/manager/OfficeBuildingManager/OFFICE_BUILDING_MANAGER_OBJECT_NAME|: no occurrences,"constructorRemoved, methodRemoved ok",All messages related to previous detections
+fieldNowStatic,NO,-,-,-,-,-,-,-,-,-,YES,-,-,-
+fieldRemoved,YES,officebuilding,2.2.0,2.3.0,officeplugin_launch,2.2.0,3,1,2,2,YES,|java+field:///net/officefloor/building/manager/OfficeBuildingManager/OFFICE_BUIDLING_ARTIFACT_ID|: no occurrences,"constructorRemoved, methodRemoved correct",All messages related to previous detections
+fieldTypeChanged,YES,drools-compiler,7.1.0.Beta2,7.1.0.Beta3,kie-wb-common-services-backend,7.1.0.Beta2,83,1,3,9,YES,,,
+interfaceAdded,YES,jetty-io,9.4.6.v20180619,9.4.7.v20180619,jetty-server,9.4.6.v20180619,5,,1,5,,,,
+methodAbstractNowDefault,YES,jetty-http,9.4.8.v20171121,9.4.9.v20180320,jetty-server,9.4.8.v20171121,7,,1,9,,,,
+methodLessAccessible,YES,drools-compiler,7.3.0.Final,7.4.0.Final,drools-cdi,7.3.0.Final,10,,2,2,,,,
+methodNewDefault,YES,jetty-http,9.4.1.v20180619,9.4.2.v20180619,jetty-server,9.4.1.v20180619,7,,2,7,,,,
+methodNoLongerStatic,YES,camel-core,2.21.1,2.22.0,camel-xmlsecurity,2.21.1,94,,1,4,,,,
+methodNowAbstract,YES,metrics-core,3.2.5,4.0.0-alpha5,haystack-agent-api,0.1.2,41,,8,8,,,,
+methodNowThrowsCheckedException,YES,sshd-core,0.12.0,0.13.0,uberfire-nio2-jgit,1.4.0.Final,122,,2,2,,,,
+methodRemoved,YES,camel-core,2.19.1,2.19.2,camel-ftp,2.19.1,8,,1,16,,,,
+superclassAdded,YES,ant,1.8.2,1.8.3,ant (glassfish),4.1.2,25,,1,0,,,,
+superclassRemoved,YES,drools-compiler,7.2.0.Final,7.3.0.Final,kie-server-services-common,7.2.0.Final,4,,4,4,,,,

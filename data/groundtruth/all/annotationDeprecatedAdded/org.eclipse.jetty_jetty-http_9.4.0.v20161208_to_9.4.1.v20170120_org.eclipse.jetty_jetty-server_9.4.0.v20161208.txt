@@ -1,0 +1,57 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.0.v20161208/jetty-http-9.4.0.v20161208.jar
+New API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.1.v20170120/jetty-http-9.4.1.v20170120.jar
+Client: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-server/9.4.0.v20161208/jetty-server-9.4.0.v20161208.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/eclipse/jetty/server/Response/getWriter()|,|java+method:///org/eclipse/jetty/http/MimeTypes/inferCharsetFromContentType(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/session/SessionHandler.java|(1677,37,<46,0>,<46,0>),46,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7634,18,<193,0>,<193,0>),193,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7678,18,<193,0>,<193,0>),193,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/Response.java|(25934,41,<840,0>,<840,0>),840,0,"The method inferCharsetFromContentType(String) from the type MimeTypes is deprecated",())
+
+message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/session/Session.java|(1313,37,<35,0>,<35,0>),35,0,"The type HttpSessionContext is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/eclipse/jetty/server/Response/getWriter()|,|java+method:///org/eclipse/jetty/http/MimeTypes/inferCharsetFromContentType(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)/srcs/jetty-server-9.4.0.v20161208-sources/org/eclipse/jetty/server/Response.java|(25934,41,<840,0>,<840,0>),840,0,"The method inferCharsetFromContentType(String) from the type MimeTypes is deprecated",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 1
+Compiler messages: 6
+
+

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.apache.camel.camel-xmlsecurity.source
+Bundle-Version: 2.21.1
+Archiver-Version: Plexus Archiver
+Built-By: camel
+Eclipse-SourceBundle: org.apache.camel.camel-xmlsecurity;version="2.21
+ .1"
+Created-By: Apache Maven
+Build-Jdk: 1.8.0_161
+

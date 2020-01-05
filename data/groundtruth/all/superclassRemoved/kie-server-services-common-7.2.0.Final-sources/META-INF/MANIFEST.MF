@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: .source
+Built-By: jenkins
+Specification-Title: KIE :: Execution Server :: Services :: Common
+Implementation-Vendor-Id: org.kie.server
+Eclipse-SourceBundle: ;version="7.2.0.201708141648";roots:="."
+Scm-Url: https://github.com/kiegroup/droolsjbpm-integration/kie-server
+ -parent/kie-server-services/kie-server-services-common
+Bundle-Name: KIE :: Execution Server :: Services :: Common
+Implementation-Title: KIE :: Execution Server :: Services :: Common
+Implementation-Version: 7.2.0.Final
+Java-Version: 1.8.0_112
+Scm-Connection: scm:git:https://github.com:kiegroup/droolsjbpm-integra
+ tion.git/kie-server-parent/kie-server-services/kie-server-services-co
+ mmon
+Specification-Vendor: JBoss by Red Hat
+Bundle-ManifestVersion: 2
+Os-Arch: amd64
+Bundle-Vendor: JBoss by Red Hat
+Java-Vendor: Oracle Corporation
+Os-Name: Linux
+Implementation-Vendor: JBoss by Red Hat
+Os-Version: 3.10.0-514.el7.x86_64
+Bundle-Version: 7.2.0.201708141648
+Scm-Revision: 422d0d874fd62fb2b1df326319fc1642b00d4bb1
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_112
+Specification-Version: 7.2
+Implementation-URL: http://www.kiegroup.org/droolsjbpm-integration/kie
+ -server-parent/kie-server-services/kie-server-services-common
+

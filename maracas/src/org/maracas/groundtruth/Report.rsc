@@ -123,7 +123,7 @@ private void appendCompilerMsgs(list[CompilerMessage] msgs, loc path) {
 
 private void appendModelStats(list[APIEntity] delta, set[Detection] detects, list[CompilerMessage] msgs, loc path) {
 	appendTitle(path, "Model Stats");
-	appendToFileLn(path, "Breaking changes: <size(delta)>");
+	appendToFileLn(path, "Breaking changes: <size(delta)>"); //FIXME
 	appendToFileLn(path, "Detections: <size(detects)>");
 	appendToFileLn(path, "Compiler messages: <size(msgs)>");
 	appendSectionEnd(path);

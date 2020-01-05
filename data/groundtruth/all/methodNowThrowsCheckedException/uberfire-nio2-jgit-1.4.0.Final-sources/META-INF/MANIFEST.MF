@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: uberfire-nio2-jgit.source
+Built-By: jenkins
+Specification-Title: UberFire NIO.2 :: JGIT Impl
+Implementation-Vendor-Id: org.uberfire
+Eclipse-SourceBundle: uberfire-nio2-jgit;version="1.4.0.2017-10-10T08:
+ 42:39Z";roots:="."
+Scm-Url: https://github.com/uberfire/uberfire/uberfire-nio2-backport/u
+ berfire-nio2-impls/uberfire-nio2-jgit
+Bundle-Name: UberFire NIO.2 :: JGIT Impl
+Implementation-Title: UberFire NIO.2 :: JGIT Impl
+Implementation-Version: 1.4.0.Final
+Java-Version: 1.8.0_131
+Scm-Connection: scm:git:git@github.com:uberfire/uberfire.git/uberfire-
+ nio2-backport/uberfire-nio2-impls/uberfire-nio2-jgit
+Specification-Vendor: JBoss by Red Hat
+Bundle-ManifestVersion: 2
+Os-Arch: amd64
+Bundle-Vendor: JBoss by Red Hat
+Java-Vendor: Oracle Corporation
+Os-Name: Linux
+Implementation-Vendor: JBoss by Red Hat
+Os-Version: 3.10.0-514.el7.x86_64
+Bundle-Version: 1.4.0.2017-10-10T08:42:39Z
+Scm-Revision: c8c5328eea68f49677e6fb40b519bc6b0de706c9
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_131
+Specification-Version: 1.4
+Implementation-URL: http://www.jboss.org/jboss-integration-platform-bo
+ m/uberfire-parent/uberfire-nio2-backport/uberfire-nio2-impls/uberfire
+ -nio2-jgit
+

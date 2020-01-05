@@ -1,0 +1,53 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-core/2.21.1/camel-core-2.21.1.jar
+New API: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-core/2.22.0/camel-core-2.22.0.jar
+Client: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-xmlsecurity/2.21.1/camel-xmlsecurity-2.21.1.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/apache/camel/dataformat/xmlsecurity/XMLSecurityDataFormat/setDefaultsFromContext(org.apache.camel.CamelContext)|,|java+method:///org/apache/camel/CamelContext/getProperty(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1203,42,<27,0>,<27,0>),27,0,"The type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1376,20,<31,0>,<31,0>),31,0,"The type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1638,34,<39,0>,<39,0>),39,0,"The constructor UriEndpointComponent(Class\<? extends Endpoint\>) is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-xmlsecurity-2.21.1-sources/org/apache/camel/component/xmlsecurity/XmlSignatureComponent.java|(1749,43,<43,0>,<43,0>),43,0,"The constructor UriEndpointComponent(CamelContext, Class\<? extends Endpoint\>) is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/apache/camel/dataformat/xmlsecurity/XMLSecurityDataFormat/setDefaultsFromContext(org.apache.camel.CamelContext)|,|java+method:///org/apache/camel/CamelContext/getProperty(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 94
+Detections: 1
+Compiler messages: 4
+
+

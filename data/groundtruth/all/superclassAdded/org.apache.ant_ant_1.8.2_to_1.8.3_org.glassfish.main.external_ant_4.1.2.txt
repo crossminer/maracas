@@ -1,0 +1,45 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/apache/ant/ant/1.8.2/ant-1.8.2.jar
+New API: /home/lina/maracas/maracas/local-repo/org/apache/ant/ant/1.8.3/ant-1.8.3.jar
+Client: /home/lina/maracas/maracas/local-repo/org/glassfish/main/external/ant/4.1.2/ant-4.1.2.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/apache/tools/ant/types/PropertySet/iterator()|,|java+constructor:///org/apache/tools/ant/types/PropertySet$1/PropertySet$1(org.apache.tools.ant.types.PropertySet,java.util.Enumeration)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///org/apache/tools/ant/types/PropertySet/iterator()|,|java+constructor:///org/apache/tools/ant/types/PropertySet$1/PropertySet$1(org.apache.tools.ant.types.PropertySet,java.util.Enumeration)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unknown() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 25
+Detections: 1
+Compiler messages: 0
+
+

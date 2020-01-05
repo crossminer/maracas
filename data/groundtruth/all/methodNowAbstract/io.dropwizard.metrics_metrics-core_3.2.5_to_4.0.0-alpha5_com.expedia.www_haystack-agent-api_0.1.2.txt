@@ -1,0 +1,96 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/io/dropwizard/metrics/metrics-core/3.2.5/metrics-core-3.2.5.jar
+New API: /home/lina/maracas/maracas/local-repo/io/dropwizard/metrics/metrics-core/4.0.0-alpha5/metrics-core-4.0.0-alpha5.jar
+Client: /home/lina/maracas/maracas/local-repo/com/expedia/www/haystack-agent-api/0.1.2/haystack-agent-api-0.1.2.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+field:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/reporter|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter$Builder|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter$Builder/build()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/close()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/start()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/forRegistry(com.codahale.metrics.MetricRegistry)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(1595,381,<36,0>,<36,0>),36,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<TracesSearchRequest\>, MethodDescriptor.Marshaller\<TracesSearchResult\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(2236,357,<45,0>,<45,0>),45,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<TraceRequest\>, MethodDescriptor.Marshaller\<Trace\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(2857,360,<54,0>,<54,0>),54,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<TraceRequest\>, MethodDescriptor.Marshaller\<Trace\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(3474,353,<63,0>,<63,0>),63,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<SpanRequest\>, MethodDescriptor.Marshaller\<Span\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(4091,360,<72,0>,<72,0>),72,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<Empty\>, MethodDescriptor.Marshaller\<FieldNames\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(4730,375,<81,0>,<81,0>),81,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<FieldValuesRequest\>, MethodDescriptor.Marshaller\<FieldValues\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/api/TraceReaderGrpc.java|(5385,375,<90,0>,<90,0>),90,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<TraceRequest\>, MethodDescriptor.Marshaller\<TraceCallGraph\>) from the type MethodDescriptor is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false)/srcs/haystack-agent-api-0.1.2-sources/com/expedia/open/tracing/agent/api/SpanAgentGrpc.java|(1580,358,<36,0>,<36,0>),36,0,"The method create(MethodDescriptor.MethodType, String, MethodDescriptor.Marshaller\<Span\>, MethodDescriptor.Marshaller\<DispatchResult\>) from the type MethodDescriptor is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+field:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/reporter|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter$Builder|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter$Builder/build()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+class:///com/codahale/metrics/JmxReporter|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/closeJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/close()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/start()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///com/expedia/www/haystack/agent/core/metrics/SharedMetricRegistry/startJmxMetricReporter()|,|java+method:///com/codahale/metrics/JmxReporter/forRegistry(com.codahale.metrics.MetricRegistry)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 8
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 41
+Detections: 8
+Compiler messages: 8
+
+

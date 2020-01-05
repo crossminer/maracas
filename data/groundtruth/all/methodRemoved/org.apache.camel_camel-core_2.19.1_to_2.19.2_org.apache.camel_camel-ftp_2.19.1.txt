@@ -1,0 +1,77 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-core/2.19.1/camel-core-2.19.1.jar
+New API: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-core/2.19.2/camel-core-2.19.2.jar
+Client: /home/lina/maracas/maracas/local-repo/org/apache/camel/camel-ftp/2.19.1/camel-ftp-2.19.1.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/apache/camel/component/file/remote/RemoteFile/populateHeaders(org.apache.camel.component.file.GenericFileMessage)|,|java+method:///org/apache/camel/component/file/GenericFile/populateHeaders(org.apache.camel.component.file.GenericFileMessage)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/SftpConsumer.java|(9049,37,<216,0>,<216,0>),216,0,"The method after(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/FtpsComponent.java|(1597,36,<42,0>,<42,0>),42,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/FtpsComponent.java|(1723,36,<47,0>,<47,0>),47,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/SftpComponent.java|(1180,36,<32,0>,<32,0>),32,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/SftpComponent.java|(1306,36,<37,0>,<37,0>),37,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileProducer.java|(894,33,<20,0>,<20,0>),20,0,"The type ServicePoolAware is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileProducer.java|(1295,16,<29,0>,<29,0>),29,0,"The type ServicePoolAware is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFile.java|(1467,15,<38,0>,<38,0>),38,0,"The method populateHeaders(GenericFileMessage\<T\>, boolean) in the type GenericFile\<T\> is not applicable for the arguments (GenericFileMessage\<T\>)",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/FtpConsumer.java|(9932,37,<246,0>,<246,0>),246,0,"The method after(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileConfiguration.java|(4011,20,<108,0>,<108,0>),108,0,"The method after(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileConfiguration.java|(4069,21,<109,0>,<109,0>),109,0,"The method before(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/FtpComponent.java|(1217,35,<33,0>,<33,0>),33,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/FtpComponent.java|(1341,35,<38,0>,<38,0>),38,0,"The method setEndpointClass(Class\<? extends Endpoint\>) from the type UriEndpointComponent is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileEndpoint.java|(5756,34,<138,0>,<138,0>),138,0,"The method notEmpty(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileEndpoint.java|(5813,42,<139,0>,<139,0>),139,0,"The method notEmpty(String, String) from the type ObjectHelper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFileConsumer.java|(4101,25,<107,0>,<107,0>),107,0,"The field Exchange.UNIT_OF_WORK_PROCESS_SYNC is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/apache/camel/component/file/remote/RemoteFile/populateHeaders(org.apache.camel.component.file.GenericFileMessage)|,|java+method:///org/apache/camel/component/file/GenericFile/populateHeaders(org.apache.camel.component.file.GenericFileMessage)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/camel-ftp-2.19.1-sources/org/apache/camel/component/file/remote/RemoteFile.java|(1467,15,<38,0>,<38,0>),38,0,"The method populateHeaders(GenericFileMessage\<T\>, boolean) in the type GenericFile\<T\> is not applicable for the arguments (GenericFileMessage\<T\>)",())
+
+
+
+matched() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 8
+Detections: 1
+Compiler messages: 16
+
+

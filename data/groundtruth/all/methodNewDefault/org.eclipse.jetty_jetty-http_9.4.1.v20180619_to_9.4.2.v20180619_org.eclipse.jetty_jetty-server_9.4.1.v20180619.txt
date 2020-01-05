@@ -1,0 +1,64 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.1.v20180619/jetty-http-9.4.1.v20180619.jar
+New API: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-http/9.4.2.v20180619/jetty-http-9.4.2.v20180619.jar
+Client: /home/lina/maracas/maracas/local-repo/org/eclipse/jetty/jetty-server/9.4.1.v20180619/jetty-server-9.4.1.v20180619.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$HttpHandler/contentComplete()|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+detection(|java+class:///org/eclipse/jetty/server/LocalConnector$LocalEndPoint$1|,|java+method:///org/eclipse/jetty/http/HttpParser$HttpHandler/contentComplete()|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/session/SessionHandler.java|(1677,37,<46,0>,<46,0>),46,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7634,18,<193,0>,<193,0>),193,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/session/SessionHandler.java|(7678,18,<193,0>,<193,0>),193,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/NCSARequestLog.java|(6716,16,<212,0>,<212,0>),212,0,"The field StringUtil.__LINE_SEPARATOR is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/HttpChannelOverHttp.java|(1802,19,<49,0>,<49,0>),49,0,"The type HttpChannelOverHttp must implement the inherited abstract method HttpParser.HttpHandler.contentComplete()",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/session/Session.java|(1313,37,<35,0>,<35,0>),35,0,"The type HttpSessionContext is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/LocalConnector.java|(16008,28,<418,0>,<418,0>),418,0,"The type new HttpParser.ResponseHandler(){} must implement the inherited abstract method HttpParser.HttpHandler.contentComplete()",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+class:///org/eclipse/jetty/server/HttpChannelOverHttp|,|java+method:///org/eclipse/jetty/http/HttpParser$HttpHandler/contentComplete()|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/HttpChannelOverHttp.java|(1802,19,<49,0>,<49,0>),49,0,"The type HttpChannelOverHttp must implement the inherited abstract method HttpParser.HttpHandler.contentComplete()",())
+
+For detection(|java+class:///org/eclipse/jetty/server/LocalConnector$LocalEndPoint$1|,|java+method:///org/eclipse/jetty/http/HttpParser$HttpHandler/contentComplete()|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodNewDefault(binaryCompatibility=false,sourceCompatibility=false)/srcs/jetty-server-9.4.1.v20180619-sources/org/eclipse/jetty/server/LocalConnector.java|(16008,28,<418,0>,<418,0>),418,0,"The type new HttpParser.ResponseHandler(){} must implement the inherited abstract method HttpParser.HttpHandler.contentComplete()",())
+
+
+
+matched() cases: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 7
+Detections: 2
+Compiler messages: 7
+
+

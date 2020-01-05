@@ -1,0 +1,56 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.5.0.Final/drools-compiler-7.5.0.Final.jar
+New API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.6.0.t022/drools-compiler-7.6.0.t022.jar
+Client: /home/lina/maracas/maracas/local-repo/org/drools/kie-pmml/7.5.0.Final/kie-pmml-7.5.0.Final.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+class:///org/kie/pmml/pmml_4_2/PMML4Compiler|,|java+method:///org/drools/compiler/compiler/PMMLCompiler/getJavaClasses(java.lang.String)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+detection(|java+class:///org/kie/pmml/pmml_4_2/PMML4Compiler|,|java+method:///org/drools/compiler/compiler/PMMLCompiler/getJavaClasses(java.io.InputStream)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(String)",())
+
+message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(InputStream)",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+class:///org/kie/pmml/pmml_4_2/PMML4Compiler|,|java+method:///org/drools/compiler/compiler/PMMLCompiler/getJavaClasses(java.lang.String)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(InputStream)",())
+	message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(String)",())
+
+For detection(|java+class:///org/kie/pmml/pmml_4_2/PMML4Compiler|,|java+method:///org/drools/compiler/compiler/PMMLCompiler/getJavaClasses(java.io.InputStream)|,implements(),methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(InputStream)",())
+	message(|file:///home/lina/tmp/gt/constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-pmml-7.5.0.Final-sources/org/kie/pmml/pmml_4_2/PMML4Compiler.java|(2841,13,<74,0>,<74,0>),74,0,"The type PMML4Compiler must implement the inherited abstract method PMMLCompiler.getJavaClasses(String)",())
+
+
+
+matched() cases: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 37
+Detections: 2
+Compiler messages: 2
+
+

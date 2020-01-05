@@ -1,0 +1,10 @@
+
+
+
+
+        Service-Component: OSGI-INF/transform-query.xml
+
+        Import-Package: org.daisy.pipeline.datatypes,*
+
+
+        

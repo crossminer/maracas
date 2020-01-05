@@ -1,0 +1,45 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/com/google/guava/guava/11.0/guava-11.0.jar
+New API: /home/lina/maracas/maracas/local-repo/com/google/guava/guava/11.0.1/guava-11.0.1.jar
+Client: /home/lina/maracas/maracas/local-repo/org/apache/isis/viewer/dnd-tck/0.2.0-incubating/dnd-tck-0.2.0-incubating.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///com/google/common/base/Optional/presentInstances(java.lang.Iterable)|,|java+constructor:///com/google/common/base/Optional$1/Optional$1(java.util.Iterator)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///com/google/common/base/Optional/presentInstances(java.lang.Iterable)|,|java+constructor:///com/google/common/base/Optional$1/Optional$1(java.util.Iterator)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unknown() cases: 1
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 2
+Detections: 1
+Compiler messages: 0
+
+

@@ -1,0 +1,21 @@
+JarIndex-Version: 1.0
+
+uberfire-nio2-jgit-1.4.0.Final-sources.jar
+META-INF
+META-INF/maven
+META-INF/maven/org.uberfire
+META-INF/maven/org.uberfire/uberfire-nio2-jgit
+org
+org/uberfire
+org/uberfire/java
+org/uberfire/java/nio
+org/uberfire/java/nio/fs
+org/uberfire/java/nio/fs/jgit
+org/uberfire/java/nio/fs/jgit/daemon
+org/uberfire/java/nio/fs/jgit/daemon/filters
+org/uberfire/java/nio/fs/jgit/daemon/git
+org/uberfire/java/nio/fs/jgit/daemon/ssh
+org/uberfire/java/nio/fs/jgit/util
+org/uberfire/java/nio/fs/jgit/util/commands
+org/uberfire/java/nio/fs/jgit/util/exceptions
+

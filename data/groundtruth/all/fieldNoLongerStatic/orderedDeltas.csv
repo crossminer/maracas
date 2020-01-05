@@ -1,0 +1,14 @@
+field0,field1,field2
+|file:///home/lina/data/deltas/org.apache.solr/solr-core/3.3.0_to_3.4.0.delta|,1,91
+|file:///home/lina/data/deltas/com.netflix.eureka/eureka-client/1.1.155_to_1.3.4.delta|,1,123
+|file:///home/lina/data/deltas/nz.ac.waikato.cms.weka/weka-dev/3.7.12_to_3.7.13.delta|,1,357
+|file:///home/lina/data/deltas/org.apache.camel/camel-core/2.9.2_to_2.10.0.delta|,1,735
+|file:///home/lina/data/deltas/org.apache.santuario/xmlsec/1.5.6_to_2.0.0.delta|,1,809
+|file:///home/lina/data/deltas/org.eclipse.persistence/eclipselink/2.6.4_to_2.7.0.delta|,1,1675
+|file:///home/lina/data/deltas/org.apache.camel/camel-core/2.8.5_to_2.10.0.delta|,1,1949
+|file:///home/lina/data/deltas/org.eclipse.persistence/eclipselink/2.6.5_to_2.7.1.delta|,1,1969
+|file:///home/lina/data/deltas/org.apache.solr/solr-core/4.10.4_to_5.5.1.delta|,1,2177
+|file:///home/lina/data/deltas/org.apache.hive/hive-exec/0.10.0_to_0.11.0.delta|,1,2900
+|file:///home/lina/data/deltas/org.apache.solr/solr-core/5.5.1_to_6.6.0.delta|,2,2618
+|file:///home/lina/data/deltas/org.apache.solr/solr-core/5.5.5_to_7.2.1.delta|,2,3721
+|file:///home/lina/data/deltas/nz.ac.waikato.cms.weka/weka-dev/3.7.11_to_3.7.12.delta|,8,396

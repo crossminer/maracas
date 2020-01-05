@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.apache.camel.camel-ftp.source
+Bundle-Version: 2.19.1
+Archiver-Version: Plexus Archiver
+Built-By: camel
+Eclipse-SourceBundle: org.apache.camel.camel-ftp;version="2.19.1"
+Created-By: Apache Maven
+Build-Jdk: 1.8.0_101
+

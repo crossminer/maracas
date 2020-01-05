@@ -1,0 +1,78 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.2.0.Final/drools-compiler-7.2.0.Final.jar
+New API: /home/lina/maracas/maracas/local-repo/org/drools/drools-compiler/7.3.0.Final/drools-compiler-7.3.0.Final.jar
+Client: /home/lina/maracas/maracas/local-repo/org/kie/server/kie-server-services-common/7.2.0.Final/kie-server-services-common-7.2.0.Final.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/lambda$locateContainer$0(java.util.List,java.util.Map,org.kie.server.services.api.KieContainerInstance)|,|java+constructor:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion/KieRepositoryImpl$ComparableVersion(java.lang.String)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/locateContainer(java.lang.String,java.util.List)|,|java+class:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/lambda$locateContainer$0(java.util.List,java.util.Map,org.kie.server.services.api.KieContainerInstance)|,|java+class:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/locateContainer(java.lang.String,java.util.List)|,|java+method:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion/toString()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1916,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1988,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2294,35,<56,0>,<56,0>),56,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2558,35,<61,0>,<61,0>),61,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/lambda$locateContainer$0(java.util.List,java.util.Map,org.kie.server.services.api.KieContainerInstance)|,|java+constructor:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion/KieRepositoryImpl$ComparableVersion(java.lang.String)|,methodInvocation(),constructorRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/lambda$locateContainer$0(java.util.List,java.util.Map,org.kie.server.services.api.KieContainerInstance)|,|java+class:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+matched() matches:
+For detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/locateContainer(java.lang.String,java.util.List)|,|java+class:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2558,35,<61,0>,<61,0>),61,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2294,35,<56,0>,<56,0>),56,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1988,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1916,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+For detection(|java+method:///org/kie/server/services/impl/locator/LatestContainerLocator/locateContainer(java.lang.String,java.util.List)|,|java+method:///org/drools/compiler/kie/builder/impl/KieRepositoryImpl$ComparableVersion/toString()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2558,35,<61,0>,<61,0>),61,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(2294,35,<56,0>,<56,0>),56,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1988,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+	message(|file:///home/lina/tmp/gt/superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)/srcs/kie-server-services-common-7.2.0.Final-sources/org/kie/server/services/impl/locator/LatestContainerLocator.java|(1916,35,<51,0>,<51,0>),51,0,"KieRepositoryImpl.ComparableVersion cannot be resolved to a type",())
+
+
+
+unknown() cases: 2
+matched() cases: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 4
+Compiler messages: 4
+
+

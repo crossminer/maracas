@@ -1,0 +1,87 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Viewer DnD for TCK
+
+
+From: 'an unknown organization'
+  - AOP alliance (http://aopalliance.sourceforge.net) aopalliance:aopalliance:jar:1.0
+    License: Public Domain 
+  - FindBugs-jsr305 (http://findbugs.sourceforge.net/) com.google.code.findbugs:jsr305:jar:1.3.9
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Guava: Google Core Libraries for Java (http://code.google.com/p/guava-libraries/guava) com.google.guava:guava:jar:11.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - javax.inject (http://code.google.com/p/atinject/) javax.inject:javax.inject:jar:1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'Apache Software Foundation' (http://www.apache.org)
+  - Apache Log4j (http://logging.apache.org/log4j/1.2/) log4j:log4j:bundle:1.2.16
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'Google, Inc.' (http://www.google.com)
+  - Google Guice - Core Library (http://code.google.com/p/google-guice/guice/) com.google.inject:guice:jar:3.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'Hamcrest' (http://code.google.com/p/hamcrest)
+  - Hamcrest Core  org.hamcrest:hamcrest-core:jar:1.1
+    License: BSD style  (http://www.opensource.org/licenses/bsd-license.php)
+  - Hamcrest Library  org.hamcrest:hamcrest-library:jar:1.1
+    License: BSD style  (http://www.opensource.org/licenses/bsd-license.php)
+
+From: 'Joda.org' (http://www.joda.org)
+  - Joda time (http://joda-time.sourceforge.net) joda-time:joda-time:jar:1.6.2
+    License: Apache 2  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'ObjectWeb' (http://www.objectweb.org/)
+  - ASM Core (http://asm.objectweb.org/asm/) asm:asm:jar:3.1
+
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - Commons CLI (http://commons.apache.org/cli/) commons-cli:commons-cli:jar:1.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Commons Codec (http://commons.apache.org/codec/) commons-codec:commons-codec:jar:1.6
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Commons Collections (http://commons.apache.org/collections/) commons-collections:commons-collections:jar:3.2.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Commons Lang (http://commons.apache.org/lang/) commons-lang:commons-lang:jar:2.6
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Isis AppLib (http://incubator.apache.org/isis/applib/) org.apache.isis:applib:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Core Commons (http://incubator.apache.org/isis/core/commons/) org.apache.isis.core:commons:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Core MetaModel (http://incubator.apache.org/isis/core/metamodel/) org.apache.isis.core:metamodel:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Core ProgModel (http://incubator.apache.org/isis/core/progmodel/) org.apache.isis.core:progmodel:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Core Runtime (http://incubator.apache.org/isis/core/runtime/) org.apache.isis.core:runtime:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Progmodel (Java) (http://incubator.apache.org/isis/defaults/progmodel/) org.apache.isis.progmodels:dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Runtime Runtime (http://incubator.apache.org/isis/runtimes/dflt/runtime/) org.apache.isis.runtimes.dflt:runtime:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Runtime Default Bytecode (CgLib) (http://incubator.apache.org/isis/runtimes/dflt/bytecode/dflt/) org.apache.isis.runtimes.dflt.bytecode:dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Runtime Default ObjectStore (In-Memory) (http://incubator.apache.org/isis/runtimes/dflt/objectstores/dflt/) org.apache.isis.runtimes.dflt.objectstores:dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Runtime XML ObjectStore (http://incubator.apache.org/isis/runtimes/dflt/objectstores/xml/) org.apache.isis.runtimes.dflt.objectstores:xml:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default ProfileStore (In-Memory) (http://incubator.apache.org/isis/runtimes/dflt/profilestores/dflt/) org.apache.isis.runtimes.dflt.profilestores:dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Default Security (No-op) (http://incubator.apache.org/isis/security/dflt/) org.apache.isis.security:dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - TCK DOM (http://incubator.apache.org/isis//tck/tck-dom) org.apache.isis.tck:tck-dom:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - TCK Fixtures (http://incubator.apache.org/isis//tck/tck-fixture) org.apache.isis.tck:tck-fixture:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - TCK Repositories (for ObjectStore Default) (http://incubator.apache.org/isis//tck/tck-objstore-dflt) org.apache.isis.tck:tck-objstore-dflt:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Drag-n-Drop Viewer (http://incubator.apache.org/isis/viewer/dnd/) org.apache.isis.viewer:dnd:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Wicket Viewer AppLib (http://incubator.apache.org/isis/viewer/wicket/wicket-applib/) org.apache.isis.viewer:wicket-applib:jar:0.2.0-incubating
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+

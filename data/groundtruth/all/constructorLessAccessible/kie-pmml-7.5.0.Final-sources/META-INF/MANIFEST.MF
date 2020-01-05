@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.kie.pmml.source
+Built-By: jenkins
+Specification-Title: KIE :: PMML - Compiler
+Implementation-Vendor-Id: org.drools
+Eclipse-SourceBundle: org.kie.pmml;version="7.5.0.201712060954";roots:
+ ="."
+Scm-Url: https://github.com/kiegroup/drools/kie-pmml
+Bundle-Name: KIE :: PMML - Compiler
+Implementation-Title: KIE :: PMML - Compiler
+Implementation-Version: 7.5.0.Final
+Java-Version: 1.8.0_131
+Scm-Connection: scm:git:https://github.com:kiegroup/drools.git/kie-pmm
+ l
+Specification-Vendor: JBoss by Red Hat
+Bundle-ManifestVersion: 2
+Os-Arch: amd64
+Bundle-Vendor: JBoss by Red Hat
+Java-Vendor: Oracle Corporation
+Os-Name: Linux
+Implementation-Vendor: JBoss by Red Hat
+Os-Version: 3.10.0-514.el7.x86_64
+Bundle-Version: 7.5.0.201712060954
+Scm-Revision: 7ef0843e610b95561b09b6d12cbc324cd7c34d12
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_131
+Specification-Version: 7.5
+Implementation-URL: http://www.kiegroup.org/drools/kie-pmml
+

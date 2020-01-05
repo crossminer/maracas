@@ -1,0 +1,83 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/javax/ws/rs/javax.ws.rs-api/2.0-m15/javax.ws.rs-api-2.0-m15.jar
+New API: /home/lina/maracas/maracas/local-repo/javax/ws/rs/javax.ws.rs-api/2.0-m16/javax.ws.rs-api-2.0-m16.jar
+Client: /home/lina/maracas/maracas/local-repo/org/glassfish/main/admin/rest-service/4.0-b72/rest-service-4.0-b72.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/glassfish/admin/rest/utils/ProxyImpl/addAuthenticationInfo(javax.ws.rs.client.Client,javax.ws.rs.client.WebTarget,com.sun.enterprise.config.serverbeans.Server,org.glassfish.hk2.api.ServiceLocator)|,|java+method:///javax/ws/rs/core/Configurable/setProperty(java.lang.String,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/glassfish/admin/rest/utils/Util/getJerseyClient()|,|java+method:///javax/ws/rs/client/ClientFactory/newClient()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/glassfish/admin/rest/utils/Util/getJerseyClient()|,|java+class:///javax/ws/rs/client/ClientFactory|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/Util.java|(2699,32,<62,0>,<62,0>),62,0,"The import javax.ws.rs.client.ClientFactory cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/Util.java|(10667,13,<292,0>,<292,0>),292,0,"ClientFactory cannot be resolved",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/composite/CompositeUtil.java|(18734,89,<464,0>,<464,0>),464,0,"The method runCommand(String, ParameterMap, ServiceLocator, String, Subject) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/TemplateExecCommand.java|(6211,137,<154,0>,<154,0>),154,0,"The method runCommand(String, ParameterMap, ServiceLocator, String, Subject) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/CollectionLeafResource.java|(11119,97,<282,0>,<282,0>),282,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/cli/SynchronizeRealmFromConfig.java|(4542,28,<109,0>,<109,0>),109,0,"The field SystemPropertyConstants.DEFAULT_SERVER_INSTANCE_NAME is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/custom/SystemPropertiesCliResource.java|(10424,82,<257,0>,<257,0>),257,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/custom/SystemPropertiesCliResource.java|(11266,80,<274,0>,<274,0>),274,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/cli/GetGroupNamesCommand.java|(4366,28,<110,0>,<110,0>),110,0,"The field SystemPropertyConstants.DEFAULT_SERVER_INSTANCE_NAME is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/cli/SupportsUserManagementCommand.java|(4491,28,<110,0>,<110,0>),110,0,"The field SystemPropertyConstants.DEFAULT_SERVER_INSTANCE_NAME is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/TemplateListOfResource.java|(5569,77,<127,0>,<127,0>),127,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/TemplateListOfResource.java|(14630,77,<323,0>,<323,0>),323,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/resources/TemplateRestResource.java|(24086,107,<541,0>,<541,0>),541,0,"The method runCommand(String, Map\<String,String\>, ServiceLocator, String) from the type ResourceUtil is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/ProxyImpl.java|(6953,11,<140,0>,<140,0>),140,0,"The method setProperty(String, SslConfig) is undefined for the type Client",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+matched() matches:
+For detection(|java+method:///org/glassfish/admin/rest/utils/ProxyImpl/addAuthenticationInfo(javax.ws.rs.client.Client,javax.ws.rs.client.WebTarget,com.sun.enterprise.config.serverbeans.Server,org.glassfish.hk2.api.ServiceLocator)|,|java+method:///javax/ws/rs/core/Configurable/setProperty(java.lang.String,java.lang.Object)|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/ProxyImpl.java|(6953,11,<140,0>,<140,0>),140,0,"The method setProperty(String, SslConfig) is undefined for the type Client",())
+
+For detection(|java+method:///org/glassfish/admin/rest/utils/Util/getJerseyClient()|,|java+method:///javax/ws/rs/client/ClientFactory/newClient()|,methodInvocation(),methodRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/Util.java|(10667,13,<292,0>,<292,0>),292,0,"ClientFactory cannot be resolved",())
+
+For detection(|java+method:///org/glassfish/admin/rest/utils/Util/getJerseyClient()|,|java+class:///javax/ws/rs/client/ClientFactory|,typeDependency(),classRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|file:///home/lina/tmp/gt/methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false)/srcs/rest-service-4.0-b72-sources/org/glassfish/admin/rest/utils/Util.java|(10667,13,<292,0>,<292,0>),292,0,"ClientFactory cannot be resolved",())
+
+
+
+matched() cases: 3
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 50
+Detections: 3
+Compiler messages: 14
+
+

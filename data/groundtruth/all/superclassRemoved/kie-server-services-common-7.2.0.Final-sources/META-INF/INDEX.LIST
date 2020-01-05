@@ -1,0 +1,26 @@
+JarIndex-Version: 1.0
+
+kie-server-services-common-7.2.0.Final-sources.jar
+META-INF
+META-INF/maven
+META-INF/maven/org.kie.server
+META-INF/maven/org.kie.server/kie-server-services-common
+META-INF/services
+org
+org/kie
+org/kie/server
+org/kie/server/services
+org/kie/server/services/api
+org/kie/server/services/impl
+org/kie/server/services/impl/adapters
+org/kie/server/services/impl/controller
+org/kie/server/services/impl/locator
+org/kie/server/services/impl/marshal
+org/kie/server/services/impl/policy
+org/kie/server/services/impl/security
+org/kie/server/services/impl/security/adapters
+org/kie/server/services/impl/security/web
+org/kie/server/services/impl/storage
+org/kie/server/services/impl/storage/file
+jbpm-executor.properties
+

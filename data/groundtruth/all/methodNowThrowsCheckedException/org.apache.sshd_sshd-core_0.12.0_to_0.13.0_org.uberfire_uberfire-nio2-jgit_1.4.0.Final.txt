@@ -1,0 +1,54 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/apache/sshd/sshd-core/0.12.0/sshd-core-0.12.0.jar
+New API: /home/lina/maracas/maracas/local-repo/org/apache/sshd/sshd-core/0.13.0/sshd-core-0.13.0.jar
+Client: /home/lina/maracas/maracas/local-repo/org/uberfire/uberfire-nio2-jgit/1.4.0.Final/uberfire-nio2-jgit-1.4.0.Final.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+method:///org/uberfire/java/nio/fs/jgit/daemon/ssh/GitSSHService/isRunning()|,|java+interface:///org/apache/sshd/common/Closeable|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+detection(|java+method:///org/uberfire/java/nio/fs/jgit/daemon/ssh/GitSSHService/isRunning()|,|java+class:///org/apache/sshd/common/util/CloseableUtils$AbstractCloseable|,methodInvocation(),superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false)/srcs/uberfire-nio2-jgit-1.4.0.Final-sources/org/uberfire/java/nio/fs/jgit/JGitFileSystemProvider.java|(65477,36,<1476,0>,<1476,0>),1476,0,"The method reconfigure(WindowCacheConfig) from the type WindowCache is deprecated",())
+
+message(|file:///home/lina/tmp/gt/methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false)/srcs/uberfire-nio2-jgit-1.4.0.Final-sources/org/uberfire/java/nio/fs/jgit/util/commands/Squash.java|(12621,12,<305,0>,<305,0>),305,0,"The method getRef(String) from the type Repository is deprecated",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unmatched() matches:
+For detection(|java+method:///org/uberfire/java/nio/fs/jgit/daemon/ssh/GitSSHService/isRunning()|,|java+interface:///org/apache/sshd/common/Closeable|,methodInvocation(),interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/uberfire/java/nio/fs/jgit/daemon/ssh/GitSSHService/isRunning()|,|java+class:///org/apache/sshd/common/util/CloseableUtils$AbstractCloseable|,methodInvocation(),superclassRemoved(binaryCompatibility=false,sourceCompatibility=false)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+unmatched() cases: 2
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 122
+Detections: 2
+Compiler messages: 2
+
+

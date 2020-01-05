@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.5.0
+Built-By: joakim
+Build-Jdk: 9.0.4
+Bundle-ManifestVersion: 2
+Bundle-Name: Jetty :: Server Core
+Bundle-SymbolicName: org.eclipse.jetty.server.source
+Bundle-Vendor: Eclipse.org - Jetty
+Bundle-Version: 9.4.6.v20180619
+Eclipse-SourceBundle: org.eclipse.jetty.server;version="9.4.6.v2018061
+ 9";roots:="."
+

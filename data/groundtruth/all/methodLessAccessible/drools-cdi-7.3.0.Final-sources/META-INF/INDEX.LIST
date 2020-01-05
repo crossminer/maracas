@@ -1,0 +1,12 @@
+JarIndex-Version: 1.0
+
+drools-cdi-7.3.0.Final-sources.jar
+META-INF
+META-INF/maven
+META-INF/maven/org.drools
+META-INF/maven/org.drools/drools-cdi
+META-INF/services
+org
+org/drools
+org/drools/cdi
+

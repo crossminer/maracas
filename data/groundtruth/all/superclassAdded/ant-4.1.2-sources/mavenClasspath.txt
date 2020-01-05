@@ -1,0 +1,1 @@
+/home/lina/.m2/repository/org/apache/ant/ant/1.8.3/ant-1.8.3.jar:/home/lina/.m2/repository/org/apache/ant/ant-launcher/1.8.2/ant-launcher-1.8.2.jar:/home/lina/.m2/repository/junit/junit/4.10/junit-4.10.jar:/home/lina/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/jre/../lib/tools.jar

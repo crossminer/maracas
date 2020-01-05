@@ -1,0 +1,937 @@
+----------------------------
+Client
+----------------------------
+
+Old API: /home/lina/maracas/maracas/local-repo/org/springframework/spring-core/4.3.6.RELEASE/spring-core-4.3.6.RELEASE.jar
+New API: /home/lina/maracas/maracas/local-repo/org/springframework/spring-core/4.3.7.RELEASE/spring-core-4.3.7.RELEASE.jar
+Client: /home/lina/maracas/maracas/local-repo/org/springframework/data/spring-data-commons/1.13.0.RELEASE/spring-data-commons-1.13.0.RELEASE.jar
+
+
+----------------------------
+Detections
+----------------------------
+
+detection(|java+constructor:///org/springframework/data/geo/Point/Point(org.springframework.data.geo.Point)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource/AnnotationRepositoryConfigurationSource(org.springframework.core.type.AnnotationMetadata,java.lang.Class,org.springframework.core.io.ResourceLoader,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/model/SimpleTypeHolder/SimpleTypeHolder(java.util.Set,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/convert/EntityInstantiators/getInstantiatorFor(org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/support/MethodParameters/MethodParameters(java.lang.reflect.Method,org.springframework.data.repository.support.AnnotationAttribute)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/model/PersistentEntityParameterValueProvider/PersistentEntityParameterValueProvider(org.springframework.data.mapping.PersistentEntity,org.springframework.data.mapping.model.PropertyValueProvider,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String,java.lang.Object)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/convert/ConfigurableTypeInformationMapper/ConfigurableTypeInformationMapper(java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/model/AbstractPersistentProperty/AbstractPersistentProperty(java.lang.reflect.Field,java.beans.PropertyDescriptor,org.springframework.data.mapping.PersistentEntity,org.springframework.data.mapping.model.SimpleTypeHolder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponentIdButFallback(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/readType(java.lang.Object,org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/convert/EntityInstantiators/EntityInstantiators(org.springframework.data.convert.EntityInstantiator,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/writeType(org.springframework.data.util.TypeInformation,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/XmlRepositoryConfigurationSource/XmlRepositoryConfigurationSource(org.w3c.dom.Element,org.springframework.beans.factory.xml.ParserContext,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/util/Version/Version(int%5B%5D)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/util/AnnotationDetectionFieldCallback/AnnotationDetectionFieldCallback(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/Polygon/Polygon(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/convert/DefaultTypeMapper/DefaultTypeMapper(org.springframework.data.convert.TypeAliasAccessor,org.springframework.data.mapping.context.MappingContext,java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/query/QueryMethod/QueryMethod(java.lang.reflect.Method,org.springframework.data.repository.core.RepositoryMetadata,org.springframework.data.projection.ProjectionFactory)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/cdi/CdiRepositoryBean/CdiRepositoryBean(java.util.Set,java.lang.Class,javax.enterprise.inject.spi.BeanManager,org.springframework.data.repository.config.CustomRepositoryImplementationDetector)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/addPersistentProperty(org.springframework.data.mapping.PersistentProperty)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionParser/NamedQueriesBeanDefinitionParser(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/model/BasicPersistentEntity/BasicPersistentEntity(org.springframework.data.util.TypeInformation,java.util.Comparator)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/util/TypeDiscoverer/specialize(org.springframework.data.util.ClassTypeInformation)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/support/DomainClassPropertyEditor/DomainClassPropertyEditor(org.springframework.data.repository.support.RepositoryInvoker,org.springframework.data.repository.core.EntityInformation,org.springframework.beans.PropertyEditorRegistry)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/domain/jaxb/SpringDataJaxb/marshal(java.lang.Iterable,javax.xml.bind.annotation.adapters.XmlAdapter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/context/MappingContextEvent/MappingContextEvent(org.springframework.data.mapping.context.MappingContext,org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/getAliasFor(org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithAssociations(org.springframework.data.mapping.SimpleAssociationHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/util/Version/parse(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/RepositoryConfigurationDelegate/RepositoryConfigurationDelegate(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.core.io.ResourceLoader,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithProperties(org.springframework.data.mapping.SimplePropertyHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/readType(java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/util/TypeDiscoverer/getReturnType(java.lang.reflect.Method)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/context/AbstractMappingContext/getPersistentEntity(org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/util/AnnotationDetectionFieldCallback/getValue(java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/convert/MappingContextTypeInformationMapper/MappingContextTypeInformationMapper(org.springframework.data.mapping.context.MappingContext)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/core/support/RepositoryFactorySupport/addQueryCreationListener(org.springframework.data.repository.core.support.QueryCreationListener)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/auditing/AuditingHandler/setAuditorAware(org.springframework.data.domain.AuditorAware)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/DelegatingEntityInformation/DelegatingEntityInformation(org.springframework.data.repository.core.EntityInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor/TransactionalRepositoryProxyPostProcessor(org.springframework.beans.factory.ListableBeanFactory,java.lang.String,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/support/AnnotationAttribute/AnnotationAttribute(java.lang.Class,java.lang.String)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder/NamedQueriesBeanDefinitionBuilder(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/PreferredConstructor/PreferredConstructor(java.lang.reflect.Constructor,org.springframework.data.mapping.PreferredConstructor$Parameter%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/context/DefaultPersistentPropertyPath/DefaultPersistentPropertyPath(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/history/Revision/Revision(org.springframework.data.history.RevisionMetadata,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/DefaultRepositoryInformation/DefaultRepositoryInformation(org.springframework.data.repository.core.RepositoryMetadata,java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/query/ParametersParameterAccessor/ParametersParameterAccessor(org.springframework.data.repository.query.Parameters,java.lang.Object%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/Box/Box(org.springframework.data.geo.Point,org.springframework.data.geo.Point)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/Polygon/Polygon(org.springframework.data.geo.Point,org.springframework.data.geo.Point,org.springframework.data.geo.Point,org.springframework.data.geo.Point%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/init/RepositoriesPopulatedEvent/RepositoriesPopulatedEvent(org.springframework.data.repository.init.RepositoryPopulator,org.springframework.data.repository.support.Repositories)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/Circle/Circle(org.springframework.data.geo.Point,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/DefaultRepositoryConfiguration/DefaultRepositoryConfiguration(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.beans.factory.config.BeanDefinition)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/config/BeanComponentDefinitionBuilder/BeanComponentDefinitionBuilder(org.w3c.dom.Element,org.springframework.beans.factory.xml.ParserContext)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/support/MethodParameters/getParametersWith(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/query/Parameters/Parameters(java.lang.reflect.Method)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/PreferredConstructor$Parameter/PreferredConstructor$Parameter(java.lang.String,org.springframework.data.util.TypeInformation,java.lang.annotation.Annotation%5B%5D,org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder/setLocations(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/support/Repositories/Repositories(org.springframework.beans.factory.ListableBeanFactory)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/cdi/CdiRepositoryBean/CdiRepositoryBean(java.util.Set,java.lang.Class,javax.enterprise.inject.spi.BeanManager,org.springframework.data.repository.config.CustomRepositoryImplementationDetector)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/config/RepositoryConfigurationExtensionSupport/getRepositoryConfigurations(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.core.io.ResourceLoader,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/init/ResourceReaderRepositoryPopulator/ResourceReaderRepositoryPopulator(org.springframework.data.repository.init.ResourceReader,java.lang.ClassLoader)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/init/ResourceReaderRepositoryPopulator/setResourceLocation(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/GeoResult/GeoResult(java.lang.Object,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/SimpleTypeHolder/isSimpleType(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/web/SortHandlerMethodArgumentResolver/setSortParameter(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/history/Revisions/Revisions(java.util.List,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/PreferredConstructor/isConstructorParameter(org.springframework.data.mapping.PersistentProperty)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/ReflectionEntityInformation/ReflectionEntityInformation(java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/RepositoryComponentProvider/RepositoryComponentProvider(java.lang.Iterable)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/util/TypeVariableTypeInformation/TypeVariableTypeInformation(java.lang.reflect.TypeVariable,java.lang.reflect.Type,org.springframework.data.util.TypeDiscoverer,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/util/Version/Version(int%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/RepositoryBeanDefinitionParser/RepositoryBeanDefinitionParser(org.springframework.data.repository.config.RepositoryConfigurationExtension)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/PropertiesBasedNamedQueries/PropertiesBasedNamedQueries(java.util.Properties)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/util/TypeDiscoverer/TypeDiscoverer(java.lang.reflect.Type,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithProperties(org.springframework.data.mapping.PropertyHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/domain/jaxb/SpringDataJaxb/unmarshal(java.util.Collection,javax.xml.bind.annotation.adapters.XmlAdapter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/repository/core/support/DefaultRepositoryInformation/isTargetClassMethod(java.lang.reflect.Method,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/geo/GeoResults/GeoResults(java.util.List,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/PreferredConstructor/isEnclosingClassParameter(org.springframework.data.mapping.PreferredConstructor$Parameter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithAssociations(org.springframework.data.mapping.AssociationHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/mapping/model/SimpleTypeHolder/SimpleTypeHolder(java.util.Set,org.springframework.data.mapping.model.SimpleTypeHolder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/core/support/AbstractEntityInformation/AbstractEntityInformation(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/history/AnnotationRevisionMetadata/AnnotationRevisionMetadata(java.lang.Object,java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/query/Parameter/Parameter(org.springframework.core.MethodParameter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+detection(|java+constructor:///org/springframework/data/repository/config/RepositoryComponentProvider$AllTypeFilter/RepositoryComponentProvider$AllTypeFilter(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
+
+
+
+----------------------------
+Compiler Messages
+----------------------------
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/RepositoryFactoryBeanSupport.java|(8755,58,<257,0>,<257,0>),257,0,"The constructor EventPublishingRepositoryProxyPostProcessor(ApplicationEventPublisher) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(2336,9,<53,0>,<53,0>),53,0,"The blank final field publisher may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(2852,55,<68,0>,<68,0>),68,0,"The constructor EventPublishingRepositoryProxyPostProcessor.EventPublishingMethodInterceptor(EventPublishingRepositoryProxyPostProcessor.EventPublishingMethod, ApplicationEventPublisher) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(3246,11,<80,0>,<80,0>),80,0,"The blank final field eventMethod may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(3301,9,<81,0>,<81,0>),81,0,"The blank final field publisher may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(4184,37,<114,0>,<114,0>),114,0,"The constructor EventPublishingRepositoryProxyPostProcessor.EventPublishingMethod(null, null) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor.java|(7123,67,<204,0>,<204,0>),204,0,"The constructor EventPublishingRepositoryProxyPostProcessor.EventPublishingMethod(Method, Method) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Point.java|(1567,14,<58,0>,<58,0>),58,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/AbstractPersistentProperty.java|(2180,25,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/AbstractPersistentProperty.java|(2216,14,<62,0>,<62,0>),62,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory.java|(11494,65,<282,0>,<282,0>),282,0,"Cannot make a static reference to the non-static method defineClass(String, byte[], int, int, PersistentEntity\<?,?\>) from the type ClassGeneratingPropertyAccessorFactory.Evil",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory.java|(45580,68,<1249,0>,<1249,0>),1249,0,"The constructor ClassGeneratingPropertyAccessorFactory.PropertyStackAddress(Label, int) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory.java|(50237,5,<1430,0>,<1430,0>),1430,0,"The blank final field label may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory.java|(50264,4,<1431,0>,<1431,0>),1431,0,"The blank final field hash may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/JsonProjectingMethodInterceptorFactory.java|(3015,35,<86,0>,<86,0>),86,0,"The constructor JsonProjectingMethodInterceptorFactory.InputMessageProjecting(DocumentContext) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/JsonProjectingMethodInterceptorFactory.java|(4083,7,<124,0>,<124,0>),124,0,"The blank final field context may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/JsonProjectingMethodInterceptorFactory.java|(5074,4,<149,0>,<149,0>),149,0,"The method read(String, Predicate...) in the type ReadContext is not applicable for the arguments (String, JsonProjectingMethodInterceptorFactory.InputMessageProjecting.ResolvableTypeRef)",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/JsonProjectingMethodInterceptorFactory.java|(5089,27,<149,0>,<149,0>),149,0,"The constructor JsonProjectingMethodInterceptorFactory.InputMessageProjecting.ResolvableTypeRef(ResolvableType) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/JsonProjectingMethodInterceptorFactory.java|(5872,4,<175,0>,<175,0>),175,0,"The blank final field type may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Circle.java|(1431,15,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Circle.java|(1458,15,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/Parameter.java|(1968,18,<56,0>,<56,0>),56,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/Repositories.java|(2888,16,<75,0>,<75,0>),75,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3486,19,<89,0>,<89,0>),89,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3516,20,<90,0>,<90,0>),90,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3547,23,<91,0>,<91,0>),91,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3581,36,<92,0>,<92,0>),92,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/projection/MapAccessingMethodInterceptor.java|(1229,3,<37,0>,<37,0>),37,0,"The blank final field map may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/ResourceReaderRepositoryPopulator.java|(2646,15,<70,0>,<70,0>),70,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/ResourceReaderRepositoryPopulator.java|(3141,17,<85,0>,<85,0>),85,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(1790,28,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(1829,19,<48,0>,<48,0>),48,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(4899,30,<150,0>,<150,0>),150,0,"The method getRepositoryFactoryBeanName() from the type RepositoryConfigurationSource is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslPathInformation.java|(1273,4,<41,0>,<41,0>),41,0,"The blank final field path may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/AbstractMappingContext.java|(6408,13,<163,0>,<163,0>),163,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/jaxb/SpringDataJaxb.java|(3476,16,<113,0>,<113,0>),113,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/jaxb/SpringDataJaxb.java|(4121,16,<141,0>,<141,0>),141,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ParametersParameterAccessor.java|(1522,19,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ParametersParameterAccessor.java|(1552,15,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1473,14,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1499,44,<46,0>,<46,0>),46,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(2280,16,<67,0>,<67,0>),67,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/AnnotationDetectionFieldCallback.java|(1624,23,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/AnnotationDetectionFieldCallback.java|(2546,15,<86,0>,<86,0>),86,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/AbstractAggregateRoot.java|(1383,3,<39,0>,<39,0>),39,0,"The value for annotation attribute Getter.onMethod must be some @lombok.Getter.AnyAnnotation annotation ",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/AbstractAggregateRoot.java|(1384,2,<39,0>,<39,0>),39,0,"__ cannot be resolved to a type",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/QuerydslRepositoryInvokerAdapter.java|(4486,53,<139,0>,<139,0>),139,0,"The method invokeQueryMethod(Method, Map\<String,String[]\>, Pageable, Sort) from the type RepositoryInvoker is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/MappingContextEvent.java|(1783,15,<49,0>,<49,0>),49,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/MappingContextEvent.java|(1809,15,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/QueryMethod.java|(3427,24,<90,0>,<90,0>),90,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(1696,15,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(2119,15,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(2245,14,<77,0>,<77,0>),77,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/auditing/AuditingHandler.java|(2972,21,<85,0>,<85,0>),85,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revisions.java|(1767,18,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionParser.java|(1985,24,<49,0>,<49,0>),49,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/RepositoryFactorySupport.java|(6780,17,<153,0>,<153,0>),153,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder.java|(1671,24,<44,0>,<44,0>),44,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder.java|(1991,18,<55,0>,<55,0>),55,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/XmlRepositoryConfigurationSource.java|(2666,16,<65,0>,<65,0>),65,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/XmlRepositoryConfigurationSource.java|(2693,16,<66,0>,<66,0>),66,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(2269,132,<65,0>,<65,0>),65,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(3026,8,<89,0>,<89,0>),89,0,"The method withMode(ExampleMatcher.MatchMode) is undefined for the type ExampleMatcher",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(3343,8,<100,0>,<100,0>),100,0,"The method withMode(ExampleMatcher.MatchMode) is undefined for the type ExampleMatcher",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(3989,119,<118,0>,<118,0>),118,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(4551,116,<133,0>,<133,0>),133,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(5216,116,<155,0>,<155,0>),155,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(7551,116,<208,0>,<208,0>),208,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(8524,116,<230,0>,<230,0>),230,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(9467,116,<253,0>,<253,0>),253,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(10887,116,<296,0>,<296,0>),296,0,"The constructor ExampleMatcher(ExampleMatcher.NullHandler, ExampleMatcher.StringMatcher, ExampleMatcher.PropertySpecifiers, Set\<String\>, boolean, ExampleMatcher.MatchMode) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(21223,87,<728,0>,<728,0>),728,0,"The constructor ExampleMatcher.PropertySpecifier(String, ExampleMatcher.StringMatcher, Boolean, ExampleMatcher.PropertyValueTransformer) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(21600,87,<739,0>,<739,0>),739,0,"The constructor ExampleMatcher.PropertySpecifier(String, ExampleMatcher.StringMatcher, boolean, ExampleMatcher.PropertyValueTransformer) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/ExampleMatcher.java|(22135,87,<752,0>,<752,0>),752,0,"The constructor ExampleMatcher.PropertySpecifier(String, ExampleMatcher.StringMatcher, Boolean, ExampleMatcher.PropertyValueTransformer) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/PropertiesBasedNamedQueries.java|(1330,19,<40,0>,<40,0>),40,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/MappingContextTypeInformationMapper.java|(2107,23,<49,0>,<49,0>),49,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/projection/ProxyProjectionFactory.java|(9276,63,<279,0>,<279,0>),279,0,"The constructor MapAccessingMethodInterceptor(Map\<String,Object\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/AbstractEntityInformation.java|(1403,20,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(3119,17,<80,0>,<80,0>),80,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(3147,26,<81,0>,<81,0>),81,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(3756,15,<100,0>,<100,0>),100,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(4863,15,<141,0>,<141,0>),141,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(6783,13,<201,0>,<201,0>),201,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(7258,13,<218,0>,<218,0>),218,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/AnnotationRevisionMetadata.java|(1956,15,<48,0>,<48,0>),48,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/AnnotationRevisionMetadata.java|(2611,47,<63,0>,<63,0>),63,0,"The constructor DateTime(DateTimeZone) is ambiguous",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResults.java|(2402,16,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryComponentProvider.java|(2718,23,<64,0>,<64,0>),64,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryComponentProvider.java|(7859,18,<207,0>,<207,0>),207,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryConfigurationDelegate.java|(3536,23,<76,0>,<76,0>),76,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2415,28,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2454,28,<72,0>,<72,0>),72,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2872,15,<86,0>,<86,0>),86,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/RepositoriesPopulatedEvent.java|(1743,18,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/RepositoriesPopulatedEvent.java|(1772,21,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeVariableTypeInformation.java|(1737,17,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/SortHandlerMethodArgumentResolver.java|(2655,22,<67,0>,<67,0>),67,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(1955,16,<51,0>,<51,0>),51,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(1982,20,<52,0>,<52,0>),52,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(2013,17,<53,0>,<53,0>),53,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/PropertyPathInformation.java|(1535,4,<46,0>,<46,0>),46,0,"The blank final field path may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/PropertyPathInformation.java|(1852,2,<56,0>,<56,0>),56,0,"The method of(String, Class\<?\>) in the type PropertyPathInformation is not applicable for the arguments (PropertyPath)",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/PropertyPathInformation.java|(2230,2,<67,0>,<67,0>),67,0,"The method of(String, Class\<?\>) in the type PropertyPathInformation is not applicable for the arguments (PropertyPath)",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Box.java|(1286,14,<43,0>,<43,0>),43,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Box.java|(1312,15,<44,0>,<44,0>),44,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(2974,17,<75,0>,<75,0>),75,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(3002,28,<76,0>,<76,0>),76,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(4731,15,<148,0>,<148,0>),148,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryBeanDefinitionBuilder.java|(3613,30,<84,0>,<84,0>),84,0,"The method getRepositoryFactoryBeanName() from the type RepositoryConfiguration\<capture#1-of ?\> is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DelegatingEntityInformation.java|(1429,17,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryConfigurationExtensionSupport.java|(3618,21,<78,0>,<78,0>),78,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryConfigurationExtensionSupport.java|(3650,15,<79,0>,<79,0>),79,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(2284,20,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(2315,19,<62,0>,<62,0>),62,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(3733,17,<125,0>,<125,0>),125,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(4680,18,<169,0>,<169,0>),169,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(5896,13,<206,0>,<206,0>),206,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(5921,20,<207,0>,<207,0>),207,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/Example.java|(1308,5,<41,0>,<41,0>),41,0,"The blank final field probe may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/Example.java|(1354,7,<42,0>,<42,0>),42,0,"The blank final field matcher may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/Example.java|(1568,48,<51,0>,<51,0>),51,0,"The constructor Example\<T\>(T, ExampleMatcher) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/Example.java|(1892,30,<62,0>,<62,0>),62,0,"The constructor Example\<T\>(T, ExampleMatcher) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/AnnotationAttribute.java|(1825,23,<53,0>,<53,0>),53,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/DefaultPersistentPropertyPath.java|(1683,19,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ReturnedType.java|(1554,10,<46,0>,<46,0>),46,0,"The blank final field domainType may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ReturnedType.java|(4161,18,<141,0>,<141,0>),141,0,"The constructor ReturnedType(Class\<capture#1-of ?\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ReturnedType.java|(6488,18,<226,0>,<226,0>),226,0,"The constructor ReturnedType(Class\<capture#8-of ?\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/ReflectionEntityInformation.java|(2211,19,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(2625,26,<89,0>,<89,0>),89,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3141,26,<105,0>,<105,0>),105,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3178,15,<106,0>,<106,0>),106,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3484,13,<120,0>,<120,0>),120,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/Parameters.java|(2358,15,<63,0>,<63,0>),63,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(2960,13,<94,0>,<94,0>),94,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(2984,24,<95,0>,<95,0>),95,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(6320,7,<218,0>,<218,0>),218,0,"The method getType() is undefined for the type TypeDiscoverer.ValueHolder",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(11737,15,<450,0>,<450,0>),450,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(14006,50,<535,0>,<535,0>),535,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(14168,46,<539,0>,<539,0>),539,0,"The constructor TypeDiscoverer.SyntheticParamterizedType(ClassTypeInformation\<capture#74-of ?\>, List\<TypeInformation\<?\>\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(15717,15,<608,0>,<608,0>),608,0,"The blank final field typeInformation may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(15784,14,<609,0>,<609,0>),609,0,"The blank final field typeParameters may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(16742,21,<655,0>,<655,0>),655,0,"The constructor TypeDiscoverer.ValueHolder(null) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(16891,21,<660,0>,<660,0>),660,0,"The constructor TypeDiscoverer.ValueHolder(TypeInformation\<capture#4-of ?\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Pair.java|(1129,5,<38,0>,<38,0>),38,0,"The blank final field first may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Pair.java|(1162,6,<39,0>,<39,0>),39,0,"The blank final field second may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Pair.java|(1412,29,<49,0>,<49,0>),49,0,"The constructor Pair\<S,T\>(S, T) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryBeanDefinitionParser.java|(2167,18,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResult.java|(1301,16,<44,0>,<44,0>),44,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResult.java|(1328,17,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(1715,22,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(1748,16,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(2117,16,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(2837,17,<79,0>,<79,0>),79,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3775,16,<107,0>,<107,0>),107,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3802,13,<108,0>,<108,0>),108,0,"The method hasText(String) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/ConfigurableTypeInformationMapper.java|(1764,22,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/PersistentEntityParameterValueProvider.java|(2074,15,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/PersistentEntityParameterValueProvider.java|(2100,17,<51,0>,<51,0>),51,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/util/QueryExecutionConverters.java|(4563,7,<125,0>,<125,0>),125,0,"The method getType() is undefined for the type QueryExecutionConverters.WrapperType",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/util/QueryExecutionConverters.java|(4766,7,<136,0>,<136,0>),136,0,"The method getType() is undefined for the type QueryExecutionConverters.WrapperType",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/util/QueryExecutionConverters.java|(4823,13,<137,0>,<137,0>),137,0,"The method isSingleValue() is undefined for the type QueryExecutionConverters.WrapperType",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/util/QueryExecutionConverters.java|(17849,27,<578,0>,<578,0>),578,0,"The constructor QueryExecutionConverters.WrapperType(Class\<capture#5-of ?\>, boolean) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/util/QueryExecutionConverters.java|(17949,28,<582,0>,<582,0>),582,0,"The constructor QueryExecutionConverters.WrapperType(Class\<capture#6-of ?\>, boolean) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revision.java|(1333,17,<40,0>,<40,0>),40,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revision.java|(1361,15,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3396,17,<80,0>,<80,0>),80,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3424,19,<81,0>,<81,0>),81,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3454,23,<82,0>,<82,0>),82,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor.java|(3229,20,<73,0>,<73,0>),73,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor.java|(3260,31,<74,0>,<74,0>),74,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(3925,20,<99,0>,<99,0>),99,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(4260,40,<106,0>,<106,0>),106,0,"The constructor BasicPersistentEntity.AssociationComparator\<P\>(Comparator\<P\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(6667,17,<191,0>,<191,0>),191,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(10254,16,<326,0>,<326,0>),326,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(10675,16,<342,0>,<342,0>),342,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(11105,16,<357,0>,<357,0>),357,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(11469,16,<370,0>,<370,0>),370,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(14536,8,<473,0>,<473,0>),473,0,"The blank final field delegate may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(2810,43,<79,0>,<79,0>),79,0,"The constructor ResultProcessor.ProjectingConverter(ReturnedType, ProjectionFactory) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(4327,2,<136,0>,<136,0>),136,0,"The method of(Class\<capture#18-of ?\>, Converter\<Object,Object\>) is undefined for the type ResultProcessor.ChainingConverter",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(4981,45,<156,0>,<156,0>),156,0,"The constructor ResultProcessor.StreamQueryResultHandler(ReturnedType, ResultProcessor.ChainingConverter) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(5820,10,<181,0>,<181,0>),181,0,"The blank final field targetType may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(5883,8,<182,0>,<182,0>),182,0,"The blank final field delegate may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(6269,303,<195,0>,<195,0>),195,0,"The constructor ResultProcessor.ChainingConverter(Class\<capture#1-of ?\>, new Converter\<Object,Object\>(){}) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(7357,4,<239,0>,<239,0>),239,0,"The blank final field type may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(7406,7,<240,0>,<240,0>),240,0,"The blank final field factory may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(8833,10,<295,0>,<295,0>),295,0,"The blank final field returnType may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ResultProcessor.java|(8896,9,<296,0>,<296,0>),296,0,"The blank final field converter may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/Jackson2ResourceReader.java|(2484,22,<83,0>,<83,0>),83,0,"The method reader(Class\<?\>) from the type ObjectMapper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/Jackson2ResourceReader.java|(3342,12,<115,0>,<115,0>),115,0,"The method reader(Class\<?\>) from the type ObjectMapper is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/MethodParameters.java|(1965,15,<57,0>,<57,0>),57,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/MethodParameters.java|(3617,19,<125,0>,<125,0>),125,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(3878,23,<118,0>,<118,0>),118,0,"The constructor QuerydslBindings.TypeBinder\<T\>(Class\<T\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(6797,10,<212,0>,<212,0>),212,0,"The method getBinding() is undefined for the type QuerydslBindings.PathAndBinding\<S,T\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(6864,10,<215,0>,<215,0>),215,0,"The method getBinding() is undefined for the type QuerydslBindings.PathAndBinding\<S,T\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(7022,10,<221,0>,<221,0>),221,0,"The method getBinding() is undefined for the type QuerydslBindings.PathAndBinding\<S,T\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(7416,7,<235,0>,<235,0>),235,0,"The method getPath() is undefined for the type QuerydslBindings.PathAndBinding\<capture#23-of ?,capture#24-of ?\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(7968,7,<255,0>,<255,0>),255,0,"The method getPath() is undefined for the type QuerydslBindings.PathAndBinding\<capture#26-of ?,capture#27-of ?\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(10117,43,<343,0>,<343,0>),343,0,"The constructor QuerydslBindings.MultiValueBindingAdapter\<P,T\>(SingleValueBinding\<P,T\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(10481,39,<357,0>,<357,0>),357,0,"The constructor QuerydslBindings.PathAndBinding\<P,T\>(P, MultiValueBinding\<P,T\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(10655,7,<362,0>,<362,0>),362,0,"The method getPath() is undefined for the type QuerydslBindings.PathAndBinding\<P,T\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(12378,36,<421,0>,<421,0>),421,0,"The constructor QuerydslBindings.PathAndBinding\<P,T\>(P, null) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(12923,7,<436,0>,<436,0>),436,0,"The method getPath() is undefined for the type QuerydslBindings.PathAndBinding\<P,T\>",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(13110,4,<449,0>,<449,0>),449,0,"The blank final field type may not have been initialized",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(13407,3,<459,0>,<459,0>),459,0,"The method all(MultiValueBinding\<P,T\>) in the type QuerydslBindings.TypeBinder\<T\> is not applicable for the arguments (QuerydslBindings.MultiValueBindingAdapter\<P,T\>)",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(13411,43,<459,0>,<459,0>),459,0,"The constructor QuerydslBindings.MultiValueBindingAdapter\<P,T\>(SingleValueBinding\<P,T\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(13790,39,<470,0>,<470,0>),470,0,"The constructor QuerydslBindings.PathAndBinding\<P,T\>(null, MultiValueBinding\<P,T\>) is undefined",())
+
+message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/querydsl/binding/QuerydslBindings.java|(14495,8,<497,0>,<497,0>),497,0,"The blank final field delegate may not have been initialized",())
+
+
+
+----------------------------
+Detection Matches
+----------------------------
+
+unknown() matches:
+For detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/readType(java.lang.Object,org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/writeType(org.springframework.data.util.TypeInformation,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/addPersistentProperty(org.springframework.data.mapping.PersistentProperty)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/readType(java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/PreferredConstructor/PreferredConstructor(java.lang.reflect.Constructor,org.springframework.data.mapping.PreferredConstructor$Parameter%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/PreferredConstructor$Parameter/PreferredConstructor$Parameter(java.lang.String,org.springframework.data.util.TypeInformation,java.lang.annotation.Annotation%5B%5D,org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/springframework/data/repository/config/RepositoryConfigurationExtensionSupport/getRepositoryConfigurations(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.core.io.ResourceLoader,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+For detection(|java+method:///org/springframework/data/mapping/PreferredConstructor/isEnclosingClassParameter(org.springframework.data.mapping.PreferredConstructor$Parameter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|unknown:///|,-1,-1,"",())
+
+
+
+matched() matches:
+For detection(|java+constructor:///org/springframework/data/repository/config/XmlRepositoryConfigurationSource/XmlRepositoryConfigurationSource(org.w3c.dom.Element,org.springframework.beans.factory.xml.ParserContext,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/XmlRepositoryConfigurationSource.java|(2666,16,<65,0>,<65,0>),65,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/XmlRepositoryConfigurationSource.java|(2693,16,<66,0>,<66,0>),66,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/Point/Point(org.springframework.data.geo.Point)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Point.java|(1567,14,<58,0>,<58,0>),58,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithProperties(org.springframework.data.mapping.SimplePropertyHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(10675,16,<342,0>,<342,0>),342,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource/AnnotationRepositoryConfigurationSource(org.springframework.core.type.AnnotationMetadata,java.lang.Class,org.springframework.core.io.ResourceLoader,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3396,17,<80,0>,<80,0>),80,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3454,23,<82,0>,<82,0>),82,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/AnnotationRepositoryConfigurationSource.java|(3424,19,<81,0>,<81,0>),81,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/model/SimpleTypeHolder/SimpleTypeHolder(java.util.Set,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(2625,26,<89,0>,<89,0>),89,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/convert/EntityInstantiators/getInstantiatorFor(org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2872,15,<86,0>,<86,0>),86,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/support/MethodParameters/MethodParameters(java.lang.reflect.Method,org.springframework.data.repository.support.AnnotationAttribute)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/MethodParameters.java|(1965,15,<57,0>,<57,0>),57,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/model/PersistentEntityParameterValueProvider/PersistentEntityParameterValueProvider(org.springframework.data.mapping.PersistentEntity,org.springframework.data.mapping.model.PropertyValueProvider,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/PersistentEntityParameterValueProvider.java|(2074,15,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/PersistentEntityParameterValueProvider.java|(2100,17,<51,0>,<51,0>),51,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String,java.lang.Object)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3775,16,<107,0>,<107,0>),107,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3802,13,<108,0>,<108,0>),108,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/convert/ConfigurableTypeInformationMapper/ConfigurableTypeInformationMapper(java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/ConfigurableTypeInformationMapper.java|(1764,22,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/model/AbstractPersistentProperty/AbstractPersistentProperty(java.lang.reflect.Field,java.beans.PropertyDescriptor,org.springframework.data.mapping.PersistentEntity,org.springframework.data.mapping.model.SimpleTypeHolder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/AbstractPersistentProperty.java|(2180,25,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/AbstractPersistentProperty.java|(2216,14,<62,0>,<62,0>),62,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponentIdButFallback(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(2837,17,<79,0>,<79,0>),79,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/convert/EntityInstantiators/EntityInstantiators(org.springframework.data.convert.EntityInstantiator,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2454,28,<72,0>,<72,0>),72,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/EntityInstantiators.java|(2415,28,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/util/Version/Version(int%5B%5D)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1499,44,<46,0>,<46,0>),46,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1473,14,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/util/AnnotationDetectionFieldCallback/AnnotationDetectionFieldCallback(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/AnnotationDetectionFieldCallback.java|(1624,23,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder,java.lang.String,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3775,16,<107,0>,<107,0>),107,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(3802,13,<108,0>,<108,0>),108,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/Polygon/Polygon(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(2119,15,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(2245,14,<77,0>,<77,0>),77,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/convert/DefaultTypeMapper/DefaultTypeMapper(org.springframework.data.convert.TypeAliasAccessor,org.springframework.data.mapping.context.MappingContext,java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(3119,17,<80,0>,<80,0>),80,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(3147,26,<81,0>,<81,0>),81,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/query/QueryMethod/QueryMethod(java.lang.reflect.Method,org.springframework.data.repository.core.RepositoryMetadata,org.springframework.data.projection.ProjectionFactory)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/QueryMethod.java|(3427,24,<90,0>,<90,0>),90,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/cdi/CdiRepositoryBean/CdiRepositoryBean(java.util.Set,java.lang.Class,javax.enterprise.inject.spi.BeanManager,org.springframework.data.repository.config.CustomRepositoryImplementationDetector)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3486,19,<89,0>,<89,0>),89,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3581,36,<92,0>,<92,0>),92,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3516,20,<90,0>,<90,0>),90,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3547,23,<91,0>,<91,0>),91,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionParser/NamedQueriesBeanDefinitionParser(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionParser.java|(1985,24,<49,0>,<49,0>),49,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/model/BasicPersistentEntity/BasicPersistentEntity(org.springframework.data.util.TypeInformation,java.util.Comparator)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(4260,40,<106,0>,<106,0>),106,0,"The constructor BasicPersistentEntity.AssociationComparator\<P\>(Comparator\<P\>) is undefined",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(3925,20,<99,0>,<99,0>),99,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/util/TypeDiscoverer/specialize(org.springframework.data.util.ClassTypeInformation)|,|java+method:///org/springframework/util/Assert/isTrue(boolean)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(14168,46,<539,0>,<539,0>),539,0,"The constructor TypeDiscoverer.SyntheticParamterizedType(ClassTypeInformation\<capture#74-of ?\>, List\<TypeInformation\<?\>\>) is undefined",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(14006,50,<535,0>,<535,0>),535,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/support/DomainClassPropertyEditor/DomainClassPropertyEditor(org.springframework.data.repository.support.RepositoryInvoker,org.springframework.data.repository.core.EntityInformation,org.springframework.beans.PropertyEditorRegistry)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(1982,20,<52,0>,<52,0>),52,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(2013,17,<53,0>,<53,0>),53,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/DomainClassPropertyEditor.java|(1955,16,<51,0>,<51,0>),51,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/domain/jaxb/SpringDataJaxb/marshal(java.lang.Iterable,javax.xml.bind.annotation.adapters.XmlAdapter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/jaxb/SpringDataJaxb.java|(4121,16,<141,0>,<141,0>),141,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/context/MappingContextEvent/MappingContextEvent(org.springframework.data.mapping.context.MappingContext,org.springframework.data.mapping.PersistentEntity)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/MappingContextEvent.java|(1809,15,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/MappingContextEvent.java|(1783,15,<49,0>,<49,0>),49,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/convert/DefaultTypeMapper/getAliasFor(org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/DefaultTypeMapper.java|(7258,13,<218,0>,<218,0>),218,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithAssociations(org.springframework.data.mapping.SimpleAssociationHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(11469,16,<370,0>,<370,0>),370,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/util/Version/parse(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(2280,16,<67,0>,<67,0>),67,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/RepositoryConfigurationDelegate/RepositoryConfigurationDelegate(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.core.io.ResourceLoader,org.springframework.core.env.Environment)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryConfigurationDelegate.java|(3536,23,<76,0>,<76,0>),76,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/util/TypeDiscoverer/getReturnType(java.lang.reflect.Method)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(11737,15,<450,0>,<450,0>),450,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/context/AbstractMappingContext/getPersistentEntity(org.springframework.data.util.TypeInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/AbstractMappingContext.java|(6408,13,<163,0>,<163,0>),163,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/util/AnnotationDetectionFieldCallback/getValue(java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/AnnotationDetectionFieldCallback.java|(2546,15,<86,0>,<86,0>),86,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/convert/MappingContextTypeInformationMapper/MappingContextTypeInformationMapper(org.springframework.data.mapping.context.MappingContext)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/convert/MappingContextTypeInformationMapper.java|(2107,23,<49,0>,<49,0>),49,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/repository/core/support/RepositoryFactorySupport/addQueryCreationListener(org.springframework.data.repository.core.support.QueryCreationListener)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/RepositoryFactorySupport.java|(6780,17,<153,0>,<153,0>),153,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/auditing/AuditingHandler/setAuditorAware(org.springframework.data.domain.AuditorAware)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/auditing/AuditingHandler.java|(2972,21,<85,0>,<85,0>),85,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/DelegatingEntityInformation/DelegatingEntityInformation(org.springframework.data.repository.core.EntityInformation)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DelegatingEntityInformation.java|(1429,17,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor/TransactionalRepositoryProxyPostProcessor(org.springframework.beans.factory.ListableBeanFactory,java.lang.String,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor.java|(3229,20,<73,0>,<73,0>),73,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor.java|(3260,31,<74,0>,<74,0>),74,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/support/AnnotationAttribute/AnnotationAttribute(java.lang.Class,java.lang.String)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/AnnotationAttribute.java|(1825,23,<53,0>,<53,0>),53,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder/NamedQueriesBeanDefinitionBuilder(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder.java|(1671,24,<44,0>,<44,0>),44,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/context/DefaultPersistentPropertyPath/DefaultPersistentPropertyPath(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/context/DefaultPersistentPropertyPath.java|(1683,19,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/history/Revision/Revision(org.springframework.data.history.RevisionMetadata,java.lang.Object)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revision.java|(1333,17,<40,0>,<40,0>),40,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revision.java|(1361,15,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/DefaultRepositoryInformation/DefaultRepositoryInformation(org.springframework.data.repository.core.RepositoryMetadata,java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(3002,28,<76,0>,<76,0>),76,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(2974,17,<75,0>,<75,0>),75,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/query/ParametersParameterAccessor/ParametersParameterAccessor(org.springframework.data.repository.query.Parameters,java.lang.Object%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ParametersParameterAccessor.java|(1552,15,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/ParametersParameterAccessor.java|(1522,19,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/Box/Box(org.springframework.data.geo.Point,org.springframework.data.geo.Point)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Box.java|(1312,15,<44,0>,<44,0>),44,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Box.java|(1286,14,<43,0>,<43,0>),43,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/Polygon/Polygon(org.springframework.data.geo.Point,org.springframework.data.geo.Point,org.springframework.data.geo.Point,org.springframework.data.geo.Point%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Polygon.java|(1696,15,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/init/RepositoriesPopulatedEvent/RepositoriesPopulatedEvent(org.springframework.data.repository.init.RepositoryPopulator,org.springframework.data.repository.support.Repositories)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/RepositoriesPopulatedEvent.java|(1743,18,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/RepositoriesPopulatedEvent.java|(1772,21,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/Circle/Circle(org.springframework.data.geo.Point,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Circle.java|(1431,15,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/Circle.java|(1458,15,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/DefaultRepositoryConfiguration/DefaultRepositoryConfiguration(org.springframework.data.repository.config.RepositoryConfigurationSource,org.springframework.beans.factory.config.BeanDefinition)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(1790,28,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(1829,19,<48,0>,<48,0>),48,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/DefaultRepositoryConfiguration.java|(4899,30,<150,0>,<150,0>),150,0,"The method getRepositoryFactoryBeanName() from the type RepositoryConfigurationSource is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/config/BeanComponentDefinitionBuilder/BeanComponentDefinitionBuilder(org.w3c.dom.Element,org.springframework.beans.factory.xml.ParserContext)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(1748,16,<47,0>,<47,0>),47,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(1715,22,<46,0>,<46,0>),46,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/config/BeanComponentDefinitionBuilder/getComponent(org.springframework.beans.factory.support.BeanDefinitionBuilder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/config/BeanComponentDefinitionBuilder.java|(2117,16,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/repository/support/MethodParameters/getParametersWith(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/MethodParameters.java|(3617,19,<125,0>,<125,0>),125,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/query/Parameters/Parameters(java.lang.reflect.Method)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/Parameters.java|(2358,15,<63,0>,<63,0>),63,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder/setLocations(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/NamedQueriesBeanDefinitionBuilder.java|(1991,18,<55,0>,<55,0>),55,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/support/Repositories/Repositories(org.springframework.beans.factory.ListableBeanFactory)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/support/Repositories.java|(2888,16,<75,0>,<75,0>),75,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/cdi/CdiRepositoryBean/CdiRepositoryBean(java.util.Set,java.lang.Class,javax.enterprise.inject.spi.BeanManager,org.springframework.data.repository.config.CustomRepositoryImplementationDetector)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3486,19,<89,0>,<89,0>),89,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3581,36,<92,0>,<92,0>),92,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3516,20,<90,0>,<90,0>),90,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/cdi/CdiRepositoryBean.java|(3547,23,<91,0>,<91,0>),91,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/init/ResourceReaderRepositoryPopulator/ResourceReaderRepositoryPopulator(org.springframework.data.repository.init.ResourceReader,java.lang.ClassLoader)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/ResourceReaderRepositoryPopulator.java|(2646,15,<70,0>,<70,0>),70,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/repository/init/ResourceReaderRepositoryPopulator/setResourceLocation(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/init/ResourceReaderRepositoryPopulator.java|(3141,17,<85,0>,<85,0>),85,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/GeoResult/GeoResult(java.lang.Object,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResult.java|(1301,16,<44,0>,<44,0>),44,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResult.java|(1328,17,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/SimpleTypeHolder/isSimpleType(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3484,13,<120,0>,<120,0>),120,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/web/SortHandlerMethodArgumentResolver/setSortParameter(java.lang.String)|,|java+method:///org/springframework/util/Assert/hasText(java.lang.String)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/web/SortHandlerMethodArgumentResolver.java|(2655,22,<67,0>,<67,0>),67,0,"The method hasText(String) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/history/Revisions/Revisions(java.util.List,boolean)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/Revisions.java|(1767,18,<54,0>,<54,0>),54,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/PreferredConstructor/isConstructorParameter(org.springframework.data.mapping.PersistentProperty)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/PreferredConstructor.java|(3733,17,<125,0>,<125,0>),125,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/ReflectionEntityInformation/ReflectionEntityInformation(java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/ReflectionEntityInformation.java|(2211,19,<61,0>,<61,0>),61,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/RepositoryComponentProvider/RepositoryComponentProvider(java.lang.Iterable)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryComponentProvider.java|(2718,23,<64,0>,<64,0>),64,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/util/TypeVariableTypeInformation/TypeVariableTypeInformation(java.lang.reflect.TypeVariable,java.lang.reflect.Type,org.springframework.data.util.TypeDiscoverer,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeVariableTypeInformation.java|(1737,17,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/util/Version/Version(int%5B%5D)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1499,44,<46,0>,<46,0>),46,0,"The method isTrue(boolean) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/Version.java|(1473,14,<45,0>,<45,0>),45,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/RepositoryBeanDefinitionParser/RepositoryBeanDefinitionParser(org.springframework.data.repository.config.RepositoryConfigurationExtension)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryBeanDefinitionParser.java|(2167,18,<50,0>,<50,0>),50,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/PropertiesBasedNamedQueries/PropertiesBasedNamedQueries(java.util.Properties)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/PropertiesBasedNamedQueries.java|(1330,19,<40,0>,<40,0>),40,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/util/TypeDiscoverer/TypeDiscoverer(java.lang.reflect.Type,java.util.Map)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(2960,13,<94,0>,<94,0>),94,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/util/TypeDiscoverer.java|(2984,24,<95,0>,<95,0>),95,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithProperties(org.springframework.data.mapping.PropertyHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(10254,16,<326,0>,<326,0>),326,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/domain/jaxb/SpringDataJaxb/unmarshal(java.util.Collection,javax.xml.bind.annotation.adapters.XmlAdapter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/domain/jaxb/SpringDataJaxb.java|(3476,16,<113,0>,<113,0>),113,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/geo/GeoResults/GeoResults(java.util.List,org.springframework.data.geo.Distance)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/geo/GeoResults.java|(2402,16,<71,0>,<71,0>),71,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/repository/core/support/DefaultRepositoryInformation/isTargetClassMethod(java.lang.reflect.Method,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/DefaultRepositoryInformation.java|(4731,15,<148,0>,<148,0>),148,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+method:///org/springframework/data/mapping/model/BasicPersistentEntity/doWithAssociations(org.springframework.data.mapping.AssociationHandler)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/BasicPersistentEntity.java|(11105,16,<357,0>,<357,0>),357,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/mapping/model/SimpleTypeHolder/SimpleTypeHolder(java.util.Set,org.springframework.data.mapping.model.SimpleTypeHolder)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3178,15,<106,0>,<106,0>),106,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/mapping/model/SimpleTypeHolder.java|(3141,26,<105,0>,<105,0>),105,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/core/support/AbstractEntityInformation/AbstractEntityInformation(java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/core/support/AbstractEntityInformation.java|(1403,20,<41,0>,<41,0>),41,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/history/AnnotationRevisionMetadata/AnnotationRevisionMetadata(java.lang.Object,java.lang.Class,java.lang.Class)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/AnnotationRevisionMetadata.java|(1956,15,<48,0>,<48,0>),48,0,"The method notNull(Object) from the type Assert is deprecated",())
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/history/AnnotationRevisionMetadata.java|(2611,47,<63,0>,<63,0>),63,0,"The constructor DateTime(DateTimeZone) is ambiguous",())
+
+For detection(|java+constructor:///org/springframework/data/repository/query/Parameter/Parameter(org.springframework.core.MethodParameter)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/query/Parameter.java|(1968,18,<56,0>,<56,0>),56,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+For detection(|java+constructor:///org/springframework/data/repository/config/RepositoryComponentProvider$AllTypeFilter/RepositoryComponentProvider$AllTypeFilter(java.util.List)|,|java+method:///org/springframework/util/Assert/notNull(java.lang.Object)|,methodInvocation(),annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true)):
+	message(|file:///home/lina/tmp/gt/classNowFinal(binaryCompatibility=false,sourceCompatibility=false)/srcs/spring-data-commons-1.13.0.RELEASE-sources/org/springframework/data/repository/config/RepositoryComponentProvider.java|(7859,18,<207,0>,<207,0>),207,0,"The method notNull(Object) from the type Assert is deprecated",())
+
+
+
+unknown() cases: 8
+matched() cases: 80
+
+
+----------------------------
+Model Stats
+----------------------------
+
+Breaking changes: 4
+Detections: 88
+Compiler messages: 208
+
+
