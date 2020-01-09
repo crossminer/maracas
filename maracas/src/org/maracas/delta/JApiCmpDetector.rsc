@@ -9,7 +9,7 @@ import Relation;
 import Set;
 import String;
 import IO;
-
+import ValueIO;
 
 //----------------------------------------------
 // ADT
@@ -636,4 +636,14 @@ private bool hasSameMethod(M3 m, loc class, loc meth) {
 		return true;
 	}
 	return false;
+}
+
+// Handy method for Java foreign calls
+public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
+	M3 clientM3 = createM3FromJarFile(clientJar);
+	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
+	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
+
+	return detections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));
 }
