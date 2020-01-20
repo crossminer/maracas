@@ -20,6 +20,15 @@ import ValueIO;
 // but this is the quickest way :)
 data Modifier =
 	\defaultAccess();
+	
+@memo
+rel[loc, loc] invertRel (rel[loc, loc] r) = invert(r);
+
+@memo
+rel[loc, loc] getInvExtends(M3 m) = invertRel(m.extends+);
+
+@memo 
+rel[loc, loc] getInvImplements(M3 m) = invertRel(m.implements+);
 
 @memo
 rel[loc, loc] getTransContainment(M3 m) = m.containment+;
@@ -57,7 +66,7 @@ loc getNonCUChild(loc elem, M3 m) {
 }
 
 set[loc] domainRangeR(rel[loc, loc] r, set[loc] elems) {
-	rel[loc, loc] inv = invert(r);
+	rel[loc, loc] inv = invertRel(r);
 	return { *inv[e] | loc e <- elems };
 }
 

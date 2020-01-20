@@ -130,7 +130,7 @@ set[loc] createHierarchyMethSymbRefs(loc class, str signature, M3 api, M3 client
 	       subtypes
 }
 set[loc] getSubtypes(loc class, M3 m) 
-	= invert(m.extends+) [class] + invert(m.implements+) [class];
+	= getInvExtends(m) [class] + getInvImplements(m) [class];
 
 @doc{ 
 	Returns a set of locations pointing to the ABSTRACT
