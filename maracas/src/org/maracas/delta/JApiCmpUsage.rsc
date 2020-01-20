@@ -5,13 +5,6 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 
 
-data Detection = detection (
-	loc elem,
-	loc used,
-	APIUse use,
-	CompatibilityChange change
-);
-
 set[loc] getUsedBreakingEntities(set[Detection] detects) 
 	= { e | detection(_, loc e, _, _) <- detects };
 
