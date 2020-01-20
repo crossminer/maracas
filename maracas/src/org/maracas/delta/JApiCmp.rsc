@@ -162,6 +162,12 @@ set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) {
 	return entities[change];
 }
 
+set[loc] getChangedEntities(list[APIEntity] delta) 
+	= range(getChangedEntities(delta));
+
+set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 
+	= getChangedEntities(delta)[change];
+	
 @doc {
 	Returns a relation mapping API entities that have been
 	modified to the type of compatibility change they experienced.
