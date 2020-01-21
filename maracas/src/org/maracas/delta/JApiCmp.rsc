@@ -3,6 +3,7 @@ module org::maracas::delta::JApiCmp
 import IO;
 import lang::java::m3::AST;
 import Node;
+import Relation;
 import Set;
 
 data APIEntity
@@ -157,12 +158,7 @@ java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str new
 set[ChangedEntity] getChangedEntities(list[APIEntity] delta) 
 	= { *getChangedEntities(e) | e <- delta };
 
-set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) {
-	set[ChangedEntity] entities = getChangedEntities(delta);
-	return entities[change];
-}
-
-set[loc] getChangedEntities(list[APIEntity] delta) 
+set[loc] getChangedEntitiesLoc(list[APIEntity] delta) 
 	= range(getChangedEntities(delta));
 
 set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change) 

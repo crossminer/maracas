@@ -9,50 +9,37 @@ import IO;
 import Relation;
 
 @doc{
-	Creates a field logical location given the logical
-	location of a parent class and the name of the field.
+	Creates a contained entity logical location given the logical
+	location of a parent class, the entity scheme and its name.
 	
 	@param class: logical location of parent class
+	@param scheme: scheme of the entity
 	@param fieldName: string representing the name of the 
 	       field
 }
-loc createFieldLoc(loc class, str fieldName)
-	= |java+field:///| + "<class.path>/<fieldName>";
-
-@doc{ 
-	Creates a method logical location given the logical
-	location of a parent class and the name of the method.
-	
-	@param class: logical location of parent class
-	@param fieldName: string representing the name of the 
-	       method
+loc createContainedLoc(loc class, str scheme, str fieldName) {
+	loc l = class;
+	l.path = "<class.path>/<fieldName>";
+	l.scheme = scheme;
+	return l;
 }
-loc createMethodLoc(loc class, str methName)
-	= |java+method:///| + "<class.path>/<methName>";
-	
 
-private set[loc] getSubtypesWithoutShadowing(loc class, str elemName, M3 m, loc (loc, str) createSymbRef) {
+private set[loc] getSubtypesWithoutShadowing(loc class, str scheme, str elemName, M3 m) {
 	set[loc] subtypes = domainRangeR(m.extends, { class }) + domainRangeR(m.implements, { class });
 	
-	return { *(getSubtypesWithoutShadowing(s, elemName, m, createSymbRef) + s) 
-		| s <- subtypes, m.declarations[createSymbRef(s, elemName)] == {} }
+	return { *(getSubtypesWithoutShadowing(s, scheme, elemName, m) + s) 
+		| s <- subtypes, m.declarations[createContainedLoc(s, scheme, elemName)] == {} }
 		+ class;
 }
 
-set[loc] getFieldSubsWithoutShadowing(loc class, str fieldName, M3 m)
-	= getSubtypesWithoutShadowing(class, fieldName, m, createFieldLoc);
-	
-set[loc] getMethSubsWithoutShadowing(loc class, str signature, M3 m)
-	= getSubtypesWithoutShadowing(class, signature, m, createMethodLoc);
-
-private set[loc] getHierarchyWithoutShadowing(loc class, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef) {
-	set[loc] apiSubtypes = getSubtypesWithoutShadowing(class, elemName, api, createSymbRef);
-	return { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes }
+private set[loc] getHierarchyWithoutShadowing(loc class, str scheme, str elemName, M3 api, M3 client) {
+	set[loc] apiSubtypes = getSubtypesWithoutShadowing(class, scheme, elemName, api);
+	return { *getSubtypesWithoutShadowing(s, scheme, elemName, client) | s <- apiSubtypes }
 		+ apiSubtypes;
 }
 	
-set[loc] getHierarchyWithoutMethShadowing(loc class, str signature, M3 api, M3 client) 
-	= getHierarchyWithoutShadowing(class, signature, api, client, createMethodLoc);
+set[loc] getHierarchyWithoutMethShadowing(loc class, str scheme, str signature, M3 api, M3 client) 
+	= getHierarchyWithoutShadowing(class, scheme, signature, api, client);
 
 @doc{ 
 	Given a type and the name of a member within that 
@@ -71,13 +58,13 @@ set[loc] getHierarchyWithoutMethShadowing(loc class, str signature, M3 api, M3 c
 	       reference of the member gicen the logical location 
 	       of a type and the member's name.
 }
-private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 client, loc (loc, str) createSymbRef, bool allowShadowing, bool includeParent) {
+private set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3 api, M3 client, bool allowShadowing, bool includeParent) {
 	set[loc] apiSubtypes = {};
 	set[loc] clientSubtypes = {};
 	
 	if (!allowShadowing) {
-		apiSubtypes = getSubtypesWithoutShadowing(class, elemName, api, createSymbRef);
-		clientSubtypes = { *getSubtypesWithoutShadowing(s, elemName, client, createSymbRef) | s <- apiSubtypes };
+		apiSubtypes = getSubtypesWithoutShadowing(class, scheme, elemName, api);
+		clientSubtypes = { *getSubtypesWithoutShadowing(s, scheme, elemName, client) | s <- apiSubtypes };
 	}
 	else {
 		apiSubtypes = getSubtypes(class, api) + class;
@@ -88,7 +75,7 @@ private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 cli
 		apiSubtypes = apiSubtypes - class;
 		clientSubtypes = clientSubtypes - class;
 	}
-	return { createSymbRef(c, elemName) | c <- apiSubtypes + clientSubtypes };
+	return { createContainedLoc(c, scheme, elemName) | c <- apiSubtypes + clientSubtypes };
 }
 
 @doc{
@@ -102,8 +89,8 @@ private set[loc] createHierarchySymbRefs(loc class, str elemName, M3 api, M3 cli
 	       field
 	@param m: M3 owning the main types and its subtypes
 }
-set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
-	= createHierarchySymbRefs(class, fieldName, api, client, createFieldLoc, allowShadowing, includeParent);
+set[loc] createHierarchyFieldSymbRefs(loc class, str scheme, str fieldName, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
+	= createHierarchySymbRefs(class, scheme, fieldName, api, client, allowShadowing, includeParent);
 
 @doc{
 	Given a type and the signature of a method within that 
@@ -117,8 +104,9 @@ set[loc] createHierarchyFieldSymbRefs(loc class, str fieldName, M3 api, M3 clien
 	       the method
 	@param m: M3 owning the main types and its subtypes
 }
-set[loc] createHierarchyMethSymbRefs(loc class, str signature, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
-	= createHierarchySymbRefs(class, signature, api, client, createMethodLoc, allowShadowing, includeParent);
+set[loc] createHierarchyMethSymbRefs(loc class, str scheme, str signature, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
+	= createHierarchySymbRefs(class, scheme, signature, api, client, allowShadowing, includeParent);
+
 
 @doc{
 	Returns a set of locations pointing to the subtypes 

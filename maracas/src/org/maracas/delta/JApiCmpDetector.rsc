@@ -18,6 +18,7 @@ import ValueIO;
 data Detection = detection (
 	loc elem,
 	loc used,
+	loc src,
 	APIUse use,
 	CompatibilityChange change
 );
@@ -99,6 +100,9 @@ set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 	return detections(evol);
 }
 
+set[Detection] getDetectionsByChange(set[Detection] detects, CompatibilityChange change)
+	= { d | Detection d <- detects, d.change == change };
+
 
 //----------------------------------------------
 // Field detections
@@ -147,7 +151,7 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, Comp
 	for (e <- changed) {
 		str field = memberName(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client, allowShadowing = allowShadowing);
+		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbFields;
 	}
 	
@@ -168,7 +172,7 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity
 		for (loc e <- transChanged) {
 			str field = memberName(e);
 			loc parent = parentType(evol.apiOld, e);
-			set[loc] symbFields = createHierarchyFieldSymbRefs(parent, field, evol.apiOld, evol.client, includeParent = includeParent);
+			set[loc] symbFields = createHierarchyFieldSymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, includeParent = includeParent);
 			entities += { used } * symbFields;
 		}
 	}
@@ -244,7 +248,7 @@ set[Detection] computeTypeHierarchyDetections(Evolution evol, CompatibilityChang
 	for (e <- changed) {
 		str signature = methodSignature(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] subtypes = getHierarchyWithoutMethShadowing(parent, signature, evol.apiOld, evol.client);
+		set[loc] subtypes = getHierarchyWithoutMethShadowing(parent, e.scheme, signature, evol.apiOld, evol.client);
 		entities += { e } * subtypes;
 	}
 	
@@ -262,7 +266,7 @@ set[Detection] computeTypeHierarchyDetectionsNewApi(Evolution evol, Compatibilit
 	for (e <- changed) {
 		str signature = methodSignature(e);
 		loc parent = parentType(evol.apiNew, e); // Diff evol.apiNew
-		set[loc] subtypes = getHierarchyWithoutMethShadowing(parent, signature, evol.apiNew, evol.client); // Diff evol.apiNew
+		set[loc] subtypes = getHierarchyWithoutMethShadowing(parent, e.scheme, signature, evol.apiNew, evol.client); // Diff evol.apiNew
 		entities += { e } * subtypes;
 	}
 		
@@ -286,7 +290,7 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, Compa
 	for (e <- changed) {
 		str signature = methodSignature(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
+		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbMeths;
 	}
 	
@@ -306,7 +310,7 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity]
 		for (loc e <- transChanged) {
 			str signature = methodSignature(e);
 			loc parent = parentType(evol.apiOld, e);
-			set[loc] symbMeths = createHierarchyMethSymbRefs(parent, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
+			set[loc] symbMeths = createHierarchyMethSymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
 			entities += { used } * symbMeths;
 		}
 	}
@@ -331,8 +335,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::annotat
 		fieldAccess()
 	};
 	
-	set[loc] transMeths = range(getTransitiveMethods(evol.apiOld, entities));
-	set[loc] transFields = range(getTransitiveFields(evol.apiOld, entities));
+	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, entities);
+	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, entities);
 	set[APIUse] apiUsesFields = { fieldAccess() };
 	
 	return computeDetections(evol, ch, apiUses)
@@ -412,21 +416,25 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 		+ computeDetections(evol, entitiesAnn, ch, { annotation() });
 }
 
+// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceRemoved()) {
 	rel[loc, loc] changed = getInterRemovedEntities(evol.delta);
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
+// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
 	rel[loc, loc] changed = getInterAddedEntities(evol.delta);
 	return computeSuperAddedDetections(evol, changed, ch);
 }
 
+// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassRemoved()) {
 	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta);
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
+// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassAdded()) {
 	rel[loc, loc] changed = getSuperAddedEntities(evol.delta);
 	return computeSuperAddedDetections(evol, changed, ch);
@@ -506,10 +514,13 @@ private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity]
 	set[loc] changed = domain(entities);
 	set[Detection] detects = {};
 	
-	for (used <- changed) {
-		set[loc] transChanged = entities[used] + used;
-		rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, transChanged) | apiUse <- apiUses };
-		detects += { detection(elem, used, apiUse, change) | <elem, apiUse> <- affected, predicate(<used, elem>, evol) };
+	for (loc src <- changed) {
+		set[loc] transChanged = entities[src] + src;
+		
+		for (loc used <- transChanged) {
+			rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, { used } ) | apiUse <- apiUses };
+			detects += { detection(elem, used, src, apiUse, change) | <elem, apiUse> <- affected, predicate(<src, elem>, evol) };
+		}
 	}
 	
 	return detects;
@@ -521,9 +532,9 @@ private set[Detection] computeDetections(Evolution evol, set[loc] entities, Comp
 private set[Detection] computeDetections(Evolution evol, set[loc] entities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
 	set[Detection] detects = {};
 	
-	for (used <- entities) {
+	for (loc used <- entities) {
 		rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, { used }) | apiUse <- apiUses };
-		detects += { detection(elem, used, apiUse, change) | <elem, apiUse> <- affected, predicate(<used, elem>, evol) };
+		detects += { detection(elem, used, used, apiUse, change) | <elem, apiUse> <- affected, predicate(<used, elem>, evol) };
 	}
 	
 	return detects;

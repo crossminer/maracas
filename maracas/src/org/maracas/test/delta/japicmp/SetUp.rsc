@@ -1,4 +1,4 @@
-module org::maracas::\test::delta::japicmp::detections::SetUp
+module org::maracas::\test::delta::japicmp::SetUp
 
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;

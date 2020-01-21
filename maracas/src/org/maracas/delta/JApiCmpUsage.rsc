@@ -3,6 +3,7 @@ module org::maracas::delta::JApiCmpUsage
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::m3::Core;
 
 
 set[loc] getUsedBreakingEntities(set[Detection] detects) 
@@ -29,7 +30,7 @@ private set[loc] getUsedNonBreakingEntities(M3 client, set[loc] entities, set[lo
 }
 
 set[loc] getUnusedChangedEntities(M3 client, list[APIEntity] delta) {
-	set[loc] entities = getChangedEntities(delta);	
+	set[loc] entities = getChangedEntitiesLoc(delta);	
 	return getUnusedChangedEntities(client, entities);
 }
 
@@ -43,9 +44,9 @@ private set[loc] getUnusedChangedEntities(M3 client, set[loc] entities)
 
 bool isUsed(loc elem, M3 m) 
 	= invertRel(m.annotations)[elem] != {}
-	|| invertRel(client.extends)[elem] != {}
-	|| invertRel(client.fieldAccess)[elem] != {}
-	|| invertRel(client.implements)[elem] != {}
-	|| invertRel(client.methodInvocation)[elem] != {}
-	|| invertRel(client.methodOverrides)[elem] != {}
-	|| invertRel(client.typeDependency)[elem] != {};
+	|| invertRel(m.extends)[elem] != {}
+	|| invertRel(m.fieldAccess)[elem] != {}
+	|| invertRel(m.implements)[elem] != {}
+	|| invertRel(m.methodInvocation)[elem] != {}
+	|| invertRel(m.methodOverrides)[elem] != {}
+	|| invertRel(m.typeDependency)[elem] != {};
