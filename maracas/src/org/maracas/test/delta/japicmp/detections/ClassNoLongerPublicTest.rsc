@@ -10,13 +10,15 @@ test bool methTD()
 	= detection(
 		|java+method:///mainclient/classNoLongerPublic/ClassNoLongerPublicTD/refClassNoLongerPublic()|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		typeDependency(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	
 test bool consTD()
 	= detection(
-		|java+parameter:///mainclient/classNoLongerPublic/ClassNoLongerPublicTD/ClassNoLongerPublicTD(main.classNoLongerPublic.ClassNoLongerPublic)/param0|,
+		|java+constructor:///mainclient/classNoLongerPublic/ClassNoLongerPublicTD/ClassNoLongerPublicTD(main.classNoLongerPublic.ClassNoLongerPublic)|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		typeDependency(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
@@ -26,6 +28,7 @@ test bool fieldTD()
 	= detection(
 		|java+field:///mainclient/classNoLongerPublic/ClassNoLongerPublicTD/field|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		typeDependency(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -33,6 +36,7 @@ test bool fieldTD()
 test bool extClass()
 	= detection(
 		|java+class:///mainclient/classNoLongerPublic/ClassNoLongerPublicExt|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		extends(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
@@ -42,6 +46,7 @@ test bool impInterface()
 	= detection(
 		|java+class:///mainclient/classNoLongerPublic/ClassNoLongerPublicImp|,
 		|java+interface:///main/classNoLongerPublic/IClassNoLongerPublic|,
+		|java+interface:///main/classNoLongerPublic/IClassNoLongerPublic|,
 		implements(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -50,6 +55,7 @@ test bool accessSuperFieldExt()
 	= detection(
 		|java+method:///mainclient/classNoLongerPublic/ClassNoLongerPublicExt/accessSuperField()|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		typeDependency(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -57,6 +63,7 @@ test bool accessSuperFieldExt()
 test bool invokeSuperMethodExt()
 	= detection(
 		|java+method:///mainclient/classNoLongerPublic/ClassNoLongerPublicExt/accessSuperMethod()|,
+		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		|java+class:///main/classNoLongerPublic/ClassNoLongerPublic|,
 		typeDependency(),
 		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))

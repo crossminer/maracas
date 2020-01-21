@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool createObject() 
 	= detection(
 		|java+method:///mainclient/classNowAbstract/ClassNowAbstractMI/createObject()|,
+		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract()|,
 		|java+class:///main/classNowAbstract/ClassNowAbstract|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool createObject()
 test bool createObjectParams() 
 	= detection(
 		|java+method:///mainclient/classNowAbstract/ClassNowAbstractMI/createObjectParams()|,
+		|java+constructor:///main/classNowAbstract/ClassNowAbstract/ClassNowAbstract(int)|,
 		|java+class:///main/classNowAbstract/ClassNowAbstract|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
@@ -42,6 +44,7 @@ test bool createObjectParams()
 test bool interCreateObject() 
 	= detection(
 		|java+method:///mainclient/classNowAbstract/IClassNowAbstractMI/createObject()|,
+		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract()|,
 		|java+class:///main/classNowAbstract/IClassNowAbstract|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
@@ -50,6 +53,7 @@ test bool interCreateObject()
 test bool interCreateObjectParams() 
 	= detection(
 		|java+method:///mainclient/classNowAbstract/IClassNowAbstractMI/createObjectParams()|,
+		|java+constructor:///main/classNowAbstract/IClassNowAbstract/IClassNowAbstract(int)|,
 		|java+class:///main/classNowAbstract/IClassNowAbstract|,
 		methodInvocation(),
 		classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))

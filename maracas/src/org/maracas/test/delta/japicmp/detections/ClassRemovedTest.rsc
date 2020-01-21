@@ -9,6 +9,7 @@ test bool implementsInt()
 	= detection(
 		|java+class:///mainclient/classRemoved/ClassRemovedImp|,
 		|java+interface:///main/classRemoved/IClassRemoved|,
+		|java+interface:///main/classRemoved/IClassRemoved|,
 		implements(),
 		classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -16,6 +17,7 @@ test bool implementsInt()
 test bool extendsClass() 
 	= detection(
 		|java+class:///mainclient/classRemoved/ClassRemovedExt|,
+		|java+class:///main/classRemoved/ClassRemoved|,
 		|java+class:///main/classRemoved/ClassRemoved|,
 		extends(),
 		classRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool typeDepIntField()
 	= detection(
 		|java+field:///mainclient/classRemoved/ClassRemovedTD/i|,
 		|java+interface:///main/classRemoved/IClassRemoved|,
+		|java+interface:///main/classRemoved/IClassRemoved|,
 		typeDependency(),
 		classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -32,6 +35,7 @@ test bool typeDepIntField()
 test bool typeDepClassField()
 	= detection(
 		|java+field:///mainclient/classRemoved/ClassRemovedTD/c|,
+		|java+class:///main/classRemoved/ClassRemoved|,
 		|java+class:///main/classRemoved/ClassRemoved|,
 		typeDependency(),
 		classRemoved(binaryCompatibility=false,sourceCompatibility=false))

@@ -363,7 +363,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowFinal()) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
-	set[loc] transMeths = range(getTransitiveMethods(evol.apiOld, entities)); // Don't like diff between set[loc] and set[TransChangedEntity]
+	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, entities);
 	return computeDetections(evol, ch, { extends() })
 		+ computeMethSymbDetections(evol, transMeths, ch, { methodOverride() }, allowShadowing = true);
 }

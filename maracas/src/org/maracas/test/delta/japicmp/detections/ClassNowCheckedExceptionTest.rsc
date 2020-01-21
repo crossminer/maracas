@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool throwsExcep()
 	= detection(
 		|java+method:///mainclient/classNowCheckedException/ClassNowCheckedExceptionThrows/throwsExcep(boolean)|,
+		|java+constructor:///main/classNowCheckedException/ClassNowCheckedException/ClassNowCheckedException()|,
 		|java+class:///main/classNowCheckedException/ClassNowCheckedException|,
 		methodInvocation(),
 		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool throwsExcep()
 test bool throwsSubExcep()
 	= detection(
 		|java+method:///mainclient/classNowCheckedException/ClassNowCheckedExceptionThrows/throwsSubExcep(boolean)|,
+		|java+constructor:///main/classNowCheckedException/ClassNowCheckedExceptionSub/ClassNowCheckedExceptionSub()|,
 		|java+class:///main/classNowCheckedException/ClassNowCheckedException|,
 		methodInvocation(),
 		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool throwsSubExcep()
 test bool throwsClientExcep()
 	= detection(
 		|java+method:///mainclient/classNowCheckedException/ClassNowCheckedExceptionThrows/throwsClientExcep(boolean)|,
+		|java+constructor:///mainclient/classNowCheckedException/ClassNowCheckedExceptionClient/ClassNowCheckedExceptionClient()|,
 		|java+class:///main/classNowCheckedException/ClassNowCheckedException|,
 		methodInvocation(),
 		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool throwsClientExcep()
 test bool throwsClientSubExcep()
 	= detection(
 		|java+method:///mainclient/classNowCheckedException/ClassNowCheckedExceptionThrows/throwsClientSubExcep(boolean)|,
+		|java+constructor:///mainclient/classNowCheckedException/ClassNowCheckedExceptionClientSub/ClassNowCheckedExceptionClientSub()|,
 		|java+class:///main/classNowCheckedException/ClassNowCheckedException|,
 		methodInvocation(),
 		classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
