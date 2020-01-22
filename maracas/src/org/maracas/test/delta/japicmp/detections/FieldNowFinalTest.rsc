@@ -10,6 +10,7 @@ test bool simpleAccessAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalAssignment()|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -20,6 +21,7 @@ test bool simpleAccessNoAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalNoAssignment()|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -27,6 +29,7 @@ test bool simpleAccessNoAssign()
 test bool superKeyAccessAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldNowFinalAssignmentSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -38,6 +41,7 @@ test bool superKeyAccessNoAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldNowFinalNoAssignmentSuperKey()|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
+		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -45,6 +49,7 @@ test bool superKeyAccessNoAssign()
 test bool noSuperKeyAccessAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldNowFinalAssignmentNoSuperKey()|,
+		|java+field:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -55,6 +60,7 @@ test bool noSuperKeyAccessAssign()
 test bool noSuperKeyAccessNoAssign()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldNowFinalNoAssignmentNoSuperKey()|,
+		|java+field:///mainclient/fieldNowFinal/FieldNowFinalExt/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -63,6 +69,7 @@ test bool noSuperKeyAccessNoAssign()
 test bool simpleAccessAssign() 
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalAssignmentSub()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinalSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -73,6 +80,7 @@ test bool simpleAccessAssign()
 test bool simpleAccessNoAssignSub()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalNoAssignmentSub()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinalSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -81,6 +89,7 @@ test bool simpleAccessNoAssignSub()
 test bool superKeyAccessAssignSub()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalAssignmentSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinalSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -91,6 +100,7 @@ test bool superKeyAccessAssignSub()
 test bool superKeyAccessNoAssignSub()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalNoAssignmentSuperKey()|,
+		|java+field:///main/fieldNowFinal/FieldNowFinalSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -99,6 +109,7 @@ test bool superKeyAccessNoAssignSub()
 test bool noSuperKeyAccessAssignSub()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalAssignmentNoSuperKey()|,
+		|java+field:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
@@ -109,6 +120,7 @@ test bool noSuperKeyAccessAssignSub()
 test bool noSuperKeyAccessNoAssignSub()
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldNowFinalNoAssignmentNoSuperKey()|,
+		|java+field:///mainclient/fieldNowFinal/FieldNowFinalExtSub/fieldFinal|,
 		|java+field:///main/fieldNowFinal/FieldNowFinal/fieldFinal|,
 		fieldAccess(),
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
