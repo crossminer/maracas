@@ -86,8 +86,8 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, classNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, classNowFinal(binaryCompatibility=false,sourceCompatibility=false))
-	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, classRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
@@ -401,6 +401,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 		
 		switch(types) {
 		case <class(), _> :	entitiesExt += e;
+		case <interface(), annotation()> : entitiesImp += e; // Do not include extends
 		case <interface(), _> : {
 			entitiesExt += e;
 			entitiesImp += e;
@@ -410,7 +411,6 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 		}
 	}
 	
-	//  computeDetections(evol, entitiesExt, ch, { extends() }, isInterNotExtendAnn)
 	return computeDetections(evol, entitiesExt, ch, { extends() })
 		+ computeDetections(evol, entitiesImp, ch, { implements() })
 		+ computeDetections(evol, entitiesAnn, ch, { annotation() });
@@ -621,7 +621,7 @@ private bool hasMethodOverride(RippleEffect effect, Evolution evol) {
 
 private bool isNotAbstract(RippleEffect effect, Evolution evol)
 	= !isAbstract(effect.affected, evol.client);
-	
+
 private bool existsMethodClash(RippleEffect effect, Evolution evol) {
 	loc affected = effect.affected;
 	loc changed = effect.changed;
