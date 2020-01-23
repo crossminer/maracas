@@ -30,9 +30,6 @@ rel[loc, loc] getInvExtends(M3 m) = invertRel(m.extends+);
 @memo 
 rel[loc, loc] getInvImplements(M3 m) = invertRel(m.implements+);
 
-@memo
-rel[loc, loc] getTransContainment(M3 m) = m.containment+;
-
 set[value] getM3Set(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? m[elem] : {};
 	

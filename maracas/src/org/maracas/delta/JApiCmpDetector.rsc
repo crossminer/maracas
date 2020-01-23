@@ -4,6 +4,7 @@ import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
+import org::maracas::m3::Containment;
 import org::maracas::m3::Inheritance;
 import Relation;
 import Set;
@@ -335,8 +336,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::annotat
 		fieldAccess()
 	};
 	
-	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, entities);
-	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, entities);
+	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, entities);
+	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, entities);
 	set[APIUse] apiUsesFields = { fieldAccess() };
 	
 	return computeDetections(evol, ch, apiUses)
@@ -357,13 +358,13 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNo
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowAbstract()) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
-	set[TransChangedEntity] transCons = getTransitiveConstructors(evol.apiOld, entities);
+	set[TransChangedEntity] transCons = getContainedConstructors(evol.apiOld, entities);
 	return computeDetections(evol, transCons, ch, { methodInvocation() }, isNotSuperInvocation);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classNowFinal()) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
-	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, entities);
+	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, entities);
 	return computeDetections(evol, ch, { extends() })
 		+ computeMethSymbDetections(evol, transMeths, ch, { methodOverride() }, allowShadowing = true);
 }
@@ -448,8 +449,8 @@ set[Detection] computeSuperAddedDetections(Evolution evol, rel[loc, loc] changed
 
 set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
 	rel[loc, loc] entitiesAbs = { <c, i> | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew) };
-	set[TransChangedEntity] transFields = getTransitiveFields(evol.apiOld, range(changed));
-	set[TransChangedEntity] transMeths = getTransitiveMethods(evol.apiOld, range(changed));
+	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, range(changed));
+	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, range(changed));
 	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
 
 	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
@@ -539,21 +540,6 @@ private set[Detection] computeDetections(Evolution evol, set[loc] entities, Comp
 	
 	return detects;
 }
-
-// TODO: check if these functions can be replaced by the ones offered by M3 Core
-private set[TransChangedEntity] getTransitiveEntities(M3 m, set[loc] entities, bool (loc) fun) {
-	rel[loc, loc] transContain = getTransContainment(m);
-	return { <e, c> | e <- entities, c <- transContain[e], fun(c) };
-}
-
-private set[TransChangedEntity] getTransitiveConstructors(M3 m, set[loc] entities) 
-	= getTransitiveEntities(m, entities, isConstructor);
-
-private set[TransChangedEntity] getTransitiveMethods(M3 m, set[loc] entities) 
-	= getTransitiveEntities(m, entities, isMethod);
-
-private set[TransChangedEntity] getTransitiveFields(M3 m, set[loc] entities) 
-	= getTransitiveEntities(m, entities, isField);
 
 private bool isNotSuperInvocation(RippleEffect effect, Evolution evol) 
 	= !(isConstructor(effect.affected) && areInSameHierarchy(effect, evol));

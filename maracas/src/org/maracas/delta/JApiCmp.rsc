@@ -177,15 +177,15 @@ set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change)
 set[ChangedEntity] getChangedEntities(APIEntity entity) {
 	set[ChangedEntity] entities = {};
 	visit (entity) {
-	case /class(id,_,_,changes,_): 
+	case class(id, _, _, changes, _): 
 		entities = addChangedEntity(id, changes, entities);
-	case /interface(id,changes,_):
+	case interface(id, changes, _):
 		entities = addChangedEntity(id, changes, entities);
-	case /field(id,_,_,changes,_): 
+	case field(id, _, _, changes, _): 
 		entities = addChangedEntity(id, changes, entities);
-	case /method(id,_,_,changes,_): 
+	case method(id, _, _, changes, _): 
 		entities = addChangedEntity(id, changes, entities);
-	case /constructor(id,_,changes,_): 
+	case constructor(id, _, changes, _): 
 		entities = addChangedEntity(id, changes, entities);
 	}
 	return entities;
