@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool listConsExt()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/listCons()|,
+		|java+field:///main/interfaceRemoved/InterfaceRemoved/LIST|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool listConsExt()
 test bool listConsInterExt()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/listConsInter()|,
+		|java+field:///main/interfaceRemoved/IInterfaceRemoved/LIST|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool listConsInterExt()
 test bool listConsDirectExt()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/listConsDirect()|,
+		|java+field:///mainclient/interfaceRemoved/InterfaceRemovedExt/LIST|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool listConsDirectExt()
 test bool listConsTD()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedTD/listCons()|,
+		|java+field:///main/interfaceRemoved/InterfaceRemoved/LIST|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -41,6 +45,7 @@ test bool listConsTD()
 test bool listConsInterTD()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedTD/listConsInter()|,
+		|java+field:///main/interfaceRemoved/IInterfaceRemoved/LIST|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -49,6 +54,7 @@ test bool listConsInterTD()
 test bool defaultExt() 
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/defaultM()|,
+		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/defaultMeth()|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		methodInvocation(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -57,6 +63,7 @@ test bool defaultExt()
 test bool staticTD()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedTD/staticM()|,
+		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticM()|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		methodInvocation(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -65,6 +72,7 @@ test bool staticTD()
 test bool staticExt()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/staticM()|,
+		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticM()|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		methodInvocation(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))

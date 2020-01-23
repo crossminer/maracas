@@ -442,8 +442,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::supercl
 
 set[Detection] computeSuperAddedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
 	set[loc] entitiesAbs = { c | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew), abstractMeths(evol.apiNew, i) != {} };
-	entitiesAbs += { *getAbstractSubtypes(e, evol.apiNew) | loc e <- entitiesAbs };
-	return computeDetections(evol, entitiesAbs, ch, { extends(), implements() }, isNotAbstract);
+	set[TransChangedEntity] entities = { *( { e } * (getAbstractSubtypes(e, evol.apiNew) + e)) | loc e <- entitiesAbs };
+	return computeDetections(evol, entities, ch, { extends(), implements() }, isNotAbstract);
 }
 
 set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {

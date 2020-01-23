@@ -10,6 +10,7 @@ test bool extendAbs()
 	= detection(
 		|java+class:///mainclient/superclassAdded/SuperclassAddedExtAbs|,
 		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
+		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
 		extends(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
@@ -17,6 +18,7 @@ test bool extendAbs()
 test bool extendsAbsMulti()
 	= detection(
 		|java+class:///mainclient/superclassAdded/SuperclassAddedImp|,
+		|java+class:///main/superclassAdded/SuperSuperclassAddedMulti|,
 		|java+class:///main/superclassAdded/SuperSuperclassAddedMulti|,
 		extends(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
@@ -26,6 +28,7 @@ test bool extendsAbsMultiMulti()
 	= detection(
 		|java+class:///mainclient/superclassAdded/SuperclassAddedImpMulti|,
 		|java+class:///main/superclassAdded/SuperSuperclassAddedMultiMulti|,
+		|java+class:///main/superclassAdded/SuperSuperclassAddedMulti|,
 		extends(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
@@ -33,6 +36,7 @@ test bool extendsAbsMultiMulti()
 test bool concreteExt()
 	= detection(
 		|java+class:///mainclient/superclassAdded/SuperclassAddedExt|,
+		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
 		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
 		extends(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
@@ -42,6 +46,7 @@ test bool abstractExtAbs1()
 	= detection(
 		|java+class:///mainclient/superclassAdded/SuperSuperclassAddedExt|,
 		|java+interface:///main/superclassAdded/SuperSuperclassAddedMulti|,
+		|java+interface:///main/superclassAdded/SuperSuperclassAddedMulti|,
 		implements(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
 	notin detects;
@@ -49,6 +54,7 @@ test bool abstractExtAbs1()
 test bool abstractExtAbs2()
 	= detection(
 		|java+class:///mainclient/superclassAdded/AbsSuperclassAddedExtAbs|,
+		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
 		|java+class:///main/superclassAdded/SuperclassAddedAbs|,
 		extends(),
 		superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
