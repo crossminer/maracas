@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool accessSuperS()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassFA/accessSuperS()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSS()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool accessSuperS()
 test bool accessSuperSAbs()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassFA/accessSuperSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool accessSuperSAbs()
 test bool accessSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassFA/accessSuper()|,
+		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedS()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool accessSuper()
 test bool accessSuperAbs()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassFA/accessSuperAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -41,6 +45,7 @@ test bool accessSuperAbs()
 test bool callSuperSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/callSuperSMethod()|,
+		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedS()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -49,6 +54,7 @@ test bool callSuperSMethodExtSuper()
 test bool callSuperSSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/callSuperSSMethod()|,
+		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSS()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -57,6 +63,7 @@ test bool callSuperSSMethodExtSuper()
 test bool callSuperSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/callSuperSMethod()|,
+		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedS()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -65,23 +72,26 @@ test bool callSuperSMethodExtSSuper()
 test bool callSuperSSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/callSuperSSMethod()|,
+		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSS()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSS()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
+// Transitive override relations are not registered in the M3
 test bool overrideSuperSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
     
-// Transitive override relations are not registered in the M3
 test bool overrideSuperSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -91,6 +101,7 @@ test bool overrideSuperSMethodExtSSuper()
 test bool overrideSuperSSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -100,6 +111,7 @@ test bool overrideSuperSSMethodExtSuper()
 test bool overrideSuperSSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))

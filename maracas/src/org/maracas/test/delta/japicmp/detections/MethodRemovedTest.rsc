@@ -10,6 +10,7 @@ test bool simpleAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedMI/methodRemovedClient()|,
     	|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
+    	|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
     	methodInvocation(),
     	methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
@@ -18,6 +19,7 @@ test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemovedClientSuper()|,
 		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
+		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
@@ -25,6 +27,7 @@ test bool superKeyAccess()
 test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemovedClientExt()|,
+		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemoved()|,
 		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -36,6 +39,7 @@ test bool noSuperKeyAccess()
 test bool methodOverrides()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedImp/methodRemoved()|,
+		|java+method:///main/methodRemoved/IMethodRemoved/methodRemoved()|,
 		|java+method:///main/methodRemoved/IMethodRemoved/methodRemoved()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))

@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool multiInterfaceNoOverride()
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefault|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool multiInterfaceNoOverride()
 test bool multiInterfaceOverride()
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/MethodAbstractNowDefaultMultiInt|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefault|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool multiInterfaceOverride()
 test bool multiInterfaceSubNoOverride()
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefaultSub|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool multiInterfaceSubNoOverride()
 test bool multiInterfaceSubOverride() 
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/MethodAbstractNowDefaultMultiIntSub|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefaultSub|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -41,6 +45,7 @@ test bool multiInterfaceSubOverride()
 test bool singleInterfaceNoOverride() 
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultSingleInt|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefault|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -49,6 +54,7 @@ test bool singleInterfaceNoOverride()
 test bool singleInterfaceOverride() 
 	= detection(
 		|java+class:///mainclient/methodAbstractNowDefault/MethodAbstractNowDefaultSingleInt|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefault|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))
@@ -56,7 +62,8 @@ test bool singleInterfaceOverride()
 	
 test bool multiInterfaceAbsOwnDef()
 	= detection(
-		|java+class:///mainclient/methodNewDefault/MethodAbstractNowDefaultMultiIntOwnDef|,
+		|java+class:///mainclient/methodNewDefault/AbsMethodAbstractNowDefaultMultiIntOwnDef|,
+		|java+interface:///main/methodAbstractNowDefault/IMethodAbstractNowDefault|,
 		|java+method:///main/methodAbstractNowDefault/IMethodAbstractNowDefault/methodAbstractNowDef()|,
 		implements(),
 		methodAbstractNowDefault(binaryCompatibility=false,sourceCompatibility=false))

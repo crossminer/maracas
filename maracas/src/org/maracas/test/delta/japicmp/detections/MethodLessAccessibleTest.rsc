@@ -10,6 +10,7 @@ test bool simpleAccessPub2Pro()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMI/methodLessAccessiblePub2ProClientSimpleAccess()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -17,6 +18,7 @@ test bool simpleAccessPub2Pro()
 test bool simpleAccessPub2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMI/methodLessAccessiblePub2PackPrivClientSimpleAccess()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -26,6 +28,7 @@ test bool simpleAccessPub2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMI/methodLessAccessiblePub2PrivClientSimpleAccess()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -33,6 +36,7 @@ test bool simpleAccessPub2Priv()
 test bool superKeyAccessPub2Pro()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2ProClientSuperKeyAccess()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -42,6 +46,7 @@ test bool superKeyAccessPub2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PackPrivClientSuperKeyAccess()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -49,6 +54,7 @@ test bool superKeyAccessPub2PackPriv()
 test bool superKeyAccessPub2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PrivClientSuperKeyAccess()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -58,6 +64,7 @@ test bool superKeyAccessPro2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PackPrivClientSuperKeyAccess()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -65,6 +72,7 @@ test bool superKeyAccessPro2PackPriv()
 test bool superKeyAccessPro2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PrivClientSuperKeyAccess()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -77,6 +85,7 @@ test bool noSuperKeyAccessPub2Pro()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PackPrivClientNoSuperKeyAccess()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -84,6 +93,7 @@ test bool noSuperKeyAccessPub2Pro()
 test bool noSuperKeyAccessPub2PackPriv()	
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PackPrivClientNoSuperKeyAccess()|,
+		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -92,6 +102,7 @@ test bool noSuperKeyAccessPub2PackPriv()
 test bool noSuperKeyAccessPub2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PrivClientNoSuperKeyAccess()|,
+		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePublic2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -100,6 +111,7 @@ test bool noSuperKeyAccessPub2Priv()
 test bool noSuperKeyAccessPro2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PackPrivClientNoSuperKeyAccess()|,
+		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessibleProtected2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -108,6 +120,7 @@ test bool noSuperKeyAccessPro2PackPriv()
 test bool noSuperKeyAccessPro2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PrivClientNoSuperKeyAccess()|,
+		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessibleProtected2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -117,6 +130,7 @@ test bool overridePub2Pro()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessiblePublic2Protected()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Protected()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -124,6 +138,7 @@ test bool overridePub2Pro()
 test bool overridePub2PackPriv()	
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessiblePublic2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -133,6 +148,7 @@ test bool overridePub2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessiblePublic2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -140,6 +156,7 @@ test bool overridePub2Priv()
 test bool overridePro2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessibleProtected2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -149,6 +166,7 @@ test bool overridePro2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessibleProtected2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;	
@@ -156,6 +174,7 @@ test bool overridePro2Priv()
 test bool simpleAccessPub2PackPrivSamePack()
 	= detection(
 		|java+method:///main/methodLessAccessible/MethodLessAccessibleMI/clientPublic()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -165,6 +184,7 @@ test bool simpleAccessPro2PackPrivSamePack()
 	= detection(
 		|java+method:///main/methodLessAccessible/MethodLessAccessibleMI/clientProtected()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -173,6 +193,7 @@ test bool overridePub2PackPrivSamePack()
 	= detection(
 		|java+method:///main/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -180,6 +201,7 @@ test bool overridePub2PackPrivSamePack()
 test bool overridePro2PackPrivSamePack()
 	= detection(
 		|java+method:///main/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessibleProtected2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodOverride(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))

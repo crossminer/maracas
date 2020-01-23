@@ -11,6 +11,7 @@ public test bool simpleAccessObj()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticMI/methodNoLongerStaticClientObject()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -18,6 +19,7 @@ public test bool simpleAccessObj()
 public test bool simpleAccessClass()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticMI/methodNoLongerStaticClientClass()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -31,6 +33,7 @@ public test bool superKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticExt/methodNoLongerStaticSuperKeyAccess()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
@@ -38,6 +41,7 @@ public test bool superKeyAccess()
 public test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticExt/methodNoLongerStaticNoSuperKeyAccess()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -47,6 +51,7 @@ public test bool interface()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticImp/methodNoLongerStaticClient()|,
 		|java+method:///main/methodNoLongerStatic/IMethodNoLongerStatic/methodNoLongerStatic()|,
+		|java+method:///main/methodNoLongerStatic/IMethodNoLongerStatic/methodNoLongerStatic()|,
 		methodInvocation(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -55,6 +60,7 @@ test bool hideNonStaticAsStatic()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodNoLongerStatic()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
 		methodOverride(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -62,6 +68,7 @@ test bool hideNonStaticAsStatic()
 test bool hideStaticAsStatic()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodRemainsStatic()|,
+		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodRemainsStatic()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodRemainsStatic()|,
 		methodOverride(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))

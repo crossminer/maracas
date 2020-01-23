@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool implements1() 
 	= detection(
 		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceImp1|,
+		|java+interface:///main/methodAddedToInterface/IMethodAddedToInterface|,
 		|java+method:///main/methodAddedToInterface/IMethodAddedToInterface/newMethod()|,
 		implements(),
 		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool implements1()
 test bool implements2()
 	= detection(
 		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceImp2|,
+		|java+interface:///main/methodAddedToInterface/IMethodAddedToInterface|,
 		|java+method:///main/methodAddedToInterface/IMethodAddedToInterface/newMethod()|,
 		implements(),
 		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool implements2()
 test bool innerInterfaceImpl() 
 	= detection(
 		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceInnerImp$Inner|,
+		|java+interface:///main/methodAddedToInterface/IMethodAddedToInterfaceInner$I|,
 		|java+method:///main/methodAddedToInterface/IMethodAddedToInterfaceInner$I/newMethod()|,
 		implements(),
 		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool innerInterfaceImpl()
 test bool innerInterfaceExt() 
 	= detection(
 		|java+class:///mainclient/methodAddedToInterface/MethodAddedToInterfaceInnerExt$Inner|,
+		|java+interface:///main/methodAddedToInterface/MethodAddedToInterfaceInner$I|,
 		|java+method:///main/methodAddedToInterface/MethodAddedToInterfaceInner$I/newMethod()|,
 		implements(),
 		methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false))

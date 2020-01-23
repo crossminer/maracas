@@ -22,7 +22,7 @@ extend org::maracas::\test::delta::japicmp::detections::MethodNowStaticTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowThrowsCheckedExceptionTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclassTest; // Failing tests (3): overrideSuperSSMethodExtSuper, overrideSuperSSMethodExtSSuper, overrideSuperSMethodExtSuper
-extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (4): superKeyNumeric, noSuperKeyNumeric, overrideList, simpleAccessNumeric
+extend org::maracas::\test::delta::japicmp::detections::MethodReturnTypeChangedTest; // Failing tests (3): superKeyNumeric, overrideList, simpleAccessNumeric
 extend org::maracas::\test::delta::japicmp::detections::ConstructorLessAccessibleTest; // Failing tests (1): anonymousConstructorAccess
 extend org::maracas::\test::delta::japicmp::detections::ConstructorRemovedTest;
 extend org::maracas::\test::delta::japicmp::detections::ClassLessAccessibleTest; // Failing tests (1): packpriv2privExt

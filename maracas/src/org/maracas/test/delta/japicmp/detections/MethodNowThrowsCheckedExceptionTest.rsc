@@ -10,6 +10,7 @@ test bool simpleCall()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callSuperMethod()|,
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
@@ -17,6 +18,7 @@ test bool simpleCall()
 test bool simpleSubCall()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callSubtypeMethod()|,
+		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionSub/nowThrowsExcep()|,
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
@@ -26,6 +28,7 @@ test bool interfaceCall()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callInterMethod()|,
 		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
@@ -33,6 +36,7 @@ test bool interfaceCall()
 test bool callImpMethod()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callImpMethod()|,
+		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionImp/nowThrowsExcep()|,
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionImp/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
@@ -42,6 +46,7 @@ test bool callImpMethodInterface()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callImpMethod()|,
 		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	notin detects;
@@ -50,6 +55,7 @@ test bool overrideSuperMethod()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionExt/nowThrowsExcep()|,
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	notin detects;
@@ -57,6 +63,7 @@ test bool overrideSuperMethod()
 test bool overrideInterMethod()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionImp/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))

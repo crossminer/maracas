@@ -10,6 +10,7 @@ test bool protected2public()
 	= detection(
 		|java+method:///mainclient/methodMoreAccessible/MethodMoreAccessibleExt/protected2public()|,
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/protected2public()|,
+		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/protected2public()|,
 		methodOverride(),
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -17,6 +18,7 @@ test bool protected2public()
 test bool protected2publicSamePkg()
 	= detection(
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessibleExt/protected2public()|,
+		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/protected2public()|,
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/protected2public()|,
 		methodOverride(),
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -26,6 +28,7 @@ test bool pkgProtected2protectedSamePkg()
 	= detection(
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessibleExt/pkgProtected2protected()|,
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/pkgProtected2protected()|,
+		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/pkgProtected2protected()|,
 		methodOverride(),
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
@@ -33,6 +36,7 @@ test bool pkgProtected2protectedSamePkg()
 test bool pkgProtected2publicSamePkg()
 	= detection(
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessibleExt/pkgProtected2public()|,
+		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/pkgProtected2public()|,
 		|java+method:///main/methodMoreAccessible/MethodMoreAccessible/pkgProtected2public()|,
 		methodOverride(),
 		methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))

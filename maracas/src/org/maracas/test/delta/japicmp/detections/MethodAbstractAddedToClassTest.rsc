@@ -9,6 +9,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 test bool abstractMeth()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedToClass/MethodAbstractAddedToClassExt|,
+		|java+class:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass|,
 		|java+method:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass/abstractNew()|,
 		extends(),
 		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
@@ -17,6 +18,7 @@ test bool abstractMeth()
 test bool concreteMeth()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedToClass/MethodAbstractAddedToClassExt|,
+		|java+class:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass|,
 		|java+method:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass/concreteNew()|,
 		extends(),
 		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
@@ -25,6 +27,7 @@ test bool concreteMeth()
 test bool abstractSubtype()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedToClass/AbsMethodAbstractAddedToClassExt|,
+		|java+class:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass|,
 		|java+method:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass/abstractNew()|,
 		extends(),
 		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
@@ -33,6 +36,7 @@ test bool abstractSubtype()
 test bool concreteSubtype()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedToClass/ConcMethodAbstractAddedToClassExt|,
+		|java+class:///mainclient/methodAbstractAddedToClass/AbsMethodAbstractAddedToClassExt|,
 		|java+method:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass/abstractNew()|,
 		extends(),
 		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
@@ -41,6 +45,7 @@ test bool concreteSubtype()
 test bool subtypeAbstractMeth()
 	= detection(
 		|java+class:///mainclient/methodAbstractAddedToClass/MethodAbstractAddedToClassSubExt|,
+		|java+class:///main/methodAbstractAddedToClass/MethodAbstractAddedToClassSub|,
 		|java+method:///main/methodAbstractAddedToClass/MethodAbstractAddedToClass/abstractNew()|,
 		extends(),
 		methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false))
