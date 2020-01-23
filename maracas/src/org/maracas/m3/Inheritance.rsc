@@ -58,7 +58,7 @@ set[loc] getHierarchyWithoutMethShadowing(loc class, str scheme, str signature, 
 	       reference of the member gicen the logical location 
 	       of a type and the member's name.
 }
-private set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3 api, M3 client, bool allowShadowing, bool includeParent) {
+set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true) {
 	set[loc] apiSubtypes = {};
 	set[loc] clientSubtypes = {};
 	
@@ -77,36 +77,6 @@ private set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3
 	}
 	return { createContainedLoc(c, scheme, elemName) | c <- apiSubtypes + clientSubtypes };
 }
-
-@doc{
-	Given a type and the name of a field within that type, 
-	the function computes all symbolic references of the 
-	method. These references are computed by gathering all 
-	subtypes of the input type that do not shadow the field. 
-	
-	@param class: logical location of parent class
-	@param fieldName: string representing the name of the
-	       field
-	@param m: M3 owning the main types and its subtypes
-}
-set[loc] createHierarchyFieldSymbRefs(loc class, str scheme, str fieldName, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
-	= createHierarchySymbRefs(class, scheme, fieldName, api, client, allowShadowing, includeParent);
-
-@doc{
-	Given a type and the signature of a method within that 
-	type, the function computes all symbolic references of
-	the method. These references are computed by gathering
-	all subtypes of the input type that do not shadow/override 
-	the method. 
-	
-	@param class: logical location of parent class
-	@param signature: string representing the signature of 
-	       the method
-	@param m: M3 owning the main types and its subtypes
-}
-set[loc] createHierarchyMethSymbRefs(loc class, str scheme, str signature, M3 api, M3 client, bool allowShadowing = false, bool includeParent = true)
-	= createHierarchySymbRefs(class, scheme, signature, api, client, allowShadowing, includeParent);
-
 
 @doc{
 	Returns a set of locations pointing to the subtypes 

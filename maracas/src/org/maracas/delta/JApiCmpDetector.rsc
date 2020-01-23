@@ -152,7 +152,7 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[loc] changed, Comp
 	for (e <- changed) {
 		str field = memberName(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbFields = createHierarchyFieldSymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, allowShadowing = allowShadowing);
+		set[loc] symbFields = createHierarchySymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbFields;
 	}
 	
@@ -173,7 +173,7 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity
 		for (loc e <- transChanged) {
 			str field = memberName(e);
 			loc parent = parentType(evol.apiOld, e);
-			set[loc] symbFields = createHierarchyFieldSymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, includeParent = includeParent);
+			set[loc] symbFields = createHierarchySymbRefs(parent, e.scheme, field, evol.apiOld, evol.client, includeParent = includeParent);
 			entities += { used } * symbFields;
 		}
 	}
@@ -291,7 +291,7 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, Compa
 	for (e <- changed) {
 		str signature = methodSignature(e);
 		loc parent = parentType(evol.apiOld, e);
-		set[loc] symbMeths = createHierarchyMethSymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
+		set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing);
 		entities += { e } * symbMeths;
 	}
 	
@@ -311,7 +311,7 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity]
 		for (loc e <- transChanged) {
 			str signature = methodSignature(e);
 			loc parent = parentType(evol.apiOld, e);
-			set[loc] symbMeths = createHierarchyMethSymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
+			set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
 			entities += { used } * symbMeths;
 		}
 	}
@@ -417,25 +417,21 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 		+ computeDetections(evol, entitiesAnn, ch, { annotation() });
 }
 
-// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceRemoved()) {
 	rel[loc, loc] changed = getInterRemovedEntities(evol.delta);
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
-// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
 	rel[loc, loc] changed = getInterAddedEntities(evol.delta);
 	return computeSuperAddedDetections(evol, changed, ch);
 }
 
-// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassRemoved()) {
 	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta);
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
-// TAG
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassAdded()) {
 	rel[loc, loc] changed = getSuperAddedEntities(evol.delta);
 	return computeSuperAddedDetections(evol, changed, ch);
