@@ -13,5 +13,8 @@ public M3 m3ApiNew = createM3FromJar(apiNew);
 public M3 m3Client = createM3FromJar(client);
 
 public list[APIEntity] delta = compareJars(apiOld, apiNew, "0.0", "1.0");
-public set[Detection] detects = detections(m3Client, m3ApiOld, m3ApiNew, delta);
+public Evolution evol = createEvolution(m3Client, m3ApiOld, m3ApiNew, delta);
+public set[Detection] detects = detections(evol);
 
+public loc detectsLoc = |project://maracas/src/org/maracas/test/data/delta/detects.bin|;
+public loc evolLoc = |project://maracas/src/org/maracas/test/data/delta/evol.bin|;

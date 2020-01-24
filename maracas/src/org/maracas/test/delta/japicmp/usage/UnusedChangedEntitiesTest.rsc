@@ -1,27 +1,34 @@
 module org::maracas::\test::delta::japicmp::usage::UnusedChangedEntitiesTest
 
-import IO;
 import org::maracas::\test::delta::japicmp::SetUp;
+import org::maracas::\test::delta::japicmp::usage::Common;
+import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::delta::JApiCmpUsage;
 import Set;
 
 
-bool unusedPkg() {
-	set[loc] unused = {};
-	for (Detection d <- detects) {		
-		loc e = d.used;
-		
-		e.path = visit(e.path) {
-			case /\/main\/<n:[A-za-z0-1$\/]+>/ => "/main/unused/<n>"
+test bool sameAsBefore() 
+	= getUnusedChangedEntities(evolBin()) == getUnusedChangedEntities(evol);
+
+test bool sameSizeAsBefore() 
+	= size(getUnusedChangedEntities(evolBin())) == size(getUnusedChangedEntities(evol));
+	
+test bool unusedPkgSubset() 
+	= unusedPkg() <= getUnusedChangedEntities(evol);
+
+test bool samePerChangeTypeRefCurrent()
+	= perChangeType(evol);
+
+test bool samePerChangeTypeRefBin()
+	= perChangeType(evolBin());
+	
+private bool perChangeType(Evolution ev) {
+	set[CompatibilityChange] changes = getCompatibilityChanges(ev.delta);
+	for (CompatibilityChange c <- changes) {
+		if (getUnusedChangedEntities(evolBin(), c) != getUnusedChangedEntities(evol, c)) {
+			return false;
 		}
-		unused += e;
 	}
-	
-	println(size(unused));
-	println(size(getUnusedChangedEntities(m3Client, delta)));
-	
-	iprintln(unused - getUnusedChangedEntities(m3Client, delta));
-	
-	return unused <= getUnusedChangedEntities(m3Client, delta);
+	return true;
 }

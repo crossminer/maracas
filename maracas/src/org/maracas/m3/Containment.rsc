@@ -12,6 +12,7 @@ private rel[loc, loc] getContainedEntities(M3 m, set[loc] entities, bool (loc) f
 	return { <e, c> | loc e <- entities, loc c <- transContain[e], fun(c) };
 }
 
+
 rel[loc, loc] getContainedConstructors(M3 m, set[loc] entities) 
 	= getContainedEntities(m, entities, isConstructor);
 
@@ -20,3 +21,13 @@ rel[loc, loc] getContainedMethods(M3 m, set[loc] entities)
 
 rel[loc, loc] getContainedFields(M3 m, set[loc] entities) 
 	= getContainedEntities(m, entities, isField);
+	
+	
+rel[loc, loc] getContainedConstructors(M3 m, loc elem) 
+	= getContainedConstructors(m, { elem });
+
+rel[loc, loc] getContainedMethods(M3 m, loc elem) 
+	= getContainedMethods(m, { elem });
+
+rel[loc, loc] getContainedFields(M3 m, loc elem) 
+	= getContainedFields(m, { elem });

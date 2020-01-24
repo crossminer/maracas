@@ -209,11 +209,11 @@ set[ChangedEntity] getChangedEntities(APIEntity entity) {
 private set[ChangedEntity] addChangedEntity(loc entity, list[CompatibilityChange] changes, set[ChangedEntity] entities)
 	= { <c, entity> | c <- changes } + entities;
 	
-set[CompatibilityChange] compatibilityChanges(APIEntity entity) 
+set[CompatibilityChange] getCompatibilityChanges(APIEntity entity) 
 	= { ch | /CompatibilityChange ch := entity };
 	
-set[CompatibilityChange] compatibilityChanges(list[APIEntity] delta)
-	= { *compatibilityChanges(entity) | entity <- delta };
+set[CompatibilityChange] getCompatibilityChanges(list[APIEntity] delta)
+	= { *getCompatibilityChanges(entity) | entity <- delta };
 	
 private list[APIEntity] removeUnchangedEntities(list[APIEntity] apiEntities) {
 	list[APIEntity] result = [];

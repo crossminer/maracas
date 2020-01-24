@@ -33,7 +33,7 @@ int numberChangesPerType(list[APIEntity] delta, CompatibilityChange ch) {
 	the number of changes affecting each kind.
 }
 map[CompatibilityChange, int] numberChangesPerType(list[APIEntity] delta) {
-	set[CompatibilityChange] changes = compatibilityChanges(delta);
+	set[CompatibilityChange] changes = getCompatibilityChanges(delta);
 	return ( ch : numberChangesPerType(delta, ch) | ch <- changes );
 }
 
