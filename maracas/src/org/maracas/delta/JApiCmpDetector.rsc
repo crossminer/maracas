@@ -58,7 +58,22 @@ Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 	return evolution(client, apiOld, apiNew, delta);
 }
 
-set[Detection] detections(Evolution evol)
+// Handy method for Java foreign calls
+Evolution createEvolution (loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
+	M3 clientM3 = createM3FromJarFile(clientJar);
+	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
+	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
+
+	return createEvolution(clientM3, apiOldM3, apiNewM3, delta);
+}
+
+set[Detection] computeDetections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
+	Evolution evol = createEvolution(client, apiOld, apiNew, delta);
+	return computeDetections(evol);
+}
+
+set[Detection] computeDetections(Evolution evol)
 	= computeDetections(evol, fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -94,12 +109,6 @@ set[Detection] detections(Evolution evol)
 	+ computeDetections(evol, superclassAdded(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
-	
-
-set[Detection] detections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
-	Evolution evol = createEvolution(client, apiOld, apiNew, delta);
-	return detections(evol);
-}
 
 set[Detection] getDetectionsByChange(set[Detection] detects, CompatibilityChange change)
 	= { d | Detection d <- detects, d.change == change };
@@ -638,5 +647,5 @@ public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNew
 	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
-	return detections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));
+	return computeDetections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));
 }

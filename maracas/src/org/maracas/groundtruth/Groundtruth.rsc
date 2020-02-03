@@ -209,7 +209,7 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 								
 								println("Computing evolution models");
 								Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
-								set[Detection] detects = detections(evol); 
+								set[Detection] detects = computeDetections(evol); 
 								
 								bool hasCCDetect = false;
 								for (Detection d <- detects) {

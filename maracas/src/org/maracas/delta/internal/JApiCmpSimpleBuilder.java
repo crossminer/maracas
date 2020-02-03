@@ -80,6 +80,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type ccMethodNowStatic;
 	private final Type ccMethodNoLongerStatic;
 	private final Type ccMethodAddedToInterface;
+	private final Type ccMethodAddedToPublicClass;
 	private final Type ccMethodNowThrowsCheckedException;
 	private final Type ccMethodAbstractAddedToClass;
 	private final Type ccMethodAbstractAddedInSuperclass;
@@ -190,6 +191,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.ccMethodNowStatic = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodNowStatic");
 		this.ccMethodNoLongerStatic = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodNoLongerStatic");
 		this.ccMethodAddedToInterface = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodAddedToInterface");
+		this.ccMethodAddedToPublicClass = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodAddedToPublicClass");
 		this.ccMethodNowThrowsCheckedException = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodNowThrowsCheckedException");
 		this.ccMethodAbstractAddedToClass = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodAbstractAddedToClass");
 		this.ccMethodAbstractAddedInSuperclass = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodAbstractAddedInSuperclass");
@@ -499,6 +501,12 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	@Override
 	public IConstructor buildCCMethodAddedToInterfaceCons(CompatibilityChange common) {
 		IConstructor change = valueFactory.constructor(ccMethodAddedToInterface);
+		return apply(common, change);
+	}
+	
+	@Override
+	public IConstructor buildCCMethodAddedToPublicClassCons(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodAddedToPublicClass);
 		return apply(common, change);
 	}
 

@@ -19,7 +19,7 @@ bool generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3
 	
 	println("Computing evolution models");
 	Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
-	set[Detection] detects = detections(evol); 
+	set[Detection] detects = computeDetections(evol); 
 	
 	if (detects != {}) {
 		println("Matching detections");

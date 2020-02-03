@@ -665,6 +665,8 @@ public class JApiCmpToRascal {
 			return builder.buildCCMethodAbstractNowDefaultCons(common);
 		case METHOD_ADDED_TO_INTERFACE:
 			return builder.buildCCMethodAddedToInterfaceCons(common);
+		case METHOD_ADDED_TO_PUBLIC_CLASS:
+			return builder.buildCCMethodAddedToPublicClassCons(common);
 		case METHOD_IS_STATIC_AND_OVERRIDES_NOT_STATIC:
 			return builder.buildCCMethodIsStaticAndOverridesNotStaticCons(common);
 		case METHOD_LESS_ACCESSIBLE:

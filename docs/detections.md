@@ -125,7 +125,8 @@ detection(
 ---
 
 ## Field Now Final
-A field goes from `non-final` to `final`, thus the field value cannot be modified. Client code breaks if ther is an attempt to assign a new value to the field.
+A field goes from `non-final` to `final`, thus the field value cannot be modified. 
+Client code breaks if there is an attempt to assign a new value to the field.
 
 **Detection**
 
