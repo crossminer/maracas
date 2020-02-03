@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>com.github.siom79.japicmp</groupId>
 			<artifactId>japicmp</artifactId>
-			<version>0.14.2-maracas</version>
+			<version>0.14.4-maracas</version>
 		</dependency>
 		<dependency>
 			<groupId>io.usethesource</groupId>
