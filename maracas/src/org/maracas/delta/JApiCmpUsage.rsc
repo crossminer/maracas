@@ -18,19 +18,19 @@ set[loc] getUsedBreakingEntities(set[Detection] detects, CompatibilityChange ch)
 set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects) {
 	set[loc] entities = getChangedEntitiesLoc(evol.delta);
 	set[loc] breaking = getUsedBreakingEntities(detects);
-	return getUsedNonBreakingEntities(evol, entities, breaking);
+	set[loc] unused = getUnusedChangedEntities(evol);
+	return getUsedNonBreakingEntities(evol, entities, breaking, unused);
 }
 
 set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects, CompatibilityChange ch) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[loc] breaking = getUsedBreakingEntities(detects, ch);
-	return getUsedNonBreakingEntities(evol, entities, breaking);
+	set[loc] unused = getUnusedChangedEntities(evol, ch);
+	return getUsedNonBreakingEntities(evol, entities, breaking, unused);
 }
 
-private set[loc] getUsedNonBreakingEntities(Evolution evol, set[loc] entities, set[loc] breaking) {
-	set[loc] nonBreaking = entities - breaking;
-	return { e | loc e <- nonBreaking, isUsed(e, evol) };
-}
+private set[loc] getUsedNonBreakingEntities(Evolution evol, set[loc] entities, set[loc] breaking, set[loc] unused) 
+	= entities - breaking - unused;
 
 
 set[loc] getUnusedChangedEntities(Evolution evol) {
