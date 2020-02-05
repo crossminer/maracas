@@ -293,7 +293,7 @@ M3 filterXM3WithExcpetions(M3 m, set[loc] elems, set[loc] excep)
  * does not hold
  */
 M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
-	m3Filtered = lang::java::m3::Core::m3(m.id);
+	m3Filtered = M3(m.id);
 
 	map[str, value] kws = getKeywordParameters(m);
 	for (str relName <- kws) {

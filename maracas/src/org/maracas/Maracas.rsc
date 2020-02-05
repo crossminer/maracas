@@ -6,6 +6,7 @@ import org::maracas::delta::Delta;
 import org::maracas::delta::DeltaBuilder;
 import org::maracas::delta::Detector;
 import org::maracas::delta::Migration;
+import org::maracas::m3::Core;
 import ValueIO;
 
 
