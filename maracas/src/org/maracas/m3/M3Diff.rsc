@@ -1,6 +1,7 @@
 module org::maracas::m3::M3Diff
 
 import lang::java::m3::Core;
+import org::maracas::m3::Core;
 import Relation;
 import Set;
 
