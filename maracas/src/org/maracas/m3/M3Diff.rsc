@@ -40,7 +40,7 @@ private set[loc] m3DiffDecls(M3 target, M3 rest)
 	= domain(target.declarations) - domain(rest.declarations);
 
 public int countAdditions(loc from, loc to) =
-	size(m3AddedDecls(createM3FromJar(from), createM3FromJar(to)));
+	size(m3AddedDecls(createM3FromJarCached(from), createM3FromJarCached(to)));
 
 public int countRemovals(loc from, loc to) =
-	size(m3RemovedDecls(createM3FromJar(from), createM3FromJar(to)));
+	size(m3RemovedDecls(createM3FromJarCached(from), createM3FromJarCached(to)));

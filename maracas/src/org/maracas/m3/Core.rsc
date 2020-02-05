@@ -105,7 +105,7 @@ bool isTargetMember(loc elem)
 @memo
 M3 createM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
 	//M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
-	M3 m = createM3FromJar(project);
+	M3 m = createM3FromJarCached(project);
 	return fillDefaultVisibility(filterAnonymousClasses(m));
 }
 
@@ -170,9 +170,12 @@ loc jarLocToSourceLoc(loc l) {
 }
 
 @memo
-M3 createM3FromDirectoryCached(loc directory) {
-	return createM3FromDirectory(directory);
-}
+M3 createM3FromDirectoryCached(loc directory)
+	= createM3FromDirectory(directory);
+
+@memo
+M3 createM3FromJarCached(loc jar)
+	= createM3FromJar(jar);
 
 str sourceCode(loc jarLocation, loc logical) {
 	if (logical == |unknown:///|)

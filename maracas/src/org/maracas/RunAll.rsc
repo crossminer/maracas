@@ -11,6 +11,7 @@ import org::maracas::Maracas;
 import org::maracas::delta::Delta;
 import org::maracas::delta::Migration;
 import org::maracas::delta::vis::Visualizer;
+import org::maracas::m3::Core;
 import lang::java::m3::Core;
 import org::maracas::delta::Detector;
 
@@ -39,7 +40,7 @@ void runAll(loc libv1, loc libv2, loc clients, loc report, bool serializeDelta, 
 		i = i + 1;
 		println("[<i>/<count>] Computing detection model for <client>... ");
 
-		M3 m3 = createM3FromJar(client);	
+		M3 m3 = createM3FromJarCached(client);	
 		set[Detection] detects = detections(m3, d);
 
 		if (size(detects) > 0)
@@ -128,7 +129,7 @@ bool storeDelta(loc m3OldAPI, loc m3NewAPI, loc delt) {
 
 bool storeM3(loc projectJar, loc projectM3) {
 	try {
-		M3 m = createM3FromJar(projectJar);
+		M3 m = createM3FromJarCached(projectJar);
 		writeBinaryValueFile(projectM3, m);
 		return true;
 	}

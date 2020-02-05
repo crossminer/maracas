@@ -8,6 +8,7 @@ import org::maracas::RunAll;
 import org::maracas::delta::Detector;
 import org::maracas::delta::Delta;
 import org::maracas::delta::vis::Visualizer;
+import org::maracas::m3::Core;
 import ValueIO;
 import ParseTree;
 
@@ -90,7 +91,7 @@ void myRunAll(loc libs=|file:///Users/ochoa/Documents/cwi/crossminer/data/api-mi
 								i = i + 1;
 								println("[<i>/<count>] Computing detection model for <client>... ");
 						
-								M3 m = createM3FromJar(client);	
+								M3 m = createM3FromJarCached(client);	
 								set[Detection] detects = detections(m, d);
 								
 								if (size(detects) > 0)

@@ -10,7 +10,7 @@ import ValueIO;
 
 
 Delta delta(loc oldAPI, loc newAPI) 
-	= createDelta(createM3FromJar(oldAPI), createM3FromJar(newAPI));
+	= createDelta(createM3FromJarCached(oldAPI), createM3FromJarCached(newAPI));
 
 Delta delta(M3 oldAPI, M3 newAPI) 
 	= createDelta(oldAPI, newAPI);
@@ -25,7 +25,7 @@ Delta fieldDelta(Delta delta)
 	= getFieldDelta(delta);
 
 set[Detection] detections(loc oldClient, Delta delta) 
-	= detections(createM3FromJar(oldClient), delta);
+	= detections(createM3FromJarCached(oldClient), delta);
 
 set[Detection] detections(M3 oldClient, Delta delta) 
 	= detections(oldClient, delta);

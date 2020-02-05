@@ -60,9 +60,9 @@ Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 
 // Handy method for Java foreign calls
 Evolution createEvolution (loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
-	M3 clientM3 = createM3FromJarFile(clientJar);
-	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
-	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	M3 clientM3 = createM3FromJarCached(clientJar);
+	M3 apiOldM3 = createM3FromJarCached(apiOldJar);
+	M3 apiNewM3 = createM3FromJarCached(apiNewJar);
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
 	return createEvolution(clientM3, apiOldM3, apiNewM3, delta);
@@ -642,9 +642,9 @@ private bool hasSameMethod(M3 m, loc class, loc meth) {
 
 // Handy method for Java foreign calls
 public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
-	M3 clientM3 = createM3FromJarFile(clientJar);
-	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
-	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	M3 clientM3 = createM3FromJarCached(clientJar);
+	M3 apiOldM3 = createM3FromJarCached(apiOldJar);
+	M3 apiNewM3 = createM3FromJarCached(apiNewJar);
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
 	return computeDetections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));
