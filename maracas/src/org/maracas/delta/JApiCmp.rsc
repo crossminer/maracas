@@ -5,10 +5,13 @@ import lang::java::m3::AST;
 import Node;
 import Relation;
 import Set;
+import ValueIO;
+
 
 data APIEntity
 	= class(
 		loc classId, 
+		list[loc] annonStability,
 	    EntityType classType, 
 	    list[APIEntity] classEntities,
 	    list[CompatibilityChange] classChanges,
@@ -19,18 +22,21 @@ data APIEntity
 		APISimpleChange interChange) 
 	| field(
 		loc fieldName, // TODO: is it align with m3 names?
+		list[loc] annonStability,
 		EntityType fieldType,
 		list[APIEntity] fieldEntities, 
 		list[CompatibilityChange] fieldChanges,
 		APISimpleChange fieldChange)
 	| method(
 		loc methId,
+		list[loc] annonStability,
 		EntityType returnType,
 		list[APIEntity] methEntities,
 		list[CompatibilityChange] methChanges,
 		APISimpleChange methChange)
 	| constructor(
 		loc consId,
+		list[loc] annonStability,
 		list[APIEntity] consEntities,
 		list[CompatibilityChange] consChanges,
 		APISimpleChange consChange)
@@ -143,6 +149,9 @@ alias ChangedEntity
 @javaClass{org.maracas.delta.internal.JApiCmp}
 @reflect{for debugging}
 java list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []);
+
+list[APIEntity] readBinaryDelta(loc delta)
+	= readBinaryValueFile(#list[APIEntity], delta);
 
 @doc {
 	Returns a relation mapping API entities that have been

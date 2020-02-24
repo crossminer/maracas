@@ -12,11 +12,11 @@ import io.usethesource.vallang.type.Type;
 
 public interface JApiCmpBuilder {
 
-	IConstructor buildApiEntityClassCons(ISourceLocation id, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityClassCons(ISourceLocation id, IList annonStability, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityInterfaceCons(ISourceLocation id, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityFieldCons(ISourceLocation id, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityMethodCons(ISourceLocation id, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityFieldCons(ISourceLocation id, IList annonStability, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityMethodCons(ISourceLocation id, IList annonStability, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList annonStability, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationCons(ISourceLocation id, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationElementCons(IString name, IConstructor apiChange);
 	IConstructor buildApiEntityExceptionCons(ISourceLocation id, IBool checkedException, IConstructor apiChange);

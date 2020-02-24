@@ -144,11 +144,11 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.modifierADT = typeFactory.abstractDataType(typeStore, "Modifier");
 		
 		// Constructors
-		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityClass = typeFactory.constructor(typeStore, apiEntityADT, "class", typeFactory.sourceLocationType(), typeFactory.listType(typeFactory.sourceLocationType()), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
 		this.apiEntityInterface = typeFactory.constructor(typeStore, apiEntityADT, "interface", typeFactory.sourceLocationType(), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.sourceLocationType(), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
-		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.sourceLocationType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityField = typeFactory.constructor(typeStore, apiEntityADT, "field", typeFactory.sourceLocationType(), typeFactory.listType(typeFactory.sourceLocationType()), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityMethod = typeFactory.constructor(typeStore, apiEntityADT, "method", typeFactory.sourceLocationType(), typeFactory.listType(typeFactory.sourceLocationType()), entityTypeADT, typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
+		this.apiEntityConstructor = typeFactory.constructor(typeStore, apiEntityADT, "constructor", typeFactory.sourceLocationType(), typeFactory.listType(typeFactory.sourceLocationType()), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
 		this.apiEntityAnnotation = typeFactory.constructor(typeStore, apiEntityADT, "annotation", typeFactory.sourceLocationType(), typeFactory.listType(apiEntityADT), typeFactory.listType(compatibilityChangeADT), apiSimpleChangeADT);
 		this.apiEntityAnnotationElement = typeFactory.constructor(typeStore, apiEntityADT, "annotationElement", typeFactory.stringType(), apiChangeADT);
 		this.apiEntityException = typeFactory.constructor(typeStore, apiEntityADT, "exception", typeFactory.sourceLocationType(), typeFactory.boolType(), apiSimpleChangeADT);
@@ -231,9 +231,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityClassCons(ISourceLocation id, IConstructor type, IList entities,
+	public IConstructor buildApiEntityClassCons(ISourceLocation id, IList annonStability, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityClass, id, type, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityClass, id, annonStability, type, entities, changes, apiChange);
 	}
 
 	@Override
@@ -242,21 +242,21 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityFieldCons(ISourceLocation id, IConstructor type, IList entities,
+	public IConstructor buildApiEntityFieldCons(ISourceLocation id, IList annonStability, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityField, id, type, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityField, id, annonStability, type, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityMethodCons(ISourceLocation id, IConstructor returnType, IList entities,
+	public IConstructor buildApiEntityMethodCons(ISourceLocation id, IList annonStability, IConstructor returnType, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityMethod, id, returnType, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityMethod, id, annonStability, returnType, entities, changes, apiChange);
 	}
 
 	@Override
-	public IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList entities, IList changes,
+	public IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList annonStability, IList entities, IList changes,
 			IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityConstructor, id, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityConstructor, id, annonStability, entities, changes, apiChange);
 	}
 
 	@Override
