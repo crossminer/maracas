@@ -2,8 +2,10 @@ module org::maracas::measure::delta::Evolution
 
 import IO;
 import List;
-import org::maracas::delta::JApiCmp;
+import Node;
 
+import org::maracas::delta::JApiCmp;
+import org::maracas::m3::M3Diff;
 
 @doc {
 	Returns the number of changes in the whole delta.
@@ -126,3 +128,26 @@ map[str, int] numberEntityChanges(list[APIEntity] delta)
 		"Method" : numberMethodChanges(delta),
 		"Field" : numberFieldChanges(delta)
 	);
+
+@doc{
+	Simple handy function that summarizes all delta stats.
+	Though ugly, it makes invoking from Java much easier.
+}
+map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	map[CompatibilityChange, int] bcs = numberChangesPerType(delta);
+	map[str, value] stats = ( getName(c) : bcs[c] | c <- bcs );
+
+	stats["delta"]          = delta;
+	stats["bcs"]            = numberChanges(delta);
+	stats["changedTypes"]   = numberChangedTypes(delta);
+	stats["changedMethods"] = numberChangedMethods(delta);
+	stats["changedFields"]  = numberChangedFields(delta);
+	stats["typeChanges"]    = numberTypeChanges(delta);
+	stats["methodChanges"]  = numberMethodChanges(delta);
+	stats["fieldChanges"]   = numberFieldChanges(delta);
+	stats["additions"]      = countAdditions(oldJar, newJar);
+	stats["removals"]       = countRemovals(oldJar, newJar);
+
+	return stats;
+}
