@@ -12,6 +12,7 @@ import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.IList;
 import io.usethesource.vallang.IListWriter;
+import io.usethesource.vallang.ISet;
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValue;
@@ -212,7 +213,7 @@ public class JApiCmpToRascal {
 		IList changes = translateCompatibilityChanges(clas.getCompatibilityChanges()); 
 		IConstructor apiChange = simpleChanges.get(clas.getChangeStatus().name());
 		
-		return builder.buildApiEntityClassCons(id, emptyList(), classType, entities, changes, apiChange);
+		return builder.buildApiEntityClassCons(id, emptySet(), classType, entities, changes, apiChange);
 	}
 	
 	/**
@@ -328,7 +329,7 @@ public class JApiCmpToRascal {
 		IList changes = translateCompatibilityChanges(cons.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(cons.getChangeStatus().name());
 		
-		return builder.buildApiEntityConstructorCons(id, emptyList(), entities, changes, apiChange);
+		return builder.buildApiEntityConstructorCons(id, emptySet(), entities, changes, apiChange);
 	}
 
 	/**
@@ -360,7 +361,7 @@ public class JApiCmpToRascal {
 		IList changes = translateCompatibilityChanges(method.getCompatibilityChanges());
 		IConstructor apiChange = simpleChanges.get(method.getChangeStatus().name());
 		
-		return builder.buildApiEntityMethodCons(id, emptyList(), returnType, entities, changes, apiChange);
+		return builder.buildApiEntityMethodCons(id, emptySet(), returnType, entities, changes, apiChange);
 	}
 
 	/**
@@ -457,7 +458,7 @@ public class JApiCmpToRascal {
 		IList changes = translateCompatibilityChanges(field.getCompatibilityChanges()); 
 		IConstructor apiChange = simpleChanges.get(field.getChangeStatus().name());;
 		
-		return builder.buildApiEntityFieldCons(id, emptyList(), fieldType, entities, changes, apiChange);
+		return builder.buildApiEntityFieldCons(id, emptySet(), fieldType, entities, changes, apiChange);
 	}
 
 	/**
@@ -598,8 +599,8 @@ public class JApiCmpToRascal {
 		return changesWriter.done(); 
 	}
 	
-	private IList emptyList() {
-		return valueFactory.list();
+	private ISet emptySet() {
+		return valueFactory.set();
 	}
 	/**
 	 * Translates a {@link japicmp.model.JApiCompatibilityChange} to a 

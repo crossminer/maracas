@@ -4,6 +4,7 @@ import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
 import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
+import io.usethesource.vallang.ISet;
 import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValue;
@@ -12,11 +13,11 @@ import io.usethesource.vallang.type.Type;
 
 public interface JApiCmpBuilder {
 
-	IConstructor buildApiEntityClassCons(ISourceLocation id, IList annonStability, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityClassCons(ISourceLocation id, ISet annonStability, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityInterfaceCons(ISourceLocation id, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityFieldCons(ISourceLocation id, IList annonStability, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityMethodCons(ISourceLocation id, IList annonStability, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
-	IConstructor buildApiEntityConstructorCons(ISourceLocation id, IList annonStability, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityFieldCons(ISourceLocation id, ISet annonStability, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityMethodCons(ISourceLocation id, ISet annonStability, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityConstructorCons(ISourceLocation id, ISet annonStability, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationCons(ISourceLocation id, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityAnnotationElementCons(IString name, IConstructor apiChange);
 	IConstructor buildApiEntityExceptionCons(ISourceLocation id, IBool checkedException, IConstructor apiChange);

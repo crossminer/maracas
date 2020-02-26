@@ -20,7 +20,7 @@ public class JApiCmp {
 		this.valueFactory = valueFactory;
 	}
 	
-	public IList compareJars(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion, IList oldCP, IList newCP, IEvaluatorContext eval) {
+	public IList compareJapi(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion, IList oldCP, IList newCP, IEvaluatorContext eval) {
 		initializeJApiCmpToRascal(eval);
 		return japicmpToRascal.compare(oldJar, newJar, oldVersion, newVersion, oldCP, newCP);
 	}
