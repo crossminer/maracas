@@ -6,6 +6,7 @@ import lang::java::m3::Core;
 import Node;
 import Relation;
 import Set;
+import String;
 import ValueIO;
 
 
@@ -193,8 +194,23 @@ list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 
 private set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 	set[loc] annonsEnt = apiOld.annotations[entity];
-	return { ann | loc ann <- annonsEnt, ann in annons };
+	return { ann | loc ann <- annonsEnt, ann in annons || containsUnstableKeyword(ann) };
 }
+
+private bool containsUnstableKeyword(loc annon) {
+	set[loc] keywords = readUnstableKeywords();
+	str annonPath = toLowerCase(annon.path);
+	
+	if (String k <- keywords, contains(annonPath, k)) {
+		return true;
+	}
+	return false;
+}
+
+@javaClass{org.maracas.delta.internal.JApiCmp}
+@reflect{for debugging}
+@memo
+java set[str] readUnstableKeywords();
 
 list[APIEntity] readBinaryDelta(loc delta)
 	= readBinaryValueFile(#list[APIEntity], delta);
