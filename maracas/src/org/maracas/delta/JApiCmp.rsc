@@ -3,11 +3,15 @@ module org::maracas::delta::JApiCmp
 import IO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
+import List;
 import Node;
 import Relation;
 import Set;
 import String;
 import ValueIO;
+
+import org::maracas::delta::JapiCmpUnstable;
+import org::maracas::io::properties::IO;
 
 
 data APIEntity
@@ -154,7 +158,6 @@ private java list[APIEntity] compareJapi(loc oldJar, loc newJar, str oldVersion,
 
 list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
 	list[APIEntity] delta = compareJapi(oldJar, newJar, oldVersion, newVersion, oldCP, newCP);
-	M3 apiOld = createM3FromJar(oldJar);
 	delta = addStabilityAnnons(delta, oldJar);
 	return delta;
 }
@@ -192,25 +195,27 @@ list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 	return deltaAnnon;
 }
 
-private set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
+set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 	set[loc] annonsEnt = apiOld.annotations[entity];
 	return { ann | loc ann <- annonsEnt, ann in annons || containsUnstableKeyword(ann) };
 }
 
 private bool containsUnstableKeyword(loc annon) {
-	set[loc] keywords = readUnstableKeywords();
+	set[str] keywords = readUnstableKeywords();
 	str annonPath = toLowerCase(annon.path);
 	
-	if (String k <- keywords, contains(annonPath, k)) {
+	if (str k <- keywords, contains(annonPath, k)) {
 		return true;
 	}
 	return false;
 }
 
-@javaClass{org.maracas.delta.internal.JApiCmp}
-@reflect{for debugging}
 @memo
-java set[str] readUnstableKeywords();
+set[str] readUnstableKeywords() {
+	map[str, str] prop = readProperties(|project://maracas/config/unstable-keywords.properties|);
+	list[str] keywords = split(",", replaceAll(prop["keywords"], " ", ""));
+	return toSet(keywords);
+}
 
 list[APIEntity] readBinaryDelta(loc delta)
 	= readBinaryValueFile(#list[APIEntity], delta);
