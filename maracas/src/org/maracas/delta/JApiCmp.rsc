@@ -169,21 +169,21 @@ list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 	
 	for (APIEntity entity <- delta) {
 		set[loc] annonsEnt = {};
-		APIEntity entityAnnon = visit (entity) {
+		APIEntity entityAnnon = top-down visit (entity) {
 			case class(id, _, a, b, c, d): {
-				annonsEnt = fetchStabilityAnnon(id, apiOld, annons);
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
 				insert class(id, annonsEnt, a, b, c, d);
 			}
 			case field(id, _, a, b, c, d): {
-				annonsEnt = fetchStabilityAnnon(id, apiOld, annons);
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
 				insert field(id, annonsEnt, a, b, c, d);
 			}
 			case method(id, _, a, b, c, d): { 
-				annonsEnt = fetchStabilityAnnon(id, apiOld, annons);
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
 				insert method(id, annonsEnt, a, b, c, d);
 			}
 			case constructor(id, _, a, b, c): {
-				annonsEnt = fetchStabilityAnnon(id, apiOld, annons);
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
 				insert constructor(id, annonsEnt, a, b, c);
 			}
 		};

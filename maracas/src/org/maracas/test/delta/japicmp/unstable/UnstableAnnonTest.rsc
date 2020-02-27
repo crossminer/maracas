@@ -10,7 +10,7 @@ import org::maracas::delta::JapiCmpUnstable;
 
 
 test bool numberUnstableDecl() 
-	= size(filterUnstableAnnon(delta)) == 6;
+	= size(filterUnstableAnnon(delta)) == 10;
 	
 test bool unstableAnnons()
 	= { |java+interface:///main/unstableAnnon/Beta|,
@@ -19,18 +19,18 @@ test bool unstableAnnons()
 
 test bool betaAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/Beta| };
-	return numberAnnonEntities(annons, 3);
+	return numberAnnonEntities(annons, 6);
 }
 
 test bool isUnstAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/IsUnstable| };
-	return numberAnnonEntities(annons, 3);
+	return numberAnnonEntities(annons, 4);
 }
 
 test bool betaAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/Beta|,
 		|java+interface:///main/unstableAnnon/IsUnstable| };
-	return numberAnnonEntities(annons, 6);
+	return numberAnnonEntities(annons, 10);
 }
 
 private bool numberAnnonEntities(set[loc] annons, int number)
