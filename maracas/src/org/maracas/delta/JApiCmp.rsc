@@ -16,53 +16,53 @@ import org::maracas::io::properties::IO;
 
 data APIEntity
 	= class(
-		loc classId,
+		loc id,
 		set[loc] annonStability,
-		EntityType classType,
-		list[APIEntity] classEntities,
-		list[CompatibilityChange] classChanges,
-		APISimpleChange classChange)
+		EntityType \entType,
+		list[APIEntity] entities,
+		list[CompatibilityChange] changes,
+		APISimpleChange change)
 	| interface(
-		loc interId, 
-		set[CompatibilityChange] interChanges,
-		APISimpleChange interChange) 
+		loc id, 
+		set[CompatibilityChange] changes2,
+		APISimpleChange change) 
 	| field(
-		loc fieldName, // TODO: is it align with m3 names?
+		loc id, // TODO: is it align with m3 names?
 		set[loc] annonStability,
-		EntityType fieldType,
-		list[APIEntity] fieldEntities, 
-		list[CompatibilityChange] fieldChanges,
-		APISimpleChange fieldChange)
+		EntityType \entType,
+		list[APIEntity] entities, 
+		list[CompatibilityChange] changes,
+		APISimpleChange change)
 	| method(
-		loc methId,
+		loc id,
 		set[loc] annonStability,
 		EntityType returnType,
-		list[APIEntity] methEntities,
-		list[CompatibilityChange] methChanges,
-		APISimpleChange methChange)
+		list[APIEntity] entities,
+		list[CompatibilityChange] changes,
+		APISimpleChange change)
 	| constructor(
-		loc consId,
+		loc id,
 		set[loc] annonStability,
-		list[APIEntity] consEntities,
-		list[CompatibilityChange] consChanges,
-		APISimpleChange consChange)
+		list[APIEntity] entities,
+		list[CompatibilityChange] changes,
+		APISimpleChange change)
 	| annotation(
-		loc annId,
-		list[APIEntity] annEntities,
-		list[CompatibilityChange] annChanges,
-		APISimpleChange annChange)
+		loc id,
+		list[APIEntity] entities,
+		list[CompatibilityChange] changes,
+		APISimpleChange change)
 	| annotationElement(
-		str annElemName, 
-		APIChange[list[str]] annElemChange)
+		str name, 
+		APIChange[list[str]] change4)
 	| exception(
-		loc excepId, 
+		loc id, 
 		bool checkedException, 
-		APISimpleChange excepChange)
+		APISimpleChange change)
 	| parameter(loc \type)
-	| modifier(APIChange[Modifier] modifChange)
+	| modifier(APIChange[Modifier] changeModif)
 	| superclass(
-		list[CompatibilityChange] superChanges,
-		APIChange[loc] superChange)
+		list[CompatibilityChange] changes,
+		APIChange[loc] changeSuper)
 	;   
 
 data APIChange[&T]
