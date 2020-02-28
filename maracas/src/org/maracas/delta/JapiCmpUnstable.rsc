@@ -8,10 +8,10 @@ list[APIEntity] filterUnstableAnnon(list[APIEntity] delta) {
 	
 	for (APIEntity entity <- delta) {		
 		visit (entity) {
-		case e:class(_, a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:field(_, a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:method(_, a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:constructor(_, a, _, _, _): filtered += (a != {}) ? e : [];
+		case e:class(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
+		case e:field(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
+		case e:method(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
+		case e:constructor(_, set[loc] a, _, _, _): filtered += (a != {}) ? e : [];
 		}
 	}
 	return filtered;

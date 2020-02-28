@@ -104,6 +104,7 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| methodAbstractAddedToClass()
 	| methodAbstractNowDefault()
 	| methodAddedToInterface()
+	| methodAddedToPublicClass()
 	| methodIsStaticAndOverridesNotStatic()
 	| methodLessAccessible()
 	| methodLessAccessibleThanInSuperclass()
