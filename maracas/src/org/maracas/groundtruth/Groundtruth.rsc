@@ -126,7 +126,7 @@ rel[loc, int, int] getDeltaStats(loc deltasDir, CompatibilityChange cc, loc clie
 			
 			for (loc l <- currentDir.ls, startsWith(l.file, "<v>")) {
 				list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], l);
-				stats += <l, numberChangesPerType(delta, cc), numberChanges(delta)> ;
+				stats += <l, numberChangesPerType(delta, cc), numberBreakingChanges(delta)> ;
 			}
 		}
 	}
@@ -175,7 +175,7 @@ void runMavenGroundtruth(loc clientsCsv = |file:///Users/ochoa/Documents/cwi/cro
 			
 			// Help, I don't know how to match a regex without having to use an if :(
 			if (/^<v1:.*>_to_<v2:.*>.delta$/ := l.file) {
-				println("Analyzing a delta containing <numberChanges(delta)> BCs [for <cc>]: <group>:<artifact>:<v1> to <v2>");
+				println("Analyzing a delta containing <numberBreakingChanges(delta)> BCs [for <cc>]: <group>:<artifact>:<v1> to <v2>");
 				
 				loc jarV1 = downloadJar(group, artifact, v1);
 				loc jarV2 = downloadJar(group, artifact, v2);
