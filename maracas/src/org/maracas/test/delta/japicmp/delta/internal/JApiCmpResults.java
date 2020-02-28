@@ -54,7 +54,7 @@ public class JApiCmpResults {
 		changes.put(JApiCompatibilityChange.FIELD_NOW_FINAL.name(), valueFactory.string("fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false)"));
 		changes.put(JApiCompatibilityChange.FIELD_NOW_STATIC.name(), valueFactory.string("fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false)"));
 		changes.put(JApiCompatibilityChange.FIELD_REMOVED.name(), valueFactory.string("methodRemoved(binaryCompatibility=false,sourceCompatibility=false)"));
-		changes.put(JApiCompatibilityChange.FIELD_REMOVED_IN_SUPERCLASS.name(), valueFactory.string("methodRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)"));
+		changes.put(JApiCompatibilityChange.FIELD_REMOVED_IN_SUPERCLASS.name(), valueFactory.string("fieldRemovedInSuperclass(binaryCompatibility=false,sourceCompatibility=false)"));
 		changes.put(JApiCompatibilityChange.FIELD_STATIC_AND_OVERRIDES_STATIC.name(), valueFactory.string("fieldStaticAndOverridesStatic(binaryCompatibility=false,sourceCompatibility=false)"));
 		changes.put(JApiCompatibilityChange.FIELD_TYPE_CHANGED.name(), valueFactory.string("fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false)"));
 		changes.put(JApiCompatibilityChange.INTERFACE_ADDED.name(), valueFactory.string("interfaceAdded(binaryCompatibility=true,sourceCompatibility=true)"));
@@ -109,6 +109,7 @@ public class JApiCmpResults {
 		return valueFactory.integer(delta.size());
 	}
 	
+	// Crappy code. Replace with proper translation
 	public IMap getChangesPerClassJApi(IString apiOld, IString apiNew, IEvaluatorContext eval) {
 		List<JApiClass> delta = compare(apiOld.getValue(), apiNew.getValue(), eval);
 		IMapWriter mw = valueFactory.mapWriter();
