@@ -7,6 +7,20 @@ import Node;
 import org::maracas::delta::JApiCmp;
 import org::maracas::m3::M3Diff;
 
+bool isBinaryCompatible(list[APIEntity] delta) {
+	for (/CompatibilityChange ch := delta)
+		if (ch.binaryCompatibility == false)
+			return false;
+	return true;
+}
+
+bool isSourceCompatible(list[APIEntity] delta) {
+	for (/CompatibilityChange ch := delta)
+		if (ch.sourceCompatibility == false)
+			return false;
+	return true;
+}
+
 @doc {
 	Returns the number of breaking changes in the whole delta.
 }
@@ -111,18 +125,20 @@ map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersio
 	map[CompatibilityChange, int] bcs = numberChangesPerType(delta);
 	map[str, value] stats = ( getName(c) : bcs[c] | c <- bcs );
 
-	stats["delta"]          = delta;
-	stats["bcs"]            = numberBreakingChanges(delta);
-	stats["changes"]        = numberChanges(delta);
-	stats["added"]          = numberAdded(delta);
-	stats["removed"]        = numberRemoved(delta);
-	stats["modified"]       = numberModified(delta);
-	stats["brokenTypes"]    = numberChangedTypes(delta);
-	stats["brokenMethods"]  = numberChangedMethods(delta);
-	stats["brokenFields"]   = numberChangedFields(delta);
-	stats["bcsOnTypes"]     = numberTypeChanges(delta);
-	stats["bcsOnMethods"]   = numberMethodChanges(delta);
-	stats["bcsOnFields"]    = numberFieldChanges(delta);
+	stats["delta"]            = delta;
+	stats["bcs"]              = numberBreakingChanges(delta);
+	stats["changes"]          = numberChanges(delta);
+	stats["added"]            = numberAdded(delta);
+	stats["removed"]          = numberRemoved(delta);
+	stats["modified"]         = numberModified(delta);
+	stats["brokenTypes"]      = numberChangedTypes(delta);
+	stats["brokenMethods"]    = numberChangedMethods(delta);
+	stats["brokenFields"]     = numberChangedFields(delta);
+	stats["bcsOnTypes"]       = numberTypeChanges(delta);
+	stats["bcsOnMethods"]     = numberMethodChanges(delta);
+	stats["bcsOnFields"]      = numberFieldChanges(delta);
+	stats["binaryCompatible"] = isBinaryCompatible(delta);
+	stats["sourceCompatible"] = isSourceCompatible(delta);
 
 	return stats;
 }
