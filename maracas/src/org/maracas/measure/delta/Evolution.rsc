@@ -122,6 +122,10 @@ map[str, int] numberEntityChanges(list[APIEntity] delta)
 }
 map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
 	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	return deltaStats(delta);
+}
+
+map[str, value] deltaStats(list[APIEntity] delta) {
 	map[CompatibilityChange, int] bcs = numberChangesPerType(delta);
 	map[str, value] stats = ( getName(c) : bcs[c] | c <- bcs );
 

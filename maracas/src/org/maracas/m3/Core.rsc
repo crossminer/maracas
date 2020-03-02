@@ -174,16 +174,12 @@ M3 createM3FromDirectoryCached(loc directory) {
 	return createM3FromDirectory(directory);
 }
 
-str sourceCode(loc jarLocation, loc logical) {
+str sourceCode(loc srcDirectory, loc logical) {
 	if (logical == |unknown:///|)
 		return "";
 
-	loc sourcesLocation = jarLocation;
-	sourcesLocation.extension = "";
-	sourcesLocation.file = sourcesLocation.file + "-sources";
-
-	if (isDirectory(sourcesLocation)) {
-		M3 sourcesM3 = createM3FromDirectoryCached(sourcesLocation);
+	if (isDirectory(srcDirectory)) {
+		M3 sourcesM3 = createM3FromDirectoryCached(srcDirectory);
 		loc sourceLoc = jarLocToSourceLoc(logical);
 		set[loc] found = sourcesM3.declarations[sourceLoc];
 
