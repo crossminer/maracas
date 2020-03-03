@@ -160,7 +160,7 @@ public class JApiCmpToRascal {
 	 */
 	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion, IList oldCP, IList newCP) {
 		Options defaultOptions = Options.newDefault();
-		defaultOptions.setAccessModifier(AccessModifier.PACKAGE_PROTECTED);
+		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
 		defaultOptions.setOutputOnlyModifications(true);
 		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
 		defaultOptions.setIgnoreMissingClasses(true);
