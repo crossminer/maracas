@@ -11,6 +11,8 @@ import util::Math;
 
 import lang::html5::DOM;
 
+import org::maracas::maven::Maven;
+
 import org::maracas::delta::JApiCmp;
 import org::maracas::measure::delta::Evolution;
 import org::maracas::delta::JapiCmpUnstable;
@@ -26,8 +28,29 @@ list[str] colors = [
 	"rgba(255, 159,  64, 0.5)"
 ];
 
-void writeReport(loc file, list[APIEntity] delta, loc srcV1, loc srcV2) {
-	writeFile(file, renderHtml(delta, srcV1, srcV2));
+void reportFromMaven(loc report, str group, str artifact, str v1, str v2) {
+	println("Building report for <group>:<artifact> (<v1> -\> <v2>)...");
+
+	if (!isDirectory(report))
+		mkDirectory(report);
+
+	println("Downloading JARs and extracting sources in <report>...");
+	loc jarV1 = downloadJar(group, artifact, v1, report);
+	loc jarV2 = downloadJar(group, artifact, v2, report);
+	loc srcJarV1 = downloadSources(group, artifact, v1, report);
+	loc srcJarV2 = downloadSources(group, artifact, v2, report);
+	loc srcV1 = extractJar(srcJarV1, report + "<v1>-extracted");
+	loc srcV2 = extractJar(srcJarV2, report + "<v2>-extracted");
+
+	println("Computing delta...");
+	list[APIEntity] delta = compareJars(jarV1, jarV2, v1, v2);
+
+	println("Writing report...");
+	writeReport(report + "Report.html", delta, srcV1, srcV2);
+}
+
+void writeReport(loc report, list[APIEntity] delta, loc srcV1, loc srcV2) {
+	writeFile(report, renderHtml(delta, srcV1, srcV2));
 }
 
 HTML5Node statsBlock(list[APIEntity] delta) {
