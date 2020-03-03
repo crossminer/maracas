@@ -1,20 +1,16 @@
 module org::maracas::delta::JapiCmpUnstable
 
+import Set;
+
 import org::maracas::delta::JApiCmp;
 
-
-list[APIEntity] filterUnstableAnnon(list[APIEntity] delta) {
-	list[APIEntity] filtered = [];
-	
-	for (APIEntity entity <- delta) {		
-		visit (entity) {
-		case e:class(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:field(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:method(_, set[loc] a, _, _, _, _): filtered += (a != {}) ? e : [];
-		case e:constructor(_, set[loc] a, _, _, _): filtered += (a != {}) ? e : [];
-		}
+list[APIEntity] filterStableAPI(list[APIEntity] delta) {
+	return visit (delta) {
+		case e:class(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case e:field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case e:method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case e:constructor(_, anns, _, _, _) => APIEntity::empty() when !isEmpty(anns)
 	}
-	return filtered;
 }
 
 set[loc] getUnstableAnnons(list[APIEntity] delta) {
