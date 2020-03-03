@@ -137,7 +137,7 @@ HTML5Node bcsBlock(list[APIEntity] delta, loc srcV1, loc srcV2) {
 
 HTML5Node sourceCodeDiv(loc srcDirectory, loc l) {
 	list[value] firstCol = [l];
-	str source = removeComments(sourceCode(srcDirectory, l));
+	str source = trim(removeComments(sourceCode(srcDirectory, l)));
 
 	if (!isEmpty(source)) {
 		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(source[..200] + (size(source) > 200 ? "\n[truncated]" : "")))];
