@@ -39,8 +39,8 @@ void reportFromMaven(loc report, str group, str artifact, str v1, str v2) {
 	loc jarV2 = downloadJar(group, artifact, v2, report);
 	loc srcJarV1 = downloadSources(group, artifact, v1, report);
 	loc srcJarV2 = downloadSources(group, artifact, v2, report);
-	loc srcV1 = extractJar(srcJarV1, report + "<v1>-extracted");
-	loc srcV2 = extractJar(srcJarV2, report + "<v2>-extracted");
+	loc srcV1 = extractJar(srcJarV1, report + "<artifact>-<v1>-extracted");
+	loc srcV2 = extractJar(srcJarV2, report + "<artifact>-<v2>-extracted");
 
 	println("Computing delta...");
 	list[APIEntity] delta = compareJars(jarV1, jarV2, v1, v2);
