@@ -186,7 +186,7 @@ str sourceCode(loc srcDirectory, loc logical) {
 		if (size(found) > 0)
 			return readFile(getOneFrom(found));
 		else
-			return "Couldn\'t find source for <logical>";
+			return "";
 	}
 
 	return "No sources available";

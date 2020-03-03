@@ -63,6 +63,7 @@ data APIEntity
 	| superclass(
 		list[CompatibilityChange] changes,
 		APIChange[loc] changeSuper)
+	| empty()
 	;   
 
 data APIChange[&T]
