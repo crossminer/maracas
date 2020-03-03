@@ -116,17 +116,17 @@ HTML5Node bcsBlock(list[APIEntity] delta, loc srcV1, loc srcV2) {
 
 	return div(
 		[
-			div(h4("<c> (<bcs[c]>)"),
+			div(h4("<getName(c)> (<bcs[c]>)"),
 				table(class("striped"),
 					thead(tr(th("Declaration"), th("Change"), th("V1"), th("V2"))),
 					tbody(
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /class(loc l, _, _, _, ch, _) := delta, c in ch ] +
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /method(loc l, _, _, _, ch, _) := delta, c in ch ] +
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /field(loc l, _, _, _, ch, _) := delta, c in ch ] +
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /interface(loc l, ch, _) := delta, c in ch ] +
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /constructor(loc l, _, _, ch, _) := delta, c in ch ] +
-						[tr(td(l.path), td(c), td(sourceCodeDiv(srcV1, l)), td(sourceCodeDiv(srcV2, l))) | /annotation(loc l, _, ch, _) := delta, c in ch ] +
-						[tr(td(super), td(c), td(), td()) | /superclass(ch, super) := delta, c in ch]
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /class(loc l, _, _, _, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /method(loc l, _, _, _, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /field(loc l, _, _, _, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /interface(loc l, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /constructor(loc l, _, _, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /annotation(loc l, _, ch, _) := delta, c in ch ] +
+						[tr(td(super), td(getName(c)), td(), td()) | /superclass(ch, super) := delta, c in ch]
 					)
 				)
 			)
@@ -135,7 +135,7 @@ HTML5Node bcsBlock(list[APIEntity] delta, loc srcV1, loc srcV2) {
 	);
 }
 
-HTML5Node sourceCodeDiv(loc srcDirectory, loc l) {
+HTML5Node sourceCodeCell(loc srcDirectory, loc l) {
 	list[value] firstCol = [l];
 	str source = trim(removeComments(sourceCode(srcDirectory, l)));
 
@@ -143,7 +143,7 @@ HTML5Node sourceCodeDiv(loc srcDirectory, loc l) {
 		firstCol += [br(), pre(class("prettyprint"), HTML5Attr::style("font-size:.75em;"), toHtml(source[..200] + (size(source) > 200 ? "\n[truncated]" : "")))];
 	}
 
-	return div(firstCol);
+	return td(firstCol);
 }
 
 // yeah ok kill me
@@ -169,8 +169,16 @@ str renderHtml(list[APIEntity] delta, loc srcV1, loc srcV2) {
 				script(src("https://cdn.jsdelivr.net/npm/chart.js@2.8.0")),
 				script(src("https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js")),
 				style("
-					.canvas-holder { width: 25%; float:left; }
+					.canvas-holder { width:25%; float:left; }
 					h3 { clear:both; }
+					.striped td, .striped th { display:inline-block;width:25%;word-wrap:break-word; }
+					pre {
+					    white-space: pre-wrap;       /* Since CSS 2.1 */
+					    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+					    white-space: -pre-wrap;      /* Opera 4-6 */
+					    white-space: -o-pre-wrap;    /* Opera 7 */
+					    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+					}
 				")
 			),
 			body(
