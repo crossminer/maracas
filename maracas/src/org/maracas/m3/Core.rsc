@@ -183,8 +183,16 @@ str sourceCode(loc srcDirectory, loc logical) {
 		loc sourceLoc = jarLocToSourceLoc(logical);
 		set[loc] found = sourcesM3.declarations[sourceLoc];
 
-		if (size(found) > 0)
-			return readFile(getOneFrom(found));
+		if (size(found) > 0) {
+			loc ret = getOneFrom(found);
+
+			if (isField(logical)) {
+				ret.offset = ret.offset - ret.begin.column;
+				ret.length = ret.length + ret.begin.column;
+			}
+
+			return readFile(ret);
+		}
 		else
 			return "";
 	}
