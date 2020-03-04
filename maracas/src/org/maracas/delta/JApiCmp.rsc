@@ -1,8 +1,5 @@
 module org::maracas::delta::JApiCmp
 
-import IO;
-import lang::java::m3::AST;
-import lang::java::m3::Core;
 import List;
 import Node;
 import Relation;
@@ -10,9 +7,10 @@ import Set;
 import String;
 import ValueIO;
 
-import org::maracas::delta::JapiCmpUnstable;
-import org::maracas::io::properties::IO;
+import lang::java::m3::AST;
+import lang::java::m3::Core;
 
+import org::maracas::io::properties::IO;
 
 data APIEntity
 	= class(
@@ -202,11 +200,20 @@ set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 	return { ann | loc ann <- annonsEnt, ann in annons || containsUnstableKeyword(ann) };
 }
 
-private bool containsUnstableKeyword(loc annon) {
-	set[str] keywords = readUnstableKeywords();
+list[APIEntity] filterStableAPI(list[APIEntity] delta) {
+	return visit (delta) {
+		case class(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case constructor(_, anns, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+	}
+}
+
+bool containsUnstableKeyword(loc annon) {
+	//set[str] keywords = readUnstableKeywords();
 	str annonPath = toLowerCase(annon.path);
 	
-	if (str k <- keywords, contains(annonPath, k)) {
+	if (str k <- unstableKeywords, contains(annonPath, k)) {
 		return true;
 	}
 	return false;
@@ -448,3 +455,6 @@ bool isPackageProtected(Modifier new)
 bool isChangedFromPublicToProtected(Modifier old, Modifier new) 
 	= old == org::maracas::delta::JApiCmp::\public() 
 	&& new == org::maracas::delta::JApiCmp::\protected();
+
+set[str] unstableKeywords =
+	{"beta", "alpha", "unstable", "experiment", "internal", "private", "protected", "removal", "evolv", "notinherit", "dev"};
