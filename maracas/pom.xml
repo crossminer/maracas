@@ -26,6 +26,9 @@
 					<include>META-INF/RASCAL.MF</include>
 				</includes>
 			</resource>
+			<resource>
+				<directory>config</directory>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
