@@ -17,6 +17,7 @@ import org::maracas::io::properties::IO;
 data APIEntity
 	= class(
 		loc id,
+		bool internal,
 		set[loc] annonStability,
 		EntityType \entType,
 		list[APIEntity] entities,
@@ -160,8 +161,32 @@ private java list[APIEntity] compareJapi(loc oldJar, loc newJar, str oldVersion,
 
 list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
 	list[APIEntity] delta = compareJapi(oldJar, newJar, oldVersion, newVersion, oldCP, newCP);
+	delta = addInternalFlag(delta);
 	delta = addStabilityAnnons(delta, oldJar);
 	return delta;
+}
+
+list[APIEntity] addInternalFlag(list[APIEntity] delta) {
+	list[APIEntity] deltaInt = [];
+	
+	for (APIEntity entity <- delta) {
+		if (class(id, _, _, _, _, _, _) := entity && isInternalAPI(id)) {
+			entity.internal = true;
+		}
+		
+		deltaInt += entity;
+	}
+	return deltaInt;
+}
+
+private bool isInternalAPI(loc elem) {
+	set[str] keywords = readUnstableKeywords();
+	str pkg = toLowerCase(elem.parent.path);
+	
+	if (str k <- keywords, contains(pkg, k)) {
+		return true;
+	}
+	return false;
 }
 
 list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {

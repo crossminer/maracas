@@ -51,6 +51,7 @@ import japicmp.model.JApiSuperclass;
 import japicmp.model.JApiType;
 import japicmp.model.StaticModifier;
 import japicmp.model.SyntheticModifier;
+import japicmp.output.Filter;
 import japicmp.output.OutputFilter;
 
 public class JApiCmpToRascal {
@@ -213,7 +214,7 @@ public class JApiCmpToRascal {
 		IList changes = translateCompatibilityChanges(clas.getCompatibilityChanges()); 
 		IConstructor apiChange = simpleChanges.get(clas.getChangeStatus().name());
 		
-		return builder.buildApiEntityClassCons(id, emptySet(), classType, entities, changes, apiChange);
+		return builder.buildApiEntityClassCons(id, valueFactory.bool(false), emptySet(), classType, entities, changes, apiChange);
 	}
 	
 	/**

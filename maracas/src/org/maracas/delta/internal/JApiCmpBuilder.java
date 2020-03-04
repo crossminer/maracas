@@ -13,7 +13,7 @@ import io.usethesource.vallang.type.Type;
 
 public interface JApiCmpBuilder {
 
-	IConstructor buildApiEntityClassCons(ISourceLocation id, ISet annonStability, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
+	IConstructor buildApiEntityClassCons(ISourceLocation id, IBool internal, ISet annonStability, IConstructor classType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityInterfaceCons(ISourceLocation id, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityFieldCons(ISourceLocation id, ISet annonStability, IConstructor fieldType, IList entities, IList changes, IConstructor apiChange);
 	IConstructor buildApiEntityMethodCons(ISourceLocation id, ISet annonStability, IConstructor returnType, IList entities, IList changes, IConstructor apiChange);

@@ -232,9 +232,9 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	}
 
 	@Override
-	public IConstructor buildApiEntityClassCons(ISourceLocation id, ISet annonStability, IConstructor type, IList entities,
+	public IConstructor buildApiEntityClassCons(ISourceLocation id, IBool internal, ISet annonStability, IConstructor type, IList entities,
 			IList changes, IConstructor apiChange) {
-		return valueFactory.constructor(apiEntityClass, id, annonStability, type, entities, changes, apiChange);
+		return valueFactory.constructor(apiEntityClass, id, internal, annonStability, type, entities, changes, apiChange);
 	}
 
 	@Override
