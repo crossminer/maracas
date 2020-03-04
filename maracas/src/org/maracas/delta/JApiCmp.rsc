@@ -177,11 +177,11 @@ list[APIEntity] addInternalFlag(list[APIEntity] delta) {
 	return deltaInt;
 }
 
-private bool isInternalAPI(loc elem) {
-	set[str] keywords = readUnstableKeywords();
+bool isInternalAPI(loc elem) {
+	//set[str] keywords = readUnstableKeywords();
 	str pkg = toLowerCase(elem.parent.path);
 	
-	if (str k <- keywords, contains(pkg, k)) {
+	if (str k <- unstableKeywords, contains(pkg, k)) {
 		return true;
 	}
 	return false;
