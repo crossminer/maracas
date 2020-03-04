@@ -15,7 +15,6 @@ import org::maracas::maven::Maven;
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::measure::delta::Evolution;
-import org::maracas::delta::JapiCmpUnstable;
 import lang::java::m3::Core;
 import org::maracas::m3::Core;
 
@@ -75,19 +74,19 @@ HTML5Node charts(list[APIEntity] delta, str suffix) {
 	list[str] broken = ["brokenTypes", "brokenMethods", "brokenFields"];
 	list[str] changes = ["added", "removed", "modified"];
 	list[str] bcs = ["bcsOnTypes", "bcsOnMethods", "bcsOnFields"];
-	list[str] bcNbc = ["bcs", "changes"];
+	list[str] bcNbc = ["bcs", "changes", "deprecated"];
 	list[str] bcTypes = [ getName(k) | k <- numberChangesPerType(delta) ];
 
 	return div(
 		div(class("chart-container"),
-			div(class("canvas-holder"), canvas(id("bc-types-<suffix>"))),
+			div(class("canvas-holder-large"), canvas(id("bc-types-<suffix>"))),
 			div(class("canvas-holder"), canvas(id("bc-nbc-<suffix>"))),
 			div(class("canvas-holder"), canvas(id("changes-<suffix>"))),
 			div(class("canvas-holder"), canvas(id("broken-<suffix>"))),
 			div(class("canvas-holder"), canvas(id("bcs-<suffix>")))
 		),
 		div(style("clear:both;")),
-		chartScript("bc-types-<suffix>", stats, bcTypes, chartType = "bar", dtLabel = "Count"),
+		chartScript("bc-types-<suffix>", stats, bcTypes),
 		chartScript("bc-nbc-<suffix>", stats, bcNbc),
 		chartScript("broken-<suffix>", stats, broken),
 		chartScript("changes-<suffix>", stats, changes),
@@ -95,7 +94,7 @@ HTML5Node charts(list[APIEntity] delta, str suffix) {
 	);
 }
 
-HTML5Node chartScript(str chartId, map[str, value] stats, list[str] keys, str chartType = "doughnut", str dtLabel = "") {
+HTML5Node chartScript(str chartId, map[str, value] stats, list[str] keys, str chartType = "bar", str dtLabel = "Count") {
 	return
 		script("
 			new Chart(document.getElementById(\'<chartId>\'), {
@@ -169,7 +168,8 @@ str renderHtml(list[APIEntity] delta, loc srcV1, loc srcV2) {
 				script(src("https://cdn.jsdelivr.net/npm/chart.js@2.8.0")),
 				script(src("https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js")),
 				style("
-					.canvas-holder { width:25%; float:left; }
+					.canvas-holder { width:20%; float:left; }
+					.canvas-holder-large { width:50%; float:left; clear:both; }
 					h3 { clear:both; }
 					.striped td, .striped th { display:inline-block;width:25%;word-wrap:break-word; }
 					pre {

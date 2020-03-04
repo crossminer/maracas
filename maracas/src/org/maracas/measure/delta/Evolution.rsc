@@ -1,12 +1,10 @@
 module org::maracas::measure::delta::Evolution
 
-import IO;
 import List;
 import Node;
 import String;
 
 import org::maracas::delta::JApiCmp;
-import org::maracas::m3::M3Diff;
 
 bool isBinaryCompatible(list[APIEntity] delta) {
 	for (/CompatibilityChange ch := delta)
@@ -35,13 +33,16 @@ int numberChanges(list[APIEntity] delta)
 	= numberAdded(delta) + numberRemoved(delta) + numberModified(delta);
 
 int numberAdded(list[APIEntity] delta)
-	= (0 | it + 1 | /APISimpleChange ch:APISimpleChange::new() := delta);
+	= (0 | it + 1 | /APISimpleChange::new() := delta);
 
 int numberRemoved(list[APIEntity] delta)
-	= (0 | it + 1 | /APISimpleChange ch:APISimpleChange::removed() := delta);
+	= (0 | it + 1 | /APISimpleChange::removed() := delta);
 
 int numberModified(list[APIEntity] delta)
-	= (0 | it + 1 | /APISimpleChange ch:APISimpleChange::modified() := delta);
+	= (0 | it + 1 | /APISimpleChange::modified() := delta);
+
+int numberDeprecated(list[APIEntity] delta)
+	= (0 | it + 1 | /CompatibilityChange::annotationDeprecatedAdded() := delta);
 
 @doc {
 	Returns the number of changes related to a given compatibility
@@ -55,7 +56,7 @@ int numberChangesPerType(list[APIEntity] delta, CompatibilityChange ch)
 	the number of changes affecting each kind.
 }
 map[CompatibilityChange, int] numberChangesPerType(list[APIEntity] delta)
-	= ( ch : numberChangesPerType(delta, ch) | ch <- getCompatibilityChanges(delta) );
+	= (ch : numberChangesPerType(delta, ch) | ch <- getCompatibilityChanges(delta));
 
 @doc {
 	Returns the number of modified types in the delta.
@@ -68,7 +69,7 @@ int numberChangedTypes(list[APIEntity] delta)
 }
 int numberChangedMethods(list[APIEntity] delta)
 	= (0 | it + 1 | /method(_, _, _, _, chs, _) := delta, chs != [])
-	+ (0 | it + 1 | /construct \or(_, _, _, chs, _) := delta, chs != []);
+	+ (0 | it + 1 | /constructor(_, _, _, chs, _) := delta, chs != []);
 
 @doc {
 	Returns the number of modified fields in the delta.
@@ -122,8 +123,18 @@ map[str, int] numberEntityChanges(list[APIEntity] delta)
 	Though ugly, it makes invoking from Java much easier.
 }
 map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return deltaStats(delta);
+}
+
+map[str, value] stableDeltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
+	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	return deltaStats(filterStableAPI(delta));
+}
+
+@memo
+list[APIEntity] computeDelta(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
+	return compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = oldCP, newCP = newCP);
 }
 
 map[str, value] deltaStats(list[APIEntity] delta) {
@@ -132,6 +143,7 @@ map[str, value] deltaStats(list[APIEntity] delta) {
 
 	stats["delta"]            = delta;
 	stats["bcs"]              = numberBreakingChanges(delta);
+	stats["deprecated"]       = numberDeprecated(delta);
 	stats["changes"]          = numberChanges(delta);
 	stats["added"]            = numberAdded(delta);
 	stats["removed"]          = numberRemoved(delta);
