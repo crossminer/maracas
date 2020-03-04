@@ -6,11 +6,10 @@ import Set;
 import org::maracas::\test::delta::japicmp::SetUp;
 import org::maracas::\test::delta::japicmp::usage::Common;
 import org::maracas::delta::JApiCmp;
-import org::maracas::delta::JapiCmpUnstable;
 
 
 test bool numberUnstableDecl() 
-	= size(filterUnstableAnnon(delta)) == 10;
+	= size(filterStableAPI(delta)) == 10;
 	
 test bool unstableAnnons()
 	= { |java+interface:///main/unstableAnnon/Beta|,
@@ -34,4 +33,4 @@ test bool betaAnnonEntities() {
 }
 
 private bool numberAnnonEntities(set[loc] annons, int number)
-	= size(filterUnstableAnnon(delta, annons)) == number;
+	= size(filterStableAPI(delta, annons)) == number;

@@ -168,8 +168,8 @@ list[APIEntity] addInternalFlag(list[APIEntity] delta) {
 	list[APIEntity] deltaInt = [];
 	
 	for (APIEntity entity <- delta) {
-		if (class(id, _, _, _, _, _, _) := entity && isInternalAPI(id)) {
-			entity.internal = true;
+		if (class(id, _, a, b, c, d, e) := entity && isInternalAPI(id)) {
+			entity = class(id, true, a, b, c, d, e);
 		}
 		
 		deltaInt += entity;
@@ -195,9 +195,9 @@ list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 	for (APIEntity entity <- delta) {
 		set[loc] annonsEnt = {};
 		APIEntity entityAnnon = top-down visit (entity) {
-			case class(id, _, a, b, c, d): {
+			case class(id, a, _, b, c, d, e): {
 				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
-				insert class(id, annonsEnt, a, b, c, d);
+				insert class(id, a, annonsEnt, b, c, d, e);
 			}
 			case field(id, _, a, b, c, d): {
 				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
@@ -290,7 +290,7 @@ set[loc] getChangedEntities(list[APIEntity] delta, CompatibilityChange change)
 set[ChangedEntity] getChangedEntities(APIEntity entity) {
 	set[ChangedEntity] entities = {};
 	visit (entity) {
-	case class(id, _, _, _, changes, _): 
+	case class(id, _, _, _, _, changes, _): 
 		entities = addChangedEntity(id, changes, entities);
 	case interface(id, changes, _):
 		entities = addChangedEntity(id, changes, entities);
@@ -348,7 +348,7 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 	
 	for (e <- apiEntities) {
 		result += visit(e) {
-			case class(i, _, t, ent, c, s) => class(i, t, removeUnchangedEntities(ent), c, s)
+			case class(i, f, _, t, ent, c, s) => class(i, f, t, removeUnchangedEntities(ent), c, s)
 			case field(i, _, t, ent, c, s) => field(i, t, removeUnchangedEntities(ent), c, s)
 			case method(i, _, t, ent, c, s) => method(i, t, removeUnchangedEntities(ent), c, s)
 			case constructor(i, _, ent, c, s) => constructor(i, removeUnchangedEntities(ent), c, s)
@@ -360,7 +360,7 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 
 APIEntity entityFromLoc(loc elem, list[APIEntity] delta) {
 	switch (delta) {
-	case /c:class(elem, _, _, _, _, _): 
+	case /c:class(elem, _, _, _, _, _, _): 
 		return c;
 	case /i:interface(elem, chs, _):
 		return i;
@@ -375,7 +375,7 @@ APIEntity entityFromLoc(loc elem, list[APIEntity] delta) {
 	}
 }
 
-tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_, _, t, _, _, _)) {
+tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_, _, _, t, _, _, _)) {
 	if (/modified(old,new) := t) {
 		return <old, new>;
 	}
@@ -392,7 +392,7 @@ rel[loc, tuple[Modifier, Modifier]] getAccessModifiers(APIEntity entity) {
 	rel[loc, tuple[Modifier, Modifier]] modifiers = {};
 	
 	visit (entity) {
-	case /class(elem, _, _, entities, _, _) : 
+	case /class(elem, _, _, _, entities, _, _) : 
 		modifiers += createAccessModifiers(elem, entities);
 	case /method(elem, _, _, entities, _, _) : 
 		modifiers += createAccessModifiers(elem, entities);
@@ -451,7 +451,7 @@ rel[loc, loc] getSuperAddedEntities(list[APIEntity] delta)
 private rel[loc, loc] getSuperEntities(APIEntity entity, bool oldSuper) {
 	rel[loc, loc] supers = {};
 	visit (entity) {
-	case /class(id, _, _, entities, _, _): 
+	case /class(id, _, _, _, entities, _, _): 
 		for (/superclass(_, modified(old, new)) := entities) {
 			supers += (oldSuper) ? <id, old> : <id, new>;
 		}
