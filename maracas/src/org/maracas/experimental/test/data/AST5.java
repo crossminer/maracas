@@ -1,4 +1,4 @@
-package org.maracas.test.data;
+package org.maracas.experimental.test.data;
 
 public class AST5 {
 	public boolean lessThan(int i, int j) {

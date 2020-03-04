@@ -51,7 +51,6 @@ import japicmp.model.JApiSuperclass;
 import japicmp.model.JApiType;
 import japicmp.model.StaticModifier;
 import japicmp.model.SyntheticModifier;
-import japicmp.output.Filter;
 import japicmp.output.OutputFilter;
 
 public class JApiCmpToRascal {

@@ -2,7 +2,6 @@ package org.maracas.delta.internal;
 
 import io.usethesource.vallang.IBool;
 import io.usethesource.vallang.IConstructor;
-import io.usethesource.vallang.IInteger;
 import io.usethesource.vallang.IList;
 import io.usethesource.vallang.ISet;
 import io.usethesource.vallang.ISourceLocation;
