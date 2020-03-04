@@ -88,13 +88,13 @@ test bool isomorphic5() = !isomorphic(ct1, ct4);
 
 
 // AST Tests
-Declaration ast1 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST1.java|, true);
-Declaration ast2 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST2.java|, true);
-Declaration ast3 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST3.java|, true);
-Declaration ast4 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST4.java|, true);
+Declaration ast1 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST1.java|, true);
+Declaration ast2 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST2.java|, true);
+Declaration ast3 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST3.java|, true);
+Declaration ast4 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST4.java|, true);
 
 private str canonStrBinFile(int ast) 
-	= readBinaryValueFile(#str, |project://maracas/src/org/maracas/test/data/| + "ast<ast>CanonStr.bin");
+	= readBinaryValueFile(#str, |project://maracas/src/org/maracas/experimental/test/data/| + "ast<ast>CanonStr.bin");
 	
 test bool canonicalStrAST1() = canonicalStr(ast1) == canonStrBinFile(1);
 test bool canonicalStrAST2() = canonicalStr(ast2) == canonStrBinFile(2);
@@ -102,7 +102,7 @@ test bool canonicalStrAST3() = canonicalStr(ast3) == canonStrBinFile(3);
 test bool canonicalStrAST4() = canonicalStr(ast4) == canonStrBinFile(4);
 
 private list[value] descendantsBinFile(int ast) 
-	= readBinaryValueFile(#list[value], |project://maracas/src/org/maracas/test/data/| + "ast<ast>Descendants.bin");
+	= readBinaryValueFile(#list[value], |project://maracas/src/org/maracas/experimental/test/data/| + "ast<ast>Descendants.bin");
 
 test bool descendantsAST1() = descendants(ast1) == descendantsBinFile(1);
 test bool descendantsAST2() = descendants(ast2) == descendantsBinFile(2);

@@ -7,11 +7,11 @@ import org::maracas::experimental::match::matcher::GumTreeMatcher;
 
 import Node;
 
-Declaration ast1 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST1.java|, true);
-Declaration ast2 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST2.java|, true);
-Declaration ast3 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST3.java|, true);
-Declaration ast4 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST4.java|, true);
-Declaration ast5 = createAstFromFile(|project://maracas/src/org/maracas/test/data/AST5.java|, true);
+Declaration ast1 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST1.java|, true);
+Declaration ast2 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST2.java|, true);
+Declaration ast3 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST3.java|, true);
+Declaration ast4 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST4.java|, true);
+Declaration ast5 = createAstFromFile(|project://maracas/src/org/maracas/experimental/test/data/AST5.java|, true);
 
 
 test bool sizeTopDownMatchAST1() = size(topDownMatch(ast1, ast4, 2)) == 1;
