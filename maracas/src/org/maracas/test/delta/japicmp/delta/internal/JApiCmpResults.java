@@ -86,7 +86,7 @@ public class JApiCmpResults {
 	
 	private List<JApiClass> compare(String apiOld, String apiNew, IEvaluatorContext eval) {
 		Options defaultOptions = Options.newDefault();
-		defaultOptions.setAccessModifier(AccessModifier.PACKAGE_PROTECTED);
+		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
 		defaultOptions.setOutputOnlyModifications(true);
 		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
 		defaultOptions.setIgnoreMissingClasses(true);
