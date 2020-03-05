@@ -81,7 +81,7 @@ detection(
 
 ## Field More Accessible
 The field is more accessible than its previous version. 
-Client types higding such fields will break if the visibility of their own declaration is lower than the API definition.
+Client types hidding such fields will break if the visibility of their own declaration is lower than the API definition.
 
 **Detection**
 

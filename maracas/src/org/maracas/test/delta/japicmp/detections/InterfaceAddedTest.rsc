@@ -23,7 +23,7 @@ test bool interImpMulti()
 		implements(),
 		interfaceAdded(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
-	
+
 // TODO: check if this something we want to keep
 test bool interImpMultiSameSrc()
 	= detection(

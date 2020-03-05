@@ -458,7 +458,7 @@ rel[loc, loc] getInterAddedEntities(list[APIEntity] delta)
 private rel[loc, loc] getInterEntities(APIEntity entity, APISimpleChange apiCh) {
 	rel[loc, loc] interfaces = {};
 	visit (entity) {
-	case /class(id, _, _, entities, _, _): 
+	case /class(id, _, _, _, entities, _, _): 
 		for (/interface(inter, _, apiCh) := entities) {
 			interfaces += <id, inter>;
 		}

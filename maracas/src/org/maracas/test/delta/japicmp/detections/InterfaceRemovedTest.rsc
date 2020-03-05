@@ -32,7 +32,7 @@ test bool listConsDirectExt()
 		fieldAccess(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
+
 test bool listConsTD()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedTD/listCons()|,

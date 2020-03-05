@@ -23,15 +23,16 @@ test bool private2protected()
 		declaration(),
 		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
-test bool private2packageprivate()
-	= detection(
-		|java+field:///mainclient/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
-		|java+field:///mainclient/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
-		|java+field:///main/fieldMoreAccessible/FieldMoreAccessible/private2packageprivate|,
-		declaration(),
-		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
+
+// Not reported by JApiCmp	
+//test bool private2packageprivate()
+//	= detection(
+//		|java+field:///mainclient/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
+//		|java+field:///mainclient/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
+//		|java+field:///main/fieldMoreAccessible/FieldMoreAccessible/private2packageprivate|,
+//		declaration(),
+//		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
+//	in detects;
 
 test bool packageprivate2public()
 	= detection(
@@ -78,14 +79,15 @@ test bool private2protectedSamePkg()
 		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-test bool private2packageprivateSamePkg()
-	= detection(
-		|java+field:///main/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
-		|java+field:///main/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
-		|java+field:///main/fieldMoreAccessible/FieldMoreAccessible/private2packageprivate|,
-		declaration(),
-		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
-    in detects;
+// Not reported by JApiCmp	
+//test bool private2packageprivateSamePkg()
+//	= detection(
+//		|java+field:///main/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
+//		|java+field:///main/fieldMoreAccessible/FieldMoreAccessibleExt/private2packageprivate|,
+//		|java+field:///main/fieldMoreAccessible/FieldMoreAccessible/private2packageprivate|,
+//		declaration(),
+//		fieldMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
+//    in detects;
 
 test bool packageprivate2publicSamePkg()
 	= detection(
