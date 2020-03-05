@@ -168,7 +168,7 @@ list[APIEntity] addInternalFlag(list[APIEntity] delta) {
 	list[APIEntity] deltaInt = [];
 	
 	for (APIEntity entity <- delta) {
-		if (class(id, _, a, b, c, d, e) := entity && isInternalAPI(id)) {
+		if (class(id, _, a, b, c, d, e) := entity && isUnstableAPI(id)) {
 			entity = class(id, true, a, b, c, d, e);
 		}
 		
@@ -177,15 +177,8 @@ list[APIEntity] addInternalFlag(list[APIEntity] delta) {
 	return deltaInt;
 }
 
-bool isInternalAPI(loc elem) {
-	//set[str] keywords = readUnstableKeywords();
-	str pkg = toLowerCase(elem.parent.path);
-	
-	if (str k <- unstableKeywords, contains(pkg, k)) {
-		return true;
-	}
-	return false;
-}
+bool isUnstableAPI(loc elem)
+	= containsKeyword(elem.parent.path, unstablePkgs);
 
 list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 	M3 apiOld = createM3FromJar(oldJar);
@@ -222,7 +215,7 @@ list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
 
 set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 	set[loc] annonsEnt = apiOld.annotations[entity];
-	return { ann | loc ann <- annonsEnt, ann in annons || containsUnstableKeyword(ann) };
+	return { ann | loc ann <- annonsEnt, ann in annons || isUnstableAnnon(ann) };
 }
 
 list[APIEntity] filterStableAPIByName(list[APIEntity] delta) 
@@ -237,11 +230,13 @@ list[APIEntity] filterStableAPI(list[APIEntity] delta) {
 	}
 }
 
-bool containsUnstableKeyword(loc annon) {
-	//set[str] keywords = readUnstableKeywords();
-	str annonPath = toLowerCase(annon.path);
+bool isUnstableAnnon(loc annon) 
+	= containsKeyword(annon.path, unstableAnnons);
+
+private bool containsKeyword(str path, set[str] keywords) {
+	str pathLow = toLowerCase(path);
 	
-	if (str k <- unstableKeywords, contains(annonPath, k)) {
+	if (str k <- keywords, contains(pathLow, k)) {
 		return true;
 	}
 	return false;
@@ -508,5 +503,8 @@ bool isChangedFromPublicToProtected(Modifier old, Modifier new)
 	= old == org::maracas::delta::JApiCmp::\public() 
 	&& new == org::maracas::delta::JApiCmp::\protected();
 
-set[str] unstableKeywords =
-	{"beta", "alpha", "unstable", "experiment", "internal", "private", "protected", "removal", "evolv", "notinherit", "dev"};
+set[str] unstableAnnons 
+	= { "beta", "alpha", "unstable", "experiment", "internal", "private", "protected", "removal", "evolv", "notinherit", "dev" };
+	
+set[str] unstablePkgs
+	= { "beta", "alpha", "unstable", "experiment", "internal", "removal", "dev", "test" };
