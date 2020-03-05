@@ -254,6 +254,30 @@ set[str] readUnstableKeywords() {
 	return toSet(keywords);
 }
 
+rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta) {
+	rel[loc, loc] unstable = {};
+	
+	for (APIEntity entity <- delta) {		
+		visit (entity) {
+		case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+		case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+		case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+		case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
+		}
+	}
+	return unstable;
+}
+
+set[loc] getUnstableAnnons(list[APIEntity] delta) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return range(unstable);
+}
+
+rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta, set[loc] annons) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return rangeR(unstable, annons);
+}
+
 list[APIEntity] readBinaryDelta(loc delta)
 	= readBinaryValueFile(#list[APIEntity], delta);
 
