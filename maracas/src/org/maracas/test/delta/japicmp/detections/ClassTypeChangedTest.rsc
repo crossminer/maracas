@@ -177,7 +177,7 @@ test bool a2cAnnMethod()
 		|java+method:///mainclient/classTypeChanged/ClassTypeChangedA2CAnn/a2cAnn()|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2C|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2C|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
     
@@ -186,7 +186,7 @@ test bool a2iAnnMethod()
 		|java+method:///mainclient/classTypeChanged/ClassTypeChangedA2IAnn/a2iAnn()|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2I|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2I|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
     
@@ -195,7 +195,7 @@ test bool a2eAnnMethod()
 		|java+method:///mainclient/classTypeChanged/ClassTypeChangedA2EAnn/a2eAnn()|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2E|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2E|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
@@ -204,7 +204,7 @@ test bool a2eAnnClass()
 		|java+class:///mainclient/classTypeChanged/ClassTypeChangedA2EAnn|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2E|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2E|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
     
@@ -213,7 +213,7 @@ test bool a2iAnnClass()
 		|java+class:///mainclient/classTypeChanged/ClassTypeChangedA2IAnn|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2I|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2I|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
     
@@ -222,6 +222,6 @@ test bool a2cAnnClass()
 		|java+class:///mainclient/classTypeChanged/ClassTypeChangedA2CAnn|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2C|,
 		|java+interface:///main/classTypeChanged/ClassTypeChangedA2C|,
-		annotation(),
+		APIUse::annotation(),
 		classTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
