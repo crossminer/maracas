@@ -52,6 +52,7 @@ import japicmp.model.JApiType;
 import japicmp.model.StaticModifier;
 import japicmp.model.SyntheticModifier;
 import japicmp.output.OutputFilter;
+import japicmp.util.Optional;
 
 public class JApiCmpToRascal {
 	
@@ -159,14 +160,9 @@ public class JApiCmpToRascal {
 	 *         (see module org::maracas::delta::JApiCmp). 
 	 */
 	public IList compare(ISourceLocation oldJar, ISourceLocation newJar, IString oldVersion, IString newVersion, IList oldCP, IList newCP) {
-		Options defaultOptions = Options.newDefault();
-		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
-		defaultOptions.setOutputOnlyModifications(true);
-		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
-		defaultOptions.setIgnoreMissingClasses(true);
-
+		Options defaultOptions = getDefaultOptions();
 		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
-
+		
 		oldCP.forEach(v -> options.getOldClassPath().add(((ISourceLocation) v).getPath()));
 		newCP.forEach(v -> options.getNewClassPath().add(((ISourceLocation) v).getPath()));
 
@@ -186,6 +182,29 @@ public class JApiCmpToRascal {
 		});
 		
 		return result.done();
+	}
+	
+	private Options getDefaultOptions() {
+		Options defaultOptions = Options.newDefault();
+		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
+		defaultOptions.setOutputOnlyModifications(true);
+		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
+		defaultOptions.setIgnoreMissingClasses(true);
+		
+		String[] excl = { "(*.)?tests(.*)?", "(*.)?test(.*)?", 
+				"@org.junit.After",
+				"@org.junit.AfterClass",
+				"@org.junit.Before",
+				"@org.junit.BeforeClass",
+				"@org.junit.Ignore",
+				"@org.junit.Test",
+				"@org.junit.runner.RunWith" };
+		
+		for (String e : excl) {
+			defaultOptions.addExcludeFromArgument(Optional.of(e), false);
+		}
+		
+		return defaultOptions;
 	}
 	
 	/**

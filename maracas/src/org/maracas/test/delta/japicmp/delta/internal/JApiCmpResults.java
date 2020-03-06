@@ -12,6 +12,7 @@ import io.usethesource.vallang.IList;
 import io.usethesource.vallang.IListWriter;
 import io.usethesource.vallang.IMap;
 import io.usethesource.vallang.IMapWriter;
+import io.usethesource.vallang.ISourceLocation;
 import io.usethesource.vallang.IString;
 import io.usethesource.vallang.IValueFactory;
 import japicmp.cli.JApiCli.ClassPathMode;
@@ -23,6 +24,7 @@ import japicmp.model.AccessModifier;
 import japicmp.model.JApiClass;
 import japicmp.model.JApiCompatibilityChange;
 import japicmp.output.OutputFilter;
+import japicmp.util.Optional;
 
 public class JApiCmpResults {
 	
@@ -85,11 +87,7 @@ public class JApiCmpResults {
 	}
 	
 	private List<JApiClass> compare(String apiOld, String apiNew, IEvaluatorContext eval) {
-		Options defaultOptions = Options.newDefault();
-		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
-		defaultOptions.setOutputOnlyModifications(true);
-		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
-		defaultOptions.setIgnoreMissingClasses(true);
+		Options defaultOptions = getDefaultOptions();
 
 		JarArchiveComparatorOptions options = JarArchiveComparatorOptions.of(defaultOptions);
 		JarArchiveComparator comparator = new JarArchiveComparator(options);
@@ -103,6 +101,30 @@ public class JApiCmpResults {
 		
 		return delta;
 	}
+	
+	private Options getDefaultOptions() {
+		Options defaultOptions = Options.newDefault();
+		defaultOptions.setAccessModifier(AccessModifier.PROTECTED);
+		defaultOptions.setOutputOnlyModifications(true);
+		defaultOptions.setClassPathMode(ClassPathMode.TWO_SEPARATE_CLASSPATHS);
+		defaultOptions.setIgnoreMissingClasses(true);
+		
+		String[] excl = { "(*.)?tests(.*)?", "(*.)?test(.*)?", 
+				"@org.junit.After",
+				"@org.junit.AfterClass",
+				"@org.junit.Before",
+				"@org.junit.BeforeClass",
+				"@org.junit.Ignore",
+				"@org.junit.Test",
+				"@org.junit.runner.RunWith" };
+		
+		for (String e : excl) {
+			defaultOptions.addExcludeFromArgument(Optional.of(e), false);
+		}
+		
+		return defaultOptions;
+	}
+	
 	
 	public IInteger getNumClasses(IString apiOld, IString apiNew, IEvaluatorContext eval) {
 		List<JApiClass> delta = compare(apiOld.getValue(), apiNew.getValue(), eval);

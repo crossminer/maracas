@@ -1,4 +1,4 @@
-module org::maracas::\test::delta::japicmp::delta::JApiCmpDeltaTest
+module org::maracas::\test::delta::japicmp::delta::CoreTest
 
 import List;
 import Map;
