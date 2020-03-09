@@ -186,7 +186,7 @@ str renderHtml(list[APIEntity] delta, loc srcV1, loc srcV2) {
 				h3("Statistics"),
 				charts(delta, "all"),
 				h3("Statistics (stable API only)"),
-				charts(filterStableAPI(delta), "stable"),
+				charts(filterStableAPIByAnnon(delta), "stable"),
 				statsBlock(delta),
 				h3("Breaking changes"),
 				bcsBlock(delta, srcV1, srcV2)

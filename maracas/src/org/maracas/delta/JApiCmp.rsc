@@ -219,16 +219,16 @@ set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 }
 
 list[APIEntity] filterStableAPIByPkg(list[APIEntity] delta) 
-	= filte(delta, bool (bool e) { return !e; });
+	= filterAPIByPkg(delta, bool (bool e) { return !e; });
 
 list[APIEntity] filterUnstableAPIByPkg(list[APIEntity] delta)
-	= filte(delta, bool (bool e) { return e; });
+	= filterAPIByPkg(delta, bool (bool e) { return e; });
 
-private list[APIEntity] filte(list[APIEntity] delta, bool(bool) predicate)
+private list[APIEntity] filterAPIByPkg(list[APIEntity] delta, bool(bool) predicate)
 	= [ entity | APIEntity entity <- delta, class(_, bool flag, _, _, _, _, _) := entity, predicate(flag) ];
 	
-list[APIEntity] filterStableAPI(list[APIEntity] delta) {
-	return visit (delta) {
+list[APIEntity] filterStableAPIByAnnon(list[APIEntity] delta) {
+	return top-down visit (delta) {
 		case class(_, _, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
 		case field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
 		case method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
@@ -255,30 +255,31 @@ set[str] readUnstableKeywords() {
 	return toSet(keywords);
 }
 
-rel[loc, loc] getAPIInUnstablePkg(list[APIEntity] delta) {
-	rel[loc, loc] unstable = {};
+set[loc] getAPIInUnstablePkg(list[APIEntity] delta) {
+	set[loc] unstable = {};
 	
-	for (APIEntity entity <- delta) {		
-		visit (entity) {
-		case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
+	for (APIENtity entity <- delta) {
+		bool isUnstable = false;
+		top-down visit (delta) {
+		case class(id, flag, anns, _, _, _, _): {
+			isUnstable = flag;
+			unstable += (isUnstable) ? id : {};
+		}
+		case field(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
+		case method(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
+		case constructor(id, anns, _, _, _): unstable += (isUnstable) ? id : {};
 		}
 	}
 	return unstable;
 }
 
 rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta) {
-	rel[loc, loc] unstable = {};
-	
-	for (APIEntity entity <- delta) {		
-		visit (entity) {
-		case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-		case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
-		}
+	rel[loc, loc] unstable = {};	
+	visit (delta) {
+	case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
 	}
 	return unstable;
 }

@@ -129,7 +129,7 @@ map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersio
 
 map[str, value] stableDeltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
 	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
-	return deltaStats(filterStableAPI(delta));
+	return deltaStats(filterStableAPIByAnnon(delta));
 }
 
 @memo
