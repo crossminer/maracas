@@ -1,6 +1,7 @@
 module org::maracas::\test::delta::japicmp::unstable::UnstablePkgTest
 
 import List;
+import Set;
 import String;
 
 import org::maracas::\test::delta::japicmp::SetUp;
@@ -9,11 +10,23 @@ import org::maracas::delta::JApiCmp;
 import org::maracas::m3::Core;
 
 
-test bool numberUnstableDecls()
+test bool numberUnstableEntities()
 	= size(filterUnstableAPIByPkg(delta)) == 14;
 
-test bool expectedPkgs() {
+test bool numberUnstableDecls()
+	= size(getAPIInUnstablePkg(delta)) == 30;
+
+test bool expectedPkgsEntities() {
 	set[loc] changed = getChangedEntitiesLoc(filterUnstableAPIByPkg(delta));
+	return expectedPkgs(changed);
+}
+
+test bool expectedPkgsDecls() {
+	set[loc] changed = getAPIInUnstablePkg(delta);
+	return expectedPkgs(changed);
+}
+
+private bool expectedPkgs(set[loc] changed) {
 	set[str] pkgs = { packag(c) | loc c <- changed };
 	set[str] pkgsExp = { "/main/unstableAnnon/", "/main/unstablePkg/" };
 	

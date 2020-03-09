@@ -9,7 +9,7 @@ import org::maracas::\test::delta::japicmp::usage::Common;
 import org::maracas::delta::JApiCmp;
 
 
-test bool numberUnstableDecl() 
+test bool numberUnstableDecls() 
 	= size(domain(getAPIWithUnstableAnnon(delta))) == 10;
 	
 test bool unstableAnnons()

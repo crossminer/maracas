@@ -258,7 +258,7 @@ set[str] readUnstableKeywords() {
 set[loc] getAPIInUnstablePkg(list[APIEntity] delta) {
 	set[loc] unstable = {};
 	
-	for (APIENtity entity <- delta) {
+	for (APIEntity entity <- delta) {
 		bool isUnstable = false;
 		top-down visit (delta) {
 		case class(id, flag, anns, _, _, _, _): {
