@@ -110,6 +110,15 @@ set[Detection] computeDetections(Evolution evol)
 	+ computeDetections(evol, superclassRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	;
 
+map[CompatibilityChange, set[Detection]] getDetectionsByChange(set[Detection] detects) {
+	map[CompatibilityChange, set[Detection]] mapDet = ();
+	for (Detection d <- detects) {
+		CompatibilityChange change = d.change;
+		mapDet += ( change : (change in mapDet) ? mapDet[change] + d : { d } );
+	}
+	return mapDet;
+}
+	
 set[Detection] getDetectionsByChange(set[Detection] detects, CompatibilityChange change)
 	= { d | Detection d <- detects, d.change == change };
 
