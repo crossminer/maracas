@@ -218,8 +218,14 @@ set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
 	return { ann | loc ann <- annonsEnt, ann in annons || isUnstableAnnon(ann) };
 }
 
-list[APIEntity] filterStableAPIByName(list[APIEntity] delta) 
-	= [ entity | APIEntity entity <- delta, class(_, flag, _, _, _, _, _) := entity, !flag ];
+list[APIEntity] filterStableAPIByPkg(list[APIEntity] delta) 
+	= filte(delta, bool (bool e) { return !e; });
+
+list[APIEntity] filterUnstableAPIByPkg(list[APIEntity] delta)
+	= filte(delta, bool (bool e) { return e; });
+
+private list[APIEntity] filte(list[APIEntity] delta, bool(bool) predicate)
+	= [ entity | APIEntity entity <- delta, class(_, bool flag, _, _, _, _, _) := entity, predicate(flag) ];
 	
 list[APIEntity] filterStableAPI(list[APIEntity] delta) {
 	return visit (delta) {
