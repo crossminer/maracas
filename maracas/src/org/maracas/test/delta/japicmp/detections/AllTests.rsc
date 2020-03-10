@@ -1,5 +1,7 @@
 module org::maracas::\test::delta::japicmp::detections::AllTests
 
+extend org::maracas::\test::delta::japicmp::detections::CoreTest;
+
 extend org::maracas::\test::delta::japicmp::detections::AnnotationDeprecatedAddedTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldLessAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::FieldMoreAccessibleTest;

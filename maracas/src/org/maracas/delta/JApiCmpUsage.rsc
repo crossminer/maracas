@@ -9,11 +9,20 @@ import org::maracas::m3::Inheritance;
 
 
 set[loc] getUsedBreakingEntities(set[Detection] detects) 
-	= { e | detection(_, _, loc e, _, _) <- detects };
+	= { d.src | Detection d <- detects };
 
 set[loc] getUsedBreakingEntities(set[Detection] detects, CompatibilityChange ch) 
-	= { e | detection(_, _, loc e, _, CompatibilityChange c) <- detects, c == ch };
+	= { d.src | Detection d <- detects, d.change == ch };
 
+map[CompatibilityChange, set[loc]] getUsedBreakingEntitiesMap(set[Detection] detects) {
+	map[CompatibilityChange, set[loc]] breaking = ();
+	for (Detection d <- detects) {
+		CompatibilityChange change = d.change;
+		breaking += ( change : (change in breaking) ? breaking[change] + d.src : { d.src });
+	}
+	return breaking;
+}
+	
 		
 set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects) {
 	set[loc] entities = getChangedEntitiesLoc(evol.delta);
@@ -29,6 +38,22 @@ set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects, Comp
 	return getUsedNonBreakingEntities(evol, entities, breaking, unused);
 }
 
+map[CompatibilityChange, set[loc]] getUsedNonBreakingEntitiesMap(Evolution evol, set[Detection] detects) {
+	map[CompatibilityChange, set[loc]] entities = getChangedEntitiesMap(evol.delta);
+	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+	map[CompatibilityChange, set[loc]] nonbreaking = ();
+	
+	for (CompatibilityChange c <- entities) {
+		set[loc] entitiesBreaking = (c in breaking) ? breaking[c] : {};
+		set[loc] entitiesUnused = (c in unused) ? unused[c] : {};
+		set[loc] entitiesNonbreaking = getUsedNonBreakingEntities(evol, entities[c], entitiesBreaking, entitiesUnused);
+		nonbreaking += (c : entitiesNonbreaking);
+	}
+	
+	return nonbreaking;
+}
+
 private set[loc] getUsedNonBreakingEntities(Evolution evol, set[loc] entities, set[loc] breaking, set[loc] unused) 
 	= entities - breaking - unused;
 
@@ -41,6 +66,18 @@ set[loc] getUnusedChangedEntities(Evolution evol) {
 set[loc] getUnusedChangedEntities(Evolution evol, CompatibilityChange ch) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);	
 	return getUnusedChangedEntities(evol, entities);
+}
+
+map[CompatibilityChange, set[loc]] getUnusedChangedEntitiesMap(Evolution evol) {
+	map[CompatibilityChange, set[loc]] changed = getChangedEntitiesMap(evol.delta);
+	map[CompatibilityChange, set[loc]] unused = ();
+	
+	for (CompatibilityChange c <- changed) {
+		set[loc] entities = changed[c];
+		set[loc] entitiesUnused = getUnusedChangedEntities(evol, entities);
+		unused += (c : entitiesUnused);	
+	}
+	return unused;
 }
 
 private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {

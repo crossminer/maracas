@@ -344,6 +344,16 @@ set[ChangedEntity] getChangedEntities(APIEntity entity) {
 	return entities;
 }
 
+map[CompatibilityChange, set[loc]] getChangedEntitiesMap(list[APIEntity] delta) {
+	set[ChangedEntity] changed = getChangedEntities(delta);
+	map[CompatibilityChange, set[loc]] changedMap = ();
+	
+	for (<CompatibilityChange c, loc e> <- changed) {
+		changedMap += ( c : (c in changedMap) ? changedMap[c] + e : { e });
+	}
+	return changedMap;
+}
+
 @doc {
 	Adds new tuples to a relation mapping API modified entities
 	to compatibility change types. These tuples map the element

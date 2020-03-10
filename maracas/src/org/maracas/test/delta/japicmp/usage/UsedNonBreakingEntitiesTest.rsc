@@ -33,3 +33,19 @@ private bool samePerChangeType(Evolution ev) {
 	}
 	return true;
 }
+
+test bool sameSizeMap() {
+	map[CompatibilityChange, set[loc]] nonbreaking = getUsedNonBreakingEntitiesMap(evol, detects);
+	set[loc] entities = { *nonbreaking[c] | CompatibilityChange c <- nonbreaking };
+	return size(entities) == size(getUsedNonBreakingEntities(evol, detects));
+}
+
+test bool mapPerChangeType() {
+	map[CompatibilityChange, set[loc]] nonbreaking = getUsedNonBreakingEntitiesMap(evol, detects);
+	for (CompatibilityChange c <- nonbreaking) {
+		if (getUsedNonBreakingEntities(evol, detects, c) != nonbreaking[c]) {
+			return false;
+		}
+	}
+	return true;
+}

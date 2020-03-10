@@ -1,4 +1,4 @@
-module org::maracas::\test::delta::japicmp::usage::UsedBreakingEntitiesTest
+ module org::maracas::\test::delta::japicmp::usage::UsedBreakingEntitiesTest
 
 import org::maracas::\test::delta::japicmp::SetUp;
 import org::maracas::\test::delta::japicmp::usage::Common;
@@ -28,6 +28,22 @@ private bool samePerChangeType(Evolution ev) {
 	set[CompatibilityChange] changes = getCompatibilityChanges(ev.delta);
 	for (CompatibilityChange c <- changes) {
 		if (getUsedBreakingEntities(detectsBin(), c) != getUsedBreakingEntities(detects, c)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+test bool sameSizeMap() {
+	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
+	set[loc] entities = { *breaking[c] | CompatibilityChange c <- breaking };
+	return size(entities) == size(getUsedBreakingEntities(detects));
+}
+
+test bool mapPerChangeType() {
+	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
+	for (CompatibilityChange c <- breaking) {
+		if (getUsedBreakingEntities(detects, c) != breaking[c]) {
 			return false;
 		}
 	}
