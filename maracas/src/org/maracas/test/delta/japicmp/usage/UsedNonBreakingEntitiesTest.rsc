@@ -9,15 +9,6 @@ import Set;
 import ValueIO;
 
 
-test bool sameAsBefore() 
-	= getUsedNonBreakingEntities(evolBin(), detectsBin()) == getUsedNonBreakingEntities(evol, detects);
-
-test bool sameSizeAsBefore() 
-	= size(getUsedNonBreakingEntities(evolBin(), detectsBin())) == size(getUsedNonBreakingEntities(evol, detects));
-
-test bool unusedPkgSubset() 
-	= !(unusedPkg() <= getUsedNonBreakingEntities(evol, detects));
-	
 test bool samePerChangeTypeRefCurrent()
 	= samePerChangeType(evol);
 
@@ -32,12 +23,6 @@ private bool samePerChangeType(Evolution ev) {
 		}
 	}
 	return true;
-}
-
-test bool sameSizeMap() {
-	map[CompatibilityChange, set[loc]] nonbreaking = getUsedNonBreakingEntitiesMap(evol, detects);
-	set[loc] entities = { *nonbreaking[c] | CompatibilityChange c <- nonbreaking };
-	return size(entities) == size(getUsedNonBreakingEntities(evol, detects));
 }
 
 test bool mapPerChangeType() {

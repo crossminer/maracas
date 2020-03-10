@@ -22,14 +22,6 @@ map[CompatibilityChange, set[loc]] getUsedBreakingEntitiesMap(set[Detection] det
 	}
 	return breaking;
 }
-	
-		
-set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects) {
-	set[loc] entities = getChangedEntitiesLoc(evol.delta);
-	set[loc] breaking = getUsedBreakingEntities(detects);
-	set[loc] unused = getUnusedChangedEntities(evol);
-	return getUsedNonBreakingEntities(evol, entities, breaking, unused);
-}
 
 set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects, CompatibilityChange ch) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
