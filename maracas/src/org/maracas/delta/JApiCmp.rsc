@@ -10,7 +10,9 @@ import ValueIO;
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 
+import org::maracas::delta::JApiCmpStability;
 import org::maracas::io::properties::IO;
+
 
 data APIEntity
 	= class(
@@ -153,6 +155,11 @@ data Modifier
 alias ChangedEntity 
 	= tuple[CompatibilityChange change, loc elem];
 
+
+//----------------------------------------------
+// Core
+//----------------------------------------------
+
 @javaClass{org.maracas.delta.internal.JApiCmp}
 @reflect{for debugging}
 private java list[APIEntity] compareJapi(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP, list[loc] newCP);
@@ -162,136 +169,6 @@ list[APIEntity] compareJars(loc oldJar, loc newJar, str oldVersion, str newVersi
 	delta = addInternalFlag(delta);
 	delta = addStabilityAnnons(delta, oldJar);
 	return delta;
-}
-
-list[APIEntity] addInternalFlag(list[APIEntity] delta) {
-	list[APIEntity] deltaInt = [];
-	
-	for (APIEntity entity <- delta) {
-		if (class(id, _, a, b, c, d, e) := entity && isUnstableAPI(id)) {
-			entity = class(id, true, a, b, c, d, e);
-		}
-		
-		deltaInt += entity;
-	}
-	return deltaInt;
-}
-
-bool isUnstableAPI(loc elem)
-	= containsKeyword(elem.parent.path, unstablePkgs);
-
-list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
-	M3 apiOld = createM3FromJar(oldJar);
-	list[APIEntity] deltaAnnon = [];
-	set[loc] annons = {};
-	
-	for (APIEntity entity <- delta) {
-		set[loc] annonsEnt = {};
-		APIEntity entityAnnon = top-down visit (entity) {
-			case class(id, a, _, b, c, d, e): {
-				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
-				insert class(id, a, annonsEnt, b, c, d, e);
-			}
-			case field(id, _, a, b, c, d): {
-				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
-				insert field(id, annonsEnt, a, b, c, d);
-			}
-			case method(id, _, a, b, c, d): { 
-				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
-				insert method(id, annonsEnt, a, b, c, d);
-			}
-			case constructor(id, _, a, b, c): {
-				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
-				insert constructor(id, annonsEnt, a, b, c);
-			}
-		};
-			
-		annons += annonsEnt;
-		deltaAnnon += entityAnnon;
-	}
-	
-	return deltaAnnon;
-}
-
-set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
-	set[loc] annonsEnt = apiOld.annotations[entity];
-	return { ann | loc ann <- annonsEnt, ann in annons || isUnstableAnnon(ann) };
-}
-
-list[APIEntity] filterStableAPIByPkg(list[APIEntity] delta) 
-	= filterAPIByPkg(delta, bool (bool e) { return !e; });
-
-list[APIEntity] filterUnstableAPIByPkg(list[APIEntity] delta)
-	= filterAPIByPkg(delta, bool (bool e) { return e; });
-
-private list[APIEntity] filterAPIByPkg(list[APIEntity] delta, bool(bool) predicate)
-	= [ entity | APIEntity entity <- delta, class(_, bool flag, _, _, _, _, _) := entity, predicate(flag) ];
-	
-list[APIEntity] filterStableAPIByAnnon(list[APIEntity] delta) {
-	return top-down visit (delta) {
-		case class(_, _, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
-		case field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
-		case method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
-		case constructor(_, anns, _, _, _) => APIEntity::empty() when !isEmpty(anns)
-	}
-}
-
-bool isUnstableAnnon(loc annon) 
-	= containsKeyword(annon.path, unstableAnnons);
-
-private bool containsKeyword(str path, set[str] keywords) {
-	str pathLow = toLowerCase(path);
-	
-	if (str k <- keywords, contains(pathLow, k)) {
-		return true;
-	}
-	return false;
-}
-
-@memo
-set[str] readUnstableKeywords() {
-	map[str, str] prop = readProperties(|project://maracas/config/unstable-keywords.properties|);
-	list[str] keywords = split(",", replaceAll(prop["keywords"], " ", ""));
-	return toSet(keywords);
-}
-
-set[loc] getAPIInUnstablePkg(list[APIEntity] delta) {
-	set[loc] unstable = {};
-	
-	for (APIEntity entity <- delta) {
-		bool isUnstable = false;
-		top-down visit (delta) {
-		case class(id, flag, anns, _, _, _, _): {
-			isUnstable = flag;
-			unstable += (isUnstable) ? id : {};
-		}
-		case field(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
-		case method(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
-		case constructor(id, anns, _, _, _): unstable += (isUnstable) ? id : {};
-		}
-	}
-	return unstable;
-}
-
-rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta) {
-	rel[loc, loc] unstable = {};	
-	visit (delta) {
-	case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-	case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-	case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
-	case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
-	}
-	return unstable;
-}
-
-set[loc] getUnstableAnnons(list[APIEntity] delta) {
-	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
-	return range(unstable);
-}
-
-rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta, set[loc] annons) {
-	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
-	return rangeR(unstable, annons);
 }
 
 list[APIEntity] readBinaryDelta(loc delta)
@@ -378,6 +255,131 @@ set[CompatibilityChange] getCompatibilityChanges(APIEntity entity)
 set[CompatibilityChange] getCompatibilityChanges(list[APIEntity] delta)
 	= { *getCompatibilityChanges(entity) | entity <- delta };
 	
+
+//----------------------------------------------
+// Stability
+//----------------------------------------------
+
+list[APIEntity] addInternalFlag(list[APIEntity] delta) {
+	list[APIEntity] deltaInt = [];
+	
+	for (APIEntity entity <- delta) {
+		if (class(id, _, a, b, c, d, e) := entity && isUnstableAPI(id)) {
+			entity = class(id, true, a, b, c, d, e);
+		}
+		
+		deltaInt += entity;
+	}
+	return deltaInt;
+}
+
+list[APIEntity] addStabilityAnnons(list[APIEntity] delta, loc oldJar) {
+	M3 apiOld = createM3FromJar(oldJar);
+	list[APIEntity] deltaAnnon = [];
+	set[loc] annons = {};
+	
+	for (APIEntity entity <- delta) {
+		set[loc] annonsEnt = {};
+		APIEntity entityAnnon = top-down visit (entity) {
+			case class(id, a, _, b, c, d, e): {
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
+				insert class(id, a, annonsEnt, b, c, d, e);
+			}
+			case field(id, _, a, b, c, d): {
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
+				insert field(id, annonsEnt, a, b, c, d);
+			}
+			case method(id, _, a, b, c, d): { 
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
+				insert method(id, annonsEnt, a, b, c, d);
+			}
+			case constructor(id, _, a, b, c): {
+				annonsEnt += fetchStabilityAnnon(id, apiOld, annons);
+				insert constructor(id, annonsEnt, a, b, c);
+			}
+		};
+			
+		annons += annonsEnt;
+		deltaAnnon += entityAnnon;
+	}
+	
+	return deltaAnnon;
+}
+
+private set[loc] fetchStabilityAnnon(loc entity, M3 apiOld, set[loc] annons) {
+	set[loc] annonsEnt = apiOld.annotations[entity];
+	return { ann | loc ann <- annonsEnt, ann in annons || isUnstableAnnon(ann) };
+}
+
+list[APIEntity] filterStableAPIByPkg(list[APIEntity] delta) 
+	= filterAPIByPkg(delta, bool (bool e) { return !e; });
+
+list[APIEntity] filterUnstableAPIByPkg(list[APIEntity] delta)
+	= filterAPIByPkg(delta, bool (bool e) { return e; });
+
+private list[APIEntity] filterAPIByPkg(list[APIEntity] delta, bool(bool) predicate)
+	= [ entity | APIEntity entity <- delta, class(_, bool flag, _, _, _, _, _) := entity, predicate(flag) ];
+	
+list[APIEntity] filterStableAPIByAnnon(list[APIEntity] delta) {
+	return top-down visit (delta) {
+		case class(_, _, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+		case constructor(_, anns, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+	}
+}
+
+@memo
+set[str] readUnstableKeywords() {
+	map[str, str] prop = readProperties(|project://maracas/config/unstable-keywords.properties|);
+	list[str] keywords = split(",", replaceAll(prop["keywords"], " ", ""));
+	return toSet(keywords);
+}
+
+set[loc] getAPIInUnstablePkg(list[APIEntity] delta) {
+	set[loc] unstable = {};
+	
+	for (APIEntity entity <- delta) {
+		bool isUnstable = false;
+		top-down visit (delta) {
+		case class(id, flag, anns, _, _, _, _): {
+			isUnstable = flag;
+			unstable += (isUnstable) ? id : {};
+		}
+		case field(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
+		case method(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
+		case constructor(id, anns, _, _, _): unstable += (isUnstable) ? id : {};
+		}
+	}
+	return unstable;
+}
+
+rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta) {
+	rel[loc, loc] unstable = {};	
+	visit (delta) {
+	case e:class(id, _, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:field(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:method(id, anns, _, _, _, _): unstable += { <id, a> | loc a <- anns };
+	case e:constructor(id, anns, _, _, _): unstable += { <id, a> | loc a <- anns };
+	}
+	return unstable;
+}
+
+set[loc] getUnstableAnnons(list[APIEntity] delta) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return range(unstable);
+}
+
+rel[loc, loc] getAPIWithUnstableAnnon(list[APIEntity] delta, set[loc] annons) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return rangeR(unstable, annons);
+}
+
+	
+//----------------------------------------------
+// Util
+//----------------------------------------------
+
 private list[APIEntity] removeUnchangedEntities(list[APIEntity] apiEntities) {
 	list[APIEntity] result = [];
 	for (a <- apiEntities) {
@@ -533,9 +535,3 @@ bool isPackageProtected(Modifier new)
 bool isChangedFromPublicToProtected(Modifier old, Modifier new) 
 	= old == org::maracas::delta::JApiCmp::\public() 
 	&& new == org::maracas::delta::JApiCmp::\protected();
-
-set[str] unstableAnnons 
-	= { "beta", "alpha", "unstable", "experiment", "internal", "private", "protected", "removal", "evolv", "notinherit", "dev" };
-	
-set[str] unstablePkgs
-	= { "beta", "alpha", "unstable", "experiment", "internal", "removal", "dev", "test" };
