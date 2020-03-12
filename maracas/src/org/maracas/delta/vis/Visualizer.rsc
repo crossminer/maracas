@@ -119,7 +119,7 @@ HTML5Node bcsBlock(list[APIEntity] delta, loc srcV1, loc srcV2) {
 				table(class("striped"),
 					thead(tr(th("Declaration"), th("Change"), th("V1"), th("V2"))),
 					tbody(
-						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /class(loc l, _, _, _, ch, _) := delta, c in ch ] +
+						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /class(loc l, _, _, _, _, ch, _) := delta, c in ch ] +
 						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /method(loc l, _, _, _, ch, _) := delta, c in ch ] +
 						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /field(loc l, _, _, _, ch, _) := delta, c in ch ] +
 						[tr(td(l.path), td(getName(c)), sourceCodeCell(srcV1, l), sourceCodeCell(srcV2, l)) | /interface(loc l, ch, _) := delta, c in ch ] +
