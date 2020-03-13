@@ -48,7 +48,7 @@ alias RippleEffect = tuple[loc changed, loc affected];
 	
 	
 //----------------------------------------------
-// Functions
+// Core
 //----------------------------------------------
 
 // Use this function instead of directly calling the
@@ -474,7 +474,7 @@ set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] chang
 
 
 //----------------------------------------------
-// General logic
+// Util
 //----------------------------------------------
 
 private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] entities) {
@@ -657,4 +657,42 @@ public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNew
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
 	return computeDetections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));
+}
+
+//----------------------------------------------
+// Stability
+//----------------------------------------------
+
+set[Detection] filterStableDetectsByPkg(set[Detection] detects) 
+	= { d | Detection d <- detects, !isUnstable(d.src) };
+
+set[Detection] filterUnstableDetectsByPkg(set[Detection] detects) 
+	= { d | Detection d <- detects, isUnstable(d.src) };
+
+set[Detection] filterStableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return filterStableDetectsByAnnon(unstable, detects);
+} 
+
+set[Detection] filterStableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects, set[loc] annons) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta, annons);
+	return filterStableDetectsByAnnon(unstable, detects);
+}
+
+private set[Detection] filterStableDetectsByAnnon(rel[loc, loc] unstable, set[Detection] detects)
+	= { d | Detection d <- detects, unstable[d.src] != {} };
+
+rel[loc, Detection] getDetectsWithUnstableAnnon(list[APIEntity] delta, set[Detection] detects) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return { <a, d> | Detection d <- detects, loc a <- unstable[d.src] };
+}
+
+rel[loc, Detection] getDetectsWithUnstableAnnon(list[APIEntity] delta, set[Detection] detects, set[loc] annons) {
+	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
+	return { <a, d> | Detection d <- detects, loc a <- unstable[d.src], a in annons };
+}
+
+set[loc] getUnstableAnnons(list[APIEntity] delta, set[Detection] detects) {
+	rel[loc, Detection] unstable = getDetectsWithUnstableAnnon(delta, detects);
+	return domain(unstable);
 }
