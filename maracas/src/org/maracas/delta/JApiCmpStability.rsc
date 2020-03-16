@@ -12,7 +12,9 @@ public set[str] unstablePkgs
 
 bool isUnstableAnnon(loc annon) 
 	= containsKeyword(annon.path, unstableAnnons);
-	
+
+// TODO: what if the method and field is contained in class 
+// that contains one of the keywords?	
 bool isUnstableAPI(loc elem)
 	= containsKeyword(elem.parent.path, unstablePkgs);
 	

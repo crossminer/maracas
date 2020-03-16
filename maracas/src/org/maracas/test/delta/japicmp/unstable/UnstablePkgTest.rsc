@@ -7,6 +7,7 @@ import String;
 import org::maracas::\test::delta::japicmp::SetUp;
 import org::maracas::\test::delta::japicmp::usage::Common;
 import org::maracas::delta::JApiCmp;
+import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
 
 
@@ -48,4 +49,27 @@ private bool expectedPkgs(set[loc] changed) {
 		}
 	}
 	return true;
-}\
+}
+
+test bool allInUnstablePkg() {
+	set[Detection] unstable = filterUnstableDetectsByPkg(detects);
+	for (Detection d <- unstable) {
+		if (!contains(d.src.parent.path, "unstable")) {
+			return false;
+		}
+	}
+	return true;
+}
+
+test bool noneInUnstablePkg() {
+	set[Detection] stable = filterStableDetectsByPkg(detects);
+	for (Detection d <- stable) {
+		if (contains(d.src.parent.path, "unstable")) {
+			return false;
+		}
+	}
+	return true;
+}
+
+test bool exclusiveStableUnstableSets()
+	= filterUnstableDetectsByPkg(detects) & filterStableDetectsByPkg(detects) == {};

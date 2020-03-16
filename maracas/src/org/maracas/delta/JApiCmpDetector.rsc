@@ -3,6 +3,7 @@ module org::maracas::delta::JApiCmpDetector
 import lang::java::m3::AST;
 import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
+import org::maracas::delta::JApiCmpStability;
 import org::maracas::m3::Core;
 import org::maracas::m3::Containment;
 import org::maracas::m3::Inheritance;
@@ -664,10 +665,10 @@ public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNew
 //----------------------------------------------
 
 set[Detection] filterStableDetectsByPkg(set[Detection] detects) 
-	= { d | Detection d <- detects, !isUnstable(d.src) };
+	= { d | Detection d <- detects, !isUnstableAPI(d.src) };
 
 set[Detection] filterUnstableDetectsByPkg(set[Detection] detects) 
-	= { d | Detection d <- detects, isUnstable(d.src) };
+	= { d | Detection d <- detects, isUnstableAPI(d.src) };
 
 set[Detection] filterStableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects) {
 	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
