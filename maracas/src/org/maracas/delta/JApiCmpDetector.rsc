@@ -416,8 +416,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 	set[loc] entitiesAnn = {};
 	
 	for (loc e <- changed) {
-		APIEntity entity = entityFromLoc(e, evol.delta);
-		tuple[ClassType, ClassType] types = classModifiedType(entity);
+		APIEntity entity = getEntityFromLoc(e, evol.delta);
+		tuple[ClassType, ClassType] types = getClassModifiedType(entity);
 		
 		switch(types) {
 		case <class(), _> :	entitiesExt += e;
@@ -670,17 +670,17 @@ set[Detection] filterStableDetectsByPkg(set[Detection] detects)
 set[Detection] filterUnstableDetectsByPkg(set[Detection] detects) 
 	= { d | Detection d <- detects, isUnstableAPI(d.src) };
 
-set[Detection] filterStableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects) {
+set[Detection] filterUnstableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects) {
 	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta);
-	return filterStableDetectsByAnnon(unstable, detects);
+	return filterUnstableDetectsByAnnon(unstable, detects);
 } 
 
-set[Detection] filterStableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects, set[loc] annons) {
+set[Detection] filterUnstableDetectsByAnnon(list[APIEntity] delta, set[Detection] detects, set[loc] annons) {
 	rel[loc, loc] unstable = getAPIWithUnstableAnnon(delta, annons);
-	return filterStableDetectsByAnnon(unstable, detects);
+	return filterUnstableDetectsByAnnon(unstable, detects);
 }
 
-private set[Detection] filterStableDetectsByAnnon(rel[loc, loc] unstable, set[Detection] detects)
+private set[Detection] filterUnstableDetectsByAnnon(rel[loc, loc] unstable, set[Detection] detects)
 	= { d | Detection d <- detects, unstable[d.src] != {} };
 
 rel[loc, Detection] getDetectsWithUnstableAnnon(list[APIEntity] delta, set[Detection] detects) {

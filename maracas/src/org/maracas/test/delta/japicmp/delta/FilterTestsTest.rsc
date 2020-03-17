@@ -10,7 +10,7 @@ import org::maracas::\test::delta::japicmp::SetUp;
 
 private bool isInDelta(loc elem) {
 	try {
-		entityFromLoc(elem, delta);
+		getEntityFromLoc(elem, delta);
 		return true;
 	}
 	catch e:

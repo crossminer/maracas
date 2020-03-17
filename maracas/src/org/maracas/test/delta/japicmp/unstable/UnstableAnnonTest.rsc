@@ -7,6 +7,7 @@ import Set;
 import org::maracas::\test::delta::japicmp::SetUp;
 import org::maracas::\test::delta::japicmp::usage::Common;
 import org::maracas::delta::JApiCmp;
+import org::maracas::delta::JApiCmpDetector;
 
 
 test bool numberUnstableDecls() 
@@ -35,3 +36,5 @@ test bool betaAnnonEntities() {
 
 private bool numberAnnonEntities(set[loc] annons, int number)
 	= size(domain(getAPIWithUnstableAnnon(delta, annons))) == number;
+	
+	

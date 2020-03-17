@@ -410,12 +410,10 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 	return result;
 }
 
-APIEntity entityFromLoc(loc elem, list[APIEntity] delta) {
+APIEntity getEntityFromLoc(loc elem, list[APIEntity] delta) {
 	switch (delta) {
 	case /c:class(elem, _, _, _, _, _, _): 
 		return c;
-	case /i:interface(elem, chs, _):
-		return i;
 	case /f:field(elem, _, _, _, _, _): 
 		return f;
 	case /m:method(elem, _, _, _, _, _): 
@@ -427,7 +425,7 @@ APIEntity entityFromLoc(loc elem, list[APIEntity] delta) {
 	}
 }
 
-tuple[ClassType, ClassType] classModifiedType(APIEntity c:class(_, _, _, t, _, _, _)) {
+tuple[ClassType, ClassType] getClassModifiedType(APIEntity c:class(_, _, _, t, _, _, _)) {
 	if (/modified(old,new) := t) {
 		return <old, new>;
 	}
