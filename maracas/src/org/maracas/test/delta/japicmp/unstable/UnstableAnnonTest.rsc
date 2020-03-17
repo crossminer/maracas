@@ -13,7 +13,7 @@ import org::maracas::delta::JApiCmpDetector;
 test bool numberUnstableDecls() 
 	= size(domain(getAPIWithUnstableAnnon(delta))) == 10;
 	
-test bool unstableAnnons()
+test bool unstableAnnonsDelta()
 	= { |java+interface:///main/unstableAnnon/Beta|,
 		|java+interface:///main/unstableAnnon/IsUnstable| }
 	== getUnstableAnnons(delta); 
@@ -37,4 +37,98 @@ test bool betaAnnonEntities() {
 private bool numberAnnonEntities(set[loc] annons, int number)
 	= size(domain(getAPIWithUnstableAnnon(delta, annons))) == number;
 	
+test bool allHaveUnstAnnons() {
+	set[Detection] unstable = filterUnstableDetectsByAnnon(delta, detects);
+	for (Detection d <- unstable) {
+		APIEntity entity = getEntityFromLoc(d.src, delta);
+		if (entity.annonStability == {}) {
+			return false;
+		}
+	}
+	return true;
+}
+
+test bool allHaveBetaAnnon()
+	= allHaveGivenAnnons({ |java+interface:///main/unstableAnnon/Beta| });
+
+test bool allHaveIsUnstAnnon()
+	= allHaveGivenAnnons({ |java+interface:///main/unstableAnnon/IsUnstable| });
+
+private bool allHaveGivenAnnons(set[loc] annons) 
+	= allDetectsHaveGivenAnnons(filterUnstableDetectsByAnnon(delta, detects, annons), annons);
 	
+private bool allDetectsHaveGivenAnnons(set[Detection] unstable, set[loc] annons) {
+	for (Detection d <- unstable) {
+		APIEntity entity = getEntityFromLoc(d.src, delta);
+		bool hasAnnon = false;
+		
+		for (loc a <- annons) {
+			if (a in entity.annonStability) {
+				hasAnnon = true;
+				break;
+			}
+		}
+		
+		if (!hasAnnon) {
+			return false;
+		}
+	}
+	return true;
+}
+
+test bool betaAndIsUnstSetsDiffer() {
+	set[Detection] beta = filterUnstableDetectsByAnnon(delta, detects, { |java+interface:///main/unstableAnnon/Beta| });
+	set[Detection] isUnst = filterUnstableDetectsByAnnon(delta, detects, { |java+interface:///main/unstableAnnon/IsUnstable| });
+	return beta != isUnst;
+}
+
+test bool sameSetsAllAnnons() {
+	set[loc] annons = { 
+		|java+interface:///main/unstableAnnon/Beta|,
+		|java+interface:///main/unstableAnnon/IsUnstable| 
+	};
+		
+	return filterUnstableDetectsByAnnon(delta, detects, annons)
+		== filterUnstableDetectsByAnnon(delta, detects);
+}
+
+test bool sameDetects()
+	 = range(getDetectsWithUnstableAnnon(delta, detects))
+	 == filterUnstableDetectsByAnnon(delta, detects);
+
+test bool allInRelHaveBetaAnnon()
+	= allInRelHaveGivenAnnons({ |java+interface:///main/unstableAnnon/Beta| });
+
+test bool allInRelHaveIsUnstAnnon()
+	= allInRelHaveGivenAnnons({ |java+interface:///main/unstableAnnon/IsUnstable| });
+		
+private bool allInRelHaveGivenAnnons(set[loc] annons)
+	= allDetectsHaveGivenAnnons(range(getDetectsWithUnstableAnnon(delta, detects, annons)), annons);
+
+test bool sameDetectsBetaAnnon()
+	= sameDetectsGivenAnnon({ |java+interface:///main/unstableAnnon/Beta| });
+	
+test bool sameDetectsIsUnstAnnon()
+	= sameDetectsGivenAnnon({ |java+interface:///main/unstableAnnon/IsUnstable| });
+
+test bool sameDetectsAllAnnons() {
+	set[loc] annons = { 
+		|java+interface:///main/unstableAnnon/Beta|,
+		|java+interface:///main/unstableAnnon/IsUnstable| 
+	};
+	return sameDetectsGivenAnnon(annons);
+}
+		
+private bool sameDetectsGivenAnnon(set[loc] annons)
+	= range(getDetectsWithUnstableAnnon(delta, detects, annons))
+	== filterUnstableDetectsByAnnon(delta, detects, annons);
+	
+test bool unstableAnnonsInRel()
+	= { |java+interface:///main/unstableAnnon/Beta|,
+		|java+interface:///main/unstableAnnon/IsUnstable| }
+	== domain(getDetectsWithUnstableAnnon(delta, detects));
+	
+test bool unstableAnnonsDetects()
+	= { |java+interface:///main/unstableAnnon/Beta|,
+		|java+interface:///main/unstableAnnon/IsUnstable| }
+	== getUnstableAnnons(delta, detects); 
