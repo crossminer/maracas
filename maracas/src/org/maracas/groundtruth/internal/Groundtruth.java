@@ -83,7 +83,7 @@ public class Groundtruth {
 
 	public IBool upgradeClient(ISourceLocation clientJar, ISourceLocation extractDir, IString groupId, IString artifactId, IString v1, IString v2,
 			IEvaluatorContext ctx) {
-		out = ctx.getStdOut();
+		out = ctx.getOutPrinter();
 		boolean upgraded = upgradeClient(Paths.get(clientJar.getPath()), Paths.get(extractDir.getPath()), groupId.getValue(),
 				artifactId.getValue(), v1.getValue(), v2.getValue());
 		return vf.bool(upgraded);
@@ -113,7 +113,7 @@ public class Groundtruth {
 	}
 	
 	public IList computeJavacErrors(ISourceLocation pomFile, IEvaluatorContext ctx) {
-		out = ctx.getStdOut();
+		out = ctx.getOutPrinter();
 		List<CompilerMessage> msgs = computeJavacErrors(Paths.get(pomFile.getPath()));
 		IListWriter res = vf.listWriter();
 

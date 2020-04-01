@@ -45,9 +45,7 @@ public class GroundtruthCli {
 	private Evaluator createRascalEvaluator(IValueFactory vf) {
 		GlobalEnvironment heap = new GlobalEnvironment();
 		ModuleEnvironment module = new ModuleEnvironment("$maracas$", heap);
-		PrintWriter stderr = new PrintWriter(System.err);
-		PrintWriter stdout = new PrintWriter(System.out);
-		Evaluator eval = new Evaluator(vf, stderr, stdout, module, heap);
+		Evaluator eval = new Evaluator(vf, System.in, System.err, System.out, module, heap);
 
 		eval.addRascalSearchPathContributor(StandardLibraryContributor.getInstance());
 		eval.addRascalSearchPath(vf.sourceLocation(Paths.get("src").toAbsolutePath().toString()));

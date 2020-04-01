@@ -48,7 +48,7 @@ public class IO {
 			stream.close();
 		} 
 		catch (IOException e) {
-			eval.getStdErr().println(e.getMessage());
+			eval.getErrorPrinter().println(e.getMessage());
 		}
 		
 		return writer.done();
