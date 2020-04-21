@@ -3,6 +3,7 @@ module org::maracas::measure::delta::Evolution
 import List;
 import Node;
 import String;
+import ValueIO;
 
 import org::maracas::delta::JApiCmp;
 
@@ -132,11 +133,6 @@ map[str, value] stableDeltaStats(loc oldJar, loc newJar, str oldVersion, str new
 	return deltaStats(filterStableAPIByAnnon(delta));
 }
 
-@memo
-list[APIEntity] computeDelta(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
-	return compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = oldCP, newCP = newCP);
-}
-
 map[str, value] deltaStats(list[APIEntity] delta) {
 	map[CompatibilityChange, int] bcs = numberChangesPerType(delta);
 	map[str, value] stats = ( getName(c) : bcs[c] | c <- bcs );
@@ -158,4 +154,12 @@ map[str, value] deltaStats(list[APIEntity] delta) {
 	stats["sourceCompatible"] = isSourceCompatible(delta);
 
 	return stats;
+}
+
+map[str, value] stableDeltaStats(list[APIEntity] delta) 
+	= deltaStats(filterStableAPIByAnnon(delta));
+	
+@memo
+list[APIEntity] computeDelta(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
+	return compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = oldCP, newCP = newCP);
 }
