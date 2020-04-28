@@ -54,7 +54,7 @@ data APIEntity
 		APISimpleChange change)
 	| annotationElement(
 		str name, 
-		APIChange[list[str]] change4)
+		APIChange[list[str]] changeAnn)
 	| exception(
 		loc id, 
 		bool checkedException, 
@@ -326,6 +326,46 @@ list[APIEntity] filterStableAPIByAnnon(list[APIEntity] delta) {
 		case field(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
 		case method(_, anns, _, _, _, _) => APIEntity::empty() when !isEmpty(anns)
 		case constructor(_, anns, _, _, _) => APIEntity::empty() when !isEmpty(anns)
+	}
+}
+
+list[APIEntity] filterUnstableAPIByAnnon(list[APIEntity] delta) {
+	return top-down visit (delta) {
+		case c : class(_, _, anns, _, entities, changes, _) : { 
+			if (isEmpty(anns)) {
+				list[APIEntity] entitiesModif = [];
+				
+				for (APIEntity e <- entities) {
+					if (s : superclass([x, *xs], ch) := e) {
+						entitiesModif += superclass([], APIChange::unchanged());
+					}
+					else {
+						entitiesModif += e;
+					}
+				}
+				c.changes = [];
+				c.entities = entitiesModif;
+			}
+			insert c;
+		} 
+		case f : field(_, anns, _, _, changes, _) : {
+			if (isEmpty(anns)) {
+				f.changes = [];
+			}
+			insert f;
+		}
+		case m : method(_, anns, _, _, changes, _) : {
+			if (isEmpty(anns)) {
+				m.changes = [];
+			}
+			insert m;
+		}
+		case c : constructor(_, anns, _, changes, _) : {
+			if (isEmpty(anns)) {
+				c.changes = [];
+			}
+			insert c;
+		}
 	}
 }
 
