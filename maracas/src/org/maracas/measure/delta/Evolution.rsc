@@ -120,29 +120,36 @@ map[str, int] numberEntityChanges(list[APIEntity] delta)
 	);
 
 map[str, value] stableDeltaAnnonStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return stableDeltaAnnonStats(delta);
 }
 
 map[str, value] stableDeltaPkgStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return stableDeltaPkgStats(delta);
 }
 
 map[str, value] stableDeltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return stableDeltaStats(delta);
 }
 
+
 map[str, value] unstableDeltaAnnonStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return unstableDeltaAnnonStats(delta);
 }
 
 map[str, value] unstableDeltaPkgStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return unstableDeltaPkgStats(delta);
 }
+
+map[str, value] unstableDeltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	return unstableDeltaStats(delta);
+}
+
 
 map[str, value] stableDeltaAnnonStats(list[APIEntity] delta) 
 	= deltaStats(filterStableAPIByAnnon(delta));
@@ -151,14 +158,19 @@ map[str, value] stableDeltaPkgStats(list[APIEntity] delta)
 	= deltaStats(filterStableAPIByPkg(delta));
 	
 map[str, value] stableDeltaStats(list[APIEntity] delta) 
-	= deltaStats(filterStableAPIByAnnon(delta));
+	= deltaStats(filterStableAPIByAnnon(filterStableAPIByPkg(delta)));
+	
 	
 map[str, value] unstableDeltaAnnonStats(list[APIEntity] delta) 
 	= deltaStats(filterUnstableAPIByAnnon(delta));
 
 map[str, value] unstableDeltaPkgStats(list[APIEntity] delta) 
 	= deltaStats(filterUnstableAPIByPkg(delta));
-	
+
+map[str, value] unstableDeltaStats(list[APIEntity] delta) 
+	= deltaStats(filterUnstableAPIByAnnon(filterUnstableAPIByPkg(delta)));
+		
+		
 @doc{
 	Simple handy function that summarizes all delta stats.
 	Though ugly, it makes invoking from Java much easier.
@@ -189,9 +201,4 @@ map[str, value] deltaStats(list[APIEntity] delta) {
 	stats["sourceCompatible"] = isSourceCompatible(delta);
 
 	return stats;
-}
-	
-@memo
-list[APIEntity] computeDelta(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] oldCP = [], list[loc] newCP = []) {
-	return compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = oldCP, newCP = newCP);
 }
