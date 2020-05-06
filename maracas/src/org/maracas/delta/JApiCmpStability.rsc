@@ -11,7 +11,7 @@ public set[str] unstablePkgs
 
 
 bool isUnstableAnnon(loc annon) 
-	= containsKeyword(annon.path, unstableAnnons);
+	= containsKeyword(annon.file, unstableAnnons);
 
 // TODO: what if the method and field is contained in class 
 // that contains one of the keywords?	
