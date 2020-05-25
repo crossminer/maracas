@@ -21,6 +21,9 @@ import ValueIO;
 data Modifier =
 	\defaultAccess();
 	
+M3 readBinaryM3(loc m3)
+	= readBinaryValueFile(#M3, m3);
+	
 @memo
 rel[loc, loc] invertRel (rel[loc, loc] r) = invert(r);
 
