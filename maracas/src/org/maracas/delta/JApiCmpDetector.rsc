@@ -46,7 +46,18 @@ data Evolution = evolution(
 alias TransChangedEntity = tuple[loc main, loc trans];
 
 alias RippleEffect = tuple[loc changed, loc affected];
+
+
+//----------------------------------------------
+// Utility
+//----------------------------------------------
+
+set[Detection] readBinaryDetections(loc detects)
+	= readBinaryValueFile(#set[Detection], detects);
 	
+set[CompatibilityChange] getCompatibilityChanges(set[Detection] detects) 
+	= { d.change | Detection d <- detects };
+
 	
 //----------------------------------------------
 // Core
