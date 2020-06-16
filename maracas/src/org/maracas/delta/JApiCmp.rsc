@@ -553,7 +553,7 @@ private map[Modifier, int] getModifierLevels()
 	= (	
 		\private() : 0,
 		packageProtected() : 1,
-		protected() : 2,
+		protected() : 2,
 		\public() : 3 
 	);	
 	 
