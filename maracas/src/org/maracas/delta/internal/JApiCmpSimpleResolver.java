@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.rascalmpl.interpreter.IEvaluatorContext;
 import org.rascalmpl.library.lang.java.m3.internal.M3Constants;
 
 import io.usethesource.vallang.ISourceLocation;
@@ -30,6 +31,7 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 	
 	private final IValueFactory valueFactory;
 	private final Map<String, String> schemes;
+	private IEvaluatorContext eval;
 	
 	
 	//-----------------------------------------------
@@ -41,9 +43,10 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 	 * 
 	 * @param valueFactory: Rascal value factory
 	 */
-	public JApiCmpSimpleResolver(IValueFactory valueFactory) {
+	public JApiCmpSimpleResolver(IValueFactory valueFactory, IEvaluatorContext eval) {
 		this.valueFactory = valueFactory;
 		this.schemes = initializeSchemes();
+		this.eval = eval;
 	}
 	
 	/**
@@ -160,7 +163,7 @@ public class JApiCmpSimpleResolver implements JApiCmpResolver {
 	 * @return string representing a path in the form of <string>(/<string>)
 	 */
 	private String qualifiedNameToPath(String qualifiedName) {
-		return qualifiedName.replace(".", File.separator);
+		return qualifiedName.replace(".", "/");
 	}
 	
 	/**
