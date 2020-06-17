@@ -87,8 +87,8 @@ set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3 api, M3
 	@param m: M3 model owning the main type and all its 
 	       subtypes
 }
-set[loc] getSubtypes(loc class, M3 m) 
-	= getInvExtends(m) [class] + getInvImplements(m) [class];
+set[loc] getSubtypes(loc class, M3 m)
+	= domain(rangeR(m.extends, { class })) + domain(rangeR(m.implements, { class }));
 
 @doc{ 
 	Returns a set of locations pointing to the ABSTRACT

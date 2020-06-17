@@ -27,12 +27,6 @@ M3 readBinaryM3(loc m3)
 @memo
 rel[loc, loc] invertRel (rel[loc, loc] r) = invert(r);
 
-@memo
-rel[loc, loc] getInvExtends(M3 m) = invertRel(m.extends+);
-
-@memo 
-rel[loc, loc] getInvImplements(M3 m) = invertRel(m.implements+);
-
 set[value] getM3Set(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? m[elem] : {};
 	

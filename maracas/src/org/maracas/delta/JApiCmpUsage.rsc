@@ -1,6 +1,8 @@
 module org::maracas::delta::JApiCmpUsage
 
 import lang::java::m3::Core;
+import Relation;
+
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
@@ -97,13 +99,13 @@ private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {
 bool isUsed(loc elem, Evolution evol) {
 	M3 m = evol.client;
 	
-	return invertRel(m.annotations)[elem] != {}
-	|| invertRel(m.extends)[elem] != {}
-	|| invertRel(m.fieldAccess)[elem] != {}
-	|| invertRel(m.implements)[elem] != {}
-	|| invertRel(m.methodInvocation)[elem] != {}
-	|| invertRel(m.methodOverrides)[elem] != {}
-	|| invertRel(m.typeDependency)[elem] != {}
+	return domain(rangeR(m.annotations, { elem })) != {}
+	|| domain(rangeR(m.extends, { elem })) != {}
+	|| domain(rangeR(m.fieldAccess, { elem })) != {}
+	|| domain(rangeR(m.implements, { elem })) != {}
+	|| domain(rangeR(m.methodInvocation, { elem })) != {}
+	|| domain(rangeR(m.methodOverrides, { elem })) != {}
+	|| domain(rangeR(m.typeDependency, { elem })) != {}
 	;
 }
 	
