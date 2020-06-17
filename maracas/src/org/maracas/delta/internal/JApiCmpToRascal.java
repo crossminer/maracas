@@ -85,7 +85,7 @@ public class JApiCmpToRascal {
 		this.valueFactory = valueFactory;
 		this.eval = eval;
 		this.builder = new JApiCmpSimpleBuilder(typeStore, typeFactory, valueFactory);
-		this.resolver = new JApiCmpSimpleResolver(valueFactory);
+		this.resolver = new JApiCmpSimpleResolver(valueFactory, eval);
 		this.modifiers = initializeModifiers();
 		this.classTypes = initializeClassTypes();
 		this.simpleChanges = initializeSimpleChanges();
