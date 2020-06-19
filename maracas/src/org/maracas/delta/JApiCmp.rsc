@@ -25,7 +25,7 @@ data APIEntity
 		APISimpleChange change)
 	| interface(
 		loc id, 
-		set[CompatibilityChange] changes2,
+		list[CompatibilityChange] changes,
 		APISimpleChange change) 
 	| field(
 		loc id, // TODO: is it align with m3 names?
@@ -336,8 +336,11 @@ list[APIEntity] filterUnstableAPIByAnnon(list[APIEntity] delta) {
 				list[APIEntity] entitiesModif = [];
 				
 				for (APIEntity e <- entities) {
-					if (s : superclass([x, *xs], ch) := e) {
+					if (s : superclass([x, *xs], _) := e) {
 						entitiesModif += superclass([], APIChange::unchanged());
+					}
+					else if (i : interface(id, [x, *xs], _) := e) {
+						entitiesModif += interface(id, [], APISimpleChange::unchanged());
 					}
 					else {
 						entitiesModif += e;

@@ -3,6 +3,7 @@ module org::maracas::measure::delta::Evolution
 import List;
 import Node;
 import String;
+import Type;
 import ValueIO;
 
 import org::maracas::delta::JApiCmp;
@@ -159,24 +160,38 @@ map[str, value] stableDeltaPkgStats(list[APIEntity] delta)
 	
 map[str, value] stableDeltaStats(list[APIEntity] delta) 
 	= deltaStats(filterStableAPIByAnnon(filterStableAPIByPkg(delta)));
-	
-	
+
 map[str, value] unstableDeltaAnnonStats(list[APIEntity] delta) 
 	= deltaStats(filterUnstableAPIByAnnon(delta));
 
 map[str, value] unstableDeltaPkgStats(list[APIEntity] delta) 
 	= deltaStats(filterUnstableAPIByPkg(delta));
 
-map[str, value] unstableDeltaStats(list[APIEntity] delta) 
-	= deltaStats(filterUnstableAPIByAnnon(filterUnstableAPIByPkg(delta)));
-		
+map[str, value] unstableDeltaStats(list[APIEntity] delta) {
+	map[str, value] al = deltaStats(delta);
+	map[str, value] stable = stableDeltaStats(delta);
+	map[str, value] stats = ();
+	
+	for (str key <- al) {
+		if (key == "delta" || key == "binaryCompatible" || key == "sourceCompatible") {
+			stats += ( key : al[key] );
+		}	
+		else {
+			alVal = toInt("<al[key]>");
+			stableVal = (key in stable) ? toInt("<stable[key]>") : 0;
+			stats += ( key : alVal - stableVal );
+		}
+	}
+	
+	return stats;
+}
 		
 @doc{
 	Simple handy function that summarizes all delta stats.
 	Though ugly, it makes invoking from Java much easier.
 }
 map[str, value] deltaStats(loc oldJar, loc newJar, str oldVersion, str newVersion, list[loc] old = [], list[loc] new = []) {
-	list[APIEntity] delta = computeDelta(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
+	list[APIEntity] delta = compareJars(oldJar, newJar, oldVersion, newVersion, oldCP = old, newCP = new);
 	return deltaStats(delta);
 }
 
