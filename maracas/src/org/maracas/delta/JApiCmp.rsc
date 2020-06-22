@@ -351,19 +351,19 @@ list[APIEntity] filterUnstableAPIByAnnon(list[APIEntity] delta) {
 			}
 			insert c;
 		} 
-		case f : field(_, anns, _, _, changes, _) : {
+		case f : field(_, anns, _, _, _, _) : {
 			if (isEmpty(anns)) {
 				f.changes = [];
 			}
 			insert f;
 		}
-		case m : method(_, anns, _, _, changes, _) : {
+		case m : method(_, anns, _, _, _, _) : {
 			if (isEmpty(anns)) {
 				m.changes = [];
 			}
 			insert m;
 		}
-		case c : constructor(_, anns, _, changes, _) : {
+		case c : constructor(_, anns, _, _, _) : {
 			if (isEmpty(anns)) {
 				c.changes = [];
 			}

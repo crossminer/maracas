@@ -1,7 +1,10 @@
 module org::maracas::measure::delta::Impact
 
+import Node;
 import Set;
+import lang::java::m3::Core;
 
+import org::maracas::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 

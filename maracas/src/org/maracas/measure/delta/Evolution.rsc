@@ -161,6 +161,7 @@ map[str, value] stableDeltaPkgStats(list[APIEntity] delta)
 map[str, value] stableDeltaStats(list[APIEntity] delta) 
 	= deltaStats(filterStableAPIByAnnon(filterStableAPIByPkg(delta)));
 
+
 map[str, value] unstableDeltaAnnonStats(list[APIEntity] delta) 
 	= deltaStats(filterUnstableAPIByAnnon(delta));
 
