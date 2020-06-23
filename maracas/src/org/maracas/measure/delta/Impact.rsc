@@ -7,6 +7,7 @@ import lang::java::m3::Core;
 import org::maracas::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::delta::JApiCmpUsage;
 
 
 int numberDetections(set[Detection] detects) 
@@ -34,6 +35,12 @@ map[str, int] numberImpactedEntities(set[Detection] detects)
 		"Field"  : numberImpactedFields(detects)
 	);
 	
+map[str, value] stableDetectsStats(set[Detection] detects, list[APIEntity] delta)
+	= detectionsStats(filterStableDetections(detects, delta));
+	
+map[str, value] unstableDetectsStats(set[Detection] detects, list[APIEntity] delta)
+	= detectionsStats(filterUnstableDetections(detects, delta));
+
 map[str, value] detectionsStats(set[Detection] detects) {
 	map[CompatibilityChange, int] dts = numberDetectionsPerType(detects);
 	map[str, value] stats = ( getName(c) : dts[c] | c <- dts );
@@ -45,4 +52,24 @@ map[str, value] detectionsStats(set[Detection] detects) {
 	stats["impactedFields"]   = numberImpactedFields(detects);
 
 	return stats;
+}
+
+map[str, value] breakingStats(set[Detection] detects) {
+	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
+	return ( getName(c) : size(breaking[c]) | c <- breaking );
+}
+
+map[str, value] nonBreakingStats(Evolution evol, set[Detection] detects) {
+	map[CompatibilityChange, set[loc]] nonBreaking = getUsedNonBreakingEntitiesMap(evol, detects);
+	return ( getName(c) : size(nonBreaking[c]) | c <- nonBreaking );
+}
+
+map[str, value] unusedStats(Evolution evol) {
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+	return ( getName(c) : size(unused[c]) | c <- unused );
+}
+
+map[str, value] changedStats(list[APIEntity] delta) {
+	map[CompatibilityChange, set[loc]] changed = getChangedEntitiesMap(delta);
+	return ( getName(c) : size(changed[c]) | c <- changed );
 }

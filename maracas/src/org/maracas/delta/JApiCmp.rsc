@@ -1,5 +1,6 @@
 module org::maracas::delta::JApiCmp
 
+import IO;
 import List;
 import Node;
 import Relation;
@@ -381,17 +382,12 @@ set[str] readUnstableKeywords() {
 
 set[loc] getAPIInUnstablePkg(list[APIEntity] delta) {
 	set[loc] unstable = {};
-	
-	for (APIEntity entity <- delta) {
-		bool isUnstable = false;
-		top-down visit (delta) {
-		case class(id, flag, anns, _, _, _, _): {
-			isUnstable = flag;
-			unstable += (isUnstable) ? id : {};
-		}
-		case field(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
-		case method(id, anns, _, _, _, _): unstable += (isUnstable) ? id : {};
-		case constructor(id, anns, _, _, _): unstable += (isUnstable) ? id : {};
+	for (c: class(_, true, _, _, _, _, _) <- delta) {
+		visit (c) {
+		case class(id, _, _, _, _, _, _): unstable += id;
+		case field(id, _, _, _, _, _): unstable += id;
+		case method(id, _, _, _, _, _): unstable += id;
+		case constructor(id, _, _, _, _): unstable += id;
 		}
 	}
 	return unstable;

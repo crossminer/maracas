@@ -675,6 +675,16 @@ public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNew
 // Stability
 //----------------------------------------------
 
+set[Detection] filterStableDetections(set[Detection] detects, list[APIEntity] delta) {
+	set[loc] unstable = getAPIInUnstablePkg(delta) + domain(getAPIWithUnstableAnnon(delta));
+	return { d | Detection d <- detects, d.src notin unstable };
+}
+
+set[Detection] filterUnstableDetections(set[Detection] detects, list[APIEntity] delta) {
+	set[loc] unstable = getAPIInUnstablePkg(delta) + domain(getAPIWithUnstableAnnon(delta));
+	return { d | Detection d <- detects, d.src in unstable };
+}
+
 set[Detection] filterStableDetectsByPkg(set[Detection] detects) 
 	= { d | Detection d <- detects, !isUnstableAPI(d.src) };
 
