@@ -18,6 +18,10 @@ test bool sameSizeAsBefore()
 test bool unusedPkgSubset() 
 	= unusedPkg() <= getUnusedChangedEntities(evol);
 
+set[loc] dif() = unusedPkg() - getUnusedChangedEntities(evol);
+
+set[loc] a() = getUnusedChangedEntities(evol);
+
 test bool samePerChangeTypeRefCurrent()
 	= perChangeType(evol);
 

@@ -12,10 +12,10 @@ import org::maracas::m3::Core;
 
 
 test bool numberUnstableEntities()
-	= size(filterUnstableAPIByPkg(delta)) == 14;
+	= size(filterUnstableAPIByPkg(delta)) == 28;
 
 test bool numberUnstableDecls()
-	= size(getAPIInUnstablePkg(delta)) == 30;
+	= size(getAPIInUnstablePkg(delta)) == 60;
 
 test bool expectedPkgsEntities() {
 	set[loc] changed = getChangedEntitiesLoc(filterUnstableAPIByPkg(delta));
@@ -29,7 +29,12 @@ test bool expectedPkgsDecls() {
 
 private bool expectedPkgs(set[loc] changed) {
 	set[str] pkgs = { packag(c) | loc c <- changed };
-	set[str] pkgsExp = { "/main/unstableAnnon/", "/main/unstablePkg/" };
+	set[str] pkgsExp = { 
+		"/main/unstableAnnon/", 
+		"/main/unstablePkg/",
+		"/main/unused/unstableAnnon/", 
+		"/main/unused/unstablePkg/"
+	 };
 	
 	for (str p <- pkgs) {
 		if (isEmpty(p)) {

@@ -11,8 +11,9 @@ import org::maracas::delta::JApiCmpDetector;
 
 
 test bool numberUnstableDecls() 
-	= size(domain(getAPIWithUnstableAnnon(delta))) == 10;
-	
+	= size(domain(getAPIWithUnstableAnnon(delta))) == 20;
+
+int f() = size(domain(getAPIWithUnstableAnnon(delta)));
 test bool unstableAnnonsDelta()
 	= { |java+interface:///main/unstableAnnon/Beta|,
 		|java+interface:///main/unstableAnnon/IsUnstable| }
@@ -20,18 +21,18 @@ test bool unstableAnnonsDelta()
 
 test bool betaAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/Beta| };
-	return numberAnnonEntities(annons, 6);
+	return numberAnnonEntities(annons, 12);
 }
 
 test bool isUnstAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/IsUnstable| };
-	return numberAnnonEntities(annons, 4);
+	return numberAnnonEntities(annons, 8);
 }
 
 test bool betaAnnonEntities() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/Beta|,
 		|java+interface:///main/unstableAnnon/IsUnstable| };
-	return numberAnnonEntities(annons, 10);
+	return numberAnnonEntities(annons, 20);
 }
 
 private bool numberAnnonEntities(set[loc] annons, int number)

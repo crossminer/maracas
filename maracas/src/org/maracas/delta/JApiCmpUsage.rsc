@@ -29,7 +29,7 @@ set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects, Comp
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[loc] breaking = getUsedBreakingEntities(detects, ch);
 	set[loc] unused = getUnusedChangedEntities(evol, ch);
-	return getUsedNonBreakingEntities(evol, entities, breaking, unused);
+	return getUsedNonBreakingEntities(entities, breaking, unused);
 }
 
 map[CompatibilityChange, set[loc]] getUsedNonBreakingEntitiesMap(Evolution evol, set[Detection] detects) {
@@ -39,16 +39,17 @@ map[CompatibilityChange, set[loc]] getUsedNonBreakingEntitiesMap(Evolution evol,
 	map[CompatibilityChange, set[loc]] nonbreaking = ();
 	
 	for (CompatibilityChange c <- entities) {
+		set[loc] ent = entities[c];
 		set[loc] entitiesBreaking = (c in breaking) ? breaking[c] : {};
 		set[loc] entitiesUnused = (c in unused) ? unused[c] : {};
-		set[loc] entitiesNonbreaking = getUsedNonBreakingEntities(evol, entities[c], entitiesBreaking, entitiesUnused);
+		set[loc] entitiesNonbreaking = getUsedNonBreakingEntities(entities[c], entitiesBreaking, entitiesUnused);
 		nonbreaking += (c : entitiesNonbreaking);
 	}
 	
 	return nonbreaking;
 }
 
-private set[loc] getUsedNonBreakingEntities(Evolution evol, set[loc] entities, set[loc] breaking, set[loc] unused) 
+private set[loc] getUsedNonBreakingEntities(set[loc] entities, set[loc] breaking, set[loc] unused) 
 	= entities - breaking - unused;
 
 
@@ -79,8 +80,11 @@ private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {
 	set[loc] unused = {};
 	
 	for (loc e <- entities) {
-		bool used = false;
+		if (isUsed(e, evol)) {
+			continue;
+		}
 		
+		bool used = false;
 		for (loc c <- transEntities[e]) {
 			if (isUsed(c, evol)) {
 				used = true;
