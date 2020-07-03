@@ -77,3 +77,30 @@ test bool pub2packprivImpSamePack()
 		implements(),
 		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
+
+test bool pub2packPrivRef()
+	= detection(
+		|java+method:///mainclient/classLessAccessible/ClassLessAccessiblePub2PackPrivExt/instantiatePub2PackPriv()|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2PackPriv|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2PackPriv|,
+		typeDependency(),
+		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+    
+test bool pub2privRef()
+	= detection(
+		|java+method:///mainclient/classLessAccessible/ClassLessAccessiblePub2PrivExt/instantiatePub2Priv()|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2Priv$ClassLessAccessiblePub2PrivInner|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2Priv$ClassLessAccessiblePub2PrivInner|,
+		typeDependency(),
+		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;
+	
+test bool pub2proRef()
+	= detection(
+		|java+method:///mainclient/classLessAccessible/ClassLessAccessiblePub2ProExt/instantiatePub2Pro()|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2Pro$ClassLessAccessiblePub2ProInner|,
+		|java+class:///main/classLessAccessible/ClassLessAccessiblePub2Pro$ClassLessAccessiblePub2ProInner|,
+		typeDependency(),
+		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;

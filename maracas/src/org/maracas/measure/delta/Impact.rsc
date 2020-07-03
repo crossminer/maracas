@@ -54,22 +54,22 @@ map[str, value] detectionsStats(set[Detection] detects) {
 	return stats;
 }
 
-map[str, value] breakingStats(set[Detection] detects) {
+map[str, int] breakingStats(set[Detection] detects) {
 	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
 	return ( getName(c) : size(breaking[c]) | c <- breaking );
 }
 
-map[str, value] nonBreakingStats(Evolution evol, set[Detection] detects) {
+map[str, int] nonBreakingStats(Evolution evol, set[Detection] detects) {
 	map[CompatibilityChange, set[loc]] nonBreaking = getUsedNonBreakingEntitiesMap(evol, detects);
 	return ( getName(c) : size(nonBreaking[c]) | c <- nonBreaking );
 }
 
-map[str, value] unusedStats(Evolution evol) {
+map[str, int] unusedStats(Evolution evol) {
 	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
 	return ( getName(c) : size(unused[c]) | c <- unused );
 }
 
-map[str, value] changedStats(list[APIEntity] delta) {
+map[str, int] changedStats(list[APIEntity] delta) {
 	map[CompatibilityChange, set[loc]] changed = getChangedEntitiesMap(delta);
 	return ( getName(c) : size(changed[c]) | c <- changed );
 }

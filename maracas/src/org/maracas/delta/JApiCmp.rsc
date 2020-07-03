@@ -495,10 +495,10 @@ rel[loc, tuple[Modifier, Modifier]] getAccessModifiers(APIEntity entity) {
 
 private rel[loc, tuple[Modifier, Modifier]] createAccessModifiers(loc elem, list[APIEntity] entities) {
 	set[Modifier] accessModifs = { 
-		org::maracas::delta::JApiCmp::\public(), 
-		org::maracas::delta::JApiCmp::\protected(), 
-		org::maracas::delta::JApiCmp::\packageProtected(), 
-		org::maracas::delta::JApiCmp::\private() };
+		\public(), 
+		\protected(), 
+		\packageProtected(), 
+		\private() };
 		
 	for (APIEntity e <- entities, /modifier(modified(old, new)) := e, old in accessModifs) {
 		return { <elem, <old, new>> };
