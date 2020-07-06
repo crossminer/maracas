@@ -45,7 +45,35 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeMeth
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeMethodParamDeleteTest; // Incomplete
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeNestedIfazeAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeNestedIfazeDeleteTest; // Incomplete
-
-
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzAbstractToNonAbstractTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzEffectivelyFinalToFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzFinalToEffectivelyFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzFinalToNonFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzNonAbstractToAbstractTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzNonFinalToFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzNonStrictfpToStrictfpTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzStrictfpToNonStrictfpTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldFinalToNonFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldNonFinalToFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldNonStaticToStaticTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldNonTransientToTransientTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldNonVolatileToVolatileTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldStaticToNonStaticTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldTransientToNonTransientTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldVolatileToNonVolatileTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodAbstractToNonAbstractTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodFinalToNonFinalTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNativeToNonNativeTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonAbstractToAbstractTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonFinalToFinalTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonNativeToNativeTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonStaticToStaticTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonStrictfpToStrictfpTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNonSynchronizedToSynchronizedTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodStaticToNonStaticTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodStrictfpToNonStrictfpTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodSynchronizedToNonSynchronizedTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierNestedClazzNonStaticToStaticTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierNestedClazzStaticToNonStaticTest;
 
 
