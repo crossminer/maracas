@@ -424,7 +424,7 @@ private list[APIEntity] removeUnchangedEntities(list[APIEntity] apiEntities) {
 	for (a <- apiEntities) {
 		children = getChildren(a);
 		
-		if (c <- children, APIEntity::unchanged() := c) {
+		if (c <- children, unchanged() := c) {
 			continue;
 		}
 		
@@ -439,10 +439,10 @@ list[APIEntity] filterUnchangedEntities(list[APIEntity] apiEntities) {
 	
 	for (e <- apiEntities) {
 		result += visit(e) {
-			case class(i, f, _, t, ent, c, s) => class(i, f, t, removeUnchangedEntities(ent), c, s)
-			case field(i, _, t, ent, c, s) => field(i, t, removeUnchangedEntities(ent), c, s)
-			case method(i, _, t, ent, c, s) => method(i, t, removeUnchangedEntities(ent), c, s)
-			case constructor(i, _, ent, c, s) => constructor(i, removeUnchangedEntities(ent), c, s)
+			case class(i, f, a, t, ent, c, s) => class(i, f, a, t, removeUnchangedEntities(ent), c, s)
+			case field(i, a, t, ent, c, s) => field(i, a, t, removeUnchangedEntities(ent), c, s)
+			case method(i, a, t, ent, c, s) => method(i, a, t, removeUnchangedEntities(ent), c, s)
+			case constructor(i, a, ent, c, s) => constructor(i, a, removeUnchangedEntities(ent), c, s)
 			case annotation(i, ent, c, s) => annotation(i, removeUnchangedEntities(ent), c, s)
 		}
 	}
@@ -570,5 +570,5 @@ bool isPackageProtected(Modifier new)
 	= new == org::maracas::delta::JApiCmp::\packageProtected();
 	
 bool isChangedFromPublicToProtected(Modifier old, Modifier new) 
-	= old == org::maracas::delta::JApiCmp::\public() 
-	&& new == org::maracas::delta::JApiCmp::\protected();
+	= old == \public() 
+	&& new == \protected();

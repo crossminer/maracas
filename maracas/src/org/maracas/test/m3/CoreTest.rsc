@@ -42,7 +42,7 @@ test bool methodQualName3()
 //----------------------------------------------
 test bool sameMethodQualNameWrongScheme() {
 	try {
-		sameMethodQualName(|java+field:///|);
+		methodQualName(|java+field:///|);
 		return false;
 	}
 	catch : {

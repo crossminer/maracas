@@ -29,7 +29,7 @@ test bool isUnstAnnonEntities() {
 	return numberAnnonEntities(annons, 8);
 }
 
-test bool betaAnnonEntities() {
+test bool betaAnnonEntitiesAll() {
 	set[loc] annons = { |java+interface:///main/unstableAnnon/Beta|,
 		|java+interface:///main/unstableAnnon/IsUnstable| };
 	return numberAnnonEntities(annons, 20);

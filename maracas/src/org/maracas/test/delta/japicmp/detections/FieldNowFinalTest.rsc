@@ -66,7 +66,7 @@ test bool noSuperKeyAccessNoAssign()
 		fieldNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 	
-test bool simpleAccessAssign() 
+test bool simpleAccessAssignSub() 
 	= detection(
 		|java+method:///mainclient/fieldNowFinal/FieldNowFinalFA/fieldNowFinalAssignmentSub()|,
 		|java+field:///main/fieldNowFinal/FieldNowFinalSub/fieldFinal|,

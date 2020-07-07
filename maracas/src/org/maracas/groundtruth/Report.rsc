@@ -47,7 +47,7 @@ bool generateReport(loc reportFile, Evolution evol, set[Detection] detects, M3 s
 		
 		println("Generating report");
 		//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
-		outputReport(oldM3.id, newM3.id, clientM3.id, sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
+		outputReport(evol.apiOld.id, evol.apiNew.id, evol.client.id, sourceM3, evol.delta, detects, jdtMsgs, jdtMatches, reportFile);
 		println("Done!");
 		return true;
 	}

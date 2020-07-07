@@ -291,7 +291,7 @@ M3 filterXM3WithExcpetions(M3 m, set[loc] elems, set[loc] excep)
  * does not hold
  */
 M3 filterM3(M3 m, bool (value v1, value v2) predicate) {
-	m3Filtered = lang::java::m3::Core::m3(m.id);
+	m3Filtered = m3(m.id);
 
 	map[str, value] kws = getKeywordParameters(m);
 	for (str relName <- kws) {
@@ -405,10 +405,10 @@ str memberDeclaration(loc elem, M3 m) {
 
 str typeDeclaration(loc typ, M3 m) {
 	if (isType(typ)) {
-		list[Modifier] modifiers = sort(memoizedModifiers(m)[typ]);
+		list[Modifier] modifiers = sort(m.modifiers[typ]);
 		str name = memberName(typ);
-		set[loc] super = (typ in memoizedExtends(m)) ? memoizedExtends(m)[typ] : {};
-		list[loc] interfaces = (typ in memoizedImplements(m)) ? sort(memoizedImplements(m)[typ]) : [];
+		set[loc] super = m.extends[typ];
+		list[loc] interfaces = sort(m.implements[typ]);
 		
 		return "<modifiers> <name> <super> <interfaces>";
 	}
@@ -419,8 +419,8 @@ str typeDeclaration(loc typ, M3 m) {
 
 str methodDeclaration(loc meth, M3 m) {
 	if (isMethod(meth)) {
-		list[Modifier] modifiers = sort(memoizedModifiers(m)[meth]);
-		TypeSymbol methType = getOneFrom(memoizedTypes(m)[meth]);
+		list[Modifier] modifiers = sort(m.modifiers[meth]);
+		TypeSymbol methType = getOneFrom(m.types[meth]);
 		TypeSymbol returnType = methodReturnType(methType);
 		str signature = methodSignature(meth);
 		
@@ -433,8 +433,8 @@ str methodDeclaration(loc meth, M3 m) {
 
 str fieldDeclaration(loc field, M3 m) {
 	if (isField(field)) {
-		list[Modifier] modifiers = sort(memoizedModifiers(m)[field]);
-		set[TypeSymbol] fieldType = memoizedTypes(m)[field];
+		list[Modifier] modifiers = sort(m.modifiers[field]);
+		set[TypeSymbol] fieldType = m.types[field];
 		str name = memberName(field);
 		
 		return "<modifiers> <fieldType> <name>";
