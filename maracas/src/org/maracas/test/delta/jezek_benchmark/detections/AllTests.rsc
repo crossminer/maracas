@@ -75,5 +75,10 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodSt
 extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodSynchronizedToNonSynchronizedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierNestedClazzNonStaticToStaticTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierNestedClazzStaticToNonStaticTest;
-
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzToIfazeTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeToClassTest;
 
