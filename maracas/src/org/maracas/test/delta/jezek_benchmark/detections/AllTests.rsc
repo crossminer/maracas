@@ -18,6 +18,23 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIf
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeMethodAccessIncreaseTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeNestedIfazeAccessDecreaseTest; // Incomplete
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeNestedIfazeAccessIncreaseTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzContractSuperClassSetTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzExpandSuperClassSetTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedFromSuperClassTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedToSuperClassTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStartInheriteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStopInheriteTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeContractSuperinterfaceSetTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeExpandSuperinterfaceSetTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedFromSuperInterfaceTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedToSuperInterfaceTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStartInheriteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStopInheriteTest;
+
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorDeleteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorParamAddTest;
