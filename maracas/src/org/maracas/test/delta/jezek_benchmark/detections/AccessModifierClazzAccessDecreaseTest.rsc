@@ -22,3 +22,12 @@ test bool classLessAcc()
 		typeDependency(),
 		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
+	
+test bool consLessAcc()
+	= detection(
+		|java+method:///accessModifierClazzAccessDecrease/Main/main(java.lang.String%5B%5D)|,
+		|java+constructor:///testing_lib/accessModifierClazzAccessDecrease/AccessModifierClazzAccessDecrease/AccessModifierClazzAccessDecrease()|,
+		|java+constructor:///testing_lib/accessModifierClazzAccessDecrease/AccessModifierClazzAccessDecrease/AccessModifierClazzAccessDecrease()|,
+		methodInvocation(),
+		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
+	in detects;

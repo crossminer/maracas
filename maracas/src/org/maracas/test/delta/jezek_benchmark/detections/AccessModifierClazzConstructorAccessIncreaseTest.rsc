@@ -5,6 +5,8 @@ import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+// [ORACLE] No BC to report here
+
 test bool protectedToPublic()
 	= detection(
 		|java+constructor:///accessModifierClazzConstructorAccessIncrease/Main/Main(int,int,int,int,int)|,
