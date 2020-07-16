@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzCons
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("membersClazzConstructorParamAdd") == true;
+	
 // It is reported as a constructorRemoved change
 test bool addParam()
 	= detection(

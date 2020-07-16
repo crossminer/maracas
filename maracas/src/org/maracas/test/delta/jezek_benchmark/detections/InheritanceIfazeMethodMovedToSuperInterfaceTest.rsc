@@ -2,10 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfaze
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
-// [ORACLE] No BC to report here
 
+// [ORACLE] No BC to report here
+test bool noOccurrence()
+	= containsCase("inheritanceIfazeMethodMovedToSuperInterface") == false;
 
 // TODO: this shouldn'y be reported as a detection
 test bool newMethInter()

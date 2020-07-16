@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierCl
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("accessModifierClazzNestedIfazeAccessDecrease") == true;
+	
 test bool publicToNon()
 	= detection(
 		|java+class:///accessModifierClazzNestedIfazeAccessDecrease/Main|,

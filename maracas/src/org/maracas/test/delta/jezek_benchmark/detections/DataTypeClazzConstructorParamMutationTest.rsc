@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzCon
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("dataTypeClazzConstructorParamMutation") == true;
+	
 test bool paramMut()
 	= detection(
 		|java+method:///dataTypeClazzConstructorParamMutation/Main/main(java.lang.String%5B%5D)|,

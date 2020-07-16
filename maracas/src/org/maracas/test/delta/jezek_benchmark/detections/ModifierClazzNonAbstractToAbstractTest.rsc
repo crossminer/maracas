@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::ModifierClazzNon
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("modifierClazzNonAbstractToAbstract") == true;
+	
 test bool mainRef()
 	 = detection(
 	 	|java+method:///modifierClazzNonAbstractToAbstract/Main/main(java.lang.String%5B%5D)|,

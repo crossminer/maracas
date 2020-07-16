@@ -2,10 +2,14 @@ module org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeNest
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
-// TODO: no reference to method main()
 
+// TODO: no reference to method main()
+test bool occurrence()
+	= containsCase("membersIfazeNestedIfazeDelete") == true;
+	
 test bool implRem()
 	= detection(
 		|java+class:///membersIfazeNestedIfazeDelete/Main|,

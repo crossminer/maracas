@@ -2,9 +2,12 @@ module org::maracas::\test::delta::jezek_benchmark::detections::MembersIfazeMeth
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // TODO: methodOverride
+test bool occurrence()
+	= containsCase("membersIfazeMethodParamAdd") == true;
 
 // It is reported as a methodAddedToInterface change
 test bool methAdd()

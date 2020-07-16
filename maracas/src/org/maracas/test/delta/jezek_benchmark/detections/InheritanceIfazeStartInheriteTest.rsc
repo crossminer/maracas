@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfaze
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("inheritanceIfazeStartInherite") == true;
+	
 test bool interAdd()
 	= detection(
 		|java+class:///inheritanceIfazeStartInherite/Main|,

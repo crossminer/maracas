@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::ModifierFieldNon
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("modifierFieldNonStaticToStatic") == true;
+	
 test bool nonStaticAccess()
 	= detection(
 		|java+method:///modifierFieldNonStaticToStatic/Main/main(java.lang.String%5B%5D)|,

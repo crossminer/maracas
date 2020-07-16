@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::ModifierMethodNo
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("modifierMethodNonAbstractToAbstract") == true;
+	
 test bool extAbstract()
 	= detection(
 		|java+class:///modifierMethodNonAbstractToAbstract/Main|,

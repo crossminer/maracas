@@ -2,10 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazz
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
-// [ORACLE] No BC to report here
 
+// [ORACLE] No BC to report here
+test bool noOccurrence()
+	= containsCase("inheritanceClazzMethodMovedToSuperClass") == false;
 
 test bool methRem()
 	= detection(

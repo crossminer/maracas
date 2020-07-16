@@ -2,9 +2,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMe
 
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
+import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
+test bool occurrence()
+	= containsCase("exceptionClazzMethodThrowCheckedAdd") == true;
+	
 test bool checkedAdd()
 	= detection(
 		|java+method:///exceptionClazzMethodThrowCheckedAdd/Main/main(java.lang.String%5B%5D)|,
