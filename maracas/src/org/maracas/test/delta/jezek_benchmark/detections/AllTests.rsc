@@ -1,25 +1,37 @@
 module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
 
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessDecreaseTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessIncreaseTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseNonToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseProtectedToNonTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseProtectedToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToNonTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToProtectedTest; // Error
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToProtectedTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToPublicTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToNonTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToProtectedTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToPublicTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseProtectedToPublicTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessDecreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessIncreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseNonToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseProtectedToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseProtectedToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToProtectedTest; // Error issue #64
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToProtectedTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToPublicTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToProtectedTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreasePrivateToPublicTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseProtectedToPublicTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreaseNonToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreaseProtectedToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreaseProtectedToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToPrivateTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToProtectedTest; // Error issue #64
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreaseTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessIncreaseTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseNonToProtectedTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseNonToPublicTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreasePrivateToNonTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreasePrivateToProtectedTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreasePrivateToPublicTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseProtectedToPublicTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreaseTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessIncreaseTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzNestedClazzAccessDecreaseTest; // Incomplete
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzNestedClazzAccessIncreaseTest; // Incomplete
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzNestedIfazeAccessDecreaseTest; // Incomplete
