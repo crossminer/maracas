@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
     
 test bool occurrence()
-	= containsCase("accessModifierClazzNestedClazzAccessDecrease") == true;
+	= containsCase("accessModifierClazzNestedClazzAccessDecrease");
 	
 // TODO: check
 test bool publicToProtected()
