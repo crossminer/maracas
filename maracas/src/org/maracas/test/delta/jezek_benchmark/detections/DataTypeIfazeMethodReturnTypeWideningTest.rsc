@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeMethodReturnTypeWidening") == true;
+	= containsCase("dataTypeIfazeMethodReturnTypeWidening");
 	
 test bool returnWide()
 	= detection(

@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzMethodReturnTypeWidening") == true;
+	= containsCase("dataTypeClazzMethodReturnTypeWidening");
 	
 test bool returnWide()
 	= detection(

@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeConstantUnboxing") == true;
+	= containsCase("dataTypeIfazeConstantUnboxing");
 	
 test bool consUnbox()
 	= detection(

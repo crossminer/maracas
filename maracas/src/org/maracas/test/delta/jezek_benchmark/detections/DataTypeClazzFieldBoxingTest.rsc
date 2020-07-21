@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzFieldBoxing") == true;
+	= containsCase("dataTypeClazzFieldBoxing");
 	
 test bool fieldBox()
 	= detection(

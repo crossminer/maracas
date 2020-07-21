@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzMethodParamUnboxing") == true;
+	= containsCase("dataTypeClazzMethodParamUnboxing");
 	
 test bool paramUnbox()
 	= detection(

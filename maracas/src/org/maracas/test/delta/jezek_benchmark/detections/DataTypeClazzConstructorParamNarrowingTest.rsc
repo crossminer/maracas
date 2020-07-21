@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzConstructorParamNarrowing") == true;
+	= containsCase("dataTypeClazzConstructorParamNarrowing");
 	
 test bool paramNarrow()
 	= detection(

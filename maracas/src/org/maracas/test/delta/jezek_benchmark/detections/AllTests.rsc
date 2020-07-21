@@ -78,13 +78,13 @@ module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeMethodAccessIncreaseTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeNestedIfazeAccessDecreaseTest; // Error issue #65
 //extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierIfazeNestedIfazeAccessIncreaseTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamBoxingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamGeneralizationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamMutationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamNarrowingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamSpecializationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamUnboxingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamWideningTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamBoxingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamGeneralizationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamMutationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamNarrowingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamSpecializationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamUnboxingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzConstructorParamWideningTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzFieldBoxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzFieldGeneralizationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzFieldMutationTest;
@@ -106,13 +106,13 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzCon
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzMethodReturnTypeSpecializationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzMethodReturnTypeUnboxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzMethodReturnTypeWideningTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantBoxingTest; // Incomplete
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantBoxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantGeneralizationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantMutationTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantNarrowingTest; // Incomplete
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantNarrowingTest; 
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantSpecializationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantUnboxingTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantWideningTest; // Incomplete
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeConstantWideningTest; // Problem with constant inlining
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamBoxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamGeneralizationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamMutationTest;
@@ -120,13 +120,13 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeClazzCon
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamSpecializationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamUnboxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamWideningTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeBoxingTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeGeneralizationTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeMutationTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeNarrowingTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeSpecializationTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeUnboxingTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeWideningTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeBoxingTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeGeneralizationTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeMutationTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeNarrowingTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeSpecializationTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeUnboxingTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeWideningTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockAddTest; // Investigate
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockDeleteTest; // Investigate
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockAddTest; // Investigate

@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeMethodParamNarrowing") == true;
+	= containsCase("dataTypeIfazeMethodParamNarrowing");
 	
 test bool paramNarrowRem()
 	= detection(

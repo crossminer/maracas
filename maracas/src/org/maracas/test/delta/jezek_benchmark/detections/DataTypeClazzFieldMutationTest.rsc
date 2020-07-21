@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzFieldMutation") == true;
+	= containsCase("dataTypeClazzFieldMutation");
 	
 test bool fieldMut()
 	= detection(

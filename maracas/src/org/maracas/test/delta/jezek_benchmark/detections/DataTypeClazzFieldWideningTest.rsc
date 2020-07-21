@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzFieldWidening") == true;
+	= containsCase("dataTypeClazzFieldWidening");
 	
 test bool fieldWide()
 	= detection(

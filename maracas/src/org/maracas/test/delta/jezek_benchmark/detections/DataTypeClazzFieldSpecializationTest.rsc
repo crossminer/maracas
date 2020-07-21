@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzFieldSpecialization") == true;
+	= containsCase("dataTypeClazzFieldSpecialization");
 	
 test bool fieldSpec()
 	= detection(

@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzMethodParamSpecialization") == true;
+	= containsCase("dataTypeClazzMethodParamSpecialization");
 	
 test bool paramSpec()
 	= detection(

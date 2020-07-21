@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeClazzMethodParamMutation") == true;
+	= containsCase("dataTypeClazzMethodParamMutation");
 	
 test bool paramMut()
 	= detection(

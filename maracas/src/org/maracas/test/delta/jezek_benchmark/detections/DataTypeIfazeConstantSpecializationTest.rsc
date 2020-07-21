@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeConstantSpecialization") == true;
+	= containsCase("dataTypeIfazeConstantSpecialization");
 	
 test bool consSpec()
 	= detection(

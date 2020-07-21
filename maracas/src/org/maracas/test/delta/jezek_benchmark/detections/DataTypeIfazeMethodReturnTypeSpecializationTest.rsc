@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeMethodReturnTypeSpecialization") == true;
+	= containsCase("dataTypeIfazeMethodReturnTypeSpecialization");
 	
 test bool returnSepc()
 	= detection(

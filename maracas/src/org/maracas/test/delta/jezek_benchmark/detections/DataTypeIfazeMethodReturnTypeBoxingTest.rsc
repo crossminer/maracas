@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("dataTypeIfazeMethodReturnTypeBoxing") == true;
+	= containsCase("dataTypeIfazeMethodReturnTypeBoxing");
 	
 test bool returnBox()
 	= detection(
