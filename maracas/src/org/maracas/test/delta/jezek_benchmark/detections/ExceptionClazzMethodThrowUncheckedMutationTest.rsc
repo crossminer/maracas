@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("exceptionClazzMethodThrowUncheckedMutation") == true;
+	= containsCase("exceptionClazzMethodThrowUncheckedMutation");
 
 test bool excepMut()
 	= detection(

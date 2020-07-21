@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("exceptionClazzMethodTryCatchToThrowChecked") == true;
+	= containsCase("exceptionClazzMethodTryCatchToThrowChecked");
 	
 test bool excepCheck()
 	= detection(

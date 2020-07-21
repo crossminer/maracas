@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("inheritanceClazzContractSuperClassSet") == true;
+	= containsCase("inheritanceClazzContractSuperClassSet");
 	
 // Non-breaking usage
 test bool contractSuper()

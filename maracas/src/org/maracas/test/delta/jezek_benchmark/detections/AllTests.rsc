@@ -120,32 +120,35 @@ module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamSpecializationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamUnboxingTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodParamWideningTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeBoxingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeGeneralizationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeMutationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeNarrowingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeSpecializationTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeUnboxingTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeWideningTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockAddTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockDeleteTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockAddTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockDeleteTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedDeleteTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedGeneralizationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedMutationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedSpecializationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedToTryCatchTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedAddTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedDeleteTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedGeneralizationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedMutationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedSpecializationTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodTryCatchToThrowCheckedTest; // Investigate
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzContractSuperClassSetTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzExpandSuperClassSetTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedFromSuperClassTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedToSuperClassTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeBoxingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeGeneralizationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeMutationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeNarrowingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeSpecializationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeUnboxingTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::DataTypeIfazeMethodReturnTypeWideningTest;
+
+// In general, exception related detections should be improved.
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockAddTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodCatchBlockDeleteTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockAddTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockDeleteTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedAddTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedDeleteTest; // Not reported by JapiCmp
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedGeneralizationTest; // Error issue #66, #67
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedMutationTest; // Error issue #67
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedSpecializationTest; // Error issue #68
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedToTryCatchTest; // Not reported by JapiCmp
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedAddTest; 
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedDeleteTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedGeneralizationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedMutationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedSpecializationTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodTryCatchToThrowCheckedTest; 
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzContractSuperClassSetTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzExpandSuperClassSetTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedFromSuperClassTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedToSuperClassTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideAddTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideDeleteTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStartInheriteTest;

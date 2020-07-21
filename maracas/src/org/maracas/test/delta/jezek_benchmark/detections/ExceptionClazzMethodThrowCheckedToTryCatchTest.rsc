@@ -4,4 +4,4 @@ import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 
 
 test bool occurrence()
-	= containsCase("exceptionClazzMethodThrowCheckedToTryCatch") == true;
+	= containsCase("exceptionClazzMethodThrowCheckedToTryCatch");

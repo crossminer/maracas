@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // [ORACLE] No BC to report here
 test bool noOccurrence()
-	= containsCase("exceptionClazzMethodThrowCheckedSpecialization") == false;
+	= !containsCase("exceptionClazzMethodThrowCheckedSpecialization");
 
 test bool excepSepc()
 	= detection(
