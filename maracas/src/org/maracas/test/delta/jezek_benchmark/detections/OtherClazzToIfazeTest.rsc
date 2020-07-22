@@ -7,9 +7,8 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("otherClazzToIfaze") == true;
+	= containsCase("otherClazzToIfaze");
 	
-// TODO: classTypeChanged?
 test bool classAbs()
 	= detection(
 		|java+method:///otherClazzToIfaze/Main/main(java.lang.String%5B%5D)|,

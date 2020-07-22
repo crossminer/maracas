@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("otherIfazeDelete") == true;
+	= containsCase("otherIfazeDelete");
 	
 test bool depRem()
 	= detection(

@@ -221,7 +221,7 @@ module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ModifierNestedClazzStaticToNonStaticTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzDeleteTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzToIfazeTest; // Incomplete
+extend org::maracas::\test::delta::jezek_benchmark::detections::OtherClazzToIfazeTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeDeleteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::OtherIfazeToClassTest;

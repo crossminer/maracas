@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("otherIfazeToClass") == true;
+	= containsCase("otherIfazeToClass");
 	
 test bool changeType()
 	= detection(
