@@ -8,7 +8,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // TODO: method override method2
 test bool occurrence()
-	= containsCase("inheritanceIfazeContractSuperinterfaceSet") == true;
+	= containsCase("inheritanceIfazeContractSuperinterfaceSet");
 	
 test bool methRem()
 	 = detection(

@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("inheritanceClazzMethodMovedFromSuperClass") == true;
+	= containsCase("inheritanceClazzMethodMovedFromSuperClass");
 	
 test bool methRem()
 	= detection(

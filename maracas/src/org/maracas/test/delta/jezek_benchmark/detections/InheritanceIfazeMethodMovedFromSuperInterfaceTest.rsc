@@ -8,7 +8,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // [ORACLE] No BC to report here
 test bool noOccurrence()
-	= containsCase("inheritanceIfazeMethodMovedFromSuperInterface") == false;
+	= !containsCase("inheritanceIfazeMethodMovedFromSuperInterface");
 
 // TODO: this shouldn't be a detection.
 test bool methRem()

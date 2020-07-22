@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("inheritanceIfazeStartInherite") == true;
+	= containsCase("inheritanceIfazeStartInherite");
 	
 test bool interAdd()
 	= detection(

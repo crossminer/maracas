@@ -145,29 +145,29 @@ module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedMutationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedSpecializationTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodTryCatchToThrowCheckedTest; 
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzContractSuperClassSetTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzExpandSuperClassSetTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedFromSuperClassTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedToSuperClassTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzContractSuperClassSetTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzExpandSuperClassSetTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedFromSuperClassTest;
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodMovedToSuperClassTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideAddTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzMethodOverrideDeleteTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStartInheriteTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStopInheriteTest; // Incomplete
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeContractSuperinterfaceSetTest; // Incomplete
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceClazzStopInheriteTest; // Error issue #69
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeContractSuperinterfaceSetTest; // Error issue #69
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideAddTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideDeleteTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeExpandSuperinterfaceSetTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedFromSuperInterfaceTest; // Incomplete
-//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedToSuperInterfaceTest; // Incomplete
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedFromSuperInterfaceTest; // Error issue #71
+//extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedToSuperInterfaceTest; // Error issue #70
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStartInheriteTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStopInheriteTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorAddTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorDeleteTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorParamAddTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorParamDeleteTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldAddTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldConstantDeleteTest;
-//extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorParamAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorParamDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldAddTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldConstantDeleteTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzFieldDeleteTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzMethodAbstractAddTest;
 //extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzMethodAbstractDeleteTest; // Incomplete
 //extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzMethodAddTest;

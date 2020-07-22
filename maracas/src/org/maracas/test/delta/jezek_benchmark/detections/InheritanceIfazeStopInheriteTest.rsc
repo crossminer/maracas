@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("inheritanceIfazeStopInherite") == true;
+	= containsCase("inheritanceIfazeStopInherite");
 
 test bool interRem()
 	= detection(
