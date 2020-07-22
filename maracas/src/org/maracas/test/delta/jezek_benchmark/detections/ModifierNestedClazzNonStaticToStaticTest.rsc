@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("modifierNestedClazzNonStaticToStatic") == true;
+	= containsCase("modifierNestedClazzNonStaticToStatic");
 	
 test bool noCons()
 	= detection(

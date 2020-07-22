@@ -6,7 +6,7 @@ import org::maracas::\test::delta::jezek_benchmark::detections::Common;
 import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 test bool occurrence()
-	= containsCase("modifierFieldStaticToNonStatic") == true;
+	= containsCase("modifierFieldStaticToNonStatic");
 	
 test bool staticAccess()
 	= detection(

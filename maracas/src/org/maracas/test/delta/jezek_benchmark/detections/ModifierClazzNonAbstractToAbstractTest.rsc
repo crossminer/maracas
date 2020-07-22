@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("modifierClazzNonAbstractToAbstract") == true;
+	= containsCase("modifierClazzNonAbstractToAbstract");
 	
 test bool mainRef()
 	 = detection(

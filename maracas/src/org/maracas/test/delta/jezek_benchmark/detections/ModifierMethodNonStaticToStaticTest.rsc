@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("modifierMethodNonStaticToStatic") == true;
+	= containsCase("modifierMethodNonStaticToStatic");
 	
 test bool nonStaticAccess()
 	= detection(

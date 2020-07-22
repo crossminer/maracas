@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("modifierMethodNonAbstractToAbstract") == true;
+	= containsCase("modifierMethodNonAbstractToAbstract");
 	
 test bool extAbstract()
 	= detection(

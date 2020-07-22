@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("modifierMethodStaticToNonStatic") == true;
+	= containsCase("modifierMethodStaticToNonStatic");
 	
 test bool staticInv()
 	= detection(
