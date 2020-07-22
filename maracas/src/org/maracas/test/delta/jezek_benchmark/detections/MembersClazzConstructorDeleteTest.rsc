@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersClazzConstructorDelete") == true;
+	= containsCase("membersClazzConstructorDelete");
 	
 test bool consRem()
 	= detection(

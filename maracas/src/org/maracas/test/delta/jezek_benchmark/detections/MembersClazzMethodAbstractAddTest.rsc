@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersClazzMethodAbstractAdd") == true;
+	= containsCase("membersClazzMethodAbstractAdd");
 	
 test bool methAbsAdd()
 	= detection(

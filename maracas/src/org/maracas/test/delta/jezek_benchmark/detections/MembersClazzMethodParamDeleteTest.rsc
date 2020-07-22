@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersClazzMethodParamDelete") == true;
+	= containsCase("membersClazzMethodParamDelete");
 	
 // It is reported as a methodRemoved change
 test bool paramRem()

@@ -7,9 +7,8 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // TODO: methodOverride
 test bool occurrence()
-	= containsCase("membersIfazeMethodParamAdd") == true;
+	= containsCase("membersIfazeMethodParamAdd");
 
-// It is reported as a methodAddedToInterface change
 test bool methAdd()
 	= detection(
 		|java+class:///membersIfazeMethodParamAdd/Main|,

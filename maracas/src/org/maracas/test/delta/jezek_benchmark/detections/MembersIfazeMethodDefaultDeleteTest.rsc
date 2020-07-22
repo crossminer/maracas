@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersIfazeMethodDefaultDelete") == true;
+	= containsCase("membersIfazeMethodDefaultDelete");
 	
 test bool methRem()
 	 = detection(

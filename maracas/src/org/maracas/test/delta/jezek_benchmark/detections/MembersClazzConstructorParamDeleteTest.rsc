@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersClazzConstructorParamDelete") == true;
+	= containsCase("membersClazzConstructorParamDelete");
 	
 // It is reported as a constructorRemoved change
 test bool remParam()

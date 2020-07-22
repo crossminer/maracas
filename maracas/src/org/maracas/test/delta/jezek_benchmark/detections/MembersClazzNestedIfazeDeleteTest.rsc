@@ -7,7 +7,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 
 test bool occurrence()
-	= containsCase("membersClazzNestedIfazeDelete") == true;
+	= containsCase("membersClazzNestedIfazeDelete");
 	
 // TODO: no reference to method main()
 test bool implRem()
