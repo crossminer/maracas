@@ -357,13 +357,13 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity]
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::annotationDeprecatedAdded()) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[APIUse] apiUses = { 
-		annotation(), 
-		extends(), 
-		implements(), 
-		typeDependency(), 
-		methodInvocation(), 
-		methodOverride(), 
-		fieldAccess()
+		APIUse::annotation(), 
+		APIUse::extends(), 
+		APIUse::implements(), 
+		APIUse::typeDependency(), 
+		APIUse::methodInvocation(), 
+		APIUse::methodOverride(), 
+		APIUse::fieldAccess()
 	};
 	
 	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, entities);
@@ -587,11 +587,13 @@ private bool isClassLessAccessible(RippleEffect effect, Evolution evol) {
 	
 	loc affected = effect.affected;
 	loc changed = effect.changed;
-	loc parent = (isType(affected)) ? affected : parentType(evol.client, affected);
 	
+	loc parent = (isType(affected)) ? affected : parentType(evol.client, affected);
+		
 	return isLessVisible(access.new, access.old)
 		&& !(pub2prot && areInSameHierarchy(effect, evol)) // Public to protected
-		&& !(pkgProt && samePackage(parent, changed)); // To package-private same package
+		&& !(pkgProt && samePackage(parent, changed)) // To package-private same package
+		&& !isInterface(parentType(evol.apiOld, changed)); // Do not consider interface declarations
 }
 
 private bool isMoreAccessible(RippleEffect effect, Evolution evol) {
@@ -610,8 +612,10 @@ private bool areStaticIncompatible(RippleEffect effect, Evolution evol) {
 }
 
 private bool areInSameHierarchy(RippleEffect effect, Evolution evol) {
-	loc apiParent = (isType(effect.changed)) ? effect.changed : parentType(evol.apiOld, effect.changed);
-	loc clientParent = (isType(effect.affected)) ? effect.affected : parentType(evol.client, effect.affected);
+	loc apiParent = (isType(effect.changed)) ? effect.changed 
+		: parentType(evol.apiOld, effect.changed);
+	loc clientParent = (isType(effect.affected)) ? effect.affected 
+		: parentType(evol.client, effect.affected);
 	
 	return (isKnown(clientParent) && isKnown(apiParent) 
 		&& <clientParent, apiParent> in composeExtends({ evol.client, evol.apiOld })+);

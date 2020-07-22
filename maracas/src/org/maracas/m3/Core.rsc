@@ -65,10 +65,19 @@ set[loc] domainRangeR(rel[loc, loc] r, set[loc] elems) {
 }
 
 loc parentType(M3 m, loc elem) {
-	list[loc] containers = (isMethod(elem) || isField(elem)) 
-		? toList(domainRangeR(m.containment, { elem }))
-		: sort(domainRangeR(m.containment+, { elem }), isLongerPath);
-		
+	list[loc] containers = [];
+	
+	if (isMethod(elem) || isField(elem)) {
+		containers = toList(domainRangeR(m.containment, { elem }));
+	}
+	else if (isNestedType(elem)) {
+		outer = getOuterType(elem, m);
+		containers = (outer == unknownSource) ? [] : [ outer ];
+	}
+	else {
+		containers = sort(domainRangeR(m.containment+, { elem }), isLongerPath);
+	}
+	
 	if (p <- containers, isType(p)) {
 		return p;
 	}
@@ -89,6 +98,7 @@ bool isType(loc entity) = isClass(entity) || isInterface(entity);
 bool isAPIEntity(loc entity) = isType(entity) || isMethod(entity) || isField(entity);
 bool isKnown(loc elem) = elem != unknownSource;
 bool isAnonymousClass(loc entity) = entity.scheme == "java+anonymousClass";
+bool isNestedType(loc entity) = isType(entity) && contains(entity.file, "$");
  	
 bool isTargetMemberExclInterface(loc elem)
 	= isClass(elem)
@@ -472,6 +482,28 @@ set[loc] abstractMeths(M3 m, loc class)
 loc getDeclaration(loc logical, M3 m) {
 	set[loc] decls = m.declarations[logical];
 	return (!isEmpty(decls)) ? getOneFrom(decls) : unknownSource;
+}
+
+loc getOuterType(loc nested, M3 m) {
+	int index = findLast(nested.path, "$");
+	str path = substring(nested.path, 0, index);
+	
+	loc outer = |java+class:///| + path;
+	if (m.declarations[outer] != {}) {
+		return outer;
+	}
+	
+	outer = |java+interface:///| + path;
+	if (m.declarations[outer] != {}) {
+		return outer;
+	}
+	
+	outer = |java+anonymousClass:///| + path;
+	if (m.declarations[outer] != {}) {
+		return outer;
+	}
+	
+	return unknownSource;
 }
 
 @memo

@@ -8,24 +8,4 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 
 // [ORACLE] No BC to report here
 test bool noOccurrence()
-	= !containsCase("accessModifierClazzNestedIfazeAccessDecrease");
-
-test bool publicToNonLessAcc()
-	= detection(
-		|java+class:///accessModifierClazzNestedIfazeAccessDecrease/Main|,
-		|java+interface:///testing_lib/accessModifierClazzNestedIfazeAccessDecrease/AccessModifierClazzNestedIfazeAccessDecrease$IfazePublicToNon|,
-		|java+interface:///testing_lib/accessModifierClazzNestedIfazeAccessDecrease/AccessModifierClazzNestedIfazeAccessDecrease$IfazePublicToNon|,
-		implements(),
-		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-
-test bool publicToNonNoPub()
-	= detection(
-		|java+class:///accessModifierClazzNestedIfazeAccessDecrease/Main|,
-		|java+interface:///testing_lib/accessModifierClazzNestedIfazeAccessDecrease/AccessModifierClazzNestedIfazeAccessDecrease$IfazePublicToNon|,
-		|java+interface:///testing_lib/accessModifierClazzNestedIfazeAccessDecrease/AccessModifierClazzNestedIfazeAccessDecrease$IfazePublicToNon|,
-		implements(),
-		classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
-    
-// TODO: missing reference on main() method
+	= !containsCase("AccessModifierIfazeNestedIfazeAccessDecrease");
