@@ -16,7 +16,7 @@ test bool publicToProtected()
 		|java+field:///testing_lib/accessModifierClazzFieldAccessDecrease/AccessModifierClazzFieldAccessDecrease/fieldPublicToProtected|,
 		fieldAccess(),
 		fieldLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
     
 test bool publicToNon()
 	= detection(

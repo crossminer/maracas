@@ -139,8 +139,27 @@ set[Detection] getDetectionsByChange(set[Detection] detects, CompatibilityChange
 // Field detections
 //----------------------------------------------
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLessAccessible()) 
-	= computeFieldSymbDetections(evol, ch, isLessAccessible);
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLessAccessible()) {
+	set[loc] changed = getChangedEntities(evol.delta, ch);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (e <- changed) {
+		tuple[Modifier old, Modifier new] access = getAccessModifiers(e, evol.delta);
+		bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
+	
+		if (!pub2prot) {
+			str field = memberName(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbFields = createHierarchySymbRefs(parent, e.scheme, field, evol.apiOld, evol.client);
+			entities += { e } * symbFields;
+		}
+		else {
+			entities += <e, e>;
+		}
+	}
+	
+	return computeDetections(evol, entities, ch, { fieldAccess() }, isLessAccessible);
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMoreAccessible()) 
 	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true); // JLS 13.4.8 Field Declarations
@@ -216,9 +235,32 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity
 // Method detections
 //----------------------------------------------
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodLessAccessible())
-	= computeMethSymbDetections(evol, ch, { methodInvocation() }, isLessAccessible)
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodLessAccessible()) {
+	return computeMethLessAccessibleDetections(evol, ch, { methodInvocation() })
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, isLessAccessible, allowShadowing = true);
+}
+
+set[Detection] computeMethLessAccessibleDetections(Evolution evol, ch:CompatibilityChange::methodLessAccessible(), set[APIUse] apiUses) {
+	set[loc] changed = getChangedEntities(evol.delta, ch);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (e <- changed) {
+		tuple[Modifier old, Modifier new] access = getAccessModifiers(e, evol.delta);
+		bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
+	
+		if (!pub2prot) {
+			str signature = methodSignature(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client);
+			entities += { e } * symbMeths;
+		}
+		else {
+			entities += <e, e>;
+		}
+	}
+	
+	return computeDetections(evol, entities, ch, apiUses, isLessAccessible);
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodMoreAccessible())
 	= computeMethSymbDetections(evol, ch, { methodOverride() }, isMoreAccessible, allowShadowing = true);	
@@ -572,11 +614,9 @@ private bool isNotSuperInvocation(RippleEffect effect, Evolution evol)
 
 private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);
-	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
 	bool pkgProt = isPackageProtected(access.new);
-		
+	
 	return isLessVisible(access.new, access.old)
-		&& !(pub2prot && areInSameHierarchy(effect, evol)) // Public to protected
 		&& !(pkgProt && samePackage(effect.affected, effect.changed)); // To package-private same package
 }
 

@@ -16,7 +16,7 @@ test bool publicToProtected()
 		|java+method:///testing_lib/accessModifierClazzMethodAccessDecrease/AccessModifierClazzMethodAccessDecrease/methodPublicToProtected()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
 test bool publicToNon()
 	= detection(

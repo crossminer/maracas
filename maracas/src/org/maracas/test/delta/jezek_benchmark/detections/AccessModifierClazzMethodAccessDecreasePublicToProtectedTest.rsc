@@ -9,7 +9,7 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 test bool occurrence()
 	= containsCase("accessModifierClazzMethodAccessDecreasePublicToProtected");
 	
-test bool PublicToProtected()
+test bool publicToProtected()
 	= detection(
 		|java+method:///accessModifierClazzMethodAccessDecreasePublicToProtected/Main/main(java.lang.String%5B%5D)|,
 		|java+method:///accessModifierClazzMethodAccessDecreasePublicToProtected/Main/methodPublicToProtected()|,
@@ -18,7 +18,7 @@ test bool PublicToProtected()
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	notin detects;
 	
-test bool PublicToProtectedSuper()
+test bool publicToProtectedSuper()
 	= detection(
 		|java+method:///accessModifierClazzMethodAccessDecreasePublicToProtected/Main/main(java.lang.String%5B%5D)|,
 		|java+method:///testing_lib/accessModifierClazzMethodAccessDecreasePublicToProtected/AccessModifierClazzMethodAccessDecreasePublicToProtected/methodPublicToProtected()|,

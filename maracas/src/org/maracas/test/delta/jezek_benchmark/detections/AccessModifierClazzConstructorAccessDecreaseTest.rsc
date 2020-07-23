@@ -37,7 +37,7 @@ test bool invNoArg()
 		|java+constructor:///testing_lib/accessModifierClazzConstructorAccessDecrease/AccessModifierClazzConstructorAccessDecrease/AccessModifierClazzConstructorAccessDecrease()|,
 		methodInvocation(),
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
 // public to non
 test bool invOneArg()

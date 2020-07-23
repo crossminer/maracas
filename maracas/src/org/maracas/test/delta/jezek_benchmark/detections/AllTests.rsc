@@ -8,7 +8,7 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierCl
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreaseProtectedToPrivateTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToNonTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToProtectedTest; // Issue #64
+extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessDecreasePublicToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzConstructorAccessIncreaseNonToPublicTest;
@@ -22,7 +22,7 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierCl
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreaseProtectedToPrivateTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToNonTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToProtectedTest; // Issue #64
+extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessDecreasePublicToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseNonToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzFieldAccessIncreaseNonToPublicTest;
@@ -36,7 +36,7 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierCl
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreaseProtectedToPrivateTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreasePublicToNonTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreasePublicToPrivateTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreasePublicToProtectedTest; // Issue #64
+extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessDecreasePublicToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessIncreaseTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessIncreaseNonToProtectedTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzMethodAccessIncreaseNonToPublicTest;
