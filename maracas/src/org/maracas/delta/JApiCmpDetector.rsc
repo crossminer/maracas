@@ -280,8 +280,10 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	= computeMethSymbDetections(evol, ch, { methodInvocation() })
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 	
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) 
-	= computeMethSymbDetections(evol, ch, { methodInvocation() });
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) {
+	set[loc] changed = domain(getExcepRemovedEntities(evol.delta) + getExcepAddedEntities(evol.delta));
+	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() }, bool (RippleEffect effect, Evolution evol) { return true; });
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodRemoved()) 
 	= computeMethSymbDetections(evol, ch, { methodInvocation() })

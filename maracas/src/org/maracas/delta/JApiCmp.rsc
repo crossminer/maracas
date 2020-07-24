@@ -514,6 +514,23 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 	throw "There is no reference to <elem> in the delta model.";
 }
 
+rel[loc, loc] getExcepRemovedEntities(list[APIEntity] delta) 
+	= { *getExcepEntities(entity, removed()) | APIEntity entity <- delta };
+
+rel[loc, loc] getExcepAddedEntities(list[APIEntity] delta) 
+	= { *getExcepEntities(entity, new()) | APIEntity entity <- delta };
+	
+rel[loc, loc] getExcepEntities(APIEntity entity, APISimpleChange apiCh) {
+	rel[loc, loc] exceptions = {};
+	visit(entity) {
+	case /method(id, _, _, entities, _, _):
+		for (/exception(excep, true, apiCh) := entities) {
+			exceptions += <id, excep>;
+		}
+	}
+	return exceptions;
+}
+
 rel[loc, loc] getInterRemovedEntities(list[APIEntity] delta) 
 	= { *getInterEntities(entity, removed()) | APIEntity entity <- delta };
 

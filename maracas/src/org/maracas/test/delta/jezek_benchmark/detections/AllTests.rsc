@@ -135,8 +135,8 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMe
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodFinallyBlockDeleteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedDeleteTest; // Not reported by JapiCmp
-extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedGeneralizationTest; // Issue #66, #67
-extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedMutationTest; // Issue #67
+extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedGeneralizationTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedMutationTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedSpecializationTest; // Issue #68
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowCheckedToTryCatchTest; // Not reported by JapiCmp
 extend org::maracas::\test::delta::jezek_benchmark::detections::ExceptionClazzMethodThrowUncheckedAddTest; 
