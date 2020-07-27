@@ -294,11 +294,29 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodR
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodAbstractAddedToClass()) 
-	= computeTypeHierarchyDetectionsNewApi(evol, ch, { extends() }, isNotAbstract);
+	= computeAbsTypeHierarchyDetections(evol, ch, { extends() }, isNotAbstract);
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodAddedToInterface()) 
-	= computeTypeHierarchyDetectionsNewApi(evol, ch, { implements() }, isNotAbstract);
+	= computeAbsTypeHierarchyDetections(evol, ch, { implements() }, isNotAbstract);
 	
+set[Detection] computeAbsTypeHierarchyDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
+	set[loc] changed = getChangedEntities(evol.delta, change);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (e <- changed) {
+		str signature = methodSignature(e);
+		loc parent = parentType(evol.apiNew, e); // Diff evol.apiNew
+		
+		if (!hasSupertypesWithShadowing(parent, e.scheme, signature, evol.apiOld)
+			&& !hasSubtypesWithShadowing(parent, e.scheme, signature, evol.apiOld)) {
+			set[loc] subtypes = getHierarchyWithoutMethShadowing(parent, e.scheme, signature, evol.apiNew, evol.client); // Diff evol.apiNew
+			entities += { e } * subtypes;
+		}
+	}
+		
+	return computeDetections(evol, entities, change, apiUses, predicate);
+}
+
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodAbstractNowDefault())
 	= computeTypeHierarchyDetectionsNewApi(evol, ch, { implements() }, existsMethodClash);
 

@@ -24,6 +24,28 @@ loc createContainedLoc(loc class, str scheme, str fieldName) {
 	return l;
 }
 
+bool hasSupertypesWithShadowing(loc class, str scheme, str elemName, M3 m) {
+	set[loc] symbRefs = createSupertypeSymbRefs(class, scheme, elemName, m);
+	
+	if (loc s <- symbRefs, m.declarations[s] != {}) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool hasSubtypesWithShadowing(loc class, str scheme, str elemName, M3 api) {
+	set[loc] symbRefs = createSubtypeSymbRefs(class, scheme, elemName, api);
+	
+	if (loc s <- symbRefs, api.declarations[s] != {}) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 private set[loc] getSubtypesWithoutShadowing(loc class, str scheme, str elemName, M3 m) {
 	set[loc] subtypes = domainRangeR(m.extends, { class }) + domainRangeR(m.implements, { class });
 	
@@ -41,7 +63,7 @@ private set[loc] getHierarchyWithoutShadowing(loc class, str scheme, str elemNam
 set[loc] getHierarchyWithoutMethShadowing(loc class, str scheme, str signature, M3 api, M3 client) 
 	= getHierarchyWithoutShadowing(class, scheme, signature, api, client);
 
-@doc{ 
+@doc{
 	Given a type and the name of a member within that 
 	type, the function computes all symbolic references of
 	the member. These references are computed by gathering
@@ -77,6 +99,20 @@ set[loc] createHierarchySymbRefs(loc class, str scheme, str elemName, M3 api, M3
 	}
 	return { createContainedLoc(c, scheme, elemName) | c <- apiSubtypes + clientSubtypes };
 }
+
+set[loc] createSupertypeSymbRefs(loc class, str scheme, str elemName, M3 api) {
+	res = { createContainedLoc(s, scheme, elemName) | s <- getSupertypes(class, api) };
+	return res;
+}
+
+set[loc] createSubtypeSymbRefs(loc class, str scheme, str elemName, M3 api) {
+	res = { createContainedLoc(s, scheme, elemName) | s <- getSubtypes(class, api) };
+	return res;
+}
+
+set[loc] getSupertypes(loc class, M3 m) 
+	= (m.extends+ + m.implements+)[class];
+	
 
 @doc{
 	Returns a set of locations pointing to the subtypes 
