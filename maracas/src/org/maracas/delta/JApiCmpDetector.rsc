@@ -286,8 +286,23 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodRemoved()) 
-	= computeMethSymbDetections(evol, ch, { methodInvocation() })
+	= computeMethRemDetections(evol, ch, { methodInvocation() })
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, allowShadowing = true);
+
+set[Detection] computeMethRemDetections(Evolution evol, CompatibilityChange change, set[APIUse] apiUses) {
+	set[loc] changed = getChangedEntities(evol.delta, change);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (e <- changed) {
+		str signature = methodSignature(e);
+		loc parent = parentType(evol.apiOld, e);
+		set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client);
+		set[loc] filterSymbMeths = { s | loc s <- symbMeths, evol.apiNew.declarations[s] == {} };
+		entities += { e } * filterSymbMeths;
+	}
+	
+	return computeDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; });
+}
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodReturnTypeChanged()) 
 	= computeMethSymbDetections(evol, ch, { methodInvocation() })

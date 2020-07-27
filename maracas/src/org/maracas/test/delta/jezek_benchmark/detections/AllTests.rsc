@@ -157,8 +157,8 @@ extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfaze
 extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideAddTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeDefaultMethodOverrideDeleteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeExpandSuperinterfaceSetTest;
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedFromSuperInterfaceTest; // Issue #71
-extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedToSuperInterfaceTest; // Issue #70
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedFromSuperInterfaceTest;
+extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeMethodMovedToSuperInterfaceTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStartInheriteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::InheritanceIfazeStopInheriteTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::MembersClazzConstructorAddTest;

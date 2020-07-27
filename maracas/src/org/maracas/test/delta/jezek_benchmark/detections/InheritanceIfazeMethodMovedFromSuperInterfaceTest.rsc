@@ -10,7 +10,6 @@ import org::maracas::\test::delta::jezek_benchmark::SetUp;
 test bool noOccurrence()
 	= !containsCase("inheritanceIfazeMethodMovedFromSuperInterface");
 
-// TODO: this shouldn't be a detection.
 test bool methRem()
 	= detection(
 		|java+method:///inheritanceIfazeMethodMovedFromSuperInterface/Main/main(java.lang.String%5B%5D)|,
