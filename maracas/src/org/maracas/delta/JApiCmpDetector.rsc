@@ -72,9 +72,9 @@ Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta
 
 // Handy method for Java foreign calls
 Evolution createEvolution (loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
-	M3 clientM3 = createM3FromJarFile(clientJar);
-	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
-	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	M3 clientM3 = createM3(clientJar);
+	M3 apiOldM3 = createM3(apiOldJar);
+	M3 apiNewM3 = createM3(apiNewJar);
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
 	return createEvolution(clientM3, apiOldM3, apiNewM3, delta);
@@ -570,28 +570,28 @@ private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] 
 	set[loc] affected = {};
 	
 	if (apiUse == APIUse::annotation()) {
-		affected = domainRangeR(client.annotations, entities);
+		affected = client.invertedAnnotations[entities];
 	}
-	elseif (apiUse == declaration()) {
-		affected = domain(domainR(client.declarations, entities));
+	else if (apiUse == declaration()) {
+		affected = { e | e <- entities, client.declarations[e] != {}};
 	}
-	elseif (apiUse == extends()) {
-		affected = domainRangeR(client.extends, entities);
+	else if (apiUse == extends()) {
+		affected = client.invertedExtends[entities];
 	}
-	elseif (apiUse == fieldAccess()) {
-		affected = domainRangeR(client.fieldAccess, entities);
+	else if (apiUse == fieldAccess()) {
+		affected = client.invertedFieldAccess[entities];
 	}
-	elseif (apiUse == implements()) {
-		affected = domainRangeR(client.implements, entities);
+	else if (apiUse == implements()) {
+		affected = client.invertedImplements[entities];
 	}
-	elseif (apiUse == methodInvocation()) {
-		affected = domainRangeR(client.methodInvocation, entities);
+	else if (apiUse == methodInvocation()) {
+		affected = client.invertedMethodInvocation[entities];
 	}
-	elseif (apiUse == methodOverride()) {
-		affected = domainRangeR(client.methodOverrides, entities);
+	else if (apiUse == methodOverride()) {
+		affected = client.invertedMethodOverrides[entities];
 	}
-	elseif (apiUse == typeDependency()) {
-		raw = domainRangeR(client.typeDependency, entities);
+	else if (apiUse == typeDependency()) {
+		raw = client.invertedTypeDependency[entities];
 		for (loc e <- raw) {
 			affected += (isParameter(e)) ? getMethod(e) : e; // Parameters special treatment
 		}
@@ -742,9 +742,9 @@ private bool hasSameMethod(M3 m, loc class, loc meth) {
 
 // Handy method for Java foreign calls
 public set[Detection] computeDetections(loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
-	M3 clientM3 = createM3FromJarFile(clientJar);
-	M3 apiOldM3 = createM3FromJarFile(apiOldJar);
-	M3 apiNewM3 = createM3FromJarFile(apiNewJar);
+	M3 clientM3 = createM3(clientJar);
+	M3 apiOldM3 = createM3(apiOldJar);
+	M3 apiNewM3 = createM3(apiNewJar);
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
 	return computeDetections(createEvolution(clientM3, apiOldM3, apiNewM3, delta));

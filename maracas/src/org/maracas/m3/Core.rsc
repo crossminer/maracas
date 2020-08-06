@@ -3,8 +3,8 @@ module org::maracas::m3::Core
 import IO;
 //import lang::java::m3::ClassPaths;
 import analysis::m3::AST;
+extend lang::java::m3::Core;
 import lang::java::m3::AST;
-import lang::java::m3::Core;
 import lang::java::m3::TypeSymbol;
 import org::maracas::io::File;
 import List;
@@ -15,17 +15,40 @@ import String;
 import Type;
 import ValueIO;
 
+data M3(
+	rel[loc from, loc to] invertedContainment = {},	
+	rel[loc from, loc to] invertedExtends = {},
+	rel[loc from, loc to] invertedImplements = {},
+	rel[loc from, loc to] invertedMethodInvocation = {},
+	rel[loc from, loc to] invertedFieldAccess = {},
+	rel[loc from, loc to] invertedTypeDependency = {},
+	rel[loc from, loc to] invertedMethodOverrides = {},
+	rel[loc declaration, loc annotation] invertedAnnotations = {},
+	rel[loc from, loc to] transInvertedContainment = {}
+);
+
 // extends lang::java::m3::AST::Modifier
 // Could be moved to M3 creation itself
 // but this is the quickest way :)
 data Modifier =
 	\defaultAccess();
-	
+
+M3 createM3(loc jar) {
+	M3 m = createM3FromJar(jar);
+	m.invertedContainment = invert(m.containment);
+	m.invertedExtends = invert(m.extends);
+	m.invertedImplements = invert(m.implements);
+	m.invertedMethodInvocation = invert(m.methodInvocation);
+	m.invertedFieldAccess = invert(m.fieldAccess);
+	m.invertedTypeDependency = invert(m.typeDependency);
+	m.invertedMethodOverrides = invert(m.methodOverrides);
+	m.invertedAnnotations = invert(m.annotations);
+	m.transInvertedContainment = m.invertedContainment+;
+	return m; 
+}
+
 M3 readBinaryM3(loc m3)
 	= readBinaryValueFile(#M3, m3);
-	
-@memo
-rel[loc, loc] invertRel (rel[loc, loc] r) = invert(r);
 
 set[value] getM3Set(loc elem, map[loc, set[value]] m) 
 	= (elem in m) ? m[elem] : {};
@@ -59,23 +82,18 @@ loc getNonCUChild(loc elem, M3 m) {
 	return elem;
 }
 
-set[loc] domainRangeR(rel[loc, loc] r, set[loc] elems) {
-	rel[loc, loc] inv = invertRel(r);
-	return { *inv[e] | loc e <- elems };
-}
-
 loc parentType(M3 m, loc elem) {
 	list[loc] containers = [];
 	
 	if (isMethod(elem) || isField(elem)) {
-		containers = toList(domainRangeR(m.containment, { elem }));
+		containers = toList(m.invertedContainment[elem]);
 	}
 	else if (isNestedType(elem)) {
 		outer = getOuterType(elem, m);
 		containers = (outer == unknownSource) ? [] : [ outer ];
 	}
 	else {
-		containers = sort(domainRangeR(m.containment+, { elem }), isLongerPath);
+		containers = sort(m.transInvertedContainment[elem], isLongerPath);
 	}
 	
 	if (p <- containers, isType(p)) {

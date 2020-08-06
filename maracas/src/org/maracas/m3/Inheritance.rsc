@@ -47,7 +47,7 @@ bool hasSubtypesWithShadowing(loc class, str scheme, str elemName, M3 api) {
 }
 
 private set[loc] getSubtypesWithoutShadowing(loc class, str scheme, str elemName, M3 m) {
-	set[loc] subtypes = domainRangeR(m.extends, { class }) + domainRangeR(m.implements, { class });
+	set[loc] subtypes = m.invertedExtends[class] + m.invertedImplements[class];
 	
 	return { *(getSubtypesWithoutShadowing(s, scheme, elemName, m) + s) 
 		| s <- subtypes, m.declarations[createContainedLoc(s, scheme, elemName)] == {} }
