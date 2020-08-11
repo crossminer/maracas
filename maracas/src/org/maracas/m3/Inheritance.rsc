@@ -124,8 +124,8 @@ set[loc] getSupertypes(loc class, M3 m)
 	       subtypes
 }
 set[loc] getSubtypes(loc class, M3 m)
-	= domain(rangeR(m.extends, { class })) + domain(rangeR(m.implements, { class }));
-
+	= m.invertedExtends[class] + m.invertedImplements[class];
+	
 @doc{ 
 	Returns a set of locations pointing to the ABSTRACT
 	subtypes of a class given by parameter. The M3 model 

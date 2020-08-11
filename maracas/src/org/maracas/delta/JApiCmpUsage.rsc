@@ -103,13 +103,13 @@ private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {
 bool isUsed(loc elem, Evolution evol) {
 	M3 m = evol.client;
 	
-	return domain(rangeR(m.annotations, { elem })) != {}
-	|| domain(rangeR(m.extends, { elem })) != {}
-	|| domain(rangeR(m.fieldAccess, { elem })) != {}
-	|| domain(rangeR(m.implements, { elem })) != {}
-	|| domain(rangeR(m.methodInvocation, { elem })) != {}
-	|| domain(rangeR(m.methodOverrides, { elem })) != {}
-	|| domain(rangeR(m.typeDependency, { elem })) != {}
+	return m.invertedAnnotations[elem] != {}
+	|| m.invertedExtends[elem] != {}
+	|| m.invertedFieldAccess[elem] != {}
+	|| m.invertedImplements[elem] != {}
+	|| m.invertedMethodInvocation[elem] != {}
+	|| m.invertedMethodOverrides[elem] != {}
+	|| m.invertedTypeDependency[elem] != {}
 	;
 }
 	
