@@ -79,23 +79,18 @@ private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {
 	set[TransChangedEntity] transEntities = getTransEntities(entities, evol);
 	set[loc] unused = {};
 	
-	for (loc e <- entities) {
-		if (isUsed(e, evol)) {
-			continue;
-		}
-		
+	for (loc e <- entities, !isUsed(e, evol)) {		
 		bool used = false;
-		for (loc c <- transEntities[e]) {
+		for (loc c <- transEntities[e], !used) {
 			if (isUsed(c, evol)) {
 				used = true;
-				break;
 			}
 		}
 		
-		if (used) {
-			continue;
+		if (!used) {
+			unused += e;
 		}
-		unused += e;
+		
 	}
 	return unused;
 }
@@ -128,7 +123,8 @@ private set[TransChangedEntity] getTransTypeEntities(loc elem, Evolution evol) {
 	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, elem);
 	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, elem);
 	set[TransChangedEntity] subtypes = { elem } * getSubtypes(elem, evol.apiOld);
-	return transFields + transMeths + subtypes;
+	return transFields + transMeths;
+	//return transFields + transMeths + subtypes;
 }
 
 private set[TransChangedEntity] getTransMethEntities(loc elem, Evolution evol) {
