@@ -28,14 +28,14 @@ map[CompatibilityChange, set[loc]] getUsedBreakingEntitiesMap(set[Detection] det
 set[loc] getUsedNonBreakingEntities(Evolution evol, set[Detection] detects, CompatibilityChange ch) {
 	set[loc] entities = getChangedEntities(evol.delta, ch);
 	set[loc] breaking = getUsedBreakingEntities(detects, ch);
-	set[loc] unused = getUnusedChangedEntities(evol, ch);
+	set[loc] unused = getUnusedChangedEntities(evol, detects, ch);
 	return getUsedNonBreakingEntities(entities, breaking, unused);
 }
 
 map[CompatibilityChange, set[loc]] getUsedNonBreakingEntitiesMap(Evolution evol, set[Detection] detects) {
 	map[CompatibilityChange, set[loc]] entities = getChangedEntitiesMap(evol.delta);
 	map[CompatibilityChange, set[loc]] breaking = getUsedBreakingEntitiesMap(detects);
-	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol, detects);
 	map[CompatibilityChange, set[loc]] nonbreaking = ();
 	
 	for (CompatibilityChange c <- entities) {
@@ -53,33 +53,28 @@ private set[loc] getUsedNonBreakingEntities(set[loc] entities, set[loc] breaking
 	= entities - breaking - unused;
 
 
-set[loc] getUnusedChangedEntities(Evolution evol) {
-	set[loc] entities = getChangedEntitiesLoc(evol.delta);	
-	return getUnusedChangedEntities(evol, entities);
+set[loc] getUnusedChangedEntities(Evolution evol, set[Detection] detects) {
+	set[CompatibilityChange] changes =  getCompatibilityChanges(evol.delta);
+	return { *getUnusedChangedEntities(evol, detects, c) | CompatibilityChange c <- changes };
 }
 
-set[loc] getUnusedChangedEntities(Evolution evol, CompatibilityChange ch) {
-	set[loc] entities = getChangedEntities(evol.delta, ch);	
-	return getUnusedChangedEntities(evol, entities);
-}
-
-map[CompatibilityChange, set[loc]] getUnusedChangedEntitiesMap(Evolution evol) {
+map[CompatibilityChange, set[loc]] getUnusedChangedEntitiesMap(Evolution evol, set[Detection] detects) {
 	map[CompatibilityChange, set[loc]] changed = getChangedEntitiesMap(evol.delta);
 	map[CompatibilityChange, set[loc]] unused = ();
 	
 	for (CompatibilityChange c <- changed) {
-		set[loc] entities = changed[c];
-		set[loc] entitiesUnused = getUnusedChangedEntities(evol, entities);
+		set[loc] entitiesUnused = getUnusedChangedEntities(evol, detects, c);
 		unused += (c : entitiesUnused);	
 	}
 	return unused;
 }
 
-private set[loc] getUnusedChangedEntities(Evolution evol, set[loc] entities) {
-	set[TransChangedEntity] transEntities = getTransEntities(entities, evol);
+set[loc] getUnusedChangedEntities(Evolution evol, set[Detection] detects, CompatibilityChange ch) {
+	set[loc] entities = getChangedEntities(evol.delta, ch);
+	set[TransChangedEntity] transEntities = getTransEntities(evol, ch);
 	set[loc] unused = {};
 	
-	for (loc e <- entities, !isUsed(e, evol)) {		
+	for (loc e <- entities, !isBreaking(e, detects) || !isUsed(e, evol)) {		
 		bool used = false;
 		for (loc c <- transEntities[e], !used) {
 			if (isUsed(c, evol)) {
@@ -108,23 +103,63 @@ bool isUsed(loc elem, Evolution evol) {
 	;
 }
 	
-private set[TransChangedEntity] getTransEntities(set[loc] entities, Evolution evol)
-	= { *getTransEntities(e, evol) | loc e <- entities };
+private set[TransChangedEntity] getTransEntities(Evolution evol, CompatibilityChange ch) {
+	set[loc] entities = getChangedEntities(evol.delta, ch);
+	return { *getTransEntities(e, evol, ch) | loc e <- entities };
+}
+
+private set[TransChangedEntity] getTransEntities(loc elem, Evolution evol, CompatibilityChange ch) {
+	set[TransChangedEntity] transEntities = {};
 	
-private set[TransChangedEntity] getTransEntities(loc elem, Evolution evol)
-	= isType(elem) ? getTransTypeEntities(elem, evol)
-	: isMethod(elem) ? getTransMethEntities(elem, evol)
-	: isField(elem) ? getTransFieldEntities(elem, evol)
-	: {}
-	+ <elem, elem> // Add itself (in case it is not included in previous tuples)
-	;
+	if (classRemoved(binaryCompatibility=false,sourceCompatibility=false) := ch
+		|| classTypeChanged(binaryCompatibility=false,sourceCompatibility=false) := ch) {
+		; // skip 
+	}
+	else if (methodAbstractAddedToClass(binaryCompatibility=true,sourceCompatibility=false) := ch
+		|| methodAddedToInterface(binaryCompatibility=true,sourceCompatibility=false) := ch) {
+		parent = parentType(evol.apiOld, elem);
+		transEntities += { elem } * getSubtypes(parent, evol.apiOld)
+				+ <elem, parent>;
+	}
+	else if (classNoLongerPublic(binaryCompatibility=false,sourceCompatibility=false) := ch
+		|| classLessAccessible(binaryCompatibility=false,sourceCompatibility=false) := ch) {
+		transEntities += getTransTypeEntitiesNoCons(elem, evol);
+	}
+	else if (classNowAbstract(binaryCompatibility=false,sourceCompatibility=false) := ch
+		|| classNowCheckedException(binaryCompatibility=true,sourceCompatibility=false) := ch
+		|| classNowFinal(binaryCompatibility=false,sourceCompatibility=false) := ch
+		|| interfaceAdded(binaryCompatibility=true,sourceCompatibility=false) := ch
+		|| interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false) := ch
+		|| superclassAdded(binaryCompatibility=true,sourceCompatibility=false) := ch
+		|| superclassRemoved(binaryCompatibility=false,sourceCompatibility=false) := ch) {
+		transEntities += getTransTypeEntities(elem, evol);
+	}
+	else if (isType(elem)) {
+		transEntities += getTransTypeEntities(elem, evol);
+	}
+	else if (isMethod(elem)) {
+		transEntities += getTransMethEntities(elem, evol);
+	}
+	else if (isField(elem)) {
+		transEntities += getTransFieldEntities(elem, evol);
+	}
+	
+	transEntities += <elem, elem>; // Add itself (in case it is not included in previous tuples)
+	return transEntities;
+}
 
 private set[TransChangedEntity] getTransTypeEntities(loc elem, Evolution evol) {	
 	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, elem);
 	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, elem);
 	set[TransChangedEntity] subtypes = { elem } * getSubtypes(elem, evol.apiOld);
+	return transFields + transMeths + subtypes;
+}
+
+private set[TransChangedEntity] getTransTypeEntitiesNoCons(loc elem, Evolution evol) {	
+	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, elem);
+	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, elem) - getContainedConstructors(evol.apiOld, elem);
+	set[TransChangedEntity] subtypes = { elem } * getSubtypes(elem, evol.apiOld);
 	return transFields + transMeths;
-	//return transFields + transMeths + subtypes;
 }
 
 private set[TransChangedEntity] getTransMethEntities(loc elem, Evolution evol) {

@@ -58,6 +58,8 @@ set[Detection] readBinaryDetections(loc detects)
 set[CompatibilityChange] getCompatibilityChanges(set[Detection] detects) 
 	= { d.change | Detection d <- detects };
 
+set[loc] getSources(set[Detection] detects) 
+	= { d.src | Detection d <- detects };
 	
 //----------------------------------------------
 // Core
@@ -796,4 +798,9 @@ rel[loc, Detection] getDetectsWithUnstableAnnon(list[APIEntity] delta, set[Detec
 set[loc] getUnstableAnnons(list[APIEntity] delta, set[Detection] detects) {
 	rel[loc, Detection] unstable = getDetectsWithUnstableAnnon(delta, detects);
 	return domain(unstable);
+}
+
+bool isBreaking(loc elem, set[Detection] detects) {
+	set[loc] srcs = getSources(detects);
+	return elem in srcs;
 }

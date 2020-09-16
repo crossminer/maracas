@@ -10,17 +10,13 @@ import org::maracas::delta::JApiCmpUsage;
 
 
 test bool sameAsBefore() 
-	= getUnusedChangedEntities(evolBin()) == getUnusedChangedEntities(evol);
+	= getUnusedChangedEntities(evolBin(), detectsBin()) == getUnusedChangedEntities(evol, detects);
 
 test bool sameSizeAsBefore() 
-	= size(getUnusedChangedEntities(evolBin())) == size(getUnusedChangedEntities(evol));
+	= size(getUnusedChangedEntities(evolBin(), detectsBin())) == size(getUnusedChangedEntities(evol, detects));
 	
 test bool unusedPkgSubset() 
-	= unusedPkg() <= getUnusedChangedEntities(evol);
-
-set[loc] dif() = unusedPkg() - getUnusedChangedEntities(evol);
-
-set[loc] a() = getUnusedChangedEntities(evol);
+	= unusedPkg() <= getUnusedChangedEntities(evol, detects);
 
 test bool samePerChangeTypeRefCurrent()
 	= perChangeType(evol);
@@ -31,7 +27,7 @@ test bool samePerChangeTypeRefBin()
 private bool perChangeType(Evolution ev) {
 	set[CompatibilityChange] changes = getCompatibilityChanges(ev.delta);
 	for (CompatibilityChange c <- changes) {
-		if (getUnusedChangedEntities(evolBin(), c) != getUnusedChangedEntities(evol, c)) {
+		if (getUnusedChangedEntities(evolBin(), detectsBin(), c) != getUnusedChangedEntities(evol, detects, c)) {
 			return false;
 		}
 	}
@@ -39,15 +35,15 @@ private bool perChangeType(Evolution ev) {
 }
 
 test bool sameSizeMap() {
-	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol, detects);
 	set[loc] entities = { *unused[c] | CompatibilityChange c <- unused };
-	return size(entities) == size(getUnusedChangedEntities(evol));
+	return size(entities) == size(getUnusedChangedEntities(evol, detects));
 }
 
 test bool mapPerChangeType() {
-	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol, detects);
 	for (CompatibilityChange c <- unused) {
-		if (getUnusedChangedEntities(evol, c) != unused[c]) {
+		if (getUnusedChangedEntities(evol, detects, c) != unused[c]) {
 			return false;
 		}
 	}

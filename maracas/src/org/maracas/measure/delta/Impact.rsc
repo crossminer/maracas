@@ -64,8 +64,8 @@ map[str, int] nonBreakingStats(Evolution evol, set[Detection] detects) {
 	return ( getName(c) : size(nonBreaking[c]) | c <- nonBreaking );
 }
 
-map[str, int] unusedStats(Evolution evol) {
-	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol);
+map[str, int] unusedStats(Evolution evol, set[Detection] detects) {
+	map[CompatibilityChange, set[loc]] unused = getUnusedChangedEntitiesMap(evol, detects);
 	return ( getName(c) : size(unused[c]) | c <- unused );
 }
 
