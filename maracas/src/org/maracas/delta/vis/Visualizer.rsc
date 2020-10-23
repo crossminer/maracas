@@ -14,6 +14,7 @@ import lang::html5::DOM;
 import org::maracas::maven::Maven;
 
 import org::maracas::delta::JApiCmp;
+import org::maracas::delta::JApiCmpDetector;
 import org::maracas::measure::delta::Evolution;
 import lang::java::m3::Core;
 import org::maracas::m3::Core;
@@ -27,11 +28,16 @@ list[str] colors = [
 	"rgba(255, 159,  64, 0.5)"
 ];
 
-void reportFromMaven(loc report, str group, str artifact, str v1, str v2) {
+void mavenReport(loc report, str group, str artifact, str v1, str v2,
+	str cgroup = "", str cartifact = "", str cv = "") {
 	println("Building report for <group>:<artifact> (<v1> -\> <v2>)...");
 
 	if (!isDirectory(report))
 		mkDirectory(report);
+
+	bool detects = !isEmpty(cgroup) && !isEmpty(cartifact) && !isEmpty(cv);
+	set[Detection] ds = {};
+	loc srcClient = |tmp:///|; 
 
 	println("Downloading JARs and extracting sources in <report>...");
 	loc jarV1 = downloadJar(group, artifact, v1, report);
@@ -40,16 +46,27 @@ void reportFromMaven(loc report, str group, str artifact, str v1, str v2) {
 	loc srcJarV2 = downloadSources(group, artifact, v2, report);
 	loc srcV1 = extractJar(srcJarV1, report + "<artifact>-<v1>-extracted");
 	loc srcV2 = extractJar(srcJarV2, report + "<artifact>-<v2>-extracted");
-
+	
 	println("Computing delta...");
 	list[APIEntity] delta = compareJars(jarV1, jarV2, v1, v2);
 
-	println("Writing report...");
-	writeReport(report + "Report.html", delta, srcV1, srcV2);
-}
+	if (detects) {
+		loc clientJar = downloadJar(cgroup, cartifact, cv, report);
+		loc srcJarClient = downloadSources(cgroup, cartifact, cv, report);
+		srcClient = extractJar(srcJarClient, report + "<cartifact>-<cv>-extracted");
 
-void writeReport(loc report, list[APIEntity] delta, loc srcV1, loc srcV2) {
-	writeFile(report, renderHtml(delta, srcV1, srcV2));
+		println("Computing M3 for detections...");
+		M3 clientM3 = createM3(clientJar);
+		M3 v1m3 = createM3(jarV1);
+		M3 v2m3 = createM3(jarV2);
+		Evolution evol = evolution(clientM3, v1m3, v2m3, delta);
+		
+		println("Computing detections...");
+		ds = computeDetections(evol);
+	}
+
+	println("Writing report...");
+	writeFile(report + "Report.html", renderHtml(delta, ds, srcV1, srcV2, srcClient));
 }
 
 HTML5Node statsBlock(list[APIEntity] delta) {
@@ -134,6 +151,17 @@ HTML5Node bcsBlock(list[APIEntity] delta, loc srcV1, loc srcV2) {
 	);
 }
 
+HTML5Node detectionsBlock(set[Detection] ds, loc srcV1, loc srcClient) {
+	return div(h4("Detections (<size(ds)>)"),
+		table(class("striped"),
+			thead(tr(th("Client"), th("API"), th("Use"), th("Change"))),
+			tbody(
+				[tr(sourceCodeCell(srcClient, d.elem), sourceCodeCell(srcV1, d.used), td(d.use), td(d.change)) | d <- ds]
+			)
+		)
+	);
+}
+
 HTML5Node sourceCodeCell(loc srcDirectory, loc l) {
 	list[value] firstCol = [l];
 	str source = trim(removeComments(sourceCode(srcDirectory, l)));
@@ -160,7 +188,7 @@ str toHtml(str code) {
 	return replaceAll(code, "\n", "\<br\>");
 }
 
-str renderHtml(list[APIEntity] delta, loc srcV1, loc srcV2) {
+str renderHtml(list[APIEntity] delta, set[Detection] detections, loc srcV1, loc srcV2, loc srcClient) {
 	return lang::html5::DOM::toString(html(
 			head(
 				title("Delta model visualizer"),
@@ -189,7 +217,9 @@ str renderHtml(list[APIEntity] delta, loc srcV1, loc srcV2) {
 				charts(filterStableAPIByAnnon(delta), "stable"),
 				statsBlock(delta),
 				h3("Breaking changes"),
-				bcsBlock(delta, srcV1, srcV2)
+				bcsBlock(delta, srcV1, srcV2),
+				h3("Detections"),
+				detectionsBlock(detections, srcV1, srcClient)
 			)
 		)
 	);
