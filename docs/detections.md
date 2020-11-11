@@ -3,7 +3,7 @@ layout: page
 title: Detections
 ---
 <p class="message">
-	In this page we list the detections that are identified by Maracas. These detections are computed based on the Java Language Specification v8. If you identify new missed detections please be encouraged to report them in our issue tracker on GitHub.
+	In this page we list the detections that are identified by Maracas. These detections are computed based on the Java Language Specification v8. If you identify new missed detections, please be encouraged to report them in our issue tracker on GitHub.
 </p>
 
 ## Annotation Deprecated Added
@@ -42,7 +42,7 @@ detection(
 ## Field Less Accessible
 The field or its parent class is less accessible. 
 Some client entities are not able to access this field anymore. 
-The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+The following table provides the less access permitted situations in Java (cf. *JLS 13.4.7*). 
 We report which of them might break client code, and which exceptions must be considered regarding fields use.
 
 | Source | Target | Detection |
@@ -81,14 +81,14 @@ detection(
 
 ## Field More Accessible
 The field is more accessible than its previous version. 
-Client types hidding such fields will break if the visibility of their own declaration is lower than the API definition (cf. *JLS 13.4.8*).
+Client types hiding such fields will break if the visibility of their own declaration is lower than the API definition (cf. *JLS 13.4.8*).
 
 **Detection**
 
-1. Client fields within type `T`hiding a field of the type `S`, where the new field declaration in `T` is less accessible than the corresponding definition in `S`.
+1. Client fields within type `T` hiding a field of the type `S`, where the new field declaration in `T` is less accessible than the corresponding definition in `S`.
 
 For example, there is an API type `api.A` with a `package-protected` field `f`.
-The later is hidden in client type `client.C` with a `protected` visibility. 
+The latter is hidden in client type `client.C` with a `protected` visibility. 
 If the visibility of `f` is changed to `public` in `api.A`, then the following detection is reported:
 
 ```
@@ -154,7 +154,7 @@ detection(
 ## Field Now Static
 A field goes from `non-static` to `static`. 
 This results in an `IncompatibleClassChangeError` at linking time. 
-The problem rises given that the JVM uses two different instructions to access fiels, `getfield` and `getstatic`. 
+The problem rises given that the JVM uses two different instructions to access fields, `getfield` and `getstatic`. 
 The former is used to access objects fields and the later to access static fields. 
 Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.10*).
 
@@ -210,7 +210,7 @@ detection(
 
 ---
 
-## Field Removed In Superclass
+## Field Removed in Superclass
 A field is removed from a supertype class. Subtypes are not able to access it anymore.
 
 **Detection**
@@ -285,7 +285,7 @@ detection(
 ## Constructor Less Accessible
 The constructor or its parent class is less accessible. 
 Client entities cannot create objects with this method.
-The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+The following table provides the less access permitted situations in Java (cf. *JLS 13.4.7*). 
 We report which of them might break client code, and which exceptions must be considered regarding constructors use.
 
 | Source | Target | Detection |
@@ -324,7 +324,7 @@ If the constructor or the parent class is removed, this issue is reported. Clien
 
 1. Client methods invoking a constructor that is removed due to its parent type removal.
 2. Client methods invoking a constructor that is removed from an API type.
-3. Client constructors invoking an supertype constructor through the `super` keyword. 
+3. Client constructors invoking a supertype constructor through the `super` keyword. 
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a constructor `A(int)`. Assume `m()` invokes `A(int)` to create an object of type `api.A`. If `A(int)` is removed from `api.A`, then the following detection is reported:
 
@@ -339,20 +339,20 @@ detection(
 
 ---
 
-## Method Abstract Added In Superclass
+## Method Abstract Added in Superclass
 An abstract method is added to a superclass and no implementation is provided in (maybe part of) the API hierarchy. 
 This change is reported only if subtypes are abstract. 
 Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
 We do not provide detections linked to this type of change.
-Instead we detect this and more general cases through the *Method Abstract Added To Class* change.
+Instead we detect this and more general cases through the *Method Abstract Added to Class* change.
 
 ---
 
-## Method Abstract Added To Class
+## Method Abstract Added to Class
 A new abstract method is added to a class.
 All non-abstract client classes extending the modified class or an abstract subtype will break, given that the definition of the target method is missing.
 This will result in a compilation error (i.e. source incompatible).
-However, at the binary level, no brekage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
+However, at the binary level, no breakage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
 In addition, the JVM does not check if there are missing method implementations at linking time. 
 
 **Detection**
@@ -377,7 +377,7 @@ detection(
 An abstract method in an interface is now declared as a default method. 
 As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
 Type `T` implements interfaces `I` and `J`.
-`I` is not a subinterface of `J` and visceversa.
+`I` is not a subinterface of `J` and viceversa.
 `J` has a default method `m()`.
 Now, we add a new default method in `I` with the same signature and return type of `m()`.
 Suppose there is an invocation of `m()` in `T` that does not follow the form `J.super.m()`.
@@ -393,12 +393,12 @@ In any case, this change might result in unpredictable behaviour or a compilatio
 </p>
 
 <p class="message">
-  Behavioural changes are not being reported. For instance, no detection is reported regarding invocations of the overriden method.
+  Behavioural changes are not being reported. For instance, no detection is reported regarding invocations of the overridden method.
 </p>
 
 For example, there is a client type `client.C`, and two API interfaces `api.I` and `otherapi.J`. 
 The type `client.C` implements both `api.I` and `otherapi.J`. 
-Suppose `api.I` and `otherapi.J` declare an abstract method `m()` (each one of them has it own definition).
+Suppose `api.I` and `otherapi.J` declare an abstract method `m()` (each one of them has its own definition).
 If the API evolves and `api.I` changes `m()` from an abstract to a default method, and `client.C` has no method definition of `m()`, then the following detection is reported:
 
 ```
@@ -412,11 +412,11 @@ detection(
 
 ---
 
-## Method Added To Interface
+## Method Added to Interface
 A new method is added to an interface.
 All client classes implementing the interface will break given that the implementation of the target method is missing.
 This will result in a compilation error (i.e. source incompatible).
-However, at the binary level, no brekage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
+However, at the binary level, no breakage is detected given that there cannot be calls to the new method when using the old version of the API (cf. *JLS 13.5.3.*).
 In addition, the JVM does not check if there are missing method implementations at linking time. 
 
 **Detection**
@@ -439,7 +439,7 @@ detection(
 ## Method Less Accessible
 The method or its parent class is less accessible. 
 Some client entities are not able to invoke this method anymore. 
-The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+The following table provides the less access permitted situations in Java (cf. *JLS 13.4.7*). 
 We report which of them might break client code, and which exceptions must be considered regarding methods use.
 
 | Source | Target | Detection |
@@ -478,10 +478,10 @@ Client types overriding such methods will break if the visibility of their own d
 
 **Detection**
 
-1. Client methods within type `T`overriding a method of the type `S`, where the new method declaration in `T` is less accessible than the corresponding definition in `S`.
+1. Client methods within type `T` overriding a method of the type `S`, where the new method declaration in `T` is less accessible than the corresponding definition in `S`.
 
 For example, there is an API type `api.A` with a `protected` method `m()`.
-The later is overriden in client type `client.C` with a `protected` visibility. 
+The latter is overridden in client type `client.C` with a `protected` visibility. 
 If the visibility of `m()` is changed to `public` in `api.A`, then the following detection is reported:
 
 ```
@@ -497,9 +497,9 @@ detection(
 
 ## Method New Default
 A new default method is declared in an interface.
-As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
+As stated in the *JLS*, this change results in an `IncompatibleClassChangeError` linkage error only in the following scenario.
 Type `T` implements interfaces `I` and `J`.
-`I` is not a subinterface of `J` and visceversa.
+`I` is not a subinterface of `J` and viceversa.
 `J` has a default method `m()`.
 Now, we add a new default method in `I` with the same signature and return type of `m()`.
 Suppose there is an invocation of `m()` in `T` that does not follow the form `J.super.m()`.
@@ -544,7 +544,7 @@ A field goes from `static` to `non-static` becoming an instance field. The field
 2. Client types extending the owner class of the modified method, which declare a `static` method with the same name of the target method (cf. *JLS 13.4.12*).
 
 <p class="message">
-  Static methods cannot be overriden, that is why we do not consider overriding relations.
+  Static methods cannot be overridden, that is why we do not consider overriding relations.
 </p>
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a static method `mA()`. Assume `mC()` invokes `mA()` in a static manner (i.e. `A.mA()`). If the `static` modifier is removed from `mA()`, then the following detection is reported:
@@ -587,7 +587,7 @@ detection(
 ---
 
 ## Method Now Final
-A method goes from `non-final` to `final`, thus the method cannot be overriden. Client code breaks if there is an attempt to override the method.
+A method goes from `non-final` to `final`, thus the method cannot be overridden. Client code breaks if there is an attempt to override the method.
 
 **Detection**
 
@@ -641,7 +641,7 @@ detection(
 ---
 
 ## Method Now Throws Checked Exception
-A method adds a new exception to the throws clause in its declaration.
+A method adds a new exception to the `throws` clause in its declaration.
 This change is binary compatible.
 However, it triggers a set of compilation errors given that client entities invoking the method need to handle the new exception. 
 
@@ -693,7 +693,7 @@ detection(
 
 ---
 
-## Method Removed In Superclass
+## Method Removed in Superclass
 
 A method is removed from a supertype class. Subtypes are not able to invoke it anymore.
 
@@ -771,7 +771,7 @@ detection(
 ## Class Less Accessible 
 The type is less accessible. 
 Some client entities are not able to depend on, be annotated with, implement, or inherit from this type anymore (cf. *JLS 13.4.3*). 
-The following table provides the less access permited situations in Java (cf. *JLS 13.4.7*). 
+The following table provides the less access permitted situations in Java (cf. *JLS 13.4.7*). 
 We report which of them might break client code, and which exceptions must be considered regarding methods use.
 
 | Source | Target | Detection |
@@ -785,12 +785,12 @@ We report which of them might break client code, and which exceptions must be co
 
 **Detection**
 
-1. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
-2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
-3. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-4. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-5. Client entities within type `T` depending on or being annotated with type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
-6. Client types each one represented by `T` implementing or extending type `S`, where: i)`T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
+1. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
+2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
+3. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+4. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
+5. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
+6. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
 7. Client entities within type `T` depending on or being annotated with type `S`, where `S` goes from any visibility to `private`. 
 6. Client types each one represented by `T` implementing or extending type `S`, where `S` goes from any visibility to `private`.  
 

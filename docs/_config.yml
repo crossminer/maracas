@@ -9,7 +9,7 @@ paginate_path: "page:num"
 title:               Maracas
 tagline:             'The API-client co-evolution project'
 description:         'Maracas is a source code and bytecode analysis framework --written in Rascal-- that is designed to support the co-evolution of Java APIs and client code.'
-url:                 http://lanyon.getpoole.com
+url:                 https://github.com/crossminer/maracas
 baseurl:             '/maracas'
 paginate:            5
 
@@ -18,4 +18,4 @@ author:
   name:              lmove
 
 # Custom vars
-version:             1.0.0
+version:             0.0.1
