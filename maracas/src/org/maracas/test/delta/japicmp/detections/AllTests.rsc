@@ -18,6 +18,7 @@ extend org::maracas::\test::delta::japicmp::detections::MethodLessAccessibleTest
 extend org::maracas::\test::delta::japicmp::detections::MethodMoreAccessibleTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNewDefaultTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNoLongerStaticTest; // Failing tests (2): superKeyAccess, simpleAccessObj
+extend org::maracas::\test::delta::japicmp::detections::MethodNoLongerThrowsCheckedExceptionTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowAbstractTest;
 extend org::maracas::\test::delta::japicmp::detections::MethodNowFinalTest; // Failing tests (1): overrideTrans
 extend org::maracas::\test::delta::japicmp::detections::MethodNowStaticTest;

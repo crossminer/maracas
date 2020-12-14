@@ -133,6 +133,7 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| fieldTypeChanged()
 	| constructorRemoved()
 	| constructorLessAccessible()
+	| methodNoLongerThrowsCheckedException()
 	;
 	
 data ClassType
