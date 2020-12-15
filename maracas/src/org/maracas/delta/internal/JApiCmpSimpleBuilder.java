@@ -98,6 +98,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	private final Type ccFieldRemovedInSuperclass;
 	private final Type ccFieldLessAccessible;
 	private final Type ccFieldMoreAccessible;
+	private final Type ccMethodNoLongerThrowsCheckedException;
 	private final Type ccConstructorRemoved;
 	private final Type ccConstructorLessAccessible;
 	private final Type classTypeAnnotation;
@@ -211,6 +212,7 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 		this.ccFieldMoreAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "fieldMoreAccessible");
 		this.ccConstructorRemoved = typeFactory.constructor(typeStore, compatibilityChangeADT, "constructorRemoved");
 		this.ccConstructorLessAccessible = typeFactory.constructor(typeStore, compatibilityChangeADT, "constructorLessAccessible");
+		this.ccMethodNoLongerThrowsCheckedException = typeFactory.constructor(typeStore, compatibilityChangeADT, "methodNoLongerThrowsCheckedException");
 		this.classTypeAnnotation = typeFactory.constructor(typeStore, classTypeADT, "annotation");
 		this.classTypeInterface = typeFactory.constructor(typeStore, classTypeADT, "interface");
 		this.classTypeClass = typeFactory.constructor(typeStore, classTypeADT, "class");
@@ -616,6 +618,12 @@ public class JApiCmpSimpleBuilder implements JApiCmpBuilder {
 	@Override
 	public IConstructor buildCCConstructorLessAccessibleCons(CompatibilityChange common) {
 		IConstructor change = valueFactory.constructor(ccConstructorLessAccessible);
+		return apply(common, change);
+	}
+
+	@Override
+	public IConstructor buildCCMethodNoLongerThrowsCheckedException(CompatibilityChange common) {
+		IConstructor change = valueFactory.constructor(ccMethodNoLongerThrowsCheckedException);
 		return apply(common, change);
 	}
 

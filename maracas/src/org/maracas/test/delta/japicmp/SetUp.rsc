@@ -4,9 +4,9 @@ import org::maracas::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 
-public loc apiOld = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-old.jar|;
-public loc apiNew = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-new.jar|;
-public loc client = |file:///Users/ochoa/Documents/cwi/crossminer/code/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-client.jar|;
+public loc apiOld = |file:///home/dig/repositories/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-old.jar|;
+public loc apiNew = |file:///home/dig/repositories/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-new.jar|;
+public loc client = |file:///home/dig/repositories/maracas/maracas/src/org/maracas/test/data/delta/comp-changes-client.jar|;
 
 public M3 m3ApiOld = createM3(apiOld);
 public M3 m3ApiNew = createM3(apiNew);

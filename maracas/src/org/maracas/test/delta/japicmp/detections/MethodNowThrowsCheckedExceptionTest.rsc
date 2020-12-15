@@ -58,7 +58,7 @@ test bool overrideSuperMethod()
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	notin detects;
+	in detects;
 
 test bool overrideInterMethod()
 	= detection(
@@ -67,5 +67,5 @@ test bool overrideInterMethod()
 		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	notin detects;
+	in detects;
 	
