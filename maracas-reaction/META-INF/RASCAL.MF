@@ -1,0 +1,8 @@
+Manifest-Version: 0.0.1
+Main-Function: main
+Courses: courses
+Project-Name: maracas-reaction
+Require-Libraries: 
+Main-Module: Plugin
+Source: src
+
