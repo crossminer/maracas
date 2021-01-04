@@ -722,6 +722,8 @@ public class JApiCmpToRascal {
 			return builder.buildCCSuperclassModifiedIncompatibleCons(common);
 		case SUPERCLASS_REMOVED:
 			return builder.buildCCSuperclassRemovedCons(common);
+		case METHOD_NO_LONGER_THROWS_CHECKED_EXCEPTION:
+			return builder.buildCCMethodNoLongerThrowsCheckedException(common);
 		default:
 			throw new RuntimeException("The following compatibility change is not supported: " + change.name());
 		}
