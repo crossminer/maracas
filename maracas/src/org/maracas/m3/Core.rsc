@@ -35,6 +35,15 @@ data Modifier =
 
 M3 createM3(loc jar) {
 	M3 m = createM3FromJar(jar);
+	return populateInvertedRelations(m);
+}
+
+M3 createM3FromSources(loc src, list[loc] classPath = []) {
+	M3 m = createM3FromDirectory(src, classPath = classPath);
+	return populateInvertedRelations(m);
+}
+
+M3 populateInvertedRelations(M3 m) {
 	m.invertedContainment = invert(m.containment);
 	m.invertedExtends = invert(m.extends);
 	m.invertedImplements = invert(m.implements);
@@ -44,7 +53,7 @@ M3 createM3(loc jar) {
 	m.invertedMethodOverrides = invert(m.methodOverrides);
 	m.invertedAnnotations = invert(m.annotations);
 	m.transInvertedContainment = m.invertedContainment+;
-	return m; 
+	return m;
 }
 
 M3 readBinaryM3(loc m3)
