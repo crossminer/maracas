@@ -39,6 +39,7 @@ M3 createM3(loc jar, list[loc] classPath = []) {
 	M3 model = createM3FromJar(jar, classPath = classPath);
 	M3 libs = composeJavaM3(|tmp:///|, { createM3FromJar(l) | loc l <- classPath });
 
+	// Attempt to retrieve methodOverrides across hierarchies in classpath
 	rel[loc from, loc to] candidates = (model.implements + model.extends + libs.implements + libs.extends)+;
 	rel[loc from, loc to] containment = domainR(model.containment + libs.containment, candidates.from + candidates.to);
 	rel[loc from, loc to] methodContainment = { <c, m> | <loc c, loc m> <- containment, isMethod(m)};
@@ -47,12 +48,39 @@ M3 createM3(loc jar, list[loc] classPath = []) {
 		model.methodOverrides += {<m, getMethodSignature(m)> | m <- methodContainment[from]}
 			o {<getMethodSignature(m), m> | m <- methodContainment[to]};
 
+	/*
+		package pkg;
+		class A { int i; void foo() {}  }
+		class B extends A { void bar() { i = 42; foo(); }
+
+		m = createM3FromJar gives:
+			m.fieldAccess      = {<|java+method:///pkg/B/bar()|,|java+field:///pkg/B/i|>}
+			m.methodInvocation = {<|java+method:///pkg/B/bar()|,|java+method:///pkg/B/foo()|>, ...}
+
+		But |java+field:///pkg/B/i| |java+method:///pkg/B/foo()| do not exist anywhere else
+		in the M3 model; they're not even contained by anything! Indeed, they're contained in A:
+		    m.containment[|java+class:///pkg/A|] = {
+		    	|java+field:///pkg/A/i|,
+		    	|java+method:///pkg/A/foo()|
+		    }
+		    m.containment[|java+class:///pkg/B|] = {
+		    	|java+method:///pkg/B/bar()|
+		    }
+
+		createM3FromSources points fieldAccess and methodInvocation properly; so let's
+		attempt to fix that for JARs here
+	*/
+
 	return populateInvertedRelations(model);
 }
 
 M3 createM3FromSources(loc src, list[loc] classPath = []) {
 	M3 m = createM3FromDirectory(src, classPath = classPath);
-	return populateInvertedRelations(m);
+	return populateInvertedRelations(
+		visit(m) {
+			case loc l => sanitize(m, l)
+		}
+	);
 }
 
 M3 populateInvertedRelations(M3 m) {
@@ -66,6 +94,51 @@ M3 populateInvertedRelations(M3 m) {
 	m.invertedAnnotations = invert(m.annotations);
 	m.transInvertedContainment = m.invertedContainment+;
 	return m;
+}
+
+// Attempting to fix some discrepancies between
+// source code M3s and JAR M3s
+//   - Cls/Inner           => Cls$Inner
+//   (- Cls/$anonymous1     => Cls$1 (brittle because order-dependent?)
+//   - java+anonymousClass => java+class)
+@memo
+loc sanitize(M3 m, loc l) {
+	set[loc] enclosing = { t | t <- invert(m.containment)[l], isType(t) };
+
+	if (size(enclosing) == 1) {
+		loc t = getOneFrom(enclosing);
+		str enclosingPath = sanitize(m, t).path;
+
+		if (isType(l))
+			l.path = "<enclosingPath>$<l.file>";
+		else
+			l.path = "<enclosingPath>/<l.file>";
+	}
+
+	// Don't need to align anonymous names, they're not
+	// affected by BCs anyway
+
+	//	if (/\$anonymous<i:[0-9]+>/ := l.path) {
+	//		// gp is the declaring type, parent is the declaring method
+	//		if (isType(l) || isAnonymousClass(l)) {
+	//			loc gp = l.parent.parent;
+	//			l.path = gp.path;
+	//			l.file = "<gp.file>$<i>";
+	//		}
+	//
+	//		// ggp is the declaring type, file is the method name
+	//		if (isMethod(l) || isField(l)) {
+	//			loc gpp = l.parent.parent.parent;
+	//			str name = l.file;
+	//			l.path = gpp.path;
+	//			l.file = "<gpp.file>$<i>/<name>";
+	//		}
+	//	}
+	//
+	//	if (l.scheme == "java+anonymousClass")
+	//		l.scheme = "java+class";
+
+	return l;
 }
 
 M3 readBinaryM3(loc m3)
