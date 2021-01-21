@@ -33,9 +33,21 @@ data M3(
 data Modifier =
 	\defaultAccess();
 
-M3 createM3(loc jar) {
-	M3 m = createM3FromJar(jar);
-	return populateInvertedRelations(m);
+// Just some band-aid for now
+// Should it move to java::lang::m3::Core?
+M3 createM3(loc jar, list[loc] classPath = []) {
+	M3 model = createM3FromJar(jar, classPath = classPath);
+	M3 libs = composeJavaM3(|tmp:///|, { createM3FromJar(l) | loc l <- classPath });
+
+	rel[loc from, loc to] candidates = (model.implements + model.extends + libs.implements + libs.extends)+;
+	rel[loc from, loc to] containment = domainR(model.containment + libs.containment, candidates.from + candidates.to);
+	rel[loc from, loc to] methodContainment = { <c, m> | <loc c, loc m> <- containment, isMethod(m)};
+
+	for(<loc from, loc to> <- candidates)
+		model.methodOverrides += {<m, getMethodSignature(m)> | m <- methodContainment[from]}
+			o {<getMethodSignature(m), m> | m <- methodContainment[to]};
+
+	return populateInvertedRelations(model);
 }
 
 M3 createM3FromSources(loc src, list[loc] classPath = []) {
