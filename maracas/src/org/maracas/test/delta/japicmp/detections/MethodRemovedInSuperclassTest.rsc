@@ -1,6 +1,5 @@
 module org::maracas::\test::delta::japicmp::detections::MethodRemovedInSuperclassTest
 
-import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::SetUp;
@@ -78,11 +77,10 @@ test bool callSuperSSMethodExtSSuper()
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-// Transitive override relations are not registered in the M3
 test bool overrideSuperSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSAbs()|,
-		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -97,21 +95,19 @@ test bool overrideSuperSMethodExtSSuper()
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-// Transitive override relations are not registered in the M3
 test bool overrideSuperSSMethodExtSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/MethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
-		|java+method:///main/methodRemovedInSuperclass/MethodRemovedInSuperclass/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-// Transitive override relations are not registered in the M3
 test bool overrideSuperSSMethodExtSSuper()
 	= detection(
 		|java+method:///mainclient/methodRemovedInSuperclass/SMethodRemovedInSuperclassExt/methodRemovedSSAbs()|,
-		|java+method:///main/methodRemovedInSuperclass/SMethodRemovedInSuperclass/methodRemovedSSAbs()|,
+		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		|java+method:///main/methodRemovedInSuperclass/SSMethodRemovedInSuperclass/methodRemovedSSAbs()|,
 		methodOverride(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))
