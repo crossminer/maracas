@@ -49,6 +49,8 @@ M3 createM3(loc jar, list[loc] classPath = []) {
 			o {<getMethodSignature(m), m> | m <- methodContainment[to]};
 
 	/*
+		Note: M3 created from JAR/source code point to != fieldAccess/methodInvocation
+
 		package pkg;
 		class A { int i; void foo() {}  }
 		class B extends A { void bar() { i = 42; foo(); }
@@ -66,9 +68,6 @@ M3 createM3(loc jar, list[loc] classPath = []) {
 		    m.containment[|java+class:///pkg/B|] = {
 		    	|java+method:///pkg/B/bar()|
 		    }
-
-		createM3FromSources points fieldAccess and methodInvocation properly; so let's
-		attempt to fix that for JARs here
 	*/
 
 	return populateInvertedRelations(model);
@@ -76,11 +75,21 @@ M3 createM3(loc jar, list[loc] classPath = []) {
 
 M3 createM3FromSources(loc src, list[loc] classPath = []) {
 	M3 m = createM3FromDirectory(src, classPath = classPath);
-	return populateInvertedRelations(
-		visit(m) {
-			case loc l => sanitize(m, l)
-		}
-	);
+	M3 libs = composeJavaM3(|tmp:///|, { createM3FromJar(l) | loc l <- classPath });
+
+	// Just kill me
+	rel[loc, loc] containment = m.containment;
+	for (<from, to> <- libs.containment) {
+		loc l = to;
+		l.path = replaceAll(l.path, "$", "/");
+		containment += <from, l>;
+	}
+
+	m = visit(m) {
+		case loc l => sanitize(containment, l)
+	}
+
+	return populateInvertedRelations(m);
 }
 
 M3 populateInvertedRelations(M3 m) {
@@ -99,44 +108,21 @@ M3 populateInvertedRelations(M3 m) {
 // Attempting to fix some discrepancies between
 // source code M3s and JAR M3s
 //   - Cls/Inner           => Cls$Inner
-//   (- Cls/$anonymous1     => Cls$1 (brittle because order-dependent?)
-//   - java+anonymousClass => java+class)
+//   [- Cls/$anonymous1     => Cls$1 (brittle because order-dependent?)
+//   - java+anonymousClass => java+class]
 @memo
-loc sanitize(M3 m, loc l) {
-	set[loc] enclosing = { t | t <- invert(m.containment)[l], isType(t) };
+loc sanitize(rel[loc, loc] containment, loc l) {
+	set[loc] enclosing = { t | t <- invert(containment)[l], isType(t) };
 
 	if (size(enclosing) == 1) {
 		loc t = getOneFrom(enclosing);
-		str enclosingPath = sanitize(m, t).path;
+		str enclosingPath = sanitize(containment, t).path;
 
 		if (isType(l))
 			l.path = "<enclosingPath>$<l.file>";
 		else
 			l.path = "<enclosingPath>/<l.file>";
 	}
-
-	// Don't need to align anonymous names, they're not
-	// affected by BCs anyway
-
-	//	if (/\$anonymous<i:[0-9]+>/ := l.path) {
-	//		// gp is the declaring type, parent is the declaring method
-	//		if (isType(l) || isAnonymousClass(l)) {
-	//			loc gp = l.parent.parent;
-	//			l.path = gp.path;
-	//			l.file = "<gp.file>$<i>";
-	//		}
-	//
-	//		// ggp is the declaring type, file is the method name
-	//		if (isMethod(l) || isField(l)) {
-	//			loc gpp = l.parent.parent.parent;
-	//			str name = l.file;
-	//			l.path = gpp.path;
-	//			l.file = "<gpp.file>$<i>/<name>";
-	//		}
-	//	}
-	//
-	//	if (l.scheme == "java+anonymousClass")
-	//		l.scheme = "java+class";
 
 	return l;
 }
