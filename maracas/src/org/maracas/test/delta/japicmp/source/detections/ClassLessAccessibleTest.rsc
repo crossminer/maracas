@@ -51,6 +51,7 @@ test bool pro2privExt()
 		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
     in detects;
 
+// Fails due to https://github.com/crossminer/maracas/issues/76
 test bool packpriv2privExt()
 	= detection(
 		|java+class:///main/classLessAccessible/ClassLessAccessiblePackPriv2PrivExt$ClassLessAccessiblePackPriv2PrivExtInner|,
