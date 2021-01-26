@@ -60,7 +60,7 @@ test bool noSuperKeyNumeric()
 test bool noSuperKeyList()
 	= detection(
 		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/listClientNoSuperKey()|,
-		|java+method:///mainclient/methodReturnTypeChanged/MethodReturnTypeChangedExt/methodReturnTypeChangedList()|,
+		|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedList()|,
 		|java+method:///main/methodReturnTypeChanged/MethodReturnTypeChanged/methodReturnTypeChangedList()|,
 		methodInvocation(),
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))

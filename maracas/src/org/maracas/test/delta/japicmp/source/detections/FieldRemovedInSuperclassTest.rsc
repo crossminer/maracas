@@ -9,7 +9,7 @@ import org::maracas::\test::delta::japicmp::source::SetUp;
 test bool accessSuper()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassFA/accessSuper()|,
-		|java+field:///main/fieldRemovedInSuperclass/SFieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -18,7 +18,7 @@ test bool accessSuper()
 test bool accessSub()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassFA/accessSub()|,
-		|java+field:///main/fieldRemovedInSuperclass/FieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -27,7 +27,7 @@ test bool accessSub()
 test bool extSubSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassExt/accessSuperKey()|,
-		|java+field:///main/fieldRemovedInSuperclass/FieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -36,7 +36,7 @@ test bool extSubSuperKeyAccess()
 test bool extSubNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassExt/accessNoSuperKey()|,
-		|java+field:///mainclient/fieldRemovedInSuperclass/FieldRemovedInSuperclassExt/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -45,7 +45,7 @@ test bool extSubNoSuperKeyAccess()
 test bool extSupSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/SFieldRemovedInSuperclassExt/accessSuperKey()|,
-		|java+field:///main/fieldRemovedInSuperclass/SFieldRemovedInSuperclass/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -54,7 +54,7 @@ test bool extSupSuperKeyAccess()
 test bool extSupNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldRemovedInSuperclass/SFieldRemovedInSuperclassExt/accessNoSuperKey()|,
-		|java+field:///mainclient/fieldRemovedInSuperclass/SFieldRemovedInSuperclassExt/removedField|,
+		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		|java+field:///main/fieldRemovedInSuperclass/SSFieldRemovedInSuperclass/removedField|,
 		fieldAccess(),
 		fieldRemoved(binaryCompatibility=false,sourceCompatibility=false))

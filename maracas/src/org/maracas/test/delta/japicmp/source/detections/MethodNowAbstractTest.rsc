@@ -45,7 +45,7 @@ test bool superInvExt()
 test bool noSuperInvExt()
 	= detection(
 		|java+method:///mainclient/methodNowAbstract/MethodNowAbstractExt/methodNowAbstractClientNoSuperKey()|,
-		|java+method:///mainclient/methodNowAbstract/MethodNowAbstractExt/methodNowAbstract()|,
+		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
 		|java+method:///main/methodNowAbstract/MethodNowAbstract/methodNowAbstract()|,
 		methodInvocation(),
 		methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))

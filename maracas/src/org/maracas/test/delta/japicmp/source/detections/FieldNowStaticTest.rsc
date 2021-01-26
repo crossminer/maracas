@@ -27,7 +27,7 @@ test bool superKeyAccess()
 test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNowStatic/FieldNowStaticExt/fieldNowStaticClientNoSuperKeyAccess()|,
-		|java+field:///mainclient/fieldNowStatic/FieldNowStaticExt/MODIFIED_FIELD|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		fieldAccess(),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -36,7 +36,7 @@ test bool noSuperKeyAccess()
 test bool simpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldNowStatic/FieldNowStaticFA/fieldNowStaticClientSimpleAccessSub()|,
-		|java+field:///main/fieldNowStatic/FieldNowStaticSub/MODIFIED_FIELD|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		fieldAccess(),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -45,7 +45,7 @@ test bool simpleAccessSub()
 test bool superKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldNowStatic/FieldNowStaticExtSub/fieldNowStaticClientSuperKeyAccess()|,
-		|java+field:///main/fieldNowStatic/FieldNowStaticSub/MODIFIED_FIELD|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		fieldAccess(),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -54,7 +54,7 @@ test bool superKeyAccessSub()
 test bool noSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldNowStatic/FieldNowStaticExtSub/fieldNowStaticClientNoSuperKeyAccess()|,
-		|java+field:///mainclient/fieldNowStatic/FieldNowStaticExtSub/MODIFIED_FIELD|,
+		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		|java+field:///main/fieldNowStatic/FieldNowStatic/MODIFIED_FIELD|,
 		fieldAccess(),
 		fieldNowStatic(binaryCompatibility=false,sourceCompatibility=false))

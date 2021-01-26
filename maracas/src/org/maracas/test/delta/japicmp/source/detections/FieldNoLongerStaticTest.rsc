@@ -33,7 +33,7 @@ test bool superKeyAccess()
 test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientNoSuperKey()|,
-		|java+field:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldStatic|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/fieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -43,7 +43,7 @@ test bool noSuperKeyAccess()
 test bool superKeyAccessSuper()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperSuperKey()|,
-		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/superFieldStatic|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -53,7 +53,7 @@ test bool superKeyAccessSuper()
 test bool noSuperKeyAccessSuper()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/fieldNoLongerStaticClientSuperNoSuperKey()|,
-		|java+field:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticExt/superFieldStatic|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -62,7 +62,7 @@ test bool noSuperKeyAccessSuper()
 test bool simpleAccessSuper1()
 	= detection(
 		|java+method:///mainclient/fieldNoLongerStatic/FieldNoLongerStaticFA/fieldNoLongerStaticSuperClient1()|,
-		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStatic/superFieldStatic|,
+		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		|java+field:///main/fieldNoLongerStatic/FieldNoLongerStaticSuper/superFieldStatic|,
 		fieldAccess(),
 		fieldNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))

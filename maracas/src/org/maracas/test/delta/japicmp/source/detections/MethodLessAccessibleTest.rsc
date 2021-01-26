@@ -93,7 +93,7 @@ test bool noSuperKeyAccessPub2Pro()
 test bool noSuperKeyAccessPub2PackPriv()	
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PackPrivClientNoSuperKeyAccess()|,
-		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePublic2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -102,7 +102,7 @@ test bool noSuperKeyAccessPub2PackPriv()
 test bool noSuperKeyAccessPub2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePub2PrivClientNoSuperKeyAccess()|,
-		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePublic2Private()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessiblePublic2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -111,7 +111,7 @@ test bool noSuperKeyAccessPub2Priv()
 test bool noSuperKeyAccessPro2PackPriv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PackPrivClientNoSuperKeyAccess()|,
-		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessibleProtected2PackPriv()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2PackPriv()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
@@ -120,12 +120,13 @@ test bool noSuperKeyAccessPro2PackPriv()
 test bool noSuperKeyAccessPro2Priv()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessiblePro2PrivClientNoSuperKeyAccess()|,
-		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleMISubtype/methodLessAccessibleProtected2Private()|,
+		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		|java+method:///main/methodLessAccessible/MethodLessAccessible/methodLessAccessibleProtected2Private()|,
 		methodInvocation(),
 		methodLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
+// public to protected shouldn't be an issue
 test bool overridePub2Pro()
 	= detection(
 		|java+method:///mainclient/methodLessAccessible/MethodLessAccessibleExt/methodLessAccessiblePublic2Protected()|,

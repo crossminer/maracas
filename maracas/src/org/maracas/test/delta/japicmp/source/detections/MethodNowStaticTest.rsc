@@ -27,7 +27,7 @@ test bool superKeyAccess()
 test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticExt/methodNowStaticClientNoSuperKeyAccess()|,
-		|java+method:///mainclient/methodNowStatic/MethodNowStaticExt/methodNowStatic()|,
+		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
 		|java+method:///main/methodNowStatic/MethodNowStatic/methodNowStatic()|,
 		methodInvocation(),
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -45,7 +45,7 @@ test bool override()
 test bool interface()
 	= detection(
 		|java+method:///mainclient/methodNowStatic/MethodNowStaticImp/methodNowStaticClient()|,
-		|java+method:///mainclient/methodNowStatic/MethodNowStaticImp/methodNowStatic()|,
+		|java+method:///main/methodNowStatic/IMethodNowStatic/methodNowStatic()|,
 		|java+method:///main/methodNowStatic/IMethodNowStatic/methodNowStatic()|,
 		methodInvocation(),
 		methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))

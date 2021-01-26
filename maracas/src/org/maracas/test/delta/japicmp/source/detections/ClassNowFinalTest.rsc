@@ -53,7 +53,7 @@ test bool nonAbstractMethodOverr()
 
 test bool anonymousNonAbstract()
 	= detection(
-		|java+class:///mainclient/classNowFinal/ClassNowFinalAnonymousSub$1|,
+		|java+anonymousClass:///mainclient/classNowFinal/ClassNowFinalAnonymousSub/classNowFinalAnonymousSub()/$anonymous1|,
 		|java+class:///main/classNowFinal/ClassNowFinal|,
 		|java+class:///main/classNowFinal/ClassNowFinal|,
 		extends(),
@@ -62,7 +62,7 @@ test bool anonymousNonAbstract()
 
 test bool anonymousAbstract()
 	= detection(
-		|java+method:///mainclient/classNowFinal/ClassNowFinalAnonymousSub$2/m()|,
+		|java+method:///mainclient/classNowFinal/ClassNowFinalAnonymousSub/classNowFinalAnonymousSubAbs()/$anonymous1/m()|,
 		|java+method:///main/classNowFinal/ClassNowFinalAbs/m()|,
 		|java+class:///main/classNowFinal/ClassNowFinalAbs|,
 		methodOverride(),
@@ -71,7 +71,7 @@ test bool anonymousAbstract()
 
 test bool anonymousAbstractExt()
 	= detection(
-		|java+class:///mainclient/classNowFinal/ClassNowFinalAnonymousSub$2|,
+		|java+anonymousClass:///mainclient/classNowFinal/ClassNowFinalAnonymousSub/classNowFinalAnonymousSubAbs()/$anonymous1|,
 		|java+class:///main/classNowFinal/ClassNowFinalAbs|,
 		|java+class:///main/classNowFinal/ClassNowFinalAbs|,
 		extends(),

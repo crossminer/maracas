@@ -18,7 +18,7 @@ test bool simpleCall()
 test bool simpleSubCall()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionMI/callSubtypeMethod()|,
-		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionSub/nowThrowsExcep()|,
+		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))

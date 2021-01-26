@@ -27,7 +27,7 @@ test bool superKeyAccess()
 test bool noSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemovedClientExt()|,
-		|java+method:///mainclient/methodRemoved/MethodRemovedExt/methodRemoved()|,
+		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
 		|java+method:///main/methodRemoved/MethodRemoved/methodRemoved()|,
 		methodInvocation(),
 		methodRemoved(binaryCompatibility=false,sourceCompatibility=false))

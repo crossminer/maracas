@@ -47,7 +47,7 @@ test bool listSuperKeyAccess()
 test bool numericNoSuperKeyAccess()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldTypeChangedClientNoSuperKeyAccess()|,
-		|java+field:///mainclient/fieldTypeChanged/FieldTypeChangedExt/fieldNumeric|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -68,7 +68,7 @@ test bool listNoSuperKeyAccess()
 test bool numericSimpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
-		|java+field:///main/fieldTypeChanged/FieldTypeChangedSub/fieldNumeric|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -77,7 +77,7 @@ test bool numericSimpleAccessSub()
 test bool listSimpleAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedFA/fieldTypeChangedClientSub()|,
-		|java+field:///main/fieldTypeChanged/FieldTypeChangedSub/fieldList|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -86,7 +86,7 @@ test bool listSimpleAccessSub()
 test bool numericSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
-		|java+field:///main/fieldTypeChanged/FieldTypeChangedSub/fieldNumeric|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -97,7 +97,7 @@ test bool numericSuperKeyAccessSub()
 test bool listSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientSuperKeyAccess()|,
-		|java+field:///main/fieldTypeChanged/FieldTypeChangedSub/fieldList|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -106,7 +106,7 @@ test bool listSuperKeyAccessSub()
 test bool numericNoSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
-		|java+field:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldNumeric|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldNumeric|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
@@ -117,7 +117,7 @@ test bool numericNoSuperKeyAccessSub()
 test bool listNoSuperKeyAccessSub()
 	= detection(
 		|java+method:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldTypeChangedClientNoSuperKeyAccess()|,
-		|java+field:///mainclient/fieldTypeChanged/FieldTypeChangedExtSub/fieldList|,
+		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		|java+field:///main/fieldTypeChanged/FieldTypeChanged/fieldList|,
 		fieldAccess(),
 		fieldTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
