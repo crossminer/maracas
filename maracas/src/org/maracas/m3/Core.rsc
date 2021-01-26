@@ -86,13 +86,13 @@ M3 createM3FromSources(loc src, list[loc] classPath = []) {
 	}
 
 	// No default constructor extracted from source code, but we need them
-	for (loc c <- classes(m))
-		if (isEmpty(constructors(m, c))) {
-			loc defaultCons = c;
-			defaultCons.scheme = "java+constructor";
-			defaultCons.file = "<c.file>/<c.file>()";
-			m.containment += { <c, defaultCons> };
-		}
+	for (loc c <- classes(m), isEmpty(constructors(m, c))) {
+		loc defaultCons = c;
+		defaultCons.scheme = "java+constructor";
+		defaultCons.file = "<c.file>/<c.file>()";
+		m.containment += { <c, defaultCons> };
+		m.modifiers += { <defaultCons, \public()> };
+	}
 
 	m = visit(m) {
 		case loc l => sanitize(containment, l)
