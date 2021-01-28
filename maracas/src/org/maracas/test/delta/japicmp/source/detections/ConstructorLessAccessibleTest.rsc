@@ -33,14 +33,15 @@ test bool simpleAccessPub2Priv()
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
+// Same package => pub2PackPriv is fine
 test bool anonymousConstructorAccess()
 	= detection(
-		|java+class:///main/constructorLessAccessible/ConstructorLessAccessibleMI$1|,
+		|java+anonymousClass:///main/constructorLessAccessible/ConstructorLessAccessibleMI/anonymousAccess()/$anonymous1|,
 		|java+constructor:///main/constructorLessAccessible/ConstructorLessAccessiblePub2PackPriv/ConstructorLessAccessiblePub2PackPriv()|,
 		|java+constructor:///main/constructorLessAccessible/ConstructorLessAccessiblePub2PackPriv/ConstructorLessAccessiblePub2PackPriv()|,
 		methodInvocation(),
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
-	in detects;
+	notin detects;
 	
 test bool superAccessPub2Pro()
 	= detection(
@@ -131,7 +132,7 @@ test bool superAccessPro2PrivParams()
 		methodInvocation(),
 		constructorLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
-	
+
 test bool simpleAccessPub2PackPrivSamePack()
 	= detection(
 		|java+method:///main/constructorLessAccessible/ConstructorLessAccessibleMI/clientPublic()|,
