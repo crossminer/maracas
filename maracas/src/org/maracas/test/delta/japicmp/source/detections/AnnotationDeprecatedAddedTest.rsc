@@ -3,6 +3,7 @@ module org::maracas::\test::delta::japicmp::source::detections::AnnotationDeprec
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::source::SetUp;
+import org::maracas::\test::delta::japicmp::source::TestUtils;
 
 test bool emptyClassTD() 
 	= detection(
@@ -319,3 +320,9 @@ test bool implementInt()
 		implements(),
 		annotationDeprecatedAdded(binaryCompatibility=true,sourceCompatibility=true))
     in detects;
+
+test bool noExtraDetections()
+	=  noDetectionOn(detects, |java+field:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/nonEmptyClassSub|)
+	&& noDetectionOn(detects, |java+field:///mainclient/annotationDeprecatedAdded/AnnotationDeprecatedAddedSA/nonDepClass|)
+	;
+

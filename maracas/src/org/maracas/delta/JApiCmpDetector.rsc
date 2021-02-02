@@ -148,7 +148,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 	for (e <- changed) {
 		tuple[Modifier old, Modifier new] access = getAccessModifiers(e, evol.delta);
 		bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
-	
+
 		if (!pub2prot) {
 			str field = memberName(e);
 			loc parent = parentType(evol.apiOld, e);
@@ -559,8 +559,8 @@ set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] chang
 	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
 
 	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
-		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation() }, includeParent = false)
-		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = false);
+		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation() }, includeParent = true)
+		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = true);
 }
 
 
@@ -652,8 +652,10 @@ private bool isNotSuperInvocation(RippleEffect effect, Evolution evol)
 private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);
 	bool pkgProt = isPackageProtected(access.new);
-	
+	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
+
 	return isLessVisible(access.new, access.old)
+		&& !(pub2prot && areInSameHierarchy(effect, evol))
 		&& !(pkgProt && samePackage(effect.affected, effect.changed)); // To package-private same package
 }
 

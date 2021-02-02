@@ -1,10 +1,9 @@
 module org::maracas::\test::delta::japicmp::source::detections::ClassLessAccessibleTest
 
-import lang::java::m3::Core;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 import org::maracas::\test::delta::japicmp::source::SetUp;
-
+import org::maracas::\test::delta::japicmp::source::TestUtils;
 
 test bool pub2proExt()
 	= detection(
@@ -105,3 +104,8 @@ test bool pub2proRef()
 		typeDependency(),
 		classLessAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
+
+test bool noExtraDetections()
+	=  noDetectionOn(detects, |java+class:///main/classLessAccessible/ClassLessAccessiblePackPriv2PrivExt|)
+	&& noDetectionOn(detects, |java+class:///main/classLessAccessible/ClassLessAccessiblePub2PackPrivImp|)
+	;

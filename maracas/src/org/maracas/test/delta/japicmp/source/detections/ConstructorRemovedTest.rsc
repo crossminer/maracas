@@ -35,11 +35,11 @@ test bool simpleAccessNoParams()
 
 test bool anonymousAccess()
 	= detection(
-		|java+constructor:///mainclient/constructorRemoved/ConstructorRemovedMI$1/ConstructorRemovedMI$1(mainclient.constructorRemoved.ConstructorRemovedMI)|,
-		|java+constructor:///main/constructorRemoved/ConstructorRemovedClass/ConstructorRemovedClass()|,
-		|java+constructor:///main/constructorRemoved/ConstructorRemovedClass/ConstructorRemovedClass()|,
-		methodInvocation(),
-		constructorRemoved(binaryCompatibility=false,sourceCompatibility=false))
+	    |java+anonymousClass:///mainclient/constructorRemoved/ConstructorRemovedMI/constructorRemovedClientClassAnonymous()/$anonymous1|,
+	    |java+class:///main/constructorRemoved/ConstructorRemovedClass|,
+	    |java+class:///main/constructorRemoved/ConstructorRemovedClass|,
+	    extends(),
+	    classRemoved(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
 test bool anonymousAccessNoParams()

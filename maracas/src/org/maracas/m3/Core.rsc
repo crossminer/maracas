@@ -86,7 +86,7 @@ M3 createM3FromSources(loc src, list[loc] classPath = []) {
 	}
 
 	// No default constructor extracted from source code, but we need them
-	for (loc c <- classes(m), isEmpty(constructors(m, c))) {
+	for (loc c <- domain(m.declarations), isClass(c) || isAnonymousClass(c), isEmpty(constructors(m, c))) {
 		loc defaultCons = c;
 		defaultCons.scheme = "java+constructor";
 		defaultCons.file = "<c.file>/<c.file>()";
