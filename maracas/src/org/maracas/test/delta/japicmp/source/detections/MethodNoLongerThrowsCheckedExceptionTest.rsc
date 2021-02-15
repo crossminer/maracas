@@ -14,7 +14,8 @@ test bool simpleCall()
 		methodInvocation(),
 		methodNoLongerThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	in detects;
-	
+    
+    
 test bool simpleSubCall()
 	= detection(
 		|java+method:///mainclient/methodNoLongerThrowsCheckedException/MethodNoLongerThrowsCheckedExceptionMI/callSubtypeMethod()|,

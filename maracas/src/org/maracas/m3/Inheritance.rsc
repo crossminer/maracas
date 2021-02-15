@@ -126,6 +126,9 @@ set[loc] getSupertypes(loc class, M3 m)
 set[loc] getSubtypes(loc class, M3 m)
 	= m.invertedExtends[class] + m.invertedImplements[class];
 	
+set[loc] getSubtypes2(loc class, M3 m) 
+	= ((m.invertedExtends + m.invertedImplements)+)[class];
+
 @doc{ 
 	Returns a set of locations pointing to the ABSTRACT
 	subtypes of a class given by parameter. The M3 model 
@@ -196,4 +199,9 @@ set[loc] getClientConcreteSubtypes(loc class, M3 api, M3 client)
 M3 filterConstructorOverride(M3 m) {
 	m.methodOverrides = { <from, to> | <loc from, loc to> <- m.methodOverrides, !(isConstructor(from) && isConstructor(to)) };
 	return m;
+}
+
+bool isSubtype(loc class, loc parent, M3 model) {
+	set[loc] subtypes = getSubtypes2(parent, model) + parent;
+	return class in subtypes;
 }

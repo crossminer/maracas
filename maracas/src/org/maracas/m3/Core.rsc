@@ -616,3 +616,9 @@ loc getOuterType(loc nested, M3 m) {
 @memo
 rel[loc, loc] composeExtends(set[M3] m3s)
 	= { *m.extends | M3 m <- m3s };
+	
+M3 composeMaracasM3s(loc id, set[M3] models) {
+	M3 comp = composeJavaM3(id, models);
+	comp = populateInvertedRelations(comp);
+	return comp;
+}
