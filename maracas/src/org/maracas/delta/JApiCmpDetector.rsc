@@ -268,6 +268,7 @@ set[Detection] computeMethLessAccessibleDetections(Evolution evol, ch:Compatibil
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodMoreAccessible())
 	= computeMethSymbDetections(evol, ch, { methodOverride() }, isMoreAccessible, allowShadowing = true);	
 
+// We do not set the API use to methodOverride() because overriding static methods is not possible in Java
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) {
 	return computeDetections(evol, ch, { methodInvocation() })
 	+ computeMethSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
