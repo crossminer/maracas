@@ -166,9 +166,11 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMoreAccessible()) 
 	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
-	= computeFieldSymbDetections(evol, ch)
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) {
+	x = computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
+	return computeFieldSymbDetections(evol, ch)
 	+ computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNowFinal()) 
 	= computeFieldSymbDetections(evol, ch); 
@@ -266,9 +268,10 @@ set[Detection] computeMethLessAccessibleDetections(Evolution evol, ch:Compatibil
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodMoreAccessible())
 	= computeMethSymbDetections(evol, ch, { methodOverride() }, isMoreAccessible, allowShadowing = true);	
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) 
-	= computeDetections(evol, ch, { methodInvocation() })
-	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) {
+	return computeDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowAbstract())
 	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() }, isAffectedByAbsMeth)
@@ -629,14 +632,6 @@ private rel[loc, APIUse] getAffectedEntities(Evolution evol, APIUse apiUse, set[
 		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedAnnotations[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
 	}
 	else if (apiUse == fieldAccess()) {
-		for (<loc p, loc e> <- entities) {
-			for (loc c <- client.invertedFieldAccess[e]) {
-				papac = parentType(client, c);
-				papae = parentType(apiOld, e);
-				x = isSubtype(papac, papae, comp);
-				y = 0;
-			}
-		}
 		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedFieldAccess[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
 	}
 	else if (apiUse == methodInvocation()) {
