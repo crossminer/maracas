@@ -114,6 +114,7 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| methodMoreAccessible()
 	| methodNewDefault()
 	| methodNoLongerStatic()
+	| methodNoLongerThrowsCheckedException()
 	| methodNowAbstract()
 	| methodNowFinal()
 	| methodNowStatic()
@@ -133,7 +134,6 @@ data CompatibilityChange(bool binaryCompatibility=false, bool sourceCompatibilit
 	| fieldTypeChanged()
 	| constructorRemoved()
 	| constructorLessAccessible()
-	| methodNoLongerThrowsCheckedException()
 	;
 	
 data ClassType
@@ -516,15 +516,15 @@ tuple[Modifier, Modifier] getAccessModifiers(loc elem, list[APIEntity] delta) {
 }
 
 rel[loc, loc] getExcepRemovedEntities(list[APIEntity] delta) 
-	= { *getExcepEntities(entity, removed()) | APIEntity entity <- delta };
+	= { *getExcepEntities(entity, removed(), methodNoLongerThrowsCheckedException()) | APIEntity entity <- delta };
 
 rel[loc, loc] getExcepAddedEntities(list[APIEntity] delta) 
-	= { *getExcepEntities(entity, new()) | APIEntity entity <- delta };
+	= { *getExcepEntities(entity, new(), methodNowThrowsCheckedException()) | APIEntity entity <- delta };
 	
-rel[loc, loc] getExcepEntities(APIEntity entity, APISimpleChange apiCh) {
+rel[loc, loc] getExcepEntities(APIEntity entity, APISimpleChange apiCh, CompatibilityChange change) {
 	rel[loc, loc] exceptions = {};
 	visit(entity) {
-	case /method(id, _, _, entities, _, _):
+	case /method(id, _, _, entities, [*_, change, *_], _):
 		for (/exception(excep, true, apiCh) := entities) {
 			exceptions += <id, excep>;
 		}

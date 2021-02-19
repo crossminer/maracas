@@ -1,6 +1,5 @@
 package org.maracas.delta.internal;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;

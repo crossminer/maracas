@@ -19,7 +19,7 @@ test bool simpleCall()
 test bool simpleSubCall()
 	= detection(
 		|java+method:///mainclient/methodNoLongerThrowsCheckedException/MethodNoLongerThrowsCheckedExceptionMI/callSubtypeMethod()|,
-		|java+method:///main/methodNoLongerThrowsCheckedException/MethodNoLongerThrowsCheckedExceptionSub/noLongerThrowsExcep()|,
+		|java+method:///main/methodNoLongerThrowsCheckedException/MethodNoLongerThrowsCheckedException/noLongerThrowsExcep()|,
 		|java+method:///main/methodNoLongerThrowsCheckedException/MethodNoLongerThrowsCheckedException/noLongerThrowsExcep()|,
 		methodInvocation(),
 		methodNoLongerThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))

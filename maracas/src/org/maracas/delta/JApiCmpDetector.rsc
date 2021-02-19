@@ -102,6 +102,7 @@ set[Detection] computeDetections(Evolution evol)
 	+ computeDetections(evol, methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNoLongerThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -274,6 +275,11 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	+ computeMethSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 }
 
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerThrowsCheckedException()) {
+	set[loc] changed = domain(getExcepRemovedEntities(evol.delta));
+	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() });
+}
+
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowAbstract())
 	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() }, isAffectedByAbsMeth)
 	+ computeMethSymbDetections(evol, ch, { methodInvocation() });
@@ -286,8 +292,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) {
-	set[loc] changed = domain(getExcepRemovedEntities(evol.delta) + getExcepAddedEntities(evol.delta));
-	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() }, bool (RippleEffect effect, Evolution evol) { return true; });
+	set[loc] changed = domain(getExcepAddedEntities(evol.delta));
+	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() });//, bool (RippleEffect effect, Evolution evol) { return true; });
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodRemoved()) 
