@@ -46,7 +46,7 @@ test bool superKeyList()
 		methodReturnTypeChanged(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 
-// TODO: If the method type changes to a subtype type of the old type 
+// TODO: If the method type changes to a subtype of the old type 
 // no source compatibility error appears.
 test bool noSuperKeyNumeric()
     = detection(
