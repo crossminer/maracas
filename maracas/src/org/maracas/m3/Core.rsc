@@ -216,11 +216,21 @@ bool isTargetMember(loc elem)
 	= isTargetMemberExclInterface(elem)
 	|| isInterface(elem);
 
-@memo
-M3 createM3(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
-	//M3 m = (project.scheme == "jar" || project.extension == "jar") ? createM3FromJar(project) : m3FromFolder(project);
+//@memo
+M3 createM3(loc project) {
+	//loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|
 	M3 m = createM3FromJar(project);
-	return fillDefaultVisibility(filterAnonymousClasses(m));
+	m = createInvertedM3(m);
+	//m = fillDefaultVisibility(filterAnonymousClasses(m));
+	return m;
+}
+
+//@memo
+M3 createM3SrcFile(loc file, list[loc] cp = []) {
+	M3 m = createM3FromFile(file, classPath = cp);
+	m = createInvertedM3(m);
+	//m = fillDefaultVisibility(filterAnonymousClasses(m));
+	return m;
 }
 
 M3 m3FromFolder(loc project, loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|) {
