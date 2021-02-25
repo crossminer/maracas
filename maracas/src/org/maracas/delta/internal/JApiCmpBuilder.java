@@ -58,6 +58,7 @@ public interface JApiCmpBuilder {
 	IConstructor buildCCMethodNowFinalCons(CompatibilityChange common);
 	IConstructor buildCCMethodNowStaticCons(CompatibilityChange common);
 	IConstructor buildCCMethodNoLongerStaticCons(CompatibilityChange common);
+	IConstructor buildCCMethodNoLongerThrowsCheckedException(CompatibilityChange common);
 	IConstructor buildCCMethodAddedToInterfaceCons(CompatibilityChange common);
 	IConstructor buildCCMethodAddedToPublicClassCons(CompatibilityChange common);
 	IConstructor buildCCMethodNowThrowsCheckedExceptionCons(CompatibilityChange common);
@@ -78,7 +79,6 @@ public interface JApiCmpBuilder {
 	IConstructor buildCCFieldMoreAccessibleCons(CompatibilityChange common);
 	IConstructor buildCCConstructorRemovedCons(CompatibilityChange common);
 	IConstructor buildCCConstructorLessAccessibleCons(CompatibilityChange common);
-	IConstructor buildCCMethodNoLongerThrowsCheckedException(CompatibilityChange common);
 	IConstructor buildClassTypeAnnotationCons();
 	IConstructor buildClassTypeInterfaceCons();
 	IConstructor buildClassTypeClassCons();

@@ -1,4 +1,4 @@
-module org::maracas::\test::delta::jezek_benchmark::detections::AllTests
+module org::maracas::\test::delta::jezek_benchmark::AllTests
 
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessDecreaseTest;
 extend org::maracas::\test::delta::jezek_benchmark::detections::AccessModifierClazzAccessIncreaseTest;

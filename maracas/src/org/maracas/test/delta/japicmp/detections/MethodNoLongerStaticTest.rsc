@@ -59,9 +59,9 @@ public test bool interface()
 test bool hideNonStaticAsStatic()
 	= detection(
 		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodNoLongerStatic()|,
+		|java+method:///mainclient/methodNoLongerStatic/MethodNoLongerStaticHideExt/methodNoLongerStatic()|,
 		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
-		|java+method:///main/methodNoLongerStatic/MethodNoLongerStatic/methodNoLongerStatic()|,
-		methodOverride(),
+		declaration(),
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
 	in detects;
 	

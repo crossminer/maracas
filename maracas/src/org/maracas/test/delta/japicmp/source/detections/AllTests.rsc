@@ -1,0 +1,42 @@
+module org::maracas::\test::delta::japicmp::source::detections::AllTests
+
+extend org::maracas::\test::delta::japicmp::source::detections::CoreTest;
+
+extend org::maracas::\test::delta::japicmp::source::detections::AnnotationDeprecatedAddedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldLessAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldMoreAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldNoLongerStaticTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldNowFinalTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldNowStaticTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldRemovedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldRemovedInSuperclassTest;
+extend org::maracas::\test::delta::japicmp::source::detections::FieldTypeChangedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodAbstractAddedToClassTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodAbstractNowDefaultTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodAddedToInterfaceTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodLessAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodMoreAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNewDefaultTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNoLongerStaticTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNoLongerThrowsCheckedExceptionTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNowAbstractTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNowFinalTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNowStaticTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodNowThrowsCheckedExceptionTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodRemovedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodRemovedInSuperclassTest;
+extend org::maracas::\test::delta::japicmp::source::detections::MethodReturnTypeChangedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ConstructorLessAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ConstructorRemovedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassLessAccessibleTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassNoLongerPublicTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassNowAbstractTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassNowCheckedExceptionTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassNowFinalTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassRemovedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::ClassTypeChangedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::InterfaceAddedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::InterfaceRemovedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::SuperclassAddedTest;
+extend org::maracas::\test::delta::japicmp::source::detections::SuperclassRemovedTest;
+

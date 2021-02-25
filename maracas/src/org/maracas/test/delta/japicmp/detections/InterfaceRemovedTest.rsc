@@ -63,7 +63,7 @@ test bool defaultExt()
 test bool staticTD()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedTD/staticM()|,
-		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticM()|,
+		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticMeth()|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		methodInvocation(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))
@@ -72,7 +72,7 @@ test bool staticTD()
 test bool staticExt()
 	= detection(
 		|java+method:///mainclient/interfaceRemoved/InterfaceRemovedExt/staticM()|,
-		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticM()|,
+		|java+method:///mainclient/interfaceRemoved/IInterfaceRemoved/staticMeth()|,
 		|java+interface:///main/interfaceRemoved/IInterfaceRemoved|,
 		methodInvocation(),
 		interfaceRemoved(binaryCompatibility=false,sourceCompatibility=false))

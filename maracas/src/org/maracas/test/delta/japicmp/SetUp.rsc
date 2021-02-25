@@ -10,7 +10,7 @@ public loc client = |file:///home/dig/repositories/maracas/maracas/src/org/marac
 
 public M3 m3ApiOld = createM3(apiOld);
 public M3 m3ApiNew = createM3(apiNew);
-public M3 m3Client = createM3(client);
+public M3 m3Client = createM3(client, classPath = [apiOld]);
 
 public list[APIEntity] delta = compareJars(apiOld, apiNew, "0.0", "1.0");
 public Evolution evol = createEvolution(m3Client, m3ApiOld, m3ApiNew, delta);

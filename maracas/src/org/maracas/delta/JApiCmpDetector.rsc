@@ -102,6 +102,7 @@ set[Detection] computeDetections(Evolution evol)
 	+ computeDetections(evol, methodMoreAccessible(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNewDefault(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false))
+	+ computeDetections(evol, methodNoLongerThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowAbstract(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowFinal(binaryCompatibility=false,sourceCompatibility=false))
 	+ computeDetections(evol, methodNowStatic(binaryCompatibility=false,sourceCompatibility=false))
@@ -148,7 +149,7 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 	for (e <- changed) {
 		tuple[Modifier old, Modifier new] access = getAccessModifiers(e, evol.delta);
 		bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
-	
+
 		if (!pub2prot) {
 			str field = memberName(e);
 			loc parent = parentType(evol.apiOld, e);
@@ -166,9 +167,11 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldLe
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldMoreAccessible()) 
 	= computeFieldSymbDetections(evol, ch, { declaration() }, isMoreAccessible, allowShadowing = true); // JLS 13.4.8 Field Declarations
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) 
-	= computeFieldSymbDetections(evol, ch)
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNoLongerStatic()) {
+	x = computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
+	return computeFieldSymbDetections(evol, ch)
 	+ computeFieldSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.8 Field Declarations
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::fieldNowFinal()) 
 	= computeFieldSymbDetections(evol, ch); 
@@ -232,7 +235,6 @@ set[Detection] computeFieldSymbDetections(Evolution evol, set[TransChangedEntity
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
-
 //----------------------------------------------
 // Method detections
 //----------------------------------------------
@@ -267,9 +269,16 @@ set[Detection] computeMethLessAccessibleDetections(Evolution evol, ch:Compatibil
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodMoreAccessible())
 	= computeMethSymbDetections(evol, ch, { methodOverride() }, isMoreAccessible, allowShadowing = true);	
 
-set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) 
-	= computeDetections(evol, ch, { methodInvocation() })
-	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
+// We do not set the API use to methodOverride() because overriding static methods is not possible in Java
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerStatic()) {
+	return computeDetections(evol, ch, { methodInvocation() })
+	+ computeMethSymbDetections(evol, ch, { declaration() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
+}
+
+set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNoLongerThrowsCheckedException()) {
+	set[loc] changed = domain(getExcepRemovedEntities(evol.delta));
+	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() });
+}
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowAbstract())
 	= computeTypeHierarchyDetections(evol, ch, { extends(), implements() }, isAffectedByAbsMeth)
@@ -283,8 +292,8 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodN
 	+ computeMethSymbDetections(evol, ch, { methodOverride() }, areStaticIncompatible, allowShadowing = true); // JLS 13.4.12 Method and Constructor Declarations
 	
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodNowThrowsCheckedException()) {
-	set[loc] changed = domain(getExcepRemovedEntities(evol.delta) + getExcepAddedEntities(evol.delta));
-	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() }, bool (RippleEffect effect, Evolution evol) { return true; });
+	set[loc] changed = domain(getExcepAddedEntities(evol.delta));
+	return computeMethSymbDetections(evol, changed, ch, { methodInvocation(), methodOverride() });//, bool (RippleEffect effect, Evolution evol) { return true; });
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::methodRemoved()) 
@@ -407,27 +416,6 @@ set[Detection] computeMethSymbDetections(Evolution evol, set[loc] changed, Compa
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
-set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false, bool includeParent = true)
-	= computeMethSymbDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing, includeParent = includeParent);
-
-set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false, bool includeParent = true) {
-	set[loc] changed = domain(chEntities);
-	set[TransChangedEntity] entities = {}; 
-	
-	for (loc used <- changed) {
-		set[loc] transChanged = chEntities[used];
-		
-		for (loc e <- transChanged) {
-			str signature = methodSignature(e);
-			loc parent = parentType(evol.apiOld, e);
-			set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
-			entities += { used } * symbMeths;
-		}
-	}
-	
-	return computeDetections(evol, entities, change, apiUses, predicate);
-}
-
 
 //----------------------------------------------
 // Class detections
@@ -527,22 +515,22 @@ set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::classTy
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceRemoved()) {
-	rel[loc, loc] changed = getInterRemovedEntities(evol.delta);
+	rel[loc, loc] changed = getInterRemovedEntities(evol.delta); // The content looks like: { <class, inter1>, <class, inter2>... }
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::interfaceAdded()) {
-	rel[loc, loc] changed = getInterAddedEntities(evol.delta);
+	rel[loc, loc] changed = getInterAddedEntities(evol.delta); // The content looks like: { <class, inter1>, <class, inter2>... }
 	return computeSuperAddedDetections(evol, changed, ch);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassRemoved()) {
-	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta);
+	rel[loc, loc] changed = getSuperRemovedEntities(evol.delta); // The content looks like: { <class, superclass> }
 	return computeSuperRemovedDetections(evol, changed, ch);
 }
 
 set[Detection] computeDetections(Evolution evol, ch:CompatibilityChange::superclassAdded()) {
-	rel[loc, loc] changed = getSuperAddedEntities(evol.delta);
+	rel[loc, loc] changed = getSuperAddedEntities(evol.delta); // The content looks like: { <class, superclass> }
 	return computeSuperAddedDetections(evol, changed, ch);
 }
 
@@ -553,20 +541,124 @@ set[Detection] computeSuperAddedDetections(Evolution evol, rel[loc, loc] changed
 }
 
 set[Detection] computeSuperRemovedDetections(Evolution evol, rel[loc, loc] changed, CompatibilityChange ch) {
+	// Get abstract classes out from the changed relation 
 	rel[loc, loc] entitiesAbs = { <c, i> | <loc c, loc i> <- changed, isAbstract(c, evol.apiNew) };
-	set[TransChangedEntity] transFields = getContainedFields(evol.apiOld, range(changed));
-	set[TransChangedEntity] transMeths = getContainedMethods(evol.apiOld, range(changed));
-	set[TransChangedEntity] absMeths = { <e, m> | <loc e, loc i> <- entitiesAbs, loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
+	
+	// Get interface/superclass (i.e. range(changed)) contained members
+	set[TransChangedEntity] transFields = { <c, f> | <loc c, loc i> <- changed, <_, loc f> <- getContainedFields(evol.apiOld, { i }) }; // <super, field>
+	set[TransChangedEntity] transMeths = { <c, m> | <loc c, loc i> <- changed, <_, loc m> <- getContainedMethods(evol.apiOld, { i }) }; // <super, method>
+	
+	// Get abstract methods from abstract classes 
+	set[TransChangedEntity] absMeths = { <c, m> | <loc c, loc i> <- entitiesAbs, 
+		loc m <- methods(evol.apiOld, i), isAbstract(m, evol.apiOld) };
 
-	return computeMethSymbDetections(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
-		+ computeMethSymbDetections(evol, transMeths, ch, { methodInvocation() }, includeParent = false)
-		+ computeFieldSymbDetections(evol, transFields, ch, includeParent = false);
+	return computeMethSymbDetectionsSuper(evol, absMeths, ch, { methodOverride() }, allowShadowing = true)
+		+ computeMethSymbDetectionsSuper(evol, transMeths, ch, { methodInvocation() }, includeParent = false) // This should be done only in child classes of impacted interface/superclass:s
+		+ computeFieldSymbDetectionsSuper(evol, transFields, ch, includeParent = false);
+}
+
+set[Detection] computeMethSymbDetectionsSuper(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false, bool includeParent = false)
+	= computeMethSymbDetectionsSuper(evol, chEntities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing, includeParent = includeParent);
+	
+set[Detection] computeMethSymbDetectionsSuper(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect effect, Evolution evol) predicate, bool allowShadowing = false, bool includeParent = true) {
+	// Get impacted classes
+	set[loc] changed = domain(chEntities); 
+	set[TransChangedEntity] entities = {}; 
+	
+	for (loc used <- changed) {
+		// Get interface/superclass' methods
+		set[loc] transChanged = chEntities[used];
+		
+		for (loc e <- transChanged) {
+			str signature = methodSignature(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbMeths = createHierarchySymbRefs(used, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent) + { e };
+			entities += { parent } * symbMeths;
+		}
+	}
+	
+	// Check only on subtypes!
+	return computeDetections(evol, entities, change, apiUses, predicate, onlySubtypes = true);
+}
+
+set[Detection] computeFieldSymbDetectionsSuper(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, bool includeParent = true)
+	 = computeFieldSymbDetectionsSuper(evol, chEntities, change, bool (RippleEffect effect, Evolution evol) { return true; }, includeParent = includeParent);
+		 
+set[Detection] computeFieldSymbDetectionsSuper(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, bool (RippleEffect effect, Evolution evol) predicate, bool includeParent = true) {
+	set[APIUse] apiUses = { fieldAccess() };
+	set[loc] changed = domain(chEntities);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (loc used <- changed) {
+		set[loc] transChanged = chEntities[used];
+		
+		for (loc e <- transChanged) {
+			str field = memberName(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbFields = createHierarchySymbRefs(used, e.scheme, field, evol.apiOld, evol.client, includeParent = includeParent) + { e };
+			entities += { parent } * symbFields;
+		}
+	}
+	
+	return computeDetections(evol, entities, change, apiUses, predicate, onlySubtypes = true);
+}
+
+set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool allowShadowing = false, bool includeParent = true)
+	= computeMethSymbDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, allowShadowing = allowShadowing, includeParent = includeParent);
+
+set[Detection] computeMethSymbDetections(Evolution evol, set[TransChangedEntity] chEntities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool allowShadowing = false, bool includeParent = true) {
+	set[loc] changed = domain(chEntities);
+	set[TransChangedEntity] entities = {}; 
+	
+	for (loc used <- changed) {
+		set[loc] transChanged = chEntities[used];
+		
+		for (loc e <- transChanged) {
+			str signature = methodSignature(e);
+			loc parent = parentType(evol.apiOld, e);
+			set[loc] symbMeths = createHierarchySymbRefs(parent, e.scheme, signature, evol.apiOld, evol.client, allowShadowing = allowShadowing, includeParent = includeParent);
+			entities += { used } * symbMeths;
+		}
+	}
+	
+	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
 
 //----------------------------------------------
 // Util
 //----------------------------------------------
+
+private rel[loc, APIUse] getAffectedEntities(Evolution evol, APIUse apiUse, set[TransChangedEntity] entities) {
+	set[loc] affected = {};
+	M3 client = evol.client;
+	M3 apiOld = evol.apiOld;
+	M3 comp = composeMaracasM3s(client.id, {apiOld, client});
+	
+	if (apiUse == APIUse::annotation()) {
+		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedAnnotations[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
+	}
+	else if (apiUse == fieldAccess()) {
+		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedFieldAccess[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
+	}
+	else if (apiUse == methodInvocation()) {
+		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedMethodInvocation[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
+	}
+	else if (apiUse == methodOverride()) {
+		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedMethodOverrides[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
+	}
+	else if (apiUse == typeDependency()) {
+		raw = { c | <loc p, loc e> <- entities, loc c <- client.invertedTypeDependency[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
+		for (loc e <- raw) {
+			affected += (isParameter(e)) ? getMethod(e) : e; // Parameters special treatment
+		}
+	}
+	else { 
+		throw "Wrong APIUse for member type: <apiUse>";
+	}
+
+	return affected * { apiUse };
+}
 
 private rel[loc, APIUse] getAffectedEntities(M3 client, APIUse apiUse, set[loc] entities) {
 	set[loc] affected = {};
@@ -613,10 +705,10 @@ private set[Detection] computeDetections(Evolution evol, CompatibilityChange cha
 	return computeDetections(evol, entities, change, apiUses, predicate);
 }
 
-private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses) 
-	= computeDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; });
+private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool onlySubtypes = false) 
+	= computeDetections(evol, entities, change, apiUses, bool (RippleEffect effect, Evolution evol) { return true; }, onlySubtypes = onlySubtypes);
 
-private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate) {
+private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity] entities, CompatibilityChange change, set[APIUse] apiUses, bool (RippleEffect, Evolution) predicate, bool onlySubtypes = false) {
 	set[loc] changed = domain(entities);
 	set[Detection] detects = {};
 	
@@ -624,7 +716,8 @@ private set[Detection] computeDetections(Evolution evol, set[TransChangedEntity]
 		set[loc] transChanged = entities[src] + src;
 		
 		for (loc used <- transChanged) {
-			rel[loc, APIUse] affected = { *getAffectedEntities(evol.client, apiUse, { used } ) | apiUse <- apiUses };
+			rel[loc, APIUse] affected = (onlySubtypes) ? { *getAffectedEntities(evol, apiUse, { <src, used> } ) | apiUse <- apiUses }
+				: { *getAffectedEntities(evol.client, apiUse, { used } ) | apiUse <- apiUses };
 			detects += { detection(elem, used, src, apiUse, change) | <elem, apiUse> <- affected, predicate(<src, elem>, evol) };
 		}
 	}
@@ -652,8 +745,10 @@ private bool isNotSuperInvocation(RippleEffect effect, Evolution evol)
 private bool isLessAccessible(RippleEffect effect, Evolution evol) {
 	tuple[Modifier old, Modifier new] access = getAccessModifiers(effect.changed, evol.delta);
 	bool pkgProt = isPackageProtected(access.new);
-	
+	bool pub2prot = isChangedFromPublicToProtected(access.old, access.new);
+
 	return isLessVisible(access.new, access.old)
+		&& !(pub2prot && areInSameHierarchy(effect, evol))
 		&& !(pkgProt && samePackage(effect.affected, effect.changed)); // To package-private same package
 }
 

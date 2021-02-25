@@ -50,7 +50,8 @@ test bool callImpMethodInterface()
 		methodInvocation(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
 	notin detects;
-	
+
+// Overriding a method in subclass without raising its original exception is perfectly fine
 test bool overrideSuperMethod()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionExt/nowThrowsExcep()|,
@@ -58,8 +59,9 @@ test bool overrideSuperMethod()
 		|java+method:///main/methodNowThrowsCheckedException/MethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	in detects;
+	notin detects;
 
+// Overriding a method in subclass without raising its original exception is perfectly fine
 test bool overrideInterMethod()
 	= detection(
 		|java+method:///mainclient/methodNowThrowsCheckedException/MethodNowThrowsCheckedExceptionImp/nowThrowsExcep()|,
@@ -67,5 +69,5 @@ test bool overrideInterMethod()
 		|java+method:///main/methodNowThrowsCheckedException/IMethodNowThrowsCheckedException/nowThrowsExcep()|,
 		methodOverride(),
 		methodNowThrowsCheckedException(binaryCompatibility=true,sourceCompatibility=false))
-	in detects;
+	notin detects;
 	

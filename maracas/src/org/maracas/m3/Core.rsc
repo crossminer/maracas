@@ -33,7 +33,75 @@ data M3(
 data Modifier =
 	\defaultAccess();
 
-M3 createInvertedM3(M3 m) {
+// Just some band-aid for now
+// Should it move to java::lang::m3::Core?
+M3 createM3(loc jar, list[loc] classPath = []) {
+	M3 model = createM3FromJar(jar, classPath = classPath);
+	M3 libs = composeJavaM3(|tmp:///|, { createM3FromJar(l) | loc l <- classPath });
+
+	// Attempt to retrieve methodOverrides across hierarchies in classpath
+	rel[loc from, loc to] candidates = (model.implements + model.extends + libs.implements + libs.extends)+;
+	rel[loc from, loc to] containment = domainR(model.containment + libs.containment, candidates.from + candidates.to);
+	rel[loc from, loc to] methodContainment = { <c, m> | <loc c, loc m> <- containment, isMethod(m)};
+
+	for(<loc from, loc to> <- candidates)
+		model.methodOverrides += {<m, getMethodSignature(m)> | m <- methodContainment[from]}
+			o {<getMethodSignature(m), m> | m <- methodContainment[to]};
+
+	/*
+		Note: M3 created from JAR/source code point to != fieldAccess/methodInvocation
+
+		package pkg;
+		class A { int i; void foo() {}  }
+		class B extends A { void bar() { i = 42; foo(); }
+
+		m = createM3FromJar gives:
+			m.fieldAccess      = {<|java+method:///pkg/B/bar()|,|java+field:///pkg/B/i|>}
+			m.methodInvocation = {<|java+method:///pkg/B/bar()|,|java+method:///pkg/B/foo()|>, ...}
+
+		But |java+field:///pkg/B/i| |java+method:///pkg/B/foo()| do not exist anywhere else
+		in the M3 model; they're not even contained by anything! Indeed, they're contained in A:
+		    m.containment[|java+class:///pkg/A|] = {
+		    	|java+field:///pkg/A/i|,
+		    	|java+method:///pkg/A/foo()|
+		    }
+		    m.containment[|java+class:///pkg/B|] = {
+		    	|java+method:///pkg/B/bar()|
+		    }
+	*/
+
+	return populateInvertedRelations(model);
+}
+
+M3 createM3FromSources(loc src, list[loc] classPath = []) {
+	M3 m = createM3FromDirectory(src, classPath = classPath);
+	M3 libs = composeJavaM3(|tmp:///|, { createM3FromJar(l) | loc l <- classPath });
+
+	// Just kill me
+	rel[loc, loc] containment = m.containment;
+	for (<from, to> <- libs.containment) {
+		loc l = to;
+		l.path = replaceAll(l.path, "$", "/");
+		containment += <from, l>;
+	}
+
+	// No default constructor extracted from source code, but we need them
+	for (loc c <- domain(m.declarations), isClass(c) || isAnonymousClass(c), isEmpty(constructors(m, c))) {
+		loc defaultCons = c;
+		defaultCons.scheme = "java+constructor";
+		defaultCons.file = "<c.file>/<c.file>()";
+		m.containment += { <c, defaultCons> };
+		m.modifiers += { <defaultCons, \public()> };
+	}
+
+	m = visit(m) {
+		case loc l => sanitize(containment, l)
+	}
+
+	return populateInvertedRelations(m);
+}
+
+M3 populateInvertedRelations(M3 m) {
 	m.invertedContainment = invert(m.containment);
 	m.invertedExtends = invert(m.extends);
 	m.invertedImplements = invert(m.implements);
@@ -43,7 +111,29 @@ M3 createInvertedM3(M3 m) {
 	m.invertedMethodOverrides = invert(m.methodOverrides);
 	m.invertedAnnotations = invert(m.annotations);
 	m.transInvertedContainment = m.invertedContainment+;
-	return m; 
+	return m;
+}
+
+// Attempting to fix some discrepancies between
+// source code M3s and JAR M3s
+//   - Cls/Inner           => Cls$Inner
+//   [- Cls/$anonymous1     => Cls$1 (brittle because order-dependent?)
+//   - java+anonymousClass => java+class]
+@memo
+loc sanitize(rel[loc, loc] containment, loc l) {
+	set[loc] enclosing = { t | t <- invert(containment)[l], isType(t) };
+
+	if (size(enclosing) == 1) {
+		loc t = getOneFrom(enclosing);
+		str enclosingPath = sanitize(containment, t).path;
+
+		if (isType(l))
+			l.path = "<enclosingPath>$<l.file>";
+		else
+			l.path = "<enclosingPath>/<l.file>";
+	}
+
+	return l;
 }
 
 M3 readBinaryM3(loc m3)
@@ -536,3 +626,9 @@ loc getOuterType(loc nested, M3 m) {
 @memo
 rel[loc, loc] composeExtends(set[M3] m3s)
 	= { *m.extends | M3 m <- m3s };
+	
+M3 composeMaracasM3s(loc id, set[M3] models) {
+	M3 comp = composeJavaM3(id, models);
+	comp = populateInvertedRelations(comp);
+	return comp;
+}
