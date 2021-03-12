@@ -16,33 +16,24 @@ import Message;
 import Set;
 import String;
 
-
 data CompilerMessage = message(
-	loc file, // Affected file
-	int line, // Line
-	int column, // Column (this is the only information we have...)
-	str message, // Error message
+	loc file,            // Affected file
+	int line,            // Line
+	int column,          // Column (this is the only information we have...)
+	str message,         // Error message
 	map[str, str] params // Additional parameters of the error (affected symbol, location, etc.)
 );
 
+CompilerMessage emptyMsg() = message(unknownSource, -1, -1, "", ());
+
 data MatchType 
-	= matched() // Detection -> Compilation message
-	| unmatched() // Detection -> No compilation message
+	= matched()    // Detection -> Compilation message
+	| unmatched()  // Detection -> No compilation message
 	| candidates() // Detection -> Many compilation messages
-	| unknown() // Cannot find the physical location of the affected client entity
+	| unknown()    // Cannot find the physical location of the affected client entity
 	;
 
-alias Match = tuple[MatchType typ, Detection detect, CompilerMessage msg];
-
-CompilerMessage emptyMsg() = message(unknownSource, -1, -1, "", ()); 
-
-@javaClass{org.maracas.groundtruth.internal.Groundtruth}
-@reflect{}
-java bool upgradeClient(loc clientJar, loc extractDir, str groupId, str artifactId, str v1, str v2);
-
-@javaClass{org.maracas.groundtruth.internal.Groundtruth}
-@reflect{}
-java list[CompilerMessage] computeJavacErrors(loc pomFile);
+alias Match = tuple[MatchType typ, Detection detect, CompilerMessage msg]; 
 
 list[CompilerMessage] computeJDTErrors(M3 srcClient) 
 	= computeJDTMessage(srcClient, isDetectedMsg);
@@ -70,31 +61,31 @@ CompilerMessage msgToCompilerMsg(str msg, loc at)
 CompilerMessage msgToCompilerMsg(error(str msg))
 	= message(unknownSource, -1, -1, msg, ());
 	
-Match createMatch(MatchType typ, Detection detect, CompilerMessage msg) = <typ, detect, msg>;
- 
 set[Match] matchDetections(M3 sourceM3, Evolution evol, set[Detection] detects, list[CompilerMessage] msgs) {
 	set[Match] checks = {};
 	
 	for (Detection d <- detects) {
 		loc physLoc = logicalToPhysical(sourceM3, d.elem);
-		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3); // Calling logicalToPhysical twice
+		set[CompilerMessage] matches = matchingMessages(d, msgs, sourceM3);
 		
 		if (!isEmpty(matches)) {
-			checks += { createMatch(matched(), d, msg) | CompilerMessage msg <- matches };
+			checks += { <matched(), d, msg> | CompilerMessage msg <- matches };
 		}
 		else if (physLoc == |unknown:///|) {
+			println("Unknown physical location for <d.elem>");
 			// Skip if we are dealing with an inherited method from a protected class
 			if (!isInheritedMethod(d.elem, sourceM3, evol.apiOld)) {
-				checks += createMatch(unknown(), d, emptyMsg());
+				checks += <unknown(), d, emptyMsg()>;
 			}
 		}
 		else {
 			set[CompilerMessage] candidats = potentialMatches(physLoc, msgs);
 			checks += (isEmpty(candidats)) 
-				? createMatch(unmatched(), d, emptyMsg())
-				: { createMatch(candidates(), d, msg) | CompilerMessage msg <- candidats };
+				? <unmatched(), d, emptyMsg()>
+				: { <candidates(), d, msg> | CompilerMessage msg <- candidats };
 		}
 	}
+
 	return checks;
 }
 
@@ -145,6 +136,19 @@ loc logicalToPhysical(M3 m, loc logical) {
 	// 3. Check if it is an implicit constructor and return parent class
 	logical = (isConstructor(logical)) ? resolveMethClass(logical, m) : logical;
 	return getDeclaration(logical, m);
+}
+
+void prettyPrint(set[Match] matches, M3 sourceM3) {
+	for (<typ, d, msg> <- matches) {
+		loc phys = logicalToPhysical(sourceM3, d.elem);
+
+		println(
+			"[<typ>] \<<d.change>\>
+				'Elem: <d.elem> (<phys.begin.line>, <phys.begin.column>) 
+				'Uses: <d.used>
+				'JDT:  <msg.message> (<msg.line>, <msg.column>)
+			");
+	}
 }
 
 // FIXME: missing information related to the API.

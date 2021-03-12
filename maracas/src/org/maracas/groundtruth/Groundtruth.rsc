@@ -69,6 +69,14 @@ java loc downloadJar(str group, str artifact, str version);
 @reflect{for debugging}
 java loc downloadSrcs(str group, str artifact, str version);
 
+@javaClass{org.maracas.groundtruth.internal.Groundtruth}
+@reflect{}
+java bool upgradeClient(loc clientJar, loc extractDir, str groupId, str artifactId, str v1, str v2);
+
+@javaClass{org.maracas.groundtruth.internal.Groundtruth}
+@reflect{}
+java list[CompilerMessage] computeJavacErrors(loc pomFile);
+
 set[CompatibilityChange] getGroundtruthCCs() 
 	= {
 		methodNoLongerStatic(binaryCompatibility=false,sourceCompatibility=false), 

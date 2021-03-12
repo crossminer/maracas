@@ -11,30 +11,6 @@ import List;
 import Relation;
 import Set;
 
-
-bool generateReport(loc reportFile, M3 oldM3, M3 newM3, M3 clientM3, M3 sourceM3, list[APIEntity] delta) {
-	println("Recording compilation errors");
-	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
-	list[CompilerMessage] jdtMsgs = computeJDTErrors(sourceM3);
-	
-	println("Computing evolution models");
-	Evolution evol = createEvolution(clientM3, oldM3, newM3, delta);
-	set[Detection] detects = computeDetections(evol); 
-	
-	if (detects != {}) {
-		println("Matching detections");
-		//set[Match] javacMatches = matchDetections(sourceM3, evol, detects, javacMsgs);
-		set[Match] jdtMatches = matchDetections(sourceM3, evol, detects, jdtMsgs);
-		
-		println("Generating report");
-		//outputReport(sourceM3, delta, detects, javacMsgs, javacMatches, javacReport);
-		outputReport(oldM3.id, newM3.id, clientM3.id, sourceM3, delta, detects, jdtMsgs, jdtMatches, reportFile);
-		println("Done!");
-		return true;
-	}
-	return false;
-}
-
 bool generateReport(loc reportFile, Evolution evol, set[Detection] detects, M3 sourceM3) {
 	println("Recording compilation errors");
 	//list[CompilerMessage] javacMsgs = computeJavacErrors(clientPom);
@@ -62,7 +38,7 @@ void outputReport(loc oldAPI, loc newAPI, loc client, M3 sourceM3, list[APIEntit
 	appendCompilerMsgs(msgs, path);
 	appendMatches(matches, path);
 	appendModelStats(delta, detects, msgs, path);
-	//appendErrorStats(sourceM3, detects, msgs, path);
+	appendErrorStats(sourceM3, detects, matches, msgs, path);
 }
 
 private void appendHeader(loc oldAPI, loc newAPI, loc client, loc path) {
@@ -129,7 +105,7 @@ private void appendModelStats(list[APIEntity] delta, set[Detection] detects, lis
 	appendSectionEnd(path);
 }
 
-private void appendErrorStats(M3 sourceM3, set[Detection] detects, list[CompilerMessage] msgs, loc path) {
+private void appendErrorStats(M3 sourceM3, set[Detection] detects, set[Match] matches, list[CompilerMessage] msgs, loc path) {
 	set[Detection] fp = falsePositives(detects, msgs, sourceM3);
 	set[CompilerMessage] fn = falseNegatives(detects, msgs, sourceM3);
 	
