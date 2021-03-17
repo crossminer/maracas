@@ -104,7 +104,8 @@ set[CompilerMessage] potentialMatches(loc file, list[CompilerMessage] messages) 
 	{ msg | msg:message(msgFile, _, _, _, _) <- messages, msgFile.path == file.path };
 
 set[CompilerMessage] matchingMessages(Detection d, list[CompilerMessage] messages, M3 sourceM3) {
-	return { m | m:message(file, line, column, _, _) <- messages, isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column) };
+	return { m | m:message(file, line, column, _, _) <- messages,
+		isIncludedIn(logicalToPhysical(sourceM3, d.elem), file, line, column) };
 }
 
 bool isIncludedIn(loc location, loc path, int line, int column) {
@@ -146,7 +147,7 @@ void prettyPrint(set[Match] matches, M3 sourceM3) {
 			"[<typ>] \<<d.change>\>
 				'Elem: <d.elem> (<phys.begin.line>, <phys.begin.column>) 
 				'Uses: <d.used>
-				'JDT:  <msg.message> (<msg.line>, <msg.column>)
+				'Msg:  <msg.message>
 			");
 	}
 }
