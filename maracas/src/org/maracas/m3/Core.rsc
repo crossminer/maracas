@@ -220,7 +220,7 @@ bool isTargetMember(loc elem)
 M3 createM3(loc project) {
 	//loc mvnExec=|file:///Users/ochoa/installations/apache-maven-3.5.4/bin/mvn|
 	M3 m = createM3FromJar(project);
-	m = createInvertedM3(m);
+	m = populateInvertedRelations(m);
 	//m = fillDefaultVisibility(filterAnonymousClasses(m));
 	return m;
 }
@@ -228,7 +228,7 @@ M3 createM3(loc project) {
 //@memo
 M3 createM3SrcFile(loc file, list[loc] cp = []) {
 	M3 m = createM3FromFile(file, classPath = cp);
-	m = createInvertedM3(m);
+	m = populateInvertedRelations(m);
 	//m = fillDefaultVisibility(filterAnonymousClasses(m));
 	return m;
 }

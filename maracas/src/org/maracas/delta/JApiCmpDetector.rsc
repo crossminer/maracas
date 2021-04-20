@@ -40,6 +40,7 @@ data Evolution = evolution(
 	M3 client, 
 	M3 apiOld, 
 	M3 apiNew, 
+	M3 composed,
 	list[APIEntity] delta
 );
 
@@ -69,22 +70,34 @@ set[loc] getSources(set[Detection] detects)
 // Evolution constructor. 
 Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
 	client = filterConstructorOverride(client); // TODO: remove once a decision is taken in the M3 side
-	return evolution(client, apiOld, apiNew, delta);
+	M3 composed = composeMaracasM3s(client.id, {apiOld, client});
+	return evolution(client, apiOld, apiNew, composed, delta);
+}
+
+Evolution createEvolution(M3 client, M3 apiOld, M3 apiNew, M3 composed, list[APIEntity] delta) {
+    client = filterConstructorOverride(client); // TODO: remove once a decision is taken in the M3 side
+    return evolution(client, apiOld, apiNew, composed, delta);
 }
 
 // Handy method for Java foreign calls
 Evolution createEvolution (loc clientJar, loc apiOldJar, loc apiNewJar, loc deltaPath) {
-	M3 clientM3 = createM3(clientJar);
-	M3 apiOldM3 = createM3(apiOldJar);
-	M3 apiNewM3 = createM3(apiNewJar);
+	M3 client = createM3(clientJar);
+	M3 apiOld = createM3(apiOldJar);
+	M3 apiNew = createM3(apiNewJar);
+	M3 composed = composeMaracasM3s(client.id, {apiOld, client});
 	list[APIEntity] delta = readBinaryValueFile(#list[APIEntity], deltaPath);
 
-	return createEvolution(clientM3, apiOldM3, apiNewM3, delta);
+	return createEvolution(client, apiOld, apiNew, composed, delta);
 }
 
 set[Detection] computeDetections(M3 client, M3 apiOld, M3 apiNew, list[APIEntity] delta) {
 	Evolution evol = createEvolution(client, apiOld, apiNew, delta);
 	return computeDetections(evol);
+}
+
+set[Detection] computeDetections(M3 client, M3 apiOld, M3 apiNew, M3 composed, list[APIEntity] delta) {
+    Evolution evol = createEvolution(client, apiOld, apiNew, composed, delta);
+    return computeDetections(evol);
 }
 
 set[Detection] computeDetections(Evolution evol)
@@ -633,7 +646,7 @@ private rel[loc, APIUse] getAffectedEntities(Evolution evol, APIUse apiUse, set[
 	set[loc] affected = {};
 	M3 client = evol.client;
 	M3 apiOld = evol.apiOld;
-	M3 comp = composeMaracasM3s(client.id, {apiOld, client});
+	M3 comp = evol.composed;
 	
 	if (apiUse == APIUse::annotation()) {
 		affected = { c | <loc p, loc e> <- entities, loc c <- client.invertedAnnotations[e], isSubtype(parentType(client, c), parentType(apiOld, e), comp) || parentType(apiOld, c) == parentType(apiOld, e) };
