@@ -8,7 +8,7 @@
 	<repositories>
 		<repository>
 			<id>rascal-snapshots</id>
-			<url>http://nexus.usethesource.io/content/repositories/public/</url>
+			<url>https://nexus.usethesource.io/content/repositories/public/</url>
 		</repository>
 	</repositories>
 	<build>
