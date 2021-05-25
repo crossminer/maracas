@@ -4,7 +4,7 @@ import Map;
 import Set;
 
 import org::maracas::\test::delta::japicmp::source::SetUp;
-import org::maracas::\test::delta::japicmp::source::usage::Common;
+import org::maracas::\test::delta::japicmp::usage::Common;
 import org::maracas::delta::JApiCmp;
 import org::maracas::delta::JApiCmpDetector;
 
