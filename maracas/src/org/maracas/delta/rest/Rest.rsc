@@ -7,7 +7,7 @@ import Set;
 import String;
 
 data BreakingChangeInstance =
-	instance(str typ, str decl, str file, int startLine, int endLine, bool source, bool binary)
+	instance(str typ, str decl, str path, int startLine, int endLine, bool source, bool binary)
 	;
 
 // Easy endpoint for the REST API
@@ -33,7 +33,7 @@ list[BreakingChangeInstance] bcInstances(loc jar1Loc, loc jar2Loc, loc sourcesLo
 		ret += instance(
 			bcName(bc),
 			sourceLocationToJavaSignature(decl),
-			srcLoc.file,
+			srcLoc.path,
 			beginLine,
 			endLine,
 			bc.sourceCompatibility,
