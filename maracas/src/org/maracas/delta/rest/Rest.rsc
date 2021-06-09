@@ -1,6 +1,7 @@
 module org::maracas::delta::rest::Rest
 
 import org::maracas::delta::JApiCmp;
+import org::maracas::delta::JApiCmpDetector;
 import org::maracas::m3::Core;
 import lang::java::m3::Core;
 import Set;
@@ -8,6 +9,10 @@ import String;
 
 data BreakingChangeInstance =
 	instance(str typ, str decl, str path, int startLine, int endLine, bool source, bool binary)
+	;
+
+data BreakingChangeDetection =
+	detection(str elem, str used, str src, str apiUse)
 	;
 
 // Easy endpoint for the REST API
@@ -42,6 +47,34 @@ list[BreakingChangeInstance] bcInstances(loc jar1Loc, loc jar2Loc, loc sourcesLo
 	
 	return ret;
 }
+
+list[BreakingChangeDetection] detections(loc jar1Loc, loc jar2Loc, loc clientLoc, loc sourcesLoc) {
+	list[APIEntity] delta = compareJars(jar1Loc, jar2Loc, "v1", "v2");
+	M3 m3V1 = createM3(jar1Loc);
+	M3 m3V2 = createM3(jar2Loc);
+	M3 m3Client = createM3(clientLoc);
+	set[Detection] ds = computeDetections(m3Client, m3V1, m3V2, delta);
+
+	list[BreakingChangeDetection] res = [];
+	for (Detection d <- ds) {
+		res += detection(
+			sourceLocationToJavaSignature(d.elem),
+			sourceLocationToJavaSignature(d.used),
+			sourceLocationToJavaSignature(d.src),
+			apiUseName(d.use));
+	}
+	
+	return res;
+}
+
+str apiUseName(APIUse::methodInvocation()) = "methodInvocation";
+str apiUseName(APIUse::methodOverride()) = "methodOverride";
+str apiUseName(APIUse::fieldAccess()) = "fieldAccess";
+str apiUseName(APIUse::extends()) = "extends";
+str apiUseName(APIUse::implements()) = "implements";
+str apiUseName(APIUse::annotation()) = "annotation";
+str apiUseName(APIUse::typeDependency()) = "typeDependency";
+str apiUseName(APIUse::declaration()) = "declaration"; 
 
 str bcName(CompatibilityChange::annotationDeprecatedAdded()) = "annotationDeprecatedAdded";
 str bcName(CompatibilityChange::classRemoved()) = "classRemoved";
