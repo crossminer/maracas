@@ -12,7 +12,7 @@ data BreakingChangeInstance =
 	;
 
 data BreakingChangeDetection =
-	detection(str elem, str used, str src, str apiUse)
+	detection(str elem, str used, str src, str apiUse, str path, int startLine, int endLine)
 	;
 
 // Easy endpoint for the REST API
@@ -53,15 +53,29 @@ list[BreakingChangeDetection] detections(loc jar1Loc, loc jar2Loc, loc clientLoc
 	M3 m3V1 = createM3(jar1Loc);
 	M3 m3V2 = createM3(jar2Loc);
 	M3 m3Client = createM3(clientLoc);
+	M3 sources = createM3FromDirectory(sourcesLoc);
 	set[Detection] ds = computeDetections(m3Client, m3V1, m3V2, delta);
 
 	list[BreakingChangeDetection] res = [];
 	for (Detection d <- ds) {
+		loc srcLoc = jarLocToSourceLoc(d.elem);
+		set[loc] found = sources.declarations[srcLoc];
+		int beginLine = -1;
+		int endLine = -1;
+		if (size(found) > 0) {
+			srcLoc = getOneFrom(found);
+			beginLine = srcLoc.begin.line;
+			endLine = srcLoc.end.line;
+		}
+
 		res += detection(
 			sourceLocationToJavaSignature(d.elem),
 			sourceLocationToJavaSignature(d.used),
 			sourceLocationToJavaSignature(d.src),
-			apiUseName(d.use));
+			apiUseName(d.use),
+			srcLoc.path,
+			beginLine,
+			endLine);
 	}
 	
 	return res;
