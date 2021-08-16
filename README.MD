@@ -15,7 +15,7 @@ Maracas is a source code and bytecode analysis framework—written in Rascal and
 ### Which are Maracas main dependencies?
 
 Maracas depends on:  
-  - [Rascal](https://github.com/usethesource/rascal) to parse and analyse source code and byte code (version 0.19.0 and up, get it from [this Eclipse update site](https:// https://update.rascal-mpl.org/unstable/))  
+  - [Rascal](https://github.com/usethesource/rascal) to parse and analyse source code and byte code (version 0.19.0 and up, get it from [this Eclipse update site](https:// https://update.rascal-mpl.org/unstable/);  
   - [japicmp](https://github.com/tdegueul/japicmp) (version 0.14.5-maracas) to compute breaking changes between two versions of a software project, and;  
   - [aethereal](https://github.com/crossminer/aethereal) (version 0.0.4) for finding and downloading artefacts from Maven Central Repository.
 
