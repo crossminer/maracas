@@ -561,3 +561,16 @@ a.pagination-item:hover {
 .layout-reverse.sidebar-overlay #sidebar-checkbox:checked ~ .sidebar {
   box-shadow: -.25rem 0 .5rem rgba(0,0,0,.1);
 }
+
+
+/*
+ * License footer
+ *
+ * Add some style to the license footer.
+ */
+
+.license {
+  font-size: 0.75rem;
+  color:  #c0c0c0;
+  margin-bottom: 2rem;
+}

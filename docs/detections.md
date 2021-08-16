@@ -3,11 +3,11 @@ layout: page
 title: Detections
 ---
 <p class="message">
-	In this page we list the detections that are identified by Maracas. These detections are computed based on the Java Language Specification v8. If you identify new missed detections, please be encouraged to report them in our issue tracker on GitHub.
+	On this page, we list the detections that are identified by Maracas. These detections are computed based on the Java Language Specification Java SE 8 Edition. If you pinpoint missed detections, we encourage you to report them in our <a href="https://github.com/crossminer/maracas/issues">issue tracker on GitHub</a>.
 </p>
 
 ## Annotation Deprecated Added
-A type, method, or field is tagged with the `@Deprecated` annotation. This is neither a binary nor source incompatible change.
+A type, method, or field is tagged with the `@Deprecated` annotation. This change is neither a binary nor source incompatible change.
 
 **Detection**
 
@@ -34,7 +34,7 @@ detection(
 ```
 
 <p class="message">
-  Due to type erasure, uses of deprecated types as type parameters cannot be detected."
+  Due to type erasure, uses of deprecated types as type parameters cannot be detected.
 </p>
 
 ---
@@ -56,8 +56,8 @@ We report which of them might break client code, and which exceptions must be co
 
 **Detection**
 
-1. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the field in `S` or `S` itself goes from `public` to `protected`. 
-2. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the field in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+1. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`, and; iii) the field in `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` accessing a field of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) the field in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
 3. Client methods within type `T` accessing a field of the type `S`, where the field in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
 
 For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a `public` field `f`. 
@@ -74,7 +74,7 @@ detection(
 ```
 
 <p class="message">
-  Due to type erasure, uses of deprecated types as type parameters cannot be detected."
+  Due to type erasure, uses of deprecated types as type parameters cannot be detected.
 </p>
 
 ---
@@ -104,14 +104,14 @@ detection(
 
 ## Field No Longer Static
 A field goes from `static` to `non-static` becoming an instance field. 
-The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
+The field cannot be accessed through its class, instead, it should be accessed through an object of the corresponding type. 
 
 **Detection**
 
 1. Client methods accessing a field that is no longer `static`.
 2. Client types extending the owner class of the modified field, which declare a `static` field with the same name of the target field (cf. *JLS 13.4.8*).
 
-For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a class field `f`. Assume `m()` accesses `f` in a static manner (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
+For example, there is a client type `client.C` with a method definition `m()`, and an API type `api.A` with a class field `f`. Assume `m()` accesses `f` statically (i.e. `A.f`). If `f` is changed to `non-static` in `api.A`, then the following detection is reported:
 
 ```
 detection(
@@ -155,7 +155,7 @@ detection(
 A field goes from `non-static` to `static`. 
 This results in an `IncompatibleClassChangeError` at linking time. 
 The problem rises given that the JVM uses two different instructions to access fields, `getfield` and `getstatic`. 
-The former is used to access objects fields and the later to access static fields. 
+The former is used to access objects fields and the latter to access static fields. 
 Client code must be recompiled to get rid of the issue (cf. *JLS 13.4.10*).
 
 **Detection**
@@ -224,7 +224,7 @@ A field is removed from a supertype class. Subtypes are not able to access it an
   We consider all direct subtypes of the type that owns the removed field, which do not shadow the target field."
 </p>
 
-For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later declares a field `f`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` accesses `f`. If `f` is removed from `api.SuperA`, then the following detection is reported:
+For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The latter declares a field `f`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` accesses `f`. If `f` is removed from `api.SuperA`, then the following detection is reported:
 
 ```
 detection(
@@ -238,26 +238,18 @@ detection(
 ---
 
 ## Field Type Changed
-The type of the field has changed. 
-
-TODO: what kind of binary error do we get?
-Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. *JLS 5.1*). Check the following table:
+The type of the field has changed. Check conversion cases in variable assignment, invocation, String, casting, and numeric contexts (cf. *JLS 5.1*). Check the following table:
 
 | Conversion type     | Description| Breakage      |
 |---------------------|------------|---------------|
 | Identity | Type `T` to type `T` | Never|
 | Widening primitive  | Smaller primitive type to wider primitive type| Never |
-| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes (1) |
+| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes |
 | Widening reference | Subtype `T` to supertype `ST` | Never |
-| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes (2) |
+| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes |
 | Boxing | Primitive type `P` to wrapper reference type `R` | Never |
-| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) 
-| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
-
-(1) It will result in a breaking change if no explicit cast is present in the old API version.
-(2)
-(3) Long, Float
-(4) Type erasure 
+| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes 
+| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes |   
 
 **Detection** 
  
@@ -286,7 +278,7 @@ detection(
 The constructor or its parent class is less accessible. 
 Client entities cannot create objects with this method.
 The following table provides the less access permitted situations in Java (cf. *JLS 13.4.7*). 
-We report which of them might break client code, and which exceptions must be considered regarding constructors use.
+We report which of them might break client code, and which exceptions must be considered regarding constructors' use.
 
 | Source | Target | Detection |
 |--------|--------|-----------|
@@ -299,8 +291,8 @@ We report which of them might break client code, and which exceptions must be co
 
 **Detection**
 
-1. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the constructor of `S` or `S` itself goes from `public` to `protected`. 
-2. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the constructor of `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+1. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`, and; iii) the constructor of `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` invoking a constructor of type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) the constructor of `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
 3. Client methods within type `T` invoking a constructor of type `S`, where the constructor of `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
 
 
@@ -344,7 +336,7 @@ An abstract method is added to a superclass and no implementation is provided in
 This change is reported only if subtypes are abstract. 
 Client types affected by this issue extend one of the subtypes of the superclass where the abstract method was added.
 We do not provide detections linked to this type of change.
-Instead we detect this and more general cases through the *Method Abstract Added to Class* change.
+Instead, we detect this and more general cases through the *Method Abstract Added to Class* change.
 
 ---
 
@@ -375,7 +367,7 @@ detection(
 
 ## Method Abstract Now Default
 An abstract method in an interface is now declared as a default method. 
-As stated in the *JLS*, this change results in a `IncompatibleClassChangeError` linkage error only in the following scenario.
+As stated in the *JLS*, this change results in an `IncompatibleClassChangeError` linkage error only in the following scenario.
 Type `T` implements interfaces `I` and `J`.
 `I` is not a subinterface of `J` and viceversa.
 `J` has a default method `m()`.
@@ -453,8 +445,8 @@ We report which of them might break client code, and which exceptions must be co
 
 **Detection**
 
-1. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`; and iii) the method in `S` or `S` itself goes from `public` to `protected`. 
-2. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) the method in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
+1. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not a subtype of `S`; ii)`T` is not located in a package with the same qualified name as the parent package of `S`, and; iii) the method in `S` or `S` itself goes from `public` to `protected`. 
+2. Client methods within type `T` invoking or overriding a method of the type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) the method in `S` or `S` itself goes from `public` to `package-private` or from `protected` to `package-private`. 
 3. Client methods within type `T` invoking or overriding a method of the type `S`, where the method in `S` goes from `public` to `private`, or from `protected` to `private`, or from `package-private` to `private`.
 
 For example, there is a client type `client.C` with a method definition `mC()`, and an API type `api.A` with a `public` method `mA()`. 
@@ -536,7 +528,7 @@ detection(
 ---
 
 ## Method No Longer Static
-A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead it should be accessed through an object of the corresponding type. 
+A field goes from `static` to `non-static` becoming an instance field. The field cannot be accessed through its class, instead, it should be accessed through an object of the corresponding type. 
 
 **Detection**
 
@@ -708,7 +700,7 @@ A method is removed from a supertype class. Subtypes are not able to invoke it a
   We consider all direct subtypes of the type that owns the removed method, which do not shadow the target method.
 </p>
 
-For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The later defines a method `mSuper()`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` invokes `mSuper()`. If `mSUper()` is removed from `api.SuperA`, then the following detection is reported:
+For example, there is an API type `api.A` that extends from the API type `api.SuperA`. The latter defines a method `mSuper()`. There is also a client type `client.C` that extends `api.A`. Type `client.C` has a method definition `m()`. Assume `m()` invokes `mSuper()`. If `mSUper()` is removed from `api.SuperA`, then the following detection is reported:
 
 ```
 detection(
@@ -722,34 +714,27 @@ detection(
 ---
 
 ## Method Return Type Changed
-The return type of the method has changed. 
-
-TODO: what king of binary error do we get?
-Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
+The return type of the method has changed. Check conversion cases in assignment, invocation, String, casting, and numeric contexts (cf. Java Language Specification Chapter 5.1). Check the following table:
 
 | Conversion type     | Description| Breakage      |
 |---------------------|------------|---------------|
 | Identity | Type `T` to type `T` | Never|
 | Widening primitive  | Smaller primitive type to wider primitive type| Never |
-| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes (1) |
+| Narrowing primitive | Wider primitive type to smaller primitive type| Sometimes |
 | Widening reference | Subtype `T` to supertype `ST` | Never |
-| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes (2) |
+| Narrowing reference | Supertype `ST` to subtype `T` | Sometimes |
 | Boxing | Primitive type `P` to wrapper reference type `R` | Never |
-| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes (3) 
-| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes (4) | 
+| Unboxing | Wrapper reference type `R` to primitive type `P` | Sometimes 
+| Unchecked | Interface type `G` to parameterized type `G<T1,..,Tn>` | Sometimes | 
 
-(1) It will result in a breaking change if no explicit cast is present in the old API version.
-(2)
-(3) Long, Float
-(4) Type erasure 
 
 **Detection** 
  
-1. Client methods invoking a method with modified return type.
+1. Client methods invoking a method with a modified return type.
 2. Client methods invoking a modified supertype method through the `super` keyword.
 4. Client methods invoking a modified supertype method without using the `super` keyword.
-5. Client methods overriding a method with modified return type in the direct parent type.
-5. Client methods overriding a method with modified return type in a transitive parent type.
+5. Client methods overriding a method with a modified return type in the direct parent type.
+5. Client methods overriding a method with a modified return type in a transitive parent type.
 
 <p class="message">
   We consider all direct subtypes of the type that owns the modified method, which do not shadow the target method.
@@ -785,12 +770,12 @@ We report which of them might break client code, and which exceptions must be co
 
 **Detection**
 
-1. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
-2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`; and iii) `S` goes from `public` to `protected`. 
-3. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-4. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `public` to `package-private`. 
-5. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
-6. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`; and ii) `S` goes from `protected` to `package-private`. 
+1. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`, and; iii) `S` goes from `public` to `protected`. 
+2. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not a subtype of `S`; ii) `T` is not located in a package with the same qualified name as the parent package of `S`, and; iii) `S` goes from `public` to `protected`. 
+3. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) `S` goes from `public` to `package-private`. 
+4. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) `S` goes from `public` to `package-private`. 
+5. Client entities within type `T` depending on or being annotated with type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) `S` goes from `protected` to `package-private`. 
+6. Client types each one represented by `T` implementing or extending type `S`, where: i) `T` is not located in a package with the same qualified name as the parent package of `S`, and; ii) `S` goes from `protected` to `package-private`. 
 7. Client entities within type `T` depending on or being annotated with type `S`, where `S` goes from any visibility to `private`. 
 6. Client types each one represented by `T` implementing or extending type `S`, where `S` goes from any visibility to `private`.  
 
@@ -836,7 +821,7 @@ detection(
 ---
 
 ## Class Now Abstract
-A class goes from `non-abstract` to `abstract`. It is not posible to create new objects from the given type.
+A class goes from `non-abstract` to `abstract`. It is not possible to create new objects from the given type.
 
 **Detection**
 
@@ -865,7 +850,7 @@ However, it triggers a set of compilation errors given that methods depending on
 
 **Detection**
 
-1. Client methods instantiating and throwing the exception (or a suptybe of it) without the corresponding declaration.
+1. Client methods instantiating and throwing the exception (or a subtybe of it) without the corresponding declaration.
 
 For example, `api.E` is an unchecked exception inheriting from `java.lang.RuntimeException`.
 There is a client type `client.C` that has a method definition `m()`.
@@ -957,7 +942,7 @@ We also report on our assumptions during the bytecode analysis.
 
 - A `class` type does not appear in the `implements` relation as implemented type.
 - An `interface` type can also be extended by other interfaces.
-- In the case of `enum` types we expect no occurrence in the `extends` and `implements` relation (an `enum` can only extend the `java.lang.Enum` class).
+- In the case of `enum` types, we expect no occurrence in the `extends` and `implements` relation (an `enum` can only extend the `java.lang.Enum` class).
 - Contained changes related to children elements (i.e. methods and fields) are reported by other detections. 
 For instance, if a `class` type is changed to an `interface`, expect detections related to *Class Now Abstract* and *Method Now Abstract* changes.
 
@@ -987,10 +972,10 @@ detection(
 ---
 
 ## Interface Removed
-A type removes an interface from its set of superinterfaces.
+A type removes an interface from its set of interfaces.
 Some castings might result in a linkage (or runtime) error.
 Subtypes won't be able to access interface fields and default methods anymore.
-Moreover, method overridings of the removed interface methods also raise a compilation error (cf. *JLS 13.4.4*).
+Moreover, method overriding of the removed interface methods also raise a compilation error (cf. *JLS 13.4.4*).
 
 **Detection**
 
@@ -1005,7 +990,7 @@ Moreover, method overridings of the removed interface methods also raise a compi
 For example, there is an abstract API class `api.A`, an API interface `api.IA`, and a client type `client.C`. 
 The class `api.A` implements `api.IA` and `client.C` extends `api.A`.
 Method `m()` in `client.C` overrides the corresponding method declared in `api.IA`.
-If `api.IA` is removed from the set of superinterfaces of `api.A` then `m()` cannot override the corresponding method of the interface anymore.
+If `api.IA` is removed from the set of innterfaces of `api.A` then `m()` cannot override the corresponding method of the interface anymore.
 The following detection is then reported:
 
 ```
@@ -1052,7 +1037,7 @@ detection(
 A type removes its original superclass.
 Castings might result in a compilation error.
 Subtypes won't be able to access superclass fields and methods anymore.
-Method overridings of the removed superclass methods also raise a compilation error (cf. *JLS 13.4.4*).
+Method overriding of the removed superclass methods also raise a compilation error (cf. *JLS 13.4.4*).
 
 **Detection**
 
