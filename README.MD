@@ -36,21 +36,21 @@ Click [here](https://www.rascal-mpl.org/developers/) for more information.
 Once your environment is ready and `maracas` has been imported into your workspace: 
 
 4. Run the Rascal REPL. That is, right-click on `maracas` and select **Rascal Console**. 
-5. In the REPL (`>` denotes the REPL prompt):
+5. In the REPL (`>` denotes the REPL prompt), import the `org::maracas::delta::vis::Visualizer` module:
+```
+import org::maracas::delta::vis::Visualizer;
+```
 
-    1. Import the `org::maracas::delta::vis::Visualizer` module:
-    ```import org::maracas::delta::vis::Visualizer;```
-
-    2. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
+6. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
 	str cgroup = "", str cartifact = "", str cv = "")` function *without* optional parameters: 
-    ```
-    > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0")
-    ```
+```
+> mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0")
+```
 
-    3.  To compute the list of breaking changes between two versions of an API, the list of detections on a client project, and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2, str cgroup = "", str cartifact = "", str cv = "")` function *with* optional parameters: 
-    ```
-    > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0", cgroup="org.springframework", cartifact="spring-test", cv="4.2.5.RELEASE")
-    ```
+7.  To compute the list of breaking changes between two versions of an API, the list of detections on a client project, and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2, str cgroup = "", str cartifact = "", str cv = "")` function *with* optional parameters: 
+```
+> mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0", cgroup="org.springframework", cartifact="spring-test", cv="4.2.5.RELEASE")
+```
 
 ## Snapshots 
 In this section, we show some snapshots taken from the report generated for the `javax.servlet-api`-`spring-test` example introduced in the previous section.
@@ -59,15 +59,13 @@ In this section, we show some snapshots taken from the report generated for the 
 
 ![Breaking changes frequency](assets/snapshot1.png "Breaking changes frequency")
 
-![Breaking changes stats](assets/snapshot2.png "Breaking changes stats")
-
 ### Breaking changes report
 
-![Breaking changes report](assets/snapshot3.png "Breaking changes report")
+![Breaking changes report](assets/snapshot2.png "Breaking changes report")
 
 ### Detections report
 
-![Detections report](assets/snapshot4.png "Detections report")
+![Detections report](assets/snapshot3.png "Detections report")
 
 
 ## Support
