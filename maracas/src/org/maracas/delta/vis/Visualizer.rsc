@@ -56,11 +56,10 @@ void mavenReport(loc report, str group, str artifact, str v1, str v2,
 		srcClient = extractJar(srcJarClient, report + "<cartifact>-<cv>-extracted");
 
 		println("Computing M3 for detections...");
-		M3 clientM3 = createM3(clientJar);
+		M3 clientM3 = createM3(clientJar, classPath = [jarV1]);
 		M3 v1m3 = createM3(jarV1);
 		M3 v2m3 = createM3(jarV2);
-		Evolution evol = evolution(clientM3, v1m3, v2m3, delta);
-		
+		Evolution evol = createEvolution(clientM3, v1m3, v2m3, delta);
 		println("Computing detections...");
 		ds = computeDetections(evol);
 	}

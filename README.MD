@@ -1,77 +1,81 @@
 # Maracas
 
-Maracas is an API migration tool developed at Centrum Winskunde & Informatica by the SWAT team.
-Maracas stands for **M**igrating **AR**caic **A**PIs under certain **CAS**es.
+Maracas is a source code and bytecode analysis framework—written in Rascal and Java—that is designed to support the co-evolution of Java APIs and client code. Maracas relies on `japicmp` to compute the list of breaking changes between two API versions. Afterwards, it is able to identify declarations within a client project that are impacted by the aforementioned breaking changes (a.k.a. detections).
 
-## Dependencies
+## Table of contents
+* [Main Dependencies](#main-dependencies)
+* [Getting Started](#getting-started)
+* [Snapshots](#snapshots)
+* [Support](#support)
+* [License](#license)
 
-Maracas depends on:
-  -  [Rascal](https://github.com/usethesource/rascal) to parse and analyse source code and byte code (version 0.12.0-SNAPSHOT and up, get it from [this Eclipse update site](https:// https://update.rascal-mpl.org/unstable/))
-  - `java-string-similarity` (version 1.1.0) for text comparison; and
-  - `java-build-manager` (version 0.0.1) for extracting the classpath of Maven and OSGi-based Java projects during M3 models creation (get it from [here](https://github.com/cwi-swat/rascal-java-build-manager)).
 
-## Running Maracas in Eclipse
+## Getting Started
 
-### Ready, Set ... 
+### Which are Maracas main dependencies?
+
+Maracas depends on:  
+  - [Rascal](https://github.com/usethesource/rascal) to parse and analyse source code and byte code (version 0.19.0 and up, get it from [this Eclipse update site](https:// https://update.rascal-mpl.org/unstable/))  
+  - [japicmp](https://github.com/tdegueul/japicmp) (version 0.14.5-maracas) to compute breaking changes between two versions of a software project, and;  
+  - [aethereal](https://github.com/crossminer/aethereal) (version 0.0.4) for finding and downloading artefacts from Maven Central Repository.
+
+
+### How to install Maracas?
 
 1. Install Eclipse RCP and RAP.
 2. Install the unstable version of Rascal plugin from its update site `https://update.rascal-mpl.org/unstable`. 
 Click [here](https://www.rascal-mpl.org/developers/) for more information.
-3. Clone the Rascal project `java-build-manager` from [here](https://github.com/cwi-swat/rascal-java-build-manager) and import it into your workspace.
+3. Clone the `japicmp` fork from [here](https://github.com/tdegueul/japicmp) and the `aethereal` project from [here](https://github.com/crossminer/aethereal).
+4. Import the aforementioned projects into your workspace.
+5. Compile and install `japicmp` and `aethereal` with Maven.
+6. Compile and install `maracas` with Maven.
+7. Import `maracas` to your workspace.
 
-### Go!
+### How to use Maracas?
 
-Once your environment is ready: 
+Once your environment is ready and `maracas` has been imported into your workspace: 
 
-1. Import `maracas` to your workspace.
+4. Run the Rascal REPL. That is, right-click on `maracas` and select **Rascal Console**. 
+5. In the REPL (`>` denotes the REPL prompt):
 
-2. Include the project `java-build-manager` in your project's classpath.
+    1. Import the `org::maracas::delta::vis::Visualizer` module:
+    ```import org::maracas::delta::vis::Visualizer;```
 
-3. Run the Rascal REPL. That is, right click on `maracas` and select **Rascal Console**. 
-
-4. In the REPL (`>` denotes the REPL prompt):
-
-    1. Import the `org::maracas::Maracas` module:
-    ```import org::maracas::Maracas;```
-
-    2. Define the following **loc** variables in the REPL (don't forget to change the absolute paths of the projects):
+    2. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
+	str cgroup = "", str cartifact = "", str cv = "")` function *without* optional parameters: 
     ```
-    > locApi1 = |file:///Users/your/path/myjar-0.1.0.jar|;
-    > locApi2 = |file:///Users/your/path/myjar-0.2.0.jar|;
-    > locClient = |file:///Users/your/path/client-of-myjar-0.1.0.jar|;
+    > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0")
     ```
 
-    3.  Build the delta model between the two versions of the API. Then, we can filter it by target memeber (i.e. type, method, or field).
+    3.  To compute the list of breaking changes between two versions of an API, the list of detections on a client project, and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2, str cgroup = "", str cartifact = "", str cv = "")` function *with* optional parameters: 
     ```
-    > Delta delta = delta(locApi1, locApi2);
-    > cdelta = classDelta(delta);
-    > mdelta = methodDelta(delta);
-    > fdelta = fieldDelta(delta);
+    > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0", cgroup="org.springframework", cartifact="spring-test", cv="4.2.5.RELEASE")
     ```
 
-    4. List the changes (detections) that the client needs to consider to migrate its code to the newest version of the API.
-    ```
-    > cdetection = detections(locClient, cdelta);
-    > mdetection = detections(locClient, mdelta);
-    > fdetection = detections(locClient, fdelta);
-    ```
+## Snapshots 
+In this section, we show some snapshots taken from the report generated for the `javax.servlet-api`-`spring-test` example introduced in the previous section.
+
+### Breaking changes stats
+
+![Breaking changes frequency](assets/snapshot1.png "Breaking changes frequency")
+
+![Breaking changes stats](assets/snapshot2.png "Breaking changes stats")
+
+### Breaking changes report
+
+![Breaking changes report](assets/snapshot3.png "Breaking changes report")
+
+### Detections report
+
+![Detections report](assets/snapshot4.png "Detections report")
+
+
+## Support
+If you would like to learn more about `maracas` or you are a current user and you need some help, do not hesitate to send us an email at [l.m.ochoa.venegas \<at> tue.nl](mailto:l.m.ochoa.venegas@tue.nl?subject=[Maracas]%20Support) or [thomas.degueule \<at> labri.fr](mailto:thomas.degueule@labri.fr?subject=[Maracas]%20Support).
+
+
+## License
+<img src="assets/cc.svg" alt="Creative Commons Attribution 4.0" width="100"/> 
     
-    5. Optionally, output user-friendly delta model in HTML:
-    ```
-    > import org::maracas::delta::vis::Visualizer;
-    > writeHtml(|file:///Users/your/path/ClassDelta.html|, cdelta);
-    > writeHtml(|file:///Users/your/path/MethodDelta.html|, mdelta);
-    > writeHtml(|file:///Users/your/path/FieldDelta.html|, fdelta);
-    ```
-
-## Running Maracas from plain Java
-
-Alternatively, Maracas can be manipulated through a basic API.
-See [Maracas.java](https://github.com/crossminer/maracas/blob/master/maracas/src/org/maracas/Maracas.java) for more details.
-
-The full pipeline can be invoked from Maven directly, for instance for Guava:
-
-```
-mvn package exec:java -Dexec.mainClass="org.maracas.Maracas" -Dexec.args="/path/to/guava-18.0.jar /path/to/guava-19.0.jar /path/to/guava-clients /path/to/guava-report"
-```
-
+This repository—and all its content—is licensed under a Creative Commons Attribution 4.0 International License.  
+© 2018-2021 Lina Ochoa and Thomas Degueule
