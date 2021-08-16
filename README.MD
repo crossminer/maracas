@@ -38,7 +38,7 @@ Once your environment is ready and `maracas` has been imported into your workspa
 1. Run the Rascal REPL. That is, right-click on `maracas` and select **Rascal Console**. 
 2. In the REPL (`>` denotes the REPL prompt), import the `org::maracas::delta::vis::Visualizer` module:
 ```
-import org::maracas::delta::vis::Visualizer;
+> import org::maracas::delta::vis::Visualizer;
 ```
 
 3. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
