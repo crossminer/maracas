@@ -35,19 +35,19 @@ Click [here](https://www.rascal-mpl.org/developers/) for more information.
 
 Once your environment is ready and `maracas` has been imported into your workspace: 
 
-4. Run the Rascal REPL. That is, right-click on `maracas` and select **Rascal Console**. 
-5. In the REPL (`>` denotes the REPL prompt), import the `org::maracas::delta::vis::Visualizer` module:
+1. Run the Rascal REPL. That is, right-click on `maracas` and select **Rascal Console**. 
+2. In the REPL (`>` denotes the REPL prompt), import the `org::maracas::delta::vis::Visualizer` module:
 ```
 import org::maracas::delta::vis::Visualizer;
 ```
 
-6. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
+3. To only compute the list of breaking changes between two versions of an API and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2,
 	str cgroup = "", str cartifact = "", str cv = "")` function *without* optional parameters: 
 ```
 > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0")
 ```
 
-7.  To compute the list of breaking changes between two versions of an API, the list of detections on a client project, and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2, str cgroup = "", str cartifact = "", str cv = "")` function *with* optional parameters: 
+4.  To compute the list of breaking changes between two versions of an API, the list of detections on a client project, and generate an HTML report, use the `mavenReport(loc report, str group, str artifact, str v1, str v2, str cgroup = "", str cartifact = "", str cv = "")` function *with* optional parameters: 
 ```
 > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0", cgroup="org.springframework", cartifact="spring-test", cv="4.2.5.RELEASE")
 ```
