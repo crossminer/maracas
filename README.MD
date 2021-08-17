@@ -73,6 +73,6 @@ If you would like to learn more about `maracas` or you are a current user and yo
 
 
 ## License
-<img src="assets/cc.svg" alt="Creative Commons Attribution 4.0" width="100"/> 
+<img src="assets/cc.svg" alt="Creative Commons Attribution 4.0" width="65"/> 
     
 This repository—and all its content—is licensed under a Creative Commons Attribution 4.0 International License. © 2018-2021 Maracas
