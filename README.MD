@@ -5,7 +5,7 @@ Maracas is a source code and bytecode analysis framework—written in Rascal and
 ## Table of contents
 * [Main Dependencies](#main-dependencies)
 * [Getting Started](#getting-started)
-* [Snapshots](#snapshots)
+* [Screenshots](#screenshots)
 * [Support](#support)
 * [License](#license)
 
