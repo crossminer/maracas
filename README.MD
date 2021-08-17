@@ -52,12 +52,12 @@ Once your environment is ready and `maracas` has been imported into your workspa
 > mavenReport(|file:///Users/path/to/output/folder|, "javax.servlet", "javax.servlet-api", "3.0.1", "3.1.0", cgroup="org.springframework", cartifact="spring-test", cv="4.2.5.RELEASE")
 ```
 
-## Snapshots 
-In this section, we show some snapshots taken from the report generated for the `javax.servlet-api`-`spring-test` example introduced in the previous section.
+## Screenshots 
+In this section, we show some screenshots taken from the report generated for the `javax.servlet-api`-`spring-test` example introduced in the previous section.
 
 ### Breaking changes stats
 
-![Breaking changes frequency](assets/snapshot1.png "Breaking changes frequency")
+<img src="assets/snapshot1.png" alt="Breaking changes frequency" width="500"/> 
 
 ### Breaking changes report
 
