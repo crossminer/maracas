@@ -1,3 +1,5 @@
+_**NOTE: Maracas developement has moved to [alien-tools/maracas](https://github.com/alien-tools/maracas) and this repository is no longer maintained.**_
+
 # Maracas
 
 Maracas is a source code and bytecode analysis framework—written in Rascal and Java—that is designed to support the co-evolution of Java APIs and client code. Maracas relies on `japicmp` to compute the list of breaking changes between two API versions. Afterwards, it is able to identify declarations within a client project that are impacted by the aforementioned breaking changes (a.k.a. detections).
